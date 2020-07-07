@@ -279,10 +279,11 @@ scoredigit5 = $f400+1*64+14*3+2
 	;.endrepeat
 	;bit $ea
 
-	.repeat 15							; add offset to timer (95 cycles)
-	cmp ($c1,x)	; 6 cycles
-	.endrepeat
-	bit $ea
+	.repeat 13							; add offset to timer (95 cycles)
+		pha
+		pla
+	.endrep
+	nop
 	nop
 
 	lda #$3e							; Start a continious timer
