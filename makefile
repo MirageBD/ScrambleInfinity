@@ -276,4 +276,5 @@ clean:
 	$(RM) $(EXE_DIR)/*.*
 	$(RM) $(EXE_DIR)/*
 	$(RM) $(LOADER)/build/loader.a
+	$(RM) $(LOADER)/build/intermediate/*.*
 	
