@@ -45,6 +45,15 @@
 .segment "TSPTS"
 .incbin "./bin/tspts.bin"
 
+.segment "BITMAP1"
+	.res 8192
+.segment "BITMAP2"
+	.res 8192
+.segment "SCREEN1"
+	.res 1024
+.segment "SCREEN2"
+	.res 1024
+
 .feature pc_assignment
 .feature labels_without_colons
 
