@@ -2,6 +2,7 @@ MEMORY
 {
 	ZPRAM:			start=$02, size=$fe, type = rw;
 	RAM:			start=$0800, size=$f800;
+	OVERLAPPING_RAM:start=$0000, size=$10000;
 }
 
 SEGMENTS
@@ -22,9 +23,8 @@ SEGMENTS
 
 	LOADERINSTALL:	load = RAM,   start = $6000, define = yes;	# $6000-$7200
 
-	# $6000 = bitmap 1
-	
-	# $8000 = colours bitmap
+	BITMAP1:		load=OVERLAPPING_RAM, start=$6000, type=BSS;
+	SCREEN1:		load=OVERLAPPING_RAM, start=$8000, type=BSS;
 	
 	S0:				load=RAM, start=$8400;
 	B0:				load=RAM, start=$84C0;
@@ -40,9 +40,8 @@ SEGMENTS
 
 	TABLES:			load = RAM, start=$9C00;
 
-	# BITMAP2:		load = RAM, start=$A000;
-	
-	# $A000 = bitmap 2
+	BITMAP2:		load=OVERLAPPING_RAM, start=$A000, type=BSS;
+	SCREEN2:		load=OVERLAPPING_RAM, start=$C000, type=BSS;
 	
 	GAMEPLAY2:		load=RAM, start=$C400;
 

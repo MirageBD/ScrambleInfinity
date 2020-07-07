@@ -45,6 +45,15 @@
 .segment "TSPTS"
 .incbin "./bin/tspts.bin"
 
+.segment "BITMAP1"
+	.res 8192
+.segment "BITMAP2"
+	.res 8192
+.segment "SCREEN1"
+	.res 1024
+.segment "SCREEN2"
+	.res 1024
+
 .feature pc_assignment
 .feature labels_without_colons
 
@@ -270,10 +279,11 @@ scoredigit5 = $f400+1*64+14*3+2
 	;.endrepeat
 	;bit $ea
 
-	.repeat 15							; add offset to timer (95 cycles)
-	cmp ($c1,x)	; 6 cycles
-	.endrepeat
-	bit $ea
+	.repeat 13							; add offset to timer (95 cycles)
+		pha
+		pla
+	.endrep
+	nop
 	nop
 
 	lda #$3e							; Start a continious timer

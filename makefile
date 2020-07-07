@@ -32,6 +32,8 @@ GCC          = gcc
 
 .SUFFIXES: .o .s .out .bin .pu .bb .bbconv .lc .lcconv .a
 
+default: all
+
 # -----------------------------------------------------------------------------
 
 $(LOADER)/build/loader.a:
