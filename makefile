@@ -274,5 +274,6 @@ run: specialtiles.exe binsplit.exe addaddr.exe main.d64
 
 clean:
 	$(RM) $(EXE_DIR)/*.*
+	$(RM) $(EXE_DIR)/*
 	$(RM) $(LOADER)/build/loader.a
 	
