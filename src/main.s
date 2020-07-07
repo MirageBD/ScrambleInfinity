@@ -60,10 +60,10 @@
 
 ; DEBUG DEFINES ----------------------------------------------------------------------------------------------------------
 
-.define fueldecreases		0			; HACKS
-.define pointsforbeingalive	0
+.define fueldecreases		1			; HACKS
+.define pointsforbeingalive	1
 .define shipbkgcollision	1
-.define shipsprcollision	0
+.define shipsprcollision	1
 .define livesdecrease		1
 .define firebullets			1
 .define firebombs			1
@@ -4072,8 +4072,6 @@ loadfile
 
 	lda zonecolour1
 	sta zonecolours,x
-	stx $0400
-	inc $0401
 
 	lda file
 	and #%00001111
