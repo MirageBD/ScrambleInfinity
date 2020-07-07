@@ -1,0 +1,68 @@
+MEMORY
+{
+	ZPRAM:			start=$02, size=$fe, type = rw;
+	RAM:			start=$0800, size=$f800;
+}
+
+SEGMENTS
+{
+	# comment
+	MAIN:			load=RAM, start=$0820;
+	IRQ:			load=RAM, align=256;
+	
+	MUSIC:			load=RAM, start=$1000;
+	
+	TITLESCREEN:	load=RAM, start=$2000;
+
+	SCROLLER:		load=RAM, start=$5000;
+
+	# $5c20 - $6000 FREE
+
+	CYCLEPERFECT:   load=RAM, start=$5f00;
+
+	LOADERINSTALL:	load = RAM,   start = $6000, define = yes;	# $6000-$7200
+
+	# $6000 = bitmap 1
+	
+	# $8000 = colours bitmap
+	
+	S0:				load=RAM, start=$8400;
+	B0:				load=RAM, start=$84C0;
+	BMB0:			load=RAM, start=$8500;
+	EXPL0:			load=RAM, start=$86C0;
+	EXPL1:			load=RAM, start=$8980;
+	EXPL2:			load=RAM, start=$8B00;
+	MISSILE:		load=RAM, start=$8C00;
+	UFO:			load=RAM, start=$8E80;
+	COMET:			load=RAM, start=$8F40;
+
+	GAMEPLAY:		load=RAM, start=$9000;
+
+	TABLES:			load = RAM, start=$9C00;
+
+	# BITMAP2:		load = RAM, start=$A000;
+	
+	# $A000 = bitmap 2
+	
+	GAMEPLAY2:		load=RAM, start=$C400;
+
+	LOADERZP:		load=ZPRAM, type=zp,     define=yes;
+	LOADER:			load=RAM,   start=$cc00, define=yes;
+	
+	FONT2:			load=RAM, start=$D000;
+	TSPTS:			load=RAM, start=$D300;
+
+	MT:				load=RAM, start=$d400;
+	
+	# $E700 - $F300 FREE
+	
+	FONT:			load=RAM, start=$F300;
+
+	# $F3C0 - $F400 should be empty missile sprite for upper border
+
+	FUEL:			load=RAM, start=$F400;
+
+	B54321:			load=RAM, start=$F600;
+
+	MTC:			load=RAM, start=$F800;
+}
