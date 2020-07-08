@@ -14,7 +14,7 @@ AS           = ca65
 ASFLAGS      = -g --cpu $(CPU) -U --feature force_range
 LD           = ld65
 LDFLAGS      = -C Linkfile -Ln $(EXE_DIR)/symbols --dbgfile $(EXE_DIR)/main.dbg
-VICE         = "..\..\..\winvice\x64sc.exe"
+VICE         = "..\..\..\winvice\x64.exe"
 VICEFLAGS    = -truedrive -autostart-warp -moncommands $(EXE_DIR)/symbols
 C1541        = c1541
 

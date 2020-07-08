@@ -91,6 +91,7 @@ font		= $f300
 
 zp0			= $fb
 zp1			= $fc
+zp2			= $fd
 
 livesdigit0	= $F600+1*64+ 2*3+2
 
@@ -5009,36 +5010,6 @@ titlescreen
 	sty zp1
 	jsr plottext
 
-	ldx #<titletext2
-	ldy #>titletext2
-	stx zp0
-	sty zp1
-	jsr plottext
-
-	ldx #<titletext3
-	ldy #>titletext3
-	stx zp0
-	sty zp1
-	jsr plottext
-
-	ldx #<titletext4
-	ldy #>titletext4
-	stx zp0
-	sty zp1
-	jsr plottext
-
-	ldx #<titletext5
-	ldy #>titletext5
-	stx zp0
-	sty zp1
-	jsr plottext
-
-	ldx #<titletext6
-	ldy #>titletext6
-	stx zp0
-	sty zp1
-	jsr plottext
-
 .macro ploticon textptr, textcolptr, row, column
 	lda textptr+0
 	sta $c000+(row+0)*40+(column+0)
@@ -5193,18 +5164,6 @@ congratulations
 	sty zp1
 	jsr plottext
 
-	ldx #<congratstext2
-	ldy #>congratstext2
-	stx zp0
-	sty zp1
-	jsr plottext
-
-	ldx #<congratstext3
-	ldy #>congratstext3
-	stx zp0
-	sty zp1
-	jsr plottext
-
 	lda #$00
 	sta timerlow
 	sta timerhigh
@@ -5247,9 +5206,7 @@ congratulations
 
 	jmp ingamefromcongratulations
 
-; abcdefghijklmnopqrstuvwxyz
-; 00000000000000011111111111
-; 123456789abcdef0123456789a
+; -----------------------------------------------------------------------------------------------
 
 plottext
 	ldy #$00
@@ -5278,10 +5235,14 @@ plottext
 	clc
 	lda zp0
 	adc #$03
+	sta zp0
 	sta pt3+1
+	sta pt5+1
 	lda zp1
 	adc #$00
+	sta zp1
 	sta pt3+2
+	sta pt5+2
 
 	sec
 	ldx #$ff
@@ -5293,28 +5254,38 @@ pt3	lda titletext,x
 pt2	sta $c000,x
 	cmp #$00
 	bne :-
+	inx
+pt5	lda titletext,x
+	cmp #$ff
+	beq :+
 
-	rts
+	clc
+	stx zp2
+	lda pt5+1
+	adc zp2
+	sta zp0
+	lda zp1
+	adc #$00
+	sta zp1
+
+	jmp plottext
+
+:	rts
+
+; -----------------------------------------------------------------------------------------------
 
 titletext
-.byte (0*40+18), >(0*40+18), $07, "play", $60
-titletext2
-.byte <(2*40+14), >(2*40+14), $03, "scramble", $80, $92,$90,$92,$90, $60
-titletext3
-.byte <(11*40+9), >(11*40+9), $02, "how", $80, "far", $80, "can", $80, "you", $80, "invade", $60
-titletext4
+.byte <( 0*40+18), >( 0*40+18), $07, "play", $60
+.byte <( 2*40+14), >( 2*40+14), $03, "scramble", $80, $92,$90,$92,$90, $60
+.byte <(11*40+ 9), >(11*40+ 9), $02, "how", $80, "far", $80, "can", $80, "you", $80, "invade", $60
 .byte <(13*40+10), >(13*40+10), $02, "our", $80, "skramble", $80, "system", $9f, $60
-titletext5
 .byte <(22*40+12), >(22*40+12), $01, $a0, $80, "copyright", $80, $92,$90,$92,$90, $60
-titletext6
 .byte <(24*40+11), >(24*40+11), $01, "press", $80, "fire", $80, "to", $80, "play", $60, $ff
 
 congratstext
 .byte <(10*40+12), >(10*40+12), $02, "congratulations", $60
-congratstext2
-.byte <(12*40+7), >(12*40+7), $07, "you", $80, "completed", $80, "your", $80, "duties", $60
-congratstext3
-.byte <(14*40+7), >(14*40+7), $03, "good", $80, "luck", $80, "next", $80, "time", $80, "again", $60, $ff
+.byte <(12*40+ 7), >(12*40+ 7), $07, "you", $80, "completed", $80, "your", $80, "duties", $60
+.byte <(14*40+ 7), >(14*40+ 7), $03, "good", $80, "luck", $80, "next", $80, "time", $80, "again", $60, $ff
 
 liveslefttext
 .byte <(12*40+16), >(12*40+16), $01, "lives", $80, "left", $60, $ff
