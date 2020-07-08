@@ -89,6 +89,9 @@ mtc			= $f800
 mt			= $d400
 font		= $f300
 
+zp0			= $fb
+zp1			= $fc
+
 livesdigit0	= $F600+1*64+ 2*3+2
 
 scoredigit0 = $f400+0*64+14*3+0
@@ -4999,54 +5002,42 @@ titlescreen
 	sta $d011
 	
 	jsr clearscreen
-	
-	ldx #$ff
-:	inx
-	lda #$07
-	sta $d800+0*40+18,x
-	lda titletext,x
-	sta $c000+0*40+18,x
-	bne :-
 
-	ldx #$ff
-:	inx
-	lda #$03
-	sta $d800+2*40+14,x
-	lda titletext2,x
-	sta $c000+2*40+14,x
-	bne :-
+	ldx #<titletext
+	ldy #>titletext
+	stx zp0
+	sty zp1
+	jsr plottext
 
-	ldx #$ff
-:	inx
-	lda #$02
-	sta $d800+11*40+9,x
-	lda titletext3,x
-	sta $c000+11*40+9,x
-	bne :-
+	ldx #<titletext2
+	ldy #>titletext2
+	stx zp0
+	sty zp1
+	jsr plottext
 
-	ldx #$ff
-:	inx
-	lda #$02
-	sta $d800+13*40+10,x
-	lda titletext4,x
-	sta $c000+13*40+10,x
-	bne :-
+	ldx #<titletext3
+	ldy #>titletext3
+	stx zp0
+	sty zp1
+	jsr plottext
 
-	ldx #$ff
-:	inx
-	lda #$01
-	sta $d800+22*40+12,x
-	lda titletext5,x
-	sta $c000+22*40+12,x
-	bne :-
+	ldx #<titletext4
+	ldy #>titletext4
+	stx zp0
+	sty zp1
+	jsr plottext
 
-	ldx #$ff
-:	inx
-	lda #$05
-	sta $d800+24*40+11,x
-	lda titletext6,x
-	sta $c000+24*40+11,x
-	bne :-
+	ldx #<titletext5
+	ldy #>titletext5
+	stx zp0
+	sty zp1
+	jsr plottext
+
+	ldx #<titletext6
+	ldy #>titletext6
+	stx zp0
+	sty zp1
+	jsr plottext
 
 .macro ploticon textptr, textcolptr, row, column
 	lda textptr+0
@@ -5136,13 +5127,11 @@ livesleftscreen
 	lda #$01
 	sta $d800+12*40+14
 
-	ldx #$ff
-:	inx
-	lda #$01
-	sta $d800+12*40+16,x
-	lda liveslefttext,x
-	sta $c000+12*40+16,x
-	bne :-
+	ldx #<liveslefttext
+	ldy #>liveslefttext
+	stx zp0
+	sty zp1
+	jsr plottext
 	
 	lda #$00
 	sta timerlow
@@ -5198,30 +5187,24 @@ congratulations
 	
 	jsr clearscreen
 	
-	ldx #$ff
-:	inx
-	lda #$02
-	sta $d800+10*40+12,x
-	lda congratstext,x
-	sta $c000+10*40+12,x
-	bne :-
-	
-	ldx #$ff
-:	inx
-	lda #$07
-	sta $d800+12*40+7,x
-	lda congratstext2,x
-	sta $c000+12*40+7,x
-	bne :-
-	
-	ldx #$ff
-:	inx
-	lda #$03
-	sta $d800+14*40+7,x
-	lda congratstext3,x
-	sta $c000+14*40+7,x
-	bne :-
-	
+	ldx #<congratstext
+	ldy #>congratstext
+	stx zp0
+	sty zp1
+	jsr plottext
+
+	ldx #<congratstext2
+	ldy #>congratstext2
+	stx zp0
+	sty zp1
+	jsr plottext
+
+	ldx #<congratstext3
+	ldy #>congratstext3
+	stx zp0
+	sty zp1
+	jsr plottext
+
 	lda #$00
 	sta timerlow
 	sta timerhigh
@@ -5264,42 +5247,77 @@ congratulations
 
 	jmp ingamefromcongratulations
 
-titletext
-; play
-.byte $10,$0c,$01,$19,    $00
-titletext2
-; scramble 2020
-.byte $13,$0b,$12,$01,$0d,$02,$0c,$05,$20,    $32,$30,$32,$30,    $00
-titletext3
-; how far can you invade
-.byte $08,$0f,$17,$20,    $06,$01,$12,$20,    $03,$01,$0e,$20,    $19,$0f,$15,$20,    $09,$0e,$16,$01,$04,$05,    $00
-titletext4
-; our skramble system?
-.byte $0f,$15,$12,$20,    $13,$0b,$12,$01,$0d,$02,$0c,$05,$20,    $13,$19,$13,$14,$05,$0d,$3f,    $00
-titletext5
-; (c) lars verhoeff 2018
-; copyright
-.byte $40,$20,    $03,$0f,$10,$19,$12,$09,$07,$08,$14,$20,    $32,$30,$32,$30,    $00
-titletext6
-; press fire to play
-.byte $10,$12,$05,$13,$13,$20,    $06,$09,$12,$05,$20,    $14,$0f,$20,    $10,$0c,$01,$19,    $00
-
-congratstext
-; congratulations
-.byte $03,$0f,$0e,$07,$12,$01,$14,$15,$0c,$01,$14,$09,$0f,$0e,$13,    $00
-congratstext2
-; you completed your duties
-.byte $19,$0f,$15,$20,   $03,$0f,$0d,$10,$0c,$05,$14,$05,$04,$20,    $19,$0f,$15,$12,$20,    $04,$15,$14,$09,$05,$13,    $00
-congratstext3
-; good luck next time again
-.byte $07,$0f,$0f,$04,$20,    $0c,$15,$03,$0b,$20,    $0e,$05,$18,$14,$20,    $14,$09,$0d,$05,$20,    $01,$07,$01,$09,$0e,     $00
-
 ; abcdefghijklmnopqrstuvwxyz
 ; 00000000000000011111111111
 ; 123456789abcdef0123456789a
 
+plottext
+	ldy #$00
+
+	clc
+	lda #$00
+	adc (zp0),y
+	sta pt2+1
+	lda #$00
+	adc (zp0),y
+	sta pt1+1
+	iny
+
+	clc
+	lda #$c0
+	adc (zp0),y
+	sta pt2+2
+	lda #$d8
+	adc (zp0),y
+	sta pt1+2
+	iny
+
+	lda (zp0),y
+	sta pt0+1
+
+	clc
+	lda zp0
+	adc #$03
+	sta pt3+1
+	lda zp1
+	adc #$00
+	sta pt3+2
+
+	sec
+	ldx #$ff
+:	inx
+pt0	lda #$08
+pt1	sta $d800,x
+pt3	lda titletext,x
+	sbc #$60
+pt2	sta $c000,x
+	cmp #$00
+	bne :-
+
+	rts
+
+titletext
+.byte (0*40+18), >(0*40+18), $07, "play", $60
+titletext2
+.byte <(2*40+14), >(2*40+14), $03, "scramble", $80, $92,$90,$92,$90, $60
+titletext3
+.byte <(11*40+9), >(11*40+9), $02, "how", $80, "far", $80, "can", $80, "you", $80, "invade", $60
+titletext4
+.byte <(13*40+10), >(13*40+10), $02, "our", $80, "skramble", $80, "system", $9f, $60
+titletext5
+.byte <(22*40+12), >(22*40+12), $01, $a0, $80, "copyright", $80, $92,$90,$92,$90, $60
+titletext6
+.byte <(24*40+11), >(24*40+11), $01, "press", $80, "fire", $80, "to", $80, "play", $60, $ff
+
+congratstext
+.byte <(10*40+12), >(10*40+12), $02, "congratulations", $60
+congratstext2
+.byte <(12*40+7), >(12*40+7), $07, "you", $80, "completed", $80, "your", $80, "duties", $60
+congratstext3
+.byte <(14*40+7), >(14*40+7), $03, "good", $80, "luck", $80, "next", $80, "time", $80, "again", $60, $ff
+
 liveslefttext
-.byte $0c,$09,$16,$05,$13,$20,    $0c,$05,$06,$14,    $00
+.byte <(12*40+16), >(12*40+16), $01, "lives", $80, "left", $60, $ff
 
 textmissile0
 .byte $60,$61,$62,$63,$64,$65
