@@ -89,9 +89,13 @@ mtc			= $f800
 mt			= $d400
 font		= $f300
 
-zp0			= $fb
-zp1			= $fc
-zp2			= $fd
+zp0			= $f9
+zp1			= $fa
+zp2			= $fb
+zp3			= $fc
+zp4			= $fd
+zp5			= $fe
+zptemp		= $ff
 
 livesdigit0	= $F600+1*64+ 2*3+2
 
@@ -5010,45 +5014,27 @@ titlescreen
 	sty zp1
 	jsr plottext
 
-.macro ploticon textptr, textcolptr, row, column
-	lda textptr+0
-	sta $c000+(row+0)*40+(column+0)
-	lda textcolptr+0
-	sta $d800+(row+0)*40+(column+0)
-	
-	lda textptr+1
-	sta $c000+(row+0)*40+(column+1)
-	lda textcolptr+1
-	sta $d800+(row+0)*40+(column+1)
-	
-	lda textptr+2
-	sta $c000+(row+1)*40+(column+0)
-	lda textcolptr+2
-	sta $d800+(row+1)*40+(column+0)
-	
-	lda textptr+3
-	sta $c000+(row+1)*40+(column+1)
-	lda textcolptr+3
-	sta $d800+(row+1)*40+(column+1)
-	
-	lda textptr+4
-	sta $c000+(row+2)*40+(column+0)
-	lda textcolptr+4
-	sta $d800+(row+2)*40+(column+0)
-	
-	lda textptr+5
-	sta $c000+(row+2)*40+(column+1)
-	lda textcolptr+5
-	sta $d800+(row+2)*40+(column+1)
+; -----------------------------------------------------------------------------------------------
+
+.macro ploticonsetup iconptr, location
+	ldx #<iconptr
+	ldy #>iconptr
+	stx zp0
+	sty zp1
+	ldx #<location
+	ldy #>location
+	stx iconposlow
+	sty iconposhigh
+	jsr ploticon
 .endmacro
-	
-	ploticon textmissile0, textmissile0cols, 4, 4
-	ploticon textmissile1, textmissile1cols, 7, 4
-	ploticon textmystery, textmysterycols, 10, 4
-	ploticon textufo, textufocols, 13, 4
-	ploticon textfuel, textfuelcols, 16, 4
-	ploticon textboss, textbosscols, 19, 4
-	
+
+	ploticonsetup textmissile0, (4*40+4)
+	ploticonsetup textmissile1, (7*40+4)
+	ploticonsetup textmystery, (10*40+4)
+	ploticonsetup textufo, (13*40+4)
+	ploticonsetup textfuel, (16*40+4)
+	ploticonsetup textboss, (19*40+4)
+
 	lda #$01
 	sta $d01a
 
@@ -5260,9 +5246,9 @@ pt5	lda titletext,x
 	beq :+
 
 	clc
-	stx zp2
+	stx zptemp
 	lda pt5+1
-	adc zp2
+	adc zptemp
 	sta zp0
 	lda zp1
 	adc #$00
@@ -5271,6 +5257,38 @@ pt5	lda titletext,x
 	jmp plottext
 
 :	rts
+
+; -----------------------------------------------------------------------------------------------
+
+ploticon
+	ldy #$00
+:	lda (zp0),y
+	clc
+	adc iconposlow
+	sta itxt+1
+	lda #$00
+	adc iconposhigh
+	adc #$c0
+	sta itxt+2
+	lda (zp0),y
+	clc
+	adc iconposlow
+	sta icol+1
+	lda #$00
+	adc iconposhigh
+	adc #$d8
+	sta icol+2
+	iny
+	lda (zp0),y
+itxt sta $c000
+	iny
+	lda (zp0),y
+icol sta $d800
+	iny
+	cpy #6*3
+	bne :-
+
+	rts
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -5290,30 +5308,35 @@ congratstext
 liveslefttext
 .byte <(12*40+16), >(12*40+16), $01, "lives", $80, "left", $60, $ff
 
+iconposlow
+.byte $00
+iconposhigh
+.byte $00
+
 textmissile0
-.byte $60,$61,$62,$63,$64,$65
-textmissile0cols
-.byte $09,$0a,$0b,$0a,$08,$08
+.byte (0*40+0),$60,$09,(0*40+1),$61,$0a
+.byte (1*40+0),$62,$0b,(1*40+1),$63,$0a
+.byte (2*40+0),$64,$08,(2*40+1),$65,$08
 textmissile1
-.byte $60,$61,$62,$63,$66,$67
-textmissile1cols
-.byte $09,$0a,$0b,$0a,$0f,$0f
+.byte (0*40+0),$60,$09,(0*40+1),$61,$0a
+.byte (1*40+0),$62,$0b,(1*40+1),$63,$0a
+.byte (2*40+0),$66,$0f,(2*40+1),$67,$0f
 textmystery
-.byte $68,$69,$6a,$6b,$6c,$6d
-textmysterycols
-.byte $09,$0f,$0f,$0a,$0a,$0a
+.byte (0*40+0),$68,$09,(0*40+1),$69,$0f
+.byte (1*40+0),$6a,$0f,(1*40+1),$6b,$0a
+.byte (2*40+0),$6c,$0a,(2*40+1),$6d,$0a
 textufo
-.byte $20,$20,$6e,$6f,$20,$20
-textufocols
-.byte $08,$08,$0b,$0d,$08,$08
+.byte (0*40+0),$20,$08,(0*40+1),$20,$08
+.byte (1*40+0),$6e,$0b,(1*40+1),$6f,$0d
+.byte (2*40+0),$20,$08,(2*40+1),$20,$08
 textfuel
-.byte $70,$71,$72,$73,$74,$75
-textfuelcols
-.byte $09,$0b,$0b,$0d,$0b,$08
+.byte (0*40+0),$70,$09,(0*40+1),$71,$0b
+.byte (1*40+0),$72,$0b,(1*40+1),$73,$0d
+.byte (2*40+0),$74,$0b,(2*40+1),$75,$08
 textboss
-.byte $76,$77,$78,$79,$7a,$7b
-textbosscols
-.byte $09,$0c,$0f,$0c,$0c,$08
+.byte (0*40+0),$76,$09,(0*40+1),$77,$0c
+.byte (1*40+0),$78,$0f,(1*40+1),$79,$0c
+.byte (2*40+0),$7a,$0c,(2*40+1),$7b,$08
 
 ; -----------------------------------------------------------------------------------------------
 ; -----------------------------------------------------------------------------------------------
