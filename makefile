@@ -13,8 +13,8 @@ CPU          = 6502X
 AS           = ca65
 ASFLAGS      = -g --cpu $(CPU) -U --feature force_range -I ./exe
 LD           = ld65
-LDFLAGS      = -C Linkfile -Ln $(EXE_DIR)/symbols --dbgfile $(EXE_DIR)/main.dbg
-VICE         = "..\..\..\winvice\x64.exe"
+LDFLAGS      = -Ln $(EXE_DIR)/symbols --dbgfile $(EXE_DIR)/main.dbg
+VICE         = "..\..\..\winvice\x64sc.exe"
 VICEFLAGS    = -truedrive -autostart-warp -moncommands $(EXE_DIR)/symbols
 C1541        = c1541
 
@@ -59,14 +59,23 @@ install-c64.prg: $(LOADER)/build/install-c64.prg
 loadersymbols-c64.inc: $(LOADER)/build/loadersymbols-c64.inc
 	$(CP) $(LOADER)/build/loadersymbols-c64.inc $(EXE_DIR)/.
 
-main.o: $(SRC_DIR)/main.s Makefile Linkfile loader-c64.prg install-c64.prg mt.out mtc.out loadersymbols-c64.inc
+main.o: $(SRC_DIR)/main.s Makefile Linkfile.main loader-c64.prg install-c64.prg mt.out mtc.out loadersymbols-c64.inc
 	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(SRC_DIR)/$*.s
 
-main_unpacked.prg: main.o loader-c64.prg install-c64.prg loadersymbols-c64.inc
-	$(LD) $(LDFLAGS) --mapfile $(EXE_DIR)/main.map -o $(EXE_DIR)/$@ $(EXE_DIR)/main.o
+main_unpacked.prg: main.o loader-c64.prg install-c64.prg loadersymbols-c64.inc Linkfile.main
+	$(LD) $(LDFLAGS) -C Linkfile.main --mapfile $(EXE_DIR)/main.map -o $(EXE_DIR)/$@ $(EXE_DIR)/main.o
 
 main.prg: main_unpacked.prg
 	$(PU) -d -l 0x0800 -x 0x0820 -g 0x37 -i 0 $(EXE_DIR)/$? $(EXE_DIR)/$@
+
+loadscreen.o: $(SRC_DIR)/loadscreen.s Makefile Linkfile.loadscreen loader-c64.prg install-c64.prg loadersymbols-c64.inc
+	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(SRC_DIR)/$*.s
+
+loadscreen_unpacked.prg: loadscreen.o loader-c64.prg install-c64.prg loadersymbols-c64.inc Linkfile.loadscreen
+	$(LD) $(LDFLAGS) -C Linkfile.loadscreen --mapfile $(EXE_DIR)/loadscreen.map -o $(EXE_DIR)/$@ $(EXE_DIR)/loadscreen.o
+
+loadscreen.prg: loadscreen_unpacked.prg
+	$(PU) -d -l 0x0800 -x 0xc000 -g 0x37 -i 0 $(EXE_DIR)/$? $(EXE_DIR)/$@
 
 # -----------------------------------------------------------------------------
 
@@ -203,7 +212,7 @@ ma30.out ma31.out ma32.out ma33.out : mtmmis.out
 	 # -f MH -w mth.bc \
 	
 
-main.d64: main.prg \
+main.d64: loadscreen.prg main.prg \
           mth.out mth.bb mth.bc \
           ma00.bc ma01.bc ma02.bc ma03.bc ma04.bc ma05.bc ma06.bc ma07.bc ma08.bc ma09.bc \
           ma0a.bc ma0b.bc ma0c.bc ma0d.bc ma0e.bc ma0f.bc ma10.bc ma11.bc ma12.bc ma13.bc \
@@ -214,7 +223,8 @@ main.d64: main.prg \
 	$(RM) $(EXE_DIR)/$@
 	$(CC1541) -n " skramble  2020 " -i "     " -S 8\
 	 \
-	 -f "skramble 2020" -w $(EXE_DIR)/main.prg \
+	 -f "loadscreen" -w $(EXE_DIR)/loadscreen.prg \
+	 -f "ff" -w $(EXE_DIR)/main.prg \
 	 \
 	 -f "00" -w $(EXE_DIR)/ma00.bc \
 	 -f "01" -w $(EXE_DIR)/ma01.bc \
@@ -278,7 +288,7 @@ tools: specialtiles.exe binsplit.exe addaddr.exe
 all: tools main.d64
 
 run: specialtiles.exe binsplit.exe addaddr.exe main.d64
-	$(VICE) $(VICEFLAGS) "$(EXE_DIR)/main.d64:skramble 2020"
+	$(VICE) $(VICEFLAGS) "$(EXE_DIR)/main.d64:loadscreen"
 
 clean:
 	$(RM) $(EXE_DIR)/*.*

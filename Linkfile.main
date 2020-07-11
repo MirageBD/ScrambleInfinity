@@ -21,8 +21,6 @@ SEGMENTS
 
 	CYCLEPERFECT:   load=RAM, start=$5f00;
 
-	LOADERINSTALL:	load = RAM,   start = $6000, define = yes;	# $6000-$7200
-
 	BITMAP1:		load=OVERLAPPING_RAM, start=$6000, type=BSS;
 	SCREEN1:		load=OVERLAPPING_RAM, start=$8000, type=BSS;
 	
@@ -45,9 +43,8 @@ SEGMENTS
 	
 	GAMEPLAY2:		load=RAM, start=$C400;
 
-	LOADERZP:		load=ZPRAM, type=zp,     define=yes;
 	LOADER:			load=RAM,   start=$cc00, define=yes;
-	
+
 	FONT2:			load=RAM, start=$D000;
 	TSPTS:			load=RAM, start=$D300;
 

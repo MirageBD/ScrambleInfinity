@@ -43,12 +43,10 @@
 .segment "TSPTS"
 .incbin "./bin/tspts.bin"
 
-.segment "LOADERINSTALL"
-.incbin "./exe/install-c64.prg", $02
+.include "loadersymbols-c64.inc"
+
 .segment "LOADER"
 .incbin "./exe/loader-c64.prg", $02
-
-.include "loadersymbols-c64.inc"
 
 .segment "BITMAP1"
 	.res 8192
@@ -219,22 +217,6 @@ scoredigit5 = $f400+1*64+14*3+2
 ; -----------------------------------------------------------------------------------------------
 
 .segment "MAIN"
-
-	sei									; init drive code
-	jsr $e544
-	jsr install
-	
-	ldx #$00
-	bcc :++
-	cmp #$04							; #STATUS::DEVICE_INCOMPATIBLE
-	beq :+
-	ldx #$04
-:	cmp #$05							; #STATUS::TOO_MANY_DEVICES
-	beq :+
-	ldx #$00
-:	stx $d020
-	stx $d021
-	cli
 
 	sei
 
