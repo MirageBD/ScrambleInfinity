@@ -2727,9 +2727,11 @@ updateflyingscore								; hit a flying sprite (missile, ufo)
 	cmp #sprcollision::flyingmissile
 	bne :+
 	addpoints #4, 5								; airmissile = add 80 points (only add 40, because missiles are 2 sprites overlayed)
+	jmp updatescore
 :	cmp #sprcollision::flyingufo
 	bne :+
 	addpoints #1, 4								; ufo = add 100 points
+	jmp updatescore
 
 :	rts
 
