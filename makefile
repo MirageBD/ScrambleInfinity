@@ -15,7 +15,8 @@ ASFLAGS      = -g --cpu $(CPU) -U --feature force_range -I ./exe
 LD           = ld65
 LDFLAGS      = -Ln $(EXE_DIR)/symbols --dbgfile $(EXE_DIR)/main.dbg
 VICE         = "..\..\..\winvice\x64sc.exe"
-VICEFLAGS    = -truedrive -autostart-warp -moncommands $(EXE_DIR)/symbols
+#VICEFLAGS    = -truedrive -autostart-warp -moncommands $(EXE_DIR)/symbols
+VICEFLAGS    = -truedrive -moncommands $(EXE_DIR)/symbols
 C1541        = c1541
 
 LOADER       = ./loader/loader
@@ -212,7 +213,7 @@ ma30.out ma31.out ma32.out ma33.out : mtmmis.out
 	 # -f MH -w mth.bc \
 	
 
-main.d64: loadscreen.prg main.prg \
+main.d64: loadscreen.prg main.prg install-c64.prg \
           mth.out mth.bb mth.bc \
           ma00.bc ma01.bc ma02.bc ma03.bc ma04.bc ma05.bc ma06.bc ma07.bc ma08.bc ma09.bc \
           ma0a.bc ma0b.bc ma0c.bc ma0d.bc ma0e.bc ma0f.bc ma10.bc ma11.bc ma12.bc ma13.bc \
@@ -221,10 +222,11 @@ main.d64: loadscreen.prg main.prg \
           ma28.bc ma29.bc ma2a.bc ma2b.bc ma2c.bc ma2d.bc ma2e.bc ma2f.bc ma30.bc ma31.bc \
           ma32.bc ma33.bc 
 	$(RM) $(EXE_DIR)/$@
-	$(CC1541) -n " skramble  2020 " -i "     " -S 8\
+	$(CC1541) -n "    skramble    " -i " 2020" -S 8\
 	 \
 	 -f "loadscreen" -w $(EXE_DIR)/loadscreen.prg \
 	 -f "ff" -w $(EXE_DIR)/main.prg \
+	 -f "li" -w $(EXE_DIR)/install-c64.prg \
 	 \
 	 -f "00" -w $(EXE_DIR)/ma00.bc \
 	 -f "01" -w $(EXE_DIR)/ma01.bc \

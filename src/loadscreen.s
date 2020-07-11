@@ -15,12 +15,9 @@
 	sei
 	
 	jsr $e544
-	lda #$06
+	lda #$00
 	sta $d020
 	sta $d021
-
-	lda #$01
-	sta $0400
 
 	jsr install							; init drive code
 	
@@ -160,32 +157,16 @@ irq1
  	lda #$1b
 	sta $d011
 
-	lda #$02
-	sta $d020
-
-	inc $0400
+	inc $d020
 
 	lda #<irq2
 	ldx #>irq2
-	ldy #$f2
-	jmp endirq
-	
-; -----------------------------------------------------------------------------------------------
-	
-irq2									; start of bottom border irq
-	pha
-
-	lda #$03
-	sta $d020
-
-	lda #<irq3
-	ldx #>irq3
 	ldy #$f8
 	jmp endirq
 	
 ; -----------------------------------------------------------------------------------------------
 
-irq3
+irq2
 	pha
 
 	ldx #$00
@@ -193,9 +174,6 @@ irq3
 	ldy #$14
 	sta $d011,x
 	sty $d011
-
-	lda #$04
-	sta $d020
 
 	lda #<irq1
 	ldx #>irq1

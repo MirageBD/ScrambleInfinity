@@ -211,7 +211,7 @@ scoredigit5 = $f400+1*64+14*3+2
 .define startlives			#$03		; initial lives
 .define ufospawntime		#$50		; time before new ufo spawns - can be more, not less
 .define bulletcooldown		#$18
-.define zonecolour0			#$02
+.define zonecolour0			#$0b
 .define zonecolour1			#$07
 
 ; -----------------------------------------------------------------------------------------------
@@ -431,11 +431,22 @@ error
 file01
 .asciiz "00"
 
+loadinstallfile
+.asciiz "LI"
+
 loadpackd
 
 	ldx #<file01
 	ldy #>file01
 	jsr loadcompd
+
+	rts
+
+loadloadinstall
+
+	ldx #<loadinstallfile
+	ldy #>loadinstallfile
+	jsr loadraw
 
 	rts
 
@@ -1344,6 +1355,7 @@ handlecooloff
 	lda #$00
 	sta timeseconds
 	addpoints #1, 5								; add 10 points every second
+	jsr updatescore
 .endif
 
 :	; fall through
@@ -4973,19 +4985,12 @@ clearscreen
 	sta $c100,x
 	sta $c200,x
 	sta $c300,x
-	;lda #$01
-	;sta $d800,x
-	;sta $d900,x
-	;sta $da00,x
-	;sta $db00,x
 	inx
 	bne :-
 
-	;lda #$00
 	sta $d020
 	sta $d021
 
-	;lda #$00
 	sta $dd00
 	
 	rts
@@ -4997,10 +5002,12 @@ titlescreen
 	lda #$37
 	sta $01
 
-	lda #$7f
+	lda #$7b
 	sta $d011
 	
 	jsr clearscreen
+
+	;jsr loadloadinstall
 
 	ldx #<titletext
 	ldy #>titletext
