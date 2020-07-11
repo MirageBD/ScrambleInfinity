@@ -8,6 +8,8 @@
 *~
 main.dbg
 main.map
+loadscreen.dbg
+loadscreen.map
 *.a
 exe/symbols
 
