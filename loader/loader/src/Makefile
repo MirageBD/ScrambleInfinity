@@ -1,77 +1,143 @@
-# gnu makefile
 
-SOMAJOR     = 0
-SOMINOR     = 0
+INSTALL     ?= 4000
+RESIDENT    ?= 0200
+ZP          ?= e0
 
-CD          = cd
-ECHO        = echo
-CAT         = cat
-MV          = mv
-RM          = rm -f
-MKDIR       = mkdir
-RMDIR       = rmdir --ignore-fail-on-non-empty
-TOUCH       = touch
+export _PLATFORM_ INSTALL RESIDENT ZP
 
-AS          = ca65
-LD          = ld65
-AR          = ar65
-VICE        = x64
-C1541       = c1541
-
-PU	        = pucrunch
-EXO         = exomizer
-
-PERL        = perl
-ZIP         = zip -9
-
-
-INCDIR      = ../../shared/
-LDRINC      = ../include
-
-BUILDDIR    = ../build
-INTERMDIR   = ../build/intermediate
-
-LOADERDEPS  = $(BUILDDIR) $(INTERMDIR) loader.s pudecomp.s bbdecomp.s lcdecomp.s exodecomp.s $(LDRINC)/loader.inc option-check.inc common-features.inc loader-jumptable.inc install-jumptable.inc $(LDRINC)/config.inc $(LDRINC)/diskio.inc ../version.inc Makefile
-INSTALLDEPS = $(BUILDDIR) $(INTERMDIR) install.s drivecode1541.s drivecode1541-loadfile.s drivecode1571.s drivecode1581.s $(LDRINC)/loader.inc $(LDRINC)/config.inc option-check.inc common-features.inc loader-jumptable.inc install-jumptable.inc $(LDRINC)/diskio.inc ../version.inc Makefile
-
-
-AS_FLAGS   += -t c64 -I $(INCDIR) -I $(LDRINC) --feature force_range
-ifneq ($(EXTCONFIG),)
-AS_FLAGS   += -D EXTCONFIG -I $(EXTCONFIG)
+ifeq ($(PLATFORM),)
+_PLATFORM_   = c64
+else ifeq ($(PLATFORM),c128)
+_PLATFORM_   = c128
+else ifeq ($(PLATFORM),c16)
+_PLATFORM_   = c16
+else ifeq ($(PLATFORM),c116)
+_PLATFORM_   = c16
+else ifeq ($(PLATFORM),plus4)
+_PLATFORM_   = c16
+else
+_PLATFORM_   = $(PLATFORM)
 endif
-ifneq ($(DEBUG),)
-AS_FLAGS   += -g
+
+ifneq ($(_PLATFORM_),c64)
+ifneq ($(_PLATFORM_),c128)
+ifneq ($(_PLATFORM_),c16)
+$(error invalid platform $(_PLATFORM_) specified)
+endif
+endif
 endif
 
 
-default: lib
+TOP         ?= .
+
+SVNVERSION   = svnversion
+ifneq ($(wildcard ../../.svn/format),)
+VERSION      = $(shell $(SVNVERSION) | tr -d [:cntrl:])
+else
+VERSION      =
+endif
+
+CD           = cd
+ECHO         = echo
+PRINTF       = printf
+CAT          = cat
+CP           = cp
+MV           = mv
+RM           = rm -f
+MKDIR        = mkdir
+RMDIR        = rmdir
+
+AS           = ca65
+LD           = ld65
+AR           = ar65
+VICE         = x64
+C1541        = c1541
+
+PERL         = perl
+ZIP          = zip -9
+
+INCDIR       = $(TOP)/../../shared
+LDRINC       = $(TOP)/../include
+
+DECOMPDIR    = $(TOP)/decompress
+DRIVESDIR    = $(TOP)/drives
+HALDIR       = $(TOP)/hal
+
+BUILDDIR     = $(TOP)/../build
+INTERMDIR    = $(TOP)/../build/intermediate
+
+ifneq ($(EXTCONFIGPATH),)
+CONFIG       = $(EXTCONFIGPATH)/loaderconfig.inc
+else
+CONFIG       = $(LDRINC)/config.inc
+endif
+
+INSTALLDEPS  = $(CONFIG) $(BUILDDIR) $(INTERMDIR) \
+               $(DRIVESDIR)/drivecode-common.inc $(DRIVESDIR)/drivecode1541.s $(DRIVESDIR)/drivecode1571.s $(DRIVESDIR)/drivecode1581.s \
+               $(HALDIR)/hal.inc $(HALDIR)/hal-c64-c128.inc $(HALDIR)/hal-c16.inc \
+               install.s \
+               $(LDRINC)/loader.inc \
+               $(TOP)/../version.inc Makefile
+
+RESIDENTDEPS = $(CONFIG) $(BUILDDIR) $(INTERMDIR) \
+               $(DECOMPDIR)/bitnaxdecomp.s \
+               $(DECOMPDIR)/b2decomp.s \
+               $(DECOMPDIR)/doynaxdecomp.s \
+               $(DECOMPDIR)/exodecomp.s \
+               $(DECOMPDIR)/lcdecomp.s \
+               $(DECOMPDIR)/ncdecomp.s \
+               $(DECOMPDIR)/pudecomp.s \
+               $(DECOMPDIR)/subsizerdecomp.s \
+               $(DECOMPDIR)/tcdecomp.s \
+               $(HALDIR)/hal.inc $(HALDIR)/hal-c64-c128.inc $(HALDIR)/hal-c16.inc \
+               resident.s \
+               $(LDRINC)/loader.inc \
+               $(TOP)/../version.inc Makefile
+
+BINDEPS      = $(BUILDDIR)/loadersymbols-$(_PLATFORM_).inc $(BUILDDIR)/loader-$(_PLATFORM_).prg $(CONFIG)
+
+ifeq ($(_PLATFORM_),c64)
+AS_FLAGS     = --cpu 6502X # allow undocumented opcodes
+else ifeq ($(_PLATFORM_),c128)
+AS_FLAGS     = --cpu 6502X # allow undocumented opcodes
+else
+AS_FLAGS     = --cpu 6502 # do not allow undocumented opcodes
+endif
+
+AS_FLAGS    += -g # include symbols in object files
+ifeq ($(_PLATFORM_),c16)
+AS_FLAGS    += -t c16 -D PLATFORM=16
+else ifeq ($(_PLATFORM_),c128)
+AS_FLAGS    += -t c128 -D PLATFORM=128
+else
+AS_FLAGS    += -t c64 -D PLATFORM=64
+endif
+AS_FLAGS    += -I $(TOP)/. -I $(INCDIR) -I $(LDRINC)
+ifneq ($(EXTCONFIGPATH),)
+AS_FLAGS    += -D EXTCONFIGPATH -I $(EXTCONFIGPATH)
+endif
+
+
+default: prg
 
 all: lib prg
 
 # use these targets to build loader.prg and install.prg
-prg: $(BUILDDIR)/loader.zip
-bin: prg
-binary: bin
+prg bin binary: $(BINDEPS)
+	@$(ECHO) "Usage: $(MAKE) prg INSTALL=<install hexaddress> RESIDENT=<resident hexaddress> ZP=<zp hexaddress>"
+	@$(ECHO) "INSTALL=\$$$(INSTALL)"
+	@$(ECHO) "RESIDENT=\$$$(RESIDENT)"
+	@$(ECHO) "ZP=\$$$(ZP)"
+	$(CAT) $(BUILDDIR)/loadersymbols-$(_PLATFORM_).inc
 
-libs: lib so
-
-lib: $(BUILDDIR)/loader.a
-so: so-basic # so-full for dynlink stuff
-dll: so
-
-mods: drivecode1541-loadfile.prg
+prgzip binzip binaryzip: $(BUILDDIR)/loader-$(_PLATFORM_).zip
 
 
-.svn/entries:
-	$(MKDIR) ./.svn
-	$(TOUCH) $@
+lib: $(BUILDDIR)/loader-$(_PLATFORM_).a
 
-../.svn/entries:
-	$(MKDIR) ../.svn
-	$(TOUCH) $@
 
-../version.inc: ../.svn/entries .svn/entries
-	$(MAKE) -C .. version.inc
+$(TOP)/../version.inc:
+	$(MAKE) -C $(TOP)/.. version.inc
 
 
 # directory targets
@@ -85,233 +151,69 @@ $(INTERMDIR):
 
 # object targets
 
-$(INTERMDIR)/zp-c64.o: $(BUILDDIR) $(INTERMDIR) zp-c64.s $(LDRINC)/config.inc
-	$(AS) $(AS_FLAGS) -o $@ zp-c64.s
+$(INTERMDIR)/loader-$(_PLATFORM_).o: $(RESIDENTDEPS)
+	$(AS) $(AS_FLAGS) -o $@ resident.s
 
-$(INTERMDIR)/loader.o: $(LOADERDEPS)
-	$(AS) $(AS_FLAGS) -o $@ loader.s
-
-$(INTERMDIR)/install.o: $(INSTALLDEPS)
-	$(AS) $(AS_FLAGS) --cpu 6502X -o $@ install.s
-	# --cpu 6502X for illegal opcodes
+$(INTERMDIR)/install-$(_PLATFORM_).o: $(INSTALLDEPS)
+	$(AS) $(AS_FLAGS) --cpu 6502X -I $(INTERMDIR) -o $@ install.s # allow undocumented opcodes for drive code
 
 
 # binary targets
- # drive-side binaries
-.PHONY: $(INTERMDIR)/drivecode.link
 
-$(INTERMDIR)/drivecode.link:
-	@$(ECHO) -e "MEMORY \n{\n DRIVERAM: start = \$$00, size = \$$0800, file = \"../build/intermediate/drivecode1541.prg\";\n}\n\nSEGMENTS\n{\n CODE: load = DRIVERAM;\n}" > $@
+.PHONY: $(INTERMDIR)/binary.link $(BUILDDIR)/loader-$(_PLATFORM_).prg $(INTERMDIR)/install-nonreloc-$(_PLATFORM_).o $(BUILDDIR)/install-$(_PLATFORM_).prg $(INTERMDIR)/loader-nonreloc-$(_PLATFORM_).o $(INTERMDIR)/loader.map $(BUILDDIR)/loadersymbols-$(_PLATFORM_).inc
 
-$(INTERMDIR)/drivecode1541.o: drivecode1541.s drivecode1541-loadfile.s
-	$(AS) $(AS_FLAGS) -D STANDALONE=1 --cpu 6502X -o $@ drivecode1541.s
-	# --cpu 6502X for illegal opcodes
+$(INTERMDIR)/loader-nonreloc-$(_PLATFORM_).o: $(RESIDENTDEPS)
+	$(AS) $(AS_FLAGS) -D RESIADDR=0x$(RESIDENT) -o $@ resident.s
 
-$(INTERMDIR)/drivecode1541.prg: $(INTERMDIR)/drivecode1541.o $(INTERMDIR)/drivecode.link
-	$(LD) -o $@ -C $(INTERMDIR)/drivecode.link $(INTERMDIR)/drivecode1541.o -vm -m $@.map
-	$(RM) a.out
+$(INTERMDIR)/install-nonreloc-$(_PLATFORM_).o: $(RESIDENTDEPS)
+	$(AS) $(AS_FLAGS) --cpu 6502X -D INSTADDR=0x$(INSTALL) -o $@ install.s # allow undocumented opcodes for drive code
 
-drivecode1541.prg: $(INTERMDIR)/drivecode1541.prg
-
-$(INTERMDIR)/drivecode1541.prg.map: drivecode1541.prg
-
-$(INTERMDIR)/kernelsymbols1541.inc: $(INTERMDIR)/drivecode1541.prg.map
-	$(PERL) make-kernelsymbolsinc.pl $^ > $@
-
-$(INTERMDIR)/drivecode-loadfile.link:
-	@$(ECHO) -e "MEMORY \n{\n DRIVERAM: start = \$$00, size = \$$0800, file = \"../build/drivecode1541-loadfile.prg\";\n}\n\nSEGMENTS\n{\n CODE: load = DRIVERAM;\n}" > $@
-
-$(INTERMDIR)/drivecode1541-loadfile.o: drivecode1541.s drivecode1541-loadfile.s $(INTERMDIR)/kernelsymbols1541.inc
-	$(AS) $(AS_FLAGS) -I $(INTERMDIR) -D MODULE=1 --cpu 6502X -o $@ drivecode1541-loadfile.s
-	# --cpu 6502X for illegal opcodes
-
-$(BUILDDIR)/drivecode1541-loadfile.prg: $(INTERMDIR)/drivecode1541-loadfile.o $(INTERMDIR)/drivecode-loadfile.link
-	$(LD) -o $@ -C $(INTERMDIR)/drivecode-loadfile.link $(INTERMDIR)/drivecode1541-loadfile.o
-	$(RM) a.out
-
-drivecode1541-loadfile.prg: $(BUILDDIR)/drivecode1541-loadfile.prg
-
-
- # computer-side binaries
-.PHONY: $(INTERMDIR)/binary.link $(BUILDDIR)/loader.prg $(INTERMDIR)/install-nonreloc.o $(BUILDDIR)/install.prg $(INTERMDIR)/loader-nonreloc.o $(INTERMDIR)/loader.map (BUILDDIR)/loadersymbols.inc
-
-$(INTERMDIR)/loader-nonreloc.o: $(LOADERDEPS)
-ifeq ($(RESIDENT),)
-	@$(ECHO) "Usage: $(MAKE) prg INSTALL=<install hexaddress> RESIDENT=<resident hexaddress> ZP=<zp hexaddress>"
-	@exit -1
-endif
-	$(AS) $(AS_FLAGS) -D RESIADDR=0x$(RESIDENT) -o $@ loader.s
-
-$(INTERMDIR)/install-nonreloc.o: $(LOADERDEPS)
-ifeq ($(INSTALL),)
-	@$(ECHO) "Usage: $(MAKE) prg INSTALL=<install hexaddress> RESIDENT=<resident hexaddress> ZP=<zp hexaddress>"
-	@exit -1
-endif
-	$(AS) $(AS_FLAGS) -D INSTADDR=0x$(INSTALL) --cpu 6502X -o $@ install.s
-	# --cpu 6502X for illegal opcodes
-
-$(INTERMDIR)/binary.link:
-ifeq ($(ZP),)
-	@$(ECHO) "Usage: $(MAKE) prg INSTALL=<install hexaddress> RESIDENT=<resident hexaddress> ZP=<zp hexaddress>"
-	@exit -1
-endif
+$(INTERMDIR)/binary.link: Makefile
 	$(PERL) -e 'printf "MEMORY\
 	{\
 	 ZPRAM: start = \$$$(ZP), size = \$$%x;\
-	 INSTALLRAM: start = \$$%x, size = \$$%x, file = \"../build/install.prg\";\
-	 LOADERRAM: start = \$$%x, size = \$$%x, file = \"../build/loader.prg\";\
+	 INSTALLRAM: start = \$$%x, size = \$$%x, file = \"../build/install-$(_PLATFORM_).prg\";\
+	 RESIDENTRAM: start = \$$%x, size = \$$%x, file = \"../build/loader-$(_PLATFORM_).prg\";\
 	}\
 	\
 	SEGMENTS\
 	{\
-	 LOADERZP: load = ZPRAM, type = zp;\
-	 LOADER: load = LOADERRAM;\
-	 LOADERINSTALL: load = INSTALLRAM;\
+	 DISKIO_ZP: load = ZPRAM, type = zp;\
+	 DISKIO: load = RESIDENTRAM;\
+	 DISKIO_INSTALL: load = INSTALLRAM;\
 	}", 0x0100 - 0x$(ZP), 0x$(INSTALL) - 2, 0x10002 - 0x$(INSTALL), 0x$(RESIDENT) - 2, 0x10002 - 0x$(RESIDENT)' > $@
 
-$(BUILDDIR)/loader.prg $(BUILDDIR)/install.prg: $(INTERMDIR)/zp-c64.o $(INTERMDIR)/loader-nonreloc.o $(INTERMDIR)/install-nonreloc.o $(INTERMDIR)/binary.link
-	$(LD) -C $(INTERMDIR)/binary.link -vm -m $(INTERMDIR)/loader.map $(INTERMDIR)/zp-c64.o $(INTERMDIR)/loader-nonreloc.o $(INTERMDIR)/install-nonreloc.o
+$(BUILDDIR)/loader-$(_PLATFORM_).prg: $(INTERMDIR)/loader-nonreloc-$(_PLATFORM_).o $(INTERMDIR)/install-nonreloc-$(_PLATFORM_).o $(INTERMDIR)/binary.link
+	$(LD) -C $(INTERMDIR)/binary.link -vm -m $(INTERMDIR)/loader-$(_PLATFORM_).map $(INTERMDIR)/loader-nonreloc-$(_PLATFORM_).o $(INTERMDIR)/install-nonreloc-$(_PLATFORM_).o
 	$(RM) a.out
 
-$(INTERMDIR)/loader.map: $(BUILDDIR)/install.prg $(BUILDDIR)/install.prg
+$(BUILDDIR)/install-$(_PLATFORM_).prg: $(BUILDDIR)/loader-$(_PLATFORM_).prg
 
-$(BUILDDIR)/loadersymbols.inc: $(INTERMDIR)/loader.map
+$(INTERMDIR)/loader-$(_PLATFORM_).map: $(BUILDDIR)/install-$(_PLATFORM_).prg
+
+$(BUILDDIR)/loadersymbols-$(_PLATFORM_).inc: $(INTERMDIR)/loader-$(_PLATFORM_).map
 	$(PERL) make-loadersymbolsinc.pl $^ > $@
 
-$(BUILDDIR)/loader.zip: $(BUILDDIR)/loadersymbols.inc $(BUILDDIR)/loader.prg $(BUILDDIR)/install.prg
-	$(CD) $(BUILDDIR) && $(ZIP) $@ $(^F)
+$(BUILDDIR)/loader-$(_PLATFORM_).zip: $(BINDEPS)
+	$(CD) $(BUILDDIR) \
+	 && $(CP) $(BUILDDIR)/loader-$(_PLATFORM_).prg $(INTERMDIR)/loader.prg && $(ZIP) -j $@ $(INTERMDIR)/loader.prg \
+	 && $(CP) $(BUILDDIR)/install-$(_PLATFORM_).prg $(INTERMDIR)/install.prg && $(ZIP) -j $@ $(INTERMDIR)/install.prg \
+	 && $(CP) $(BUILDDIR)/loadersymbols-$(_PLATFORM_).inc $(INTERMDIR)/loadersymbols.inc && $(ZIP) -j $@ $(INTERMDIR)/loadersymbols.inc
 
 
-# dynlink targets
+# loader-$(_PLATFORM_).a library target
 
-$(INTERMDIR)/zp-c64.o65.o: zp-c64.s $(LDRINC)/config.inc
-	$(AS) $(AS_FLAGS) -D DYNLINK -o $@ zp-c64.s
-
-$(INTERMDIR)/loader.o65.o: $(LOADERDEPS)
-	$(AS) $(AS_FLAGS) -D DYNLINK -o $@ loader.s
-
-$(INTERMDIR)/install.o65.o: $(INSTALLDEPS)
-	$(AS) $(AS_FLAGS) -D DYNLINK --cpu 6502X -o $@ install.s
-	# --cpu 6502X for illegal opcodes
-
-$(INTERMDIR)/install.o65: $(INTERMDIR)/install.o65.o $(INTERMDIR)/zp-c64.o65.o
-	$(LD) -o $@ -t module -vm -m $@.map $^
-
-$(INTERMDIR)/loader.o65: $(INTERMDIR)/loader.o65.o $(INTERMDIR)/zp-c64.o65.o
-	$(LD) -o $@ -t module -vm -m $@.map $^
-
-$(BUILDDIR)/loader.so: $(INTERMDIR)/loader.so.uncompd Makefile
-	$(EXO) raw -m 512 $(INTERMDIR)/loader.so.uncompd -o $(INTERMDIR)/loader.so.temp
-	$(ECHO) -n -e "\xC4ISK \xC9/\xCF \xCCIBRARY\x00\x$(SOMAJOR)\x$(SOMINOR)" | $(CAT) - $(INTERMDIR)/loader.so.temp > $@
-
-$(INTERMDIR)/loader.so.uncompd: $(INTERMDIR)/install.o65 $(INTERMDIR)/loader.o65
-	$(CAT) $^ > $@
-
-$(INTERMDIR)/dynlink.o: dynlink.s $(LDRINC)/diskio.inc $(BUILDDIR)/loader.so
-	$(AS) $(AS_FLAGS) -I $(CC65_INC) -o $*.o $<
-
-$(INTERMDIR)/exostreamdecr1.o: exostreamdecr1.s
-	$(AS) $(AS_FLAGS) -o $*.o $?
-
-$(INTERMDIR)/modload.o: $(CC65_SRC)/libsrc/common/modload.s
-	$(AS) $(AS_FLAGS) -I $(CC65_INC)/../asminc -o $@ $(CC65_INC)/../libsrc/common/modload.s
-
-$(INTERMDIR)/memset.o: $(CC65_SRC)/libsrc/common/memset.s
-	$(AS) $(AS_FLAGS) -I $(CC65_INC)/../asminc -o $@ $(CC65_INC)/../libsrc/common/memset.s
-
-$(INTERMDIR)/pushax.o: $(CC65_SRC)/libsrc/runtime/pushax.s
-	$(AS) $(AS_FLAGS) -I $(CC65_INC)/../asminc -o $@ $(CC65_INC)/../libsrc/runtime/pushax.s
-
-$(INTERMDIR)/decax1.o: $(CC65_SRC)/libsrc/runtime/decax1.s
-	$(AS) $(AS_FLAGS) -I $(CC65_INC)/../asminc -o $@ $(CC65_INC)/../libsrc/runtime/decax1.s
-
-$(INTERMDIR)/incsp2.o: $(CC65_SRC)/libsrc/runtime/incsp2.s
-	$(AS) $(AS_FLAGS) -I $(CC65_INC)/../asminc -o $@ $(CC65_INC)/../libsrc/runtime/incsp2.s
-
-
-# loader.a library target
-
-$(BUILDDIR)/loader.a: $(INTERMDIR)/zp-c64.o $(INTERMDIR)/loader.o $(INTERMDIR)/install.o
+$(BUILDDIR)/loader-$(_PLATFORM_).a: $(INTERMDIR)/loader-$(_PLATFORM_).o $(INTERMDIR)/install-$(_PLATFORM_).o
 	$(AR) a $@ $^
-
-so-basic: $(BUILDDIR)/loader.a
-
-so-full: $(BUILDDIR)/loader.a $(INTERMDIR)/dynlink.o $(INTERMDIR)/exostreamdecr1.o $(INTERMDIR)/modload.o $(INTERMDIR)/memset.o $(INTERMDIR)/pushax.o $(INTERMDIR)/decax1.o $(INTERMDIR)/incsp2.o
-	$(AR) a $^
-
-# debug targets
-
-$(INTERMDIR)/debug.o: debug.s
-	$(AS) $(AS_FLAGS) -o $@ $?
-
-.PHONY: $(INTERMDIR)/debug.link
-
-$(INTERMDIR)/debug.link:
-ifeq ($(INSTALL),)
-	@$(ECHO) "Usage: $(MAKE) prg INSTALL=<install hexaddress> RESIDENT=<resident hexaddress> ZP=<zp hexaddress>"
-	@exit -1
-endif
-ifeq ($(RESIDENT),)
-	@$(ECHO) "Usage: $(MAKE) prg INSTALL=<install hexaddress> RESIDENT=<resident hexaddress> ZP=<zp hexaddress>"
-	@exit -1
-endif
-ifeq ($(ZP),)
-	@$(ECHO) "Usage: $(MAKE) prg INSTALL=<install hexaddress> RESIDENT=<resident hexaddress> ZP=<zp hexaddress>"
-	@exit -1
-endif
-	$(PERL) -e 'printf "MEMORY\
-	{\
-	 ZPRAM: start = \$$$(ZP), size = \$$%x;\
-	 RAM:  start = \$$0800, size = \$$f800;\
-	}\
-	\
-	SEGMENTS\
-	{\
-	 CODE: load = RAM, start = \$$%x;\
-	 LOADERZP: load = ZPRAM, type = zp;\
-	 LOADERINSTALL: load = RAM, start = \$$%x;\
-	 LOADER: load = RAM, start = \$$%x;\
-	}", 0x0100 - 0x$(ZP), 0x$(MAIN), 0x$(INSTALL), 0x$(RESIDENT)' > $@
-
-$(INTERMDIR)/debug_uncompressed.prg: $(INTERMDIR)/debug.o $(BUILDDIR)/loader.a $(INTERMDIR)/debug.link
-ifeq ($(IMAGE),)
-	@$(ECHO) "Usage: $(MAKE) prg IMAGE=<image path> MAIN=<main address> INSTALL=<install hexaddress> RESIDENT=<resident hexaddress> ZP=<zp hexaddress>"
-	@exit -1
-endif
-ifeq ($(MAIN),)
-	@$(ECHO) "Usage: $(MAKE) prg IMAGE=<image path> MAIN=<main address> INSTALL=<install hexaddress> RESIDENT=<resident hexaddress> ZP=<zp hexaddress>"
-	@exit -1
-endif
-	$(LD) -C $(INTERMDIR)/debug.link -vm -m $@.map -Ln $@.lbl -o $@ $(INTERMDIR)/debug.o $(BUILDDIR)/loader.a
-
-$(INTERMDIR)/debug.prg: $(INTERMDIR)/debug_uncompressed.prg
-	$(PU) -d -l 0x0800 -x 0x$(MAIN) -g 0x37 -i 0 $? $@
-
-debug_image: $(INTERMDIR)/debug.prg
-	$(C1541) -attach $(IMAGE) -delete debug -write $? debug
-
-debug debug41: debug_image
-	$(VICE) -autostart "$(IMAGE):debug" -drive8type 1541 -drive9type none
-
-debug42: debug_image
-	$(VICE) -autostart "$(IMAGE):debug" -drive8type 1542 -drive9type none
-
-debug70: debug_image
-	$(VICE) -autostart "$(IMAGE):debug" -drive8type 1570 -drive9type none
-
-debug71: debug_image
-	$(VICE) -autostart "$(IMAGE):debug" -drive8type 1571 -drive9type none
 
 
 clean:
 	-$(RM) \
-	 $(INTERMDIR)/drivecode.link $(INTERMDIR)/drivecode1541.o $(INTERMDIR)/drivecode1541.prg $(INTERMDIR)/drivecode1541.prg.map $(INTERMDIR)/drivecode1541-loadfile.o $(INTERMDIR)/drivecode1541-loadfile.prg.map $(INTERMDIR)/drivecode-loadfile.link $(INTERMDIR)/kernelsymbols1541.inc \
-	 $(INTERMDIR)/zp-c64.o $(INTERMDIR)/loader.o $(INTERMDIR)/install.o \
-	 $(INTERMDIR)/loader-nonreloc.o $(INTERMDIR)/install-nonreloc.o $(BUILDDIR)/loader.prg $(BUILDDIR)/install.prg $(INTERMDIR)/binary.link $(BUILDDIR)/loadersymbols.inc \
-	 $(INTERMDIR)/loader.map $(INTERMDIR)/loader.o65.map $(INTERMDIR)/install.o65.map \
-	 $(INTERMDIR)/zp-c64.o65.o $(INTERMDIR)/install.o65.o $(INTERMDIR)/loader.o65.o $(INTERMDIR)/install.o65 $(INTERMDIR)/loader.o65 \
-	 $(INTERMDIR)/loader.so.uncompd $(INTERMDIR)/loader.so.temp \
-	 $(INTERMDIR)/dynlink.o $(INTERMDIR)/exostreamdecr1.o  $(INTERMDIR)/modload.o $(INTERMDIR)/memset.o $(INTERMDIR)/pushax.o $(INTERMDIR)/decax1.o $(INTERMDIR)/incsp2.o \
-	 $(BUILDDIR)/loader.a $(BUILDDIR)/loader.so \
-	 $(INTERMDIR)/debug.link $(INTERMDIR)/debug_uncompressed.prg.map $(INTERMDIR)/debug_uncompressed.prg.lbl $(INTERMDIR)/debug.o $(INTERMDIR)/debug_uncompressed.prg $(INTERMDIR)/debug.prg
+	 $(INTERMDIR)/* \
+	 $(BUILDDIR)/loader-c64.a \
+	 $(BUILDDIR)/loader-c64.prg $(BUILDDIR)/install-c64.prg $(BUILDDIR)/loadersymbols-c64.inc \
+	 $(BUILDDIR)/loader-c128.a \
+	 $(BUILDDIR)/loader-c128.prg $(BUILDDIR)/install-c128.prg $(BUILDDIR)/loadersymbols-c128.inc \
+	 $(BUILDDIR)/loader-c16.a \
+	 $(BUILDDIR)/loader-c16.prg $(BUILDDIR)/install-c16.prg $(BUILDDIR)/loadersymbols-c16.inc
 	-$(RMDIR) $(INTERMDIR)

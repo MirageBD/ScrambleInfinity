@@ -1,9 +1,7 @@
 ; TODO:
 ; show mystery points
-; award extra life at 10,000 points
 ; highscore + obfuscate (big one, install irq loader afterwards = $1200 mem, seperate file?)
 ; stars at startup-screen (or maybe something more fancy)
-; show lives as number, not as ship*x
 ; update round-flags as number, not as round-flag*x
 ; new music (give option to play without music?) 2channel prefered
 ; add sound-fx for fire/bomb/explode
@@ -45,6 +43,13 @@
 .segment "TSPTS"
 .incbin "./bin/tspts.bin"
 
+.segment "LOADERINSTALL"
+.incbin "./exe/install-c64.prg", $02
+.segment "LOADER"
+.incbin "./exe/loader-c64.prg", $02
+
+.include "loadersymbols-c64.inc"
+
 .segment "BITMAP1"
 	.res 8192
 .segment "BITMAP2"
@@ -82,8 +87,8 @@
 
 tuneinit	= $1000
 tuneplay	= $1003
-install		= $6000
-loader		= $cb00
+;install	= $6000
+;loader		= $cb00
 
 mtc			= $f800
 mt			= $d400
@@ -153,7 +158,7 @@ scoredigit5 = $f400+1*64+14*3+2
 	lda score+arg2
 	adc arg1
 	sta score+arg2
-	jmp updatescore
+	;jmp updatescore
 .endmacro
 
 .macro plotdigit arg1, arg2
@@ -2675,18 +2680,22 @@ updategroundscore
 	bne :+
 	addpoints #1, 4
 	addpoints #5, 5								; add 150 points
-	jmp increasefuel
+	jsr increasefuel
+	jmp updatescore
 :	cmp #bkgcollision::fuelcave
 	bne :+
 	addpoints #1, 4
 	addpoints #5, 5								; add 150 points
-	jmp increasefuel
+	jsr increasefuel
+	jmp updatescore
 :	cmp #bkgcollision::standingmissilenoncave
 	bne :+
 	addpoints #5, 5								; groundmissile = add 50 points (5 at 5th position)
+	jmp updatescore
 :	cmp #bkgcollision::standingmissilecave
 	bne :+
 	addpoints #8, 5								; groundmissile cave = add 80 points
+	jmp updatescore
 :	cmp #bkgcollision::mysterynoncave
 	bne :+
 	clc											; mystery = add 100/200/300 points (1/2/3 at 4th position)
@@ -2705,7 +2714,8 @@ updategroundscore
 	bne :+
 	lda #$01
 	sta gamefinished
-	addpoints #8, 4								; boss = add 800 points (8 at 4th position) 
+	addpoints #8, 4								; boss = add 800 points (8 at 4th position)
+	jmp updatescore
 	
 :	rts
 
@@ -2736,7 +2746,7 @@ increasefuel
 	lda fuelfull
 	sta fuel
 
-:
+:	rts
 
 ; -----------------------------------------------------------------------------------------------	
 

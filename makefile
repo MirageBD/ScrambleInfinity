@@ -6,12 +6,12 @@ RM           = rm -f
 SRC_DIR      = ./src
 EXE_DIR      = ./exe
 BIN_DIR      = ./bin
-JAVA_DIR     = ./java
+PERL_DIR     = ./perl
 
 CPU          = 6502X
 
 AS           = ca65
-ASFLAGS      = -g --cpu $(CPU) -U --feature force_range
+ASFLAGS      = -g --cpu $(CPU) -U --feature force_range -I ./exe
 LD           = ld65
 LDFLAGS      = -C Linkfile -Ln $(EXE_DIR)/symbols --dbgfile $(EXE_DIR)/main.dbg
 VICE         = "..\..\..\winvice\x64.exe"
@@ -22,9 +22,9 @@ LOADER       = ./loader/loader
 CC1541       = cc1541
 
 PU           = pucrunch
-BB           = BB
+BB           = B2
 LC           = crush 6
-CONV         = java -cp $(JAVA_DIR) PackedFileConverter
+CONV         = perl $(PERL_DIR)/compressedfileconverter.pl
 BINSPLIT     = $(EXE_DIR)/binsplit.exe
 SPECIALTILES = $(EXE_DIR)/specialtiles.exe
 ADDADDR      = $(EXE_DIR)/addaddr.exe
@@ -36,8 +36,8 @@ default: all
 
 # -----------------------------------------------------------------------------
 
-$(LOADER)/build/loader.a:
-	$(MAKE) -C $(LOADER)
+$(LOADER)/build/loader-c64.prg:
+	;$(MAKE) prg ZP=e8 INSTALL=6000 RESIDENT=ce00
 
 # -----------------------------------------------------------------------------
 
@@ -50,17 +50,20 @@ binsplit.exe: $(SRC_DIR)/binsplit.c
 addaddr.exe: $(SRC_DIR)/addaddr.c
 	$(GCC) $(SRC_DIR)/addaddr.c -o $(EXE_DIR)/addaddr.exe
 
-loader.a: $(LOADER)/build/loader.a
-	$(CP) $(LOADER)/build/loader.a $(EXE_DIR)/.
+loader-c64.prg: $(LOADER)/build/loader-c64.prg
+	$(CP) $(LOADER)/build/loader-c64.prg $(EXE_DIR)/.
 	
-install.o: $(LOADER)/build/intermediate/install.o	
-	$(CP) $(LOADER)/build/intermediate/install.o $(EXE_DIR)/.
+install-c64.prg: $(LOADER)/build/install-c64.prg	
+	$(CP) $(LOADER)/build/install-c64.prg $(EXE_DIR)/.
 
-main.o: $(SRC_DIR)/main.s Makefile Linkfile loader.a mt.out mtc.out
+loadersymbols-c64.inc: $(LOADER)/build/loadersymbols-c64.inc
+	$(CP) $(LOADER)/build/loadersymbols-c64.inc $(EXE_DIR)/.
+
+main.o: $(SRC_DIR)/main.s Makefile Linkfile loader-c64.prg install-c64.prg mt.out mtc.out loadersymbols-c64.inc
 	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(SRC_DIR)/$*.s
 
-main_unpacked.prg: main.o loader.a install.o
-	$(LD) $(LDFLAGS) --mapfile $(EXE_DIR)/main.map -o $(EXE_DIR)/$@ $(EXE_DIR)/main.o $(EXE_DIR)/loader.a $(EXE_DIR)/install.o
+main_unpacked.prg: main.o loader-c64.prg install-c64.prg loadersymbols-c64.inc
+	$(LD) $(LDFLAGS) --mapfile $(EXE_DIR)/main.map -o $(EXE_DIR)/$@ $(EXE_DIR)/main.o
 
 main.prg: main_unpacked.prg
 	$(PU) -d -l 0x0800 -x 0x0820 -g 0x37 -i 0 $(EXE_DIR)/$? $(EXE_DIR)/$@
@@ -176,10 +179,11 @@ ma30.out ma31.out ma32.out ma33.out : mtmmis.out
 
 %.bb: %.out
 	$(BB) $(EXE_DIR)/$*.out
-	$(MV) $(EXE_DIR)/$*.out.bb $(EXE_DIR)/$*.bb
+	$(MV) $(EXE_DIR)/$*.out.b2 $(EXE_DIR)/$*.b2
 
 %.bc: %.bb
-	$(CONV) bb 3 $(EXE_DIR)/$*.out $(EXE_DIR)/$*.bb $(EXE_DIR)/$*.bc
+	cp $(EXE_DIR)/$*.b2 $(EXE_DIR)/$*.bc
+	# $(CONV) $(EXE_DIR)/$*.out $(EXE_DIR)/$*.b2 $(EXE_DIR)/$*.bc
 
 #.out.bb:
 #	$(BB) $(EXE_DIR)/$*.out
@@ -207,63 +211,65 @@ main.d64: main.prg \
           ma1e.bc ma1f.bc ma20.bc ma21.bc ma22.bc ma23.bc ma24.bc ma25.bc ma26.bc ma27.bc \
           ma28.bc ma29.bc ma2a.bc ma2b.bc ma2c.bc ma2d.bc ma2e.bc ma2f.bc ma30.bc ma31.bc \
           ma32.bc ma33.bc 
-	$(CC1541) -n " SKRAMBLE  2020 " -i "     " -S 8\
+	$(RM) $(EXE_DIR)/$@
+	$(CC1541) -n " skramble  2020 " -i "     " -S 8\
 	 \
-	 -f "SKRAMBLE 2020" -w $(EXE_DIR)/main.prg \
+	 -f "skramble 2020" -w $(EXE_DIR)/main.prg \
 	 \
-	 -f 00 -w $(EXE_DIR)/ma00.bc \
-	 -f 01 -w $(EXE_DIR)/ma01.bc \
-	 -f 02 -w $(EXE_DIR)/ma02.bc \
-	 -f 03 -w $(EXE_DIR)/ma03.bc \
-	 -f 04 -w $(EXE_DIR)/ma04.bc \
-	 -f 05 -w $(EXE_DIR)/ma05.bc \
-	 -f 06 -w $(EXE_DIR)/ma06.bc \
-	 -f 07 -w $(EXE_DIR)/ma07.bc \
-	 -f 08 -w $(EXE_DIR)/ma08.bc \
-	 -f 09 -w $(EXE_DIR)/ma09.bc \
-	 -f 0A -w $(EXE_DIR)/ma0a.bc \
-	 -f 0B -w $(EXE_DIR)/ma0b.bc \
-	 -f 0C -w $(EXE_DIR)/ma0c.bc \
-	 -f 0D -w $(EXE_DIR)/ma0d.bc \
-	 -f 0E -w $(EXE_DIR)/ma0e.bc \
-	 -f 0F -w $(EXE_DIR)/ma0f.bc \
-	 -f 10 -w $(EXE_DIR)/ma10.bc \
-	 -f 11 -w $(EXE_DIR)/ma11.bc \
-	 -f 12 -w $(EXE_DIR)/ma12.bc \
-	 -f 13 -w $(EXE_DIR)/ma13.bc \
-	 -f 14 -w $(EXE_DIR)/ma14.bc \
-	 -f 15 -w $(EXE_DIR)/ma15.bc \
-	 -f 16 -w $(EXE_DIR)/ma16.bc \
-	 -f 17 -w $(EXE_DIR)/ma17.bc \
-	 -f 18 -w $(EXE_DIR)/ma18.bc \
-	 -f 19 -w $(EXE_DIR)/ma19.bc \
-	 -f 1A -w $(EXE_DIR)/ma1a.bc \
-	 -f 1B -w $(EXE_DIR)/ma1b.bc \
-	 -f 1C -w $(EXE_DIR)/ma1c.bc \
-	 -f 1D -w $(EXE_DIR)/ma1d.bc \
-	 -f 1E -w $(EXE_DIR)/ma1e.bc \
-	 -f 1F -w $(EXE_DIR)/ma1f.bc \
-	 -f 20 -w $(EXE_DIR)/ma20.bc \
-	 -f 21 -w $(EXE_DIR)/ma21.bc \
-	 -f 22 -w $(EXE_DIR)/ma22.bc \
-	 -f 23 -w $(EXE_DIR)/ma23.bc \
-	 -f 24 -w $(EXE_DIR)/ma24.bc \
-	 -f 25 -w $(EXE_DIR)/ma25.bc \
-	 -f 26 -w $(EXE_DIR)/ma26.bc \
-	 -f 27 -w $(EXE_DIR)/ma27.bc \
-	 -f 28 -w $(EXE_DIR)/ma28.bc \
-	 -f 29 -w $(EXE_DIR)/ma29.bc \
-	 -f 2A -w $(EXE_DIR)/ma2a.bc \
-	 -f 2B -w $(EXE_DIR)/ma2b.bc \
-	 -f 2C -w $(EXE_DIR)/ma2c.bc \
-	 -f 2D -w $(EXE_DIR)/ma2d.bc \
-	 -f 2E -w $(EXE_DIR)/ma2e.bc \
-	 -f 2F -w $(EXE_DIR)/ma2f.bc \
-	 -f 30 -w $(EXE_DIR)/ma30.bc \
-	 -f 31 -w $(EXE_DIR)/ma31.bc \
-	 -f 32 -w $(EXE_DIR)/ma32.bc \
-	 -f 33 -w $(EXE_DIR)/ma33.bc \
+	 -f "00" -w $(EXE_DIR)/ma00.bc \
+	 -f "01" -w $(EXE_DIR)/ma01.bc \
+	 -f "02" -w $(EXE_DIR)/ma02.bc \
+	 -f "03" -w $(EXE_DIR)/ma03.bc \
+	 -f "04" -w $(EXE_DIR)/ma04.bc \
+	 -f "05" -w $(EXE_DIR)/ma05.bc \
+	 -f "06" -w $(EXE_DIR)/ma06.bc \
+	 -f "07" -w $(EXE_DIR)/ma07.bc \
+	 -f "08" -w $(EXE_DIR)/ma08.bc \
+	 -f "09" -w $(EXE_DIR)/ma09.bc \
+	 -f "0a" -w $(EXE_DIR)/ma0a.bc \
+	 -f "0b" -w $(EXE_DIR)/ma0b.bc \
+	 -f "0c" -w $(EXE_DIR)/ma0c.bc \
+	 -f "0d" -w $(EXE_DIR)/ma0d.bc \
+	 -f "0e" -w $(EXE_DIR)/ma0e.bc \
+	 -f "0f" -w $(EXE_DIR)/ma0f.bc \
+	 -f "10" -w $(EXE_DIR)/ma10.bc \
+	 -f "11" -w $(EXE_DIR)/ma11.bc \
+	 -f "12" -w $(EXE_DIR)/ma12.bc \
+	 -f "13" -w $(EXE_DIR)/ma13.bc \
+	 -f "14" -w $(EXE_DIR)/ma14.bc \
+	 -f "15" -w $(EXE_DIR)/ma15.bc \
+	 -f "16" -w $(EXE_DIR)/ma16.bc \
+	 -f "17" -w $(EXE_DIR)/ma17.bc \
+	 -f "18" -w $(EXE_DIR)/ma18.bc \
+	 -f "19" -w $(EXE_DIR)/ma19.bc \
+	 -f "1a" -w $(EXE_DIR)/ma1a.bc \
+	 -f "1b" -w $(EXE_DIR)/ma1b.bc \
+	 -f "1c" -w $(EXE_DIR)/ma1c.bc \
+	 -f "1d" -w $(EXE_DIR)/ma1d.bc \
+	 -f "1e" -w $(EXE_DIR)/ma1e.bc \
+	 -f "1f" -w $(EXE_DIR)/ma1f.bc \
+	 -f "20" -w $(EXE_DIR)/ma20.bc \
+	 -f "21" -w $(EXE_DIR)/ma21.bc \
+	 -f "22" -w $(EXE_DIR)/ma22.bc \
+	 -f "23" -w $(EXE_DIR)/ma23.bc \
+	 -f "24" -w $(EXE_DIR)/ma24.bc \
+	 -f "25" -w $(EXE_DIR)/ma25.bc \
+	 -f "26" -w $(EXE_DIR)/ma26.bc \
+	 -f "27" -w $(EXE_DIR)/ma27.bc \
+	 -f "28" -w $(EXE_DIR)/ma28.bc \
+	 -f "29" -w $(EXE_DIR)/ma29.bc \
+	 -f "2a" -w $(EXE_DIR)/ma2a.bc \
+	 -f "2b" -w $(EXE_DIR)/ma2b.bc \
+	 -f "2c" -w $(EXE_DIR)/ma2c.bc \
+	 -f "2d" -w $(EXE_DIR)/ma2d.bc \
+	 -f "2e" -w $(EXE_DIR)/ma2e.bc \
+	 -f "2f" -w $(EXE_DIR)/ma2f.bc \
+	 -f "30" -w $(EXE_DIR)/ma30.bc \
+	 -f "31" -w $(EXE_DIR)/ma31.bc \
+	 -f "32" -w $(EXE_DIR)/ma32.bc \
+	 -f "33" -w $(EXE_DIR)/ma33.bc \
 	$(EXE_DIR)/$@
+	cat $(EXE_DIR)/main.map
 
 # -----------------------------------------------------------------------------
 
@@ -277,6 +283,6 @@ run: specialtiles.exe binsplit.exe addaddr.exe main.d64
 clean:
 	$(RM) $(EXE_DIR)/*.*
 	$(RM) $(EXE_DIR)/*
-	$(RM) $(LOADER)/build/loader.a
-	$(RM) $(LOADER)/build/intermediate/*.*
+	# $(RM) $(LOADER)/build/*.*
+	# $(RM) $(LOADER)/build/intermediate/*.*
 	
