@@ -6,7 +6,6 @@ RM           = rm -f
 SRC_DIR      = ./src
 EXE_DIR      = ./exe
 BIN_DIR      = ./bin
-PERL_DIR     = ./perl
 
 CPU          = 6502X
 
@@ -25,13 +24,12 @@ CC1541       = cc1541
 PU           = pucrunch
 BB           = B2
 LC           = crush 6
-CONV         = perl $(PERL_DIR)/compressedfileconverter.pl
 BINSPLIT     = $(EXE_DIR)/binsplit.exe
 SPECIALTILES = $(EXE_DIR)/specialtiles.exe
 ADDADDR      = $(EXE_DIR)/addaddr.exe
 GCC          = gcc
 
-.SUFFIXES: .o .s .out .bin .pu .bb .bbconv .lc .lcconv .a
+.SUFFIXES: .o .s .out .bin .pu .b2 .a
 
 default: all
 
@@ -182,28 +180,9 @@ ma30.out ma31.out ma32.out ma33.out : mtmmis.out
 
 # -----------------------------------------------------------------------------
 
-#mth.bc: $(EXE_DIR)/mth.out
-#	$(BB) $(EXE_DIR)/mth.out
-#	$(MV) $(EXE_DIR)/mth.out.bb $(EXE_DIR)/mth.bb
-#	$(CONV) bb 3 $(EXE_DIR)/mth.out $(EXE_DIR)/mth.bb $(EXE_DIR)/mth.bc
-
-%.bb: %.out
+%.b2: %.out
 	$(BB) $(EXE_DIR)/$*.out
 	$(MV) $(EXE_DIR)/$*.out.b2 $(EXE_DIR)/$*.b2
-
-%.bc: %.bb
-	cp $(EXE_DIR)/$*.b2 $(EXE_DIR)/$*.bc
-	# $(CONV) $(EXE_DIR)/$*.out $(EXE_DIR)/$*.b2 $(EXE_DIR)/$*.bc
-
-#.out.bb:
-#	$(BB) $(EXE_DIR)/$*.out
-#	$(MV) $(EXE_DIR)/$*.out.bb $(EXE_DIR)/$*.bb
-
-#.bb.bc:
-#	$(CONV) bb 3 $(EXE_DIR)/$*.out $(EXE_DIR)/$*.bb $(EXE_DIR)/$*.bc
-
-#.bb.bc: $(EXE_DIR)/$*.bb
-#	$(CONV) bb 3 $(EXE_DIR)/$*.out $(EXE_DIR)/$*.bb $(EXE_DIR)/$*.bc
 
 .out.pu:
 	$(PU) -c0 $(EXE_DIR)/$*.out $(EXE_DIR)/$*.pu
@@ -214,13 +193,13 @@ ma30.out ma31.out ma32.out ma33.out : mtmmis.out
 	
 
 main.d64: loadscreen.prg main.prg install-c64.prg \
-          mth.out mth.bb mth.bc \
-          ma00.bc ma01.bc ma02.bc ma03.bc ma04.bc ma05.bc ma06.bc ma07.bc ma08.bc ma09.bc \
-          ma0a.bc ma0b.bc ma0c.bc ma0d.bc ma0e.bc ma0f.bc ma10.bc ma11.bc ma12.bc ma13.bc \
-          ma14.bc ma15.bc ma16.bc ma17.bc ma18.bc ma19.bc ma1a.bc ma1b.bc ma1c.bc ma1d.bc \
-          ma1e.bc ma1f.bc ma20.bc ma21.bc ma22.bc ma23.bc ma24.bc ma25.bc ma26.bc ma27.bc \
-          ma28.bc ma29.bc ma2a.bc ma2b.bc ma2c.bc ma2d.bc ma2e.bc ma2f.bc ma30.bc ma31.bc \
-          ma32.bc ma33.bc 
+          mth.out mth.b2 \
+          ma00.b2 ma01.b2 ma02.b2 ma03.b2 ma04.b2 ma05.b2 ma06.b2 ma07.b2 ma08.b2 ma09.b2 \
+          ma0a.b2 ma0b.b2 ma0c.b2 ma0d.b2 ma0e.b2 ma0f.b2 ma10.b2 ma11.b2 ma12.b2 ma13.b2 \
+          ma14.b2 ma15.b2 ma16.b2 ma17.b2 ma18.b2 ma19.b2 ma1a.b2 ma1b.b2 ma1c.b2 ma1d.b2 \
+          ma1e.b2 ma1f.b2 ma20.b2 ma21.b2 ma22.b2 ma23.b2 ma24.b2 ma25.b2 ma26.b2 ma27.b2 \
+          ma28.b2 ma29.b2 ma2a.b2 ma2b.b2 ma2c.b2 ma2d.b2 ma2e.b2 ma2f.b2 ma30.b2 ma31.b2 \
+          ma32.b2 ma33.b2 
 	$(RM) $(EXE_DIR)/$@
 	$(CC1541) -n "    skramble    " -i " 2020" -S 8\
 	 \
@@ -228,58 +207,58 @@ main.d64: loadscreen.prg main.prg install-c64.prg \
 	 -f "ff" -w $(EXE_DIR)/main.prg \
 	 -f "li" -w $(EXE_DIR)/install-c64.prg \
 	 \
-	 -f "00" -w $(EXE_DIR)/ma00.bc \
-	 -f "01" -w $(EXE_DIR)/ma01.bc \
-	 -f "02" -w $(EXE_DIR)/ma02.bc \
-	 -f "03" -w $(EXE_DIR)/ma03.bc \
-	 -f "04" -w $(EXE_DIR)/ma04.bc \
-	 -f "05" -w $(EXE_DIR)/ma05.bc \
-	 -f "06" -w $(EXE_DIR)/ma06.bc \
-	 -f "07" -w $(EXE_DIR)/ma07.bc \
-	 -f "08" -w $(EXE_DIR)/ma08.bc \
-	 -f "09" -w $(EXE_DIR)/ma09.bc \
-	 -f "0a" -w $(EXE_DIR)/ma0a.bc \
-	 -f "0b" -w $(EXE_DIR)/ma0b.bc \
-	 -f "0c" -w $(EXE_DIR)/ma0c.bc \
-	 -f "0d" -w $(EXE_DIR)/ma0d.bc \
-	 -f "0e" -w $(EXE_DIR)/ma0e.bc \
-	 -f "0f" -w $(EXE_DIR)/ma0f.bc \
-	 -f "10" -w $(EXE_DIR)/ma10.bc \
-	 -f "11" -w $(EXE_DIR)/ma11.bc \
-	 -f "12" -w $(EXE_DIR)/ma12.bc \
-	 -f "13" -w $(EXE_DIR)/ma13.bc \
-	 -f "14" -w $(EXE_DIR)/ma14.bc \
-	 -f "15" -w $(EXE_DIR)/ma15.bc \
-	 -f "16" -w $(EXE_DIR)/ma16.bc \
-	 -f "17" -w $(EXE_DIR)/ma17.bc \
-	 -f "18" -w $(EXE_DIR)/ma18.bc \
-	 -f "19" -w $(EXE_DIR)/ma19.bc \
-	 -f "1a" -w $(EXE_DIR)/ma1a.bc \
-	 -f "1b" -w $(EXE_DIR)/ma1b.bc \
-	 -f "1c" -w $(EXE_DIR)/ma1c.bc \
-	 -f "1d" -w $(EXE_DIR)/ma1d.bc \
-	 -f "1e" -w $(EXE_DIR)/ma1e.bc \
-	 -f "1f" -w $(EXE_DIR)/ma1f.bc \
-	 -f "20" -w $(EXE_DIR)/ma20.bc \
-	 -f "21" -w $(EXE_DIR)/ma21.bc \
-	 -f "22" -w $(EXE_DIR)/ma22.bc \
-	 -f "23" -w $(EXE_DIR)/ma23.bc \
-	 -f "24" -w $(EXE_DIR)/ma24.bc \
-	 -f "25" -w $(EXE_DIR)/ma25.bc \
-	 -f "26" -w $(EXE_DIR)/ma26.bc \
-	 -f "27" -w $(EXE_DIR)/ma27.bc \
-	 -f "28" -w $(EXE_DIR)/ma28.bc \
-	 -f "29" -w $(EXE_DIR)/ma29.bc \
-	 -f "2a" -w $(EXE_DIR)/ma2a.bc \
-	 -f "2b" -w $(EXE_DIR)/ma2b.bc \
-	 -f "2c" -w $(EXE_DIR)/ma2c.bc \
-	 -f "2d" -w $(EXE_DIR)/ma2d.bc \
-	 -f "2e" -w $(EXE_DIR)/ma2e.bc \
-	 -f "2f" -w $(EXE_DIR)/ma2f.bc \
-	 -f "30" -w $(EXE_DIR)/ma30.bc \
-	 -f "31" -w $(EXE_DIR)/ma31.bc \
-	 -f "32" -w $(EXE_DIR)/ma32.bc \
-	 -f "33" -w $(EXE_DIR)/ma33.bc \
+	 -f "00" -w $(EXE_DIR)/ma00.b2 \
+	 -f "01" -w $(EXE_DIR)/ma01.b2 \
+	 -f "02" -w $(EXE_DIR)/ma02.b2 \
+	 -f "03" -w $(EXE_DIR)/ma03.b2 \
+	 -f "04" -w $(EXE_DIR)/ma04.b2 \
+	 -f "05" -w $(EXE_DIR)/ma05.b2 \
+	 -f "06" -w $(EXE_DIR)/ma06.b2 \
+	 -f "07" -w $(EXE_DIR)/ma07.b2 \
+	 -f "08" -w $(EXE_DIR)/ma08.b2 \
+	 -f "09" -w $(EXE_DIR)/ma09.b2 \
+	 -f "0a" -w $(EXE_DIR)/ma0a.b2 \
+	 -f "0b" -w $(EXE_DIR)/ma0b.b2 \
+	 -f "0c" -w $(EXE_DIR)/ma0c.b2 \
+	 -f "0d" -w $(EXE_DIR)/ma0d.b2 \
+	 -f "0e" -w $(EXE_DIR)/ma0e.b2 \
+	 -f "0f" -w $(EXE_DIR)/ma0f.b2 \
+	 -f "10" -w $(EXE_DIR)/ma10.b2 \
+	 -f "11" -w $(EXE_DIR)/ma11.b2 \
+	 -f "12" -w $(EXE_DIR)/ma12.b2 \
+	 -f "13" -w $(EXE_DIR)/ma13.b2 \
+	 -f "14" -w $(EXE_DIR)/ma14.b2 \
+	 -f "15" -w $(EXE_DIR)/ma15.b2 \
+	 -f "16" -w $(EXE_DIR)/ma16.b2 \
+	 -f "17" -w $(EXE_DIR)/ma17.b2 \
+	 -f "18" -w $(EXE_DIR)/ma18.b2 \
+	 -f "19" -w $(EXE_DIR)/ma19.b2 \
+	 -f "1a" -w $(EXE_DIR)/ma1a.b2 \
+	 -f "1b" -w $(EXE_DIR)/ma1b.b2 \
+	 -f "1c" -w $(EXE_DIR)/ma1c.b2 \
+	 -f "1d" -w $(EXE_DIR)/ma1d.b2 \
+	 -f "1e" -w $(EXE_DIR)/ma1e.b2 \
+	 -f "1f" -w $(EXE_DIR)/ma1f.b2 \
+	 -f "20" -w $(EXE_DIR)/ma20.b2 \
+	 -f "21" -w $(EXE_DIR)/ma21.b2 \
+	 -f "22" -w $(EXE_DIR)/ma22.b2 \
+	 -f "23" -w $(EXE_DIR)/ma23.b2 \
+	 -f "24" -w $(EXE_DIR)/ma24.b2 \
+	 -f "25" -w $(EXE_DIR)/ma25.b2 \
+	 -f "26" -w $(EXE_DIR)/ma26.b2 \
+	 -f "27" -w $(EXE_DIR)/ma27.b2 \
+	 -f "28" -w $(EXE_DIR)/ma28.b2 \
+	 -f "29" -w $(EXE_DIR)/ma29.b2 \
+	 -f "2a" -w $(EXE_DIR)/ma2a.b2 \
+	 -f "2b" -w $(EXE_DIR)/ma2b.b2 \
+	 -f "2c" -w $(EXE_DIR)/ma2c.b2 \
+	 -f "2d" -w $(EXE_DIR)/ma2d.b2 \
+	 -f "2e" -w $(EXE_DIR)/ma2e.b2 \
+	 -f "2f" -w $(EXE_DIR)/ma2f.b2 \
+	 -f "30" -w $(EXE_DIR)/ma30.b2 \
+	 -f "31" -w $(EXE_DIR)/ma31.b2 \
+	 -f "32" -w $(EXE_DIR)/ma32.b2 \
+	 -f "33" -w $(EXE_DIR)/ma33.b2 \
 	$(EXE_DIR)/$@
 	cat $(EXE_DIR)/main.map
 
