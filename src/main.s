@@ -355,11 +355,6 @@ initiatebitmapscores
 	rts
 
 ingamefresh
-	jsr ingamestart						; sets $01
-
-	; do everything that needs $01 to be at #$34 or #$35 first
-
-	jsr setupinitiallevel
 
 	ldx #$00							; set score to zero
 	lda #$00
@@ -369,32 +364,31 @@ ingamefresh
 	cpx #$06
 	bne :-
 
-	jsr initiatebitmapscores
-
-	jsr setuplevel						; sets $01 to #$37 and returns
-	jsr resetfirestate
-
 	lda startlives
 	sta lives
 	lda #$00
 	sta flags
 
-	jmp ingameend
+	jsr ingamestart						; sets $01
+	jsr setupinitiallevel
+	jsr setuplevel						; sets $01 to #$37 and returns
+	
+	jmp ingamefromui
 
 ingamefromlivesleftscreen
 	jsr ingamestart
-	jsr initiatebitmapscores
-	jsr setingamebkgcolours
-	jsr resetfirestate
-	jmp ingameend
+	jmp ingamefromui
 	
 ingamefromcongratulations
 	jsr ingamestart
-	jsr initiatebitmapscores
 	jsr setupinitiallevel
 	jsr setuplevel
+	jmp ingamefromui
+
+ingamefromui
+	jsr setingamebkgcolours
+	jsr initiatebitmapscores
 	jsr resetfirestate
-	; don't clear lives left or score
 	jmp ingameend
 
 screensafe
@@ -458,12 +452,6 @@ error
 ; -----------------------------------------------------------------------------------------------
 ; -----------------------------------------------------------------------------------------------
 ; -----------------------------------------------------------------------------------------------
-
-file01
-.asciiz "00"
-
-loadinstallfile
-.asciiz "LI"
 
 loadpackd
 
@@ -5781,6 +5769,12 @@ sortskipshigh
 .byte >sortskip9
 .byte >sortskip10
 .byte >sortskip11
+
+file01
+.asciiz "00"
+
+loadinstallfile
+.asciiz "LI"
 
 .byte $de,$ad,$be,$ef		; DEADBEEF
 
