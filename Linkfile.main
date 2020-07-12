@@ -26,7 +26,7 @@ SEGMENTS
 
 	# $5c20 - $6000 FREE
 
-	CYCLEPERFECT:		load=RAM, start=$5f00;
+	CYCLEPERFECT:		load=RAM, align=256;
 
 	BITMAP1:			load=OVERLAPPING_RAM, start=$6000, type=BSS;
 

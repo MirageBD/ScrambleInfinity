@@ -69,6 +69,10 @@
 .segment "LOADER"
 .incbin "./exe/loader-c64.prg", $02
 
+.segment "LOADEDDATA1"
+	.res 2048
+.segment "LOADEDDATA2"
+	.res 2048
 .segment "SCREEN1"
 	.res 1024
 .segment "BITMAP1"
