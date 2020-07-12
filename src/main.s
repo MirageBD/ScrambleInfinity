@@ -938,9 +938,6 @@ irqtitle
 	lda #$00									; no sprites on title screen
 	sta $d015
 	
-	;lda #$0b
-	;sta $d020
-	
 	lda #<irqtitle2
 	ldx #>irqtitle2
 	ldy #$f8
@@ -971,9 +968,6 @@ irqlivesleft
 
 	lda #$00									; no sprites on lives left screen
 	sta $d015
-
-	;inc $d020
-	;dec $d020
 
 	lda timerreached
 	bne timerreacheddone
@@ -1257,9 +1251,7 @@ firebomb0
 	lda ship0+sprdata::ylow
 	adc #$02
 	sta bomb0+sprdata::ylow
-	;lda #$01
 	stx bomb0+sprdata::xvel
-	;lda #$01
 	stx bomb0+sprdata::yvel
 
 	lda #$00
@@ -1292,9 +1284,7 @@ firebomb1
 	lda ship0+sprdata::ylow
 	adc #$02
 	sta bomb1+sprdata::ylow
-	;lda #$01
 	stx bomb1+sprdata::xvel
-	;lda #$01
 	stx bomb1+sprdata::yvel
 
 	lda #$00
@@ -2942,7 +2932,7 @@ hualoop
 	lda sortsprp,x
 	cmp #$3d
 	bcc :+
-	lda #$3a									;8E80, 8ec0, 8f00
+	lda #$3a									; 8E80, 8ec0, 8f00
 	sta sortsprp,x
 :	inx
 	cpx #MAXMULTPLEXSPR
@@ -3815,7 +3805,7 @@ gett1
 	lda loadeddata1+0*2
 	sta currenttile+0
 	sta currenttiletimes8+0
-	;adc #$00									; commented out for performance reasons
+	;adc #$00
 	sta plotc1+1
 gett2
 	lda loadeddata1+1+0*2
@@ -3825,7 +3815,7 @@ gett2
 	sta plotc1+2
 	
 	lda currenttile+1							; > 256 = always solid tile
-	;cmp #$00									; commented out for performance reasons
+	;cmp #$00
 	bne solidtile
 	
 	lda currenttile+0
@@ -3864,7 +3854,7 @@ skipspecialtiles
 	
 	clc
 	lda currenttiletimes8+0
-	;adc #$00									; commented out for performance reasons
+	;adc #$00
 	sta ploth1+1
 	lda currenttiletimes8+1
 	adc #>maptiles
@@ -5778,7 +5768,7 @@ file01
 loadinstallfile
 .asciiz "LI"
 
-.byte $de,$ad,$be,$ef		; DEADBEEF
+.byte $de,$ad,$be,$ef							; DEADBEEF
 
 ; -----------------------------------------------------------------------------------------------	
 
