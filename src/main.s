@@ -109,6 +109,8 @@
 .define sortorder			$a0
 .define sortcounter			$b2
 
+.define bitmapwidth			320
+
 ; ------------------------------------------------------------------------------------------------------------------------
 
 tuneinit					= $1000
@@ -128,6 +130,10 @@ screen2						= $8000
 sprites2					= $8400
 bitmap2						= $a000
 screenspecial				= $c000
+screenui					= $c000
+clearmisilepositiondata		= screenspecial+$03c0
+
+colormem					= $d800
 
 scoreandfuelsprites			= $f400
 livesandzonesprites			= $f600
@@ -480,10 +486,10 @@ loadloadinstall
 setingamebkgcolours
 	ldx #$00
 :	lda #$0c
-	sta $d800,x
-	sta $d900,x
-	sta $da00,x
-	sta $db00,x
+	sta colormem+(0*$0100),x
+	sta colormem+(1*$0100),x
+	sta colormem+(2*$0100),x
+	sta colormem+(3*$0100),x
 	dex
 	bne :-
 	rts
@@ -683,8 +689,8 @@ sldone
 	lda #$01
 	sta scrollspeed
 
-	ldx #$01
-	ldy #$3f
+	ldx #>(bitmapwidth-1)
+	ldy #<(bitmapwidth-1)
 	stx screenposhigh
 	sty screenposlow
 
@@ -1685,19 +1691,19 @@ testbomb0bkgcollision
 	lda bomb0+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
 	cmp #$df
 	bpl :+
-	jmp bombinsidescreen0
+	jmp bombinsidescreenok0
 	
 :	cmp #$00
 	bmi :+
-	jmp bombinsidescreen0
+	jmp bombinsidescreenok0
 	
-:	lda #$df
-	sta bomb0+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
-	lda #$ff							; simulate collision with background
+:	lda #$df							; clamp bomb position
+	sta bomb0+sprdata::ylow
+	lda #$ff							; and simulate collision with background
 	sta calchit
 	jmp handlebomb0bkgcollision
 	
-bombinsidescreen0
+bombinsidescreenok0
 
 	jsr calcspritepostoscreenpos
 
@@ -1790,19 +1796,19 @@ testbomb1bkgcollision
 	lda bomb1+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
 	cmp #$df
 	bpl :+
-	jmp bombinsidescreen1
+	jmp bombinsidescreenok1
 	
 :	cmp #$00
 	bmi :+
-	jmp bombinsidescreen1
+	jmp bombinsidescreenok1
 	
-:	lda #$df
-	sta bomb1+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
-	lda #$ff							; simulate collision with background
+:	lda #$df							; clamp bomb position
+	sta bomb1+sprdata::ylow
+	lda #$ff							; and simulate collision with background
 	sta calchit
 	jmp handlebomb1bkgcollision
 	
-bombinsidescreen1
+bombinsidescreenok1
 
 	jsr calcspritepostoscreenpos
 
@@ -2024,9 +2030,9 @@ removeobject
 	adc hbo8+2
 	sta hbo8+2
 
-	lda #$c3							; setup clear misile position data
+	lda #>clearmisilepositiondata		; setup clear misile position data
 	sta hbo10+2
-	lda #$c0
+	lda #<clearmisilepositiondata
 	sta hbo10+1
 
 	clc
@@ -2125,9 +2131,9 @@ hbo0
 hbo1
 	sta bitmap2-1,x
 hbo2
-	sta bitmap1+320-1,x
+	sta bitmap1+bitmapwidth-1,x
 hbo3
-	sta bitmap2+320-1,x
+	sta bitmap2+bitmapwidth-1,x
 	dex
 	bne hbo0
 
@@ -2155,7 +2161,7 @@ hbo9
 
 	lda #$00
 hbo10
-	sta $c3c0
+	sta clearmisilepositiondata
 
 	rts
 
@@ -4155,8 +4161,8 @@ scrollscreen
 	cmp #$ff
 	bne :+
 	
-	ldx #$01
-	ldy #$3f
+	ldx #>(bitmapwidth-1)
+	ldy #<(bitmapwidth-1)
 	stx screenposhigh
 	sty screenposlow
 	
@@ -4167,10 +4173,10 @@ scrollscreen
 calcvsp
 
 	sec									; first calculate the inverse numbers
-	lda #$3f
+	lda #<(bitmapwidth-1)
 	sbc screenposlow
 	sta invscreenposlow
-	lda #$01
+	lda #>(bitmapwidth-1)
 	sbc screenposhigh
 	sta invscreenposhigh
 
@@ -4239,7 +4245,7 @@ plotfuelplotscoreupdatefuel
 	;sta arg1+5*3
 .endmacro
 
-	;tick $f486+(0*64), 0+(0*3*4)		; 3 * 4 expanded pixels in a sprite horizontally
+	;tick scoreandfuelsprites+$0086+(0*64), 0+(0*3*4)		; 3 * 4 expanded pixels in a sprite horizontally
 	tick scoreandfuelsprites+$0087+(0*64), 0+(0*3*4)
 	tick scoreandfuelsprites+$0088+(0*64), 4+(0*3*4)
 
@@ -4635,11 +4641,11 @@ calcshippostoscreenpos
 	adc calcxlow
 	sta csptsp1+1
 	lda csptsp1+2
-	adc #$c0
+	adc #>screenspecial
 	sta csptsp1+2
 
 csptsp1
-	lda $c001
+	lda screenspecial+1
 	sta calchit
 
 	rts
@@ -4827,10 +4833,6 @@ shiphitdebug
 normalgameplay2
 
 	jsr scrollscreen
-
-
-	;lda #$06
-	;sta $d020
 	
 	jsr joyrout							; 03
 	jsr calcvsp
@@ -4865,8 +4867,6 @@ normalgameplay2
 	lda scrollspeed						; we died, scrollspeed is 0
 	beq wedied
 
-	;inc $d020
-
 	lda $01
 	pha
 	lda #$34
@@ -4888,13 +4888,12 @@ wedied
 	dey
 	bne :--
 	
-:
-	;lda #$00
+:	;lda #$00
 	;sta $d020
 	; we are below the bottom border sprites - set up the top border sprites now
 	
 	.repeat 6,i
-	lda #$16						; was 16
+	lda #$16							; was 16
 	sta $d001+i*2
 	lda #$d8+i
 	sta $c3f8+i
@@ -4909,19 +4908,19 @@ wedied
 	sta $d027+4
 	sta $d027+5
 
-	lda #$20+0*24					; UI ship
+	lda #$20+0*24						; UI ship
 	sta $d000
-	lda #$20+1*24					; x
+	lda #$20+1*24						; x
 	sta $d002
 
-	lda #$00+0*24					; empty
+	lda #$00+0*24						; empty
 	sta $d004
-	lda #$00+1*24					; empty
+	lda #$00+1*24						; empty
 	sta $d006
 
-	lda #$1c+0*24					; UI flag
+	lda #$1c+0*24						; UI flag
 	sta $d008
-	lda #$1c+1*24					; x
+	lda #$1c+1*24						; x
 	sta $d00a
 
 	lda #%00111100
@@ -5009,10 +5008,10 @@ clearscreen
 
 	ldx #$00
 :	lda #$00
-	sta screenspecial+(0*256),x
-	sta screenspecial+(1*256),x
-	sta screenspecial+(2*256),x
-	sta screenspecial+(3*256),x
+	sta screenui+(0*$0100),x
+	sta screenui+(1*$0100),x
+	sta screenui+(2*$0100),x
+	sta screenui+(3*$0100),x
 	inx
 	bne :-
 
@@ -5109,9 +5108,9 @@ livesleftscreen
 	
 	lda lives
 	adc #$2f
-	sta screenspecial+(0*256)+12*40+14
+	sta screenui+12*40+14
 	lda #$01
-	sta screenspecial+(0*256)+12*40+14
+	sta colormem+12*40+14
 
 	ldx #<liveslefttext
 	ldy #>liveslefttext
@@ -5227,19 +5226,19 @@ plottext
 	ldy #$00
 
 	clc
-	lda #$00
+	lda #<screenui
 	adc (zp0),y
 	sta pt2+1
-	lda #$00
+	lda #<colormem
 	adc (zp0),y
 	sta pt1+1
 	iny
 
 	clc
-	lda #$c0
+	lda #>screenui
 	adc (zp0),y
 	sta pt2+2
-	lda #$d8
+	lda #>colormem
 	adc (zp0),y
 	sta pt1+2
 	iny
@@ -5263,10 +5262,10 @@ plottext
 	ldx #$ff
 :	inx
 pt0	lda #$08
-pt1	sta $d800,x
+pt1	sta colormem,x
 pt3	lda titletext,x
 	sbc #$60
-pt2	sta screenspecial+(0*256),x
+pt2	sta screenui,x
 	cmp #$00
 	bne :-
 	inx
@@ -5295,9 +5294,9 @@ ploticon
 	clc
 	adc iconposlow
 	sta itxt+1
-	lda #$00
+	lda #<screenui
 	adc iconposhigh
-	adc #$c0
+	adc #>screenui
 	sta itxt+2
 	lda (zp0),y
 	clc
@@ -5305,14 +5304,14 @@ ploticon
 	sta icol+1
 	lda #$00
 	adc iconposhigh
-	adc #$d8
+	adc #>colormem
 	sta icol+2
 	iny
 	lda (zp0),y
-itxt sta screenspecial
+itxt sta screenui
 	iny
 	lda (zp0),y
-icol sta $d800
+icol sta colormem
 	iny
 	cpy #6*3
 	bne :-
