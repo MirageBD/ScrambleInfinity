@@ -6,7 +6,6 @@
 ; add sound-fx for fire/bomb/explode
 ; more obfuscate against hackers? On drive? Probably not worth it
 ; fancy startup screen
-; fix sprite bugs in lower border
 ; fix bug where ground targets sometimes get cleaned only half when hit
 
 .segment "MUSIC"
@@ -628,8 +627,10 @@ psdone
 	bne :-
 	
 	ldx #$00
-	lda #$66
-:	sta $4000,x
+:	lda #$66
+	sta $4000,x
+	lda #$20
+	sta $c000,x
 	inx
 	cpx #$28
 	bne :-
@@ -1249,7 +1250,7 @@ firebomb0
 	sta bomb0+sprdata::xhigh
 	clc
 	lda ship0+sprdata::ylow
-	adc #$0a
+	adc #$02
 	sta bomb0+sprdata::ylow
 	;lda #$01
 	stx bomb0+sprdata::xvel
@@ -1284,7 +1285,7 @@ firebomb1
 	sta bomb1+sprdata::xhigh
 	clc
 	lda ship0+sprdata::ylow
-	adc #$0a
+	adc #$02
 	sta bomb1+sprdata::ylow
 	;lda #$01
 	stx bomb1+sprdata::xvel
@@ -1669,8 +1670,25 @@ testbomb0bkgcollision
 	sta calcxhigh
 	sec
 	lda bomb0+sprdata::ylow
-	sbc #50
+	sbc #42
 	sta calcylow
+
+	lda bomb0+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
+	cmp #$df
+	bpl :+
+	jmp bombinsidescreen0
+	
+:	cmp #$00
+	bmi :+
+	jmp bombinsidescreen0
+	
+:	lda #$df
+	sta bomb0+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
+	lda #$ff							; simulate collision with background
+	sta calchit
+	jmp handlebomb0bkgcollision
+	
+bombinsidescreen0
 
 	jsr calcspritepostoscreenpos
 
@@ -1680,21 +1698,7 @@ testbomb0bkgcollision
 
 	jmp handlebomb0bkgcollision
 
-:	lda bomb0+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
-	cmp #$df
-	bpl :+
-	jmp bombinsidescreen0
-	
-:	cmp #$00
-	bmi :+
-	jmp bombinsidescreen0
-	
-:	lda #$ff							; simulate collision with background
-	sta calchit
-	jmp handlebomb0bkgcollision
-	
-bombinsidescreen0
-	rts
+:	rts
 
 testbomb0sprcollision
 
@@ -1771,8 +1775,25 @@ testbomb1bkgcollision
 	sta calcxhigh
 	sec
 	lda bomb1+sprdata::ylow
-	sbc #50
+	sbc #42
 	sta calcylow
+
+	lda bomb1+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
+	cmp #$df
+	bpl :+
+	jmp bombinsidescreen1
+	
+:	cmp #$00
+	bmi :+
+	jmp bombinsidescreen1
+	
+:	lda #$df
+	sta bomb1+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
+	lda #$ff							; simulate collision with background
+	sta calchit
+	jmp handlebomb1bkgcollision
+	
+bombinsidescreen1
 
 	jsr calcspritepostoscreenpos
 
@@ -1782,21 +1803,7 @@ testbomb1bkgcollision
 
 	jmp handlebomb1bkgcollision
 
-:	lda bomb1+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
-	cmp #$df
-	bpl :+
-	jmp bombinsidescreen1
-	
-:	cmp #$00
-	bmi :+
-	jmp bombinsidescreen1
-	
-:	lda #$ff							; simulate collision with background
-	sta calchit
-	jmp handlebomb1bkgcollision
-	
-bombinsidescreen1
-	rts
+:	rts
 	
 testbomb1sprcollision
 
