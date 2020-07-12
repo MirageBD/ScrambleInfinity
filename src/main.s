@@ -1,12 +1,13 @@
 ; TODO:
 ; show mystery points
-; highscore + obfuscate (big one, install irq loader afterwards = $1200 mem, seperate file?)
+; highscore + obfuscate (irq loader now loadable after reverting to kernal)
 ; stars at startup-screen (or maybe something more fancy)
-; update round-flags as number, not as round-flag*x
 ; new music (give option to play without music?) 2channel prefered
 ; add sound-fx for fire/bomb/explode
 ; more obfuscate against hackers? On drive? Probably not worth it
 ; fancy startup screen
+; fix sprite bugs in lower border
+; fix bug where ground targets sometimes get cleaned only half when hit
 
 .segment "MUSIC"
 .incbin "./bin/jammer.bin"
@@ -101,6 +102,7 @@ zp5			= $fe
 zptemp		= $ff
 
 livesdigit0	= $F600+1*64+ 2*3+2
+flagsdigit0 = $F600+5*64+ 2*3+2
 
 scoredigit0 = $f400+0*64+14*3+0
 scoredigit1 = $f400+0*64+14*3+1
@@ -323,6 +325,7 @@ initiatebitmapscores
 	plotdigit score+4, scoredigit4
 	plotdigit score+5, scoredigit5
 	plotdigit lives, livesdigit0
+	plotdigit flags, flagsdigit0
 	rts
 
 ingamefresh
@@ -347,6 +350,8 @@ ingamefresh
 
 	lda startlives
 	sta lives
+	lda #$00
+	sta flags
 
 	jmp ingameend
 
@@ -4257,8 +4262,11 @@ updatedigit2
 	cmp prevscore+2
 	beq updatedigit3
 	plotdigit score+2, scoredigit2
+	lda lives
+	cmp #$09
+	beq :+
 	inc lives									; award extra life at every 10000 points
-	plotdigit lives, livesdigit0
+:	plotdigit lives, livesdigit0
 
 updatedigit3
 	lda score+3
@@ -4763,7 +4771,11 @@ handlezone5								; avoid fuel
 	jmp handlezone5rest
 	
 handlegamefinished
-	lda #states::congratulations
+	lda flags
+	cmp #$09
+	beq :+
+	inc flags
+:	lda #states::congratulations
 	sta state+1
 	rts
 
@@ -5421,6 +5433,9 @@ fuel
 
 lives
 .byte $03
+
+flags
+.byte $00
 
 timeseconds
 .byte $00
