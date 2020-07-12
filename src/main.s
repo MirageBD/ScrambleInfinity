@@ -1,14 +1,16 @@
 ; ------------------------------------------------------------------------------------------------------------------------
 
 ; TODO:
-; show mystery points
-; highscore + obfuscate (irq loader now loadable after reverting to kernal)
-; stars at startup-screen (or maybe something more fancy)
-; new music (give option to play without music?) 2channel prefered
-; add sound-fx for fire/bomb/explode
-; more obfuscate against hackers? On drive? Probably not worth it
-; fancy startup screen
-; fix bug where ground targets sometimes get cleaned only half when hit
+
+; show mystery points.
+; highscore + obfuscate (irq loader now loadable after reverting to kernal).
+; stars at startup-screen (or maybe something more fancy).
+; new music (give option to play without music?) 2channel prefered.
+; add sound-fx for fire/bomb/explode.
+; more obfuscate against hackers? On drive? Probably not worth it.
+; fancy startup screen.
+; fix bug where ground targets sometimes get cleaned only half when hit.
+; add proper disk fail handling.
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
@@ -32,25 +34,25 @@
 .segment "MUSIC"
 .incbin "./bin/jammer.bin"
 
-.segment "DIGITSPRITEFONT"				; referenced by code. digits to plot into sprites
+.segment "DIGITSPRITEFONT"						; referenced by code. digits to plot into sprites
 .incbin "./bin/font.bin"
 
-.segment "FUELSPRITES"					; referenced by code. score and highscore are plotted in here
+.segment "FUELSPRITES"							; referenced by code. score and highscore are plotted in here
 .incbin "./bin/fuel.bin"
 
-.segment "ZONESPRITES"					; referenced by code. lives and flags are plotted in here
+.segment "ZONESPRITES"							; referenced by code. lives and flags are plotted in here
 .incbin "./bin/b54321.bin"
 
-.segment "SPRITES1"						; copied to other bank once, used as sprites
-.incbin "./bin/s0.bin"					; ""
-.incbin "./bin/b0.bin"					; ""
-.incbin "./bin/bmb0.bin"				; ""
-.incbin "./bin/expl0.bin"				; ""
-.incbin "./bin/expl1.bin"				; ""
-.incbin "./bin/expl2.bin"				; ""
-.incbin "./bin/miss.bin"				; ""
-.incbin "./bin/ufo.bin"					; ""
-.incbin "./bin/comet.bin"				; ""
+.segment "SPRITES1"								; copied to other bank once, used as sprites
+.incbin "./bin/s0.bin"							; ""
+.incbin "./bin/b0.bin"							; ""
+.incbin "./bin/bmb0.bin"						; ""
+.incbin "./bin/expl0.bin"						; ""
+.incbin "./bin/expl1.bin"						; ""
+.incbin "./bin/expl2.bin"						; ""
+.incbin "./bin/miss.bin"						; ""
+.incbin "./bin/ufo.bin"							; ""
+.incbin "./bin/comet.bin"						; ""
 
 .segment "MAPTILES"
 .incbin "./exe/mt.out"
@@ -58,10 +60,10 @@
 .segment "MAPTILECOLORS"
 .incbin "./exe/mtc.out"
 
-.segment "UIFONT"						; not referenced, used as font
+.segment "UIFONT"								; not referenced, used as font
 .incbin "./bin/font2.bin"
 
-.segment "ENEMYICONS"					; not references, used as font
+.segment "ENEMYICONS"							; not references, used as font
 .incbin "./bin/tspts.bin"
 
 .segment "LOADER"
@@ -80,14 +82,14 @@
 
 ; DEBUG DEFINES ----------------------------------------------------------------------------------------------------------
 
-.define fueldecreases		1			; HACKS
+.define fueldecreases		1					; HACKS
 .define pointsforbeingalive	1
 .define shipbkgcollision	1
 .define shipsprcollision	1
 .define livesdecrease		1
 .define firebullets			1
 .define firebombs			1
-.define startzone			#$01		; #$01 - #$06
+.define startzone			#$01				; #$01 - #$06
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
 
@@ -96,11 +98,11 @@
 .define bank2				$8000
 .define bank3				$c000
 
-.define fueladd				#$08		; how much to add when you destroy a fuel tanker
-.define fueldecreaseticks	#$20		; frames before fuel decreases by one
-.define fuelfull			#$38		; full tank
-.define startlives			#$03		; initial lives
-.define ufospawntime		#$50		; time before new ufo spawns - can be more, not less
+.define fueladd				#$08				; how much to add when you destroy a fuel tanker
+.define fueldecreaseticks	#$20				; frames before fuel decreases by one
+.define fuelfull			#$38				; full tank
+.define startlives			#$03				; initial lives
+.define ufospawntime		#$50				; time before new ufo spawns - can be more, not less
 .define bulletcooldown		#$18
 .define zonecolour0			#$0b
 .define zonecolour1			#$07
@@ -179,7 +181,7 @@ scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
 	congratulations			= 6
 .endenum
 
-.enum bkgcollision							; 3rd bit for cave?
+.enum bkgcollision								; 3rd bit for cave?
 	standingmissilenoncave	= %00000000
 	mysterynoncave			= %00000100
 	fuelnoncave				= %00001000
@@ -198,7 +200,7 @@ scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
 
 ; MACROS -----------------------------------------------------------------------------------------------------------------
 
-.macro add16bit arg1, arg2				; clear carry before using this
+.macro add16bit arg1, arg2						; clear carry before using this
 	lda arg1+1
 	adc #<(arg2)
 	sta arg1+1
@@ -207,7 +209,7 @@ scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
 	sta arg1+2
 .endmacro
 
-.macro sub16bit arg1, arg2				; set carry before using this
+.macro sub16bit arg1, arg2						; set carry before using this
 	lda arg1+1
 	sbc #<(arg2)
 	sta arg1+1
@@ -253,24 +255,24 @@ scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
 
 	sei
 
-	lda #$00							; Disable all interferences
-	sta $d015							; for a stable timer
+	lda #$00									; Disable all interferences
+	sta $d015									; for a stable timer
 	lda #$35
 	sta $01
 	lda #$7f
 	sta $dc0d
 	bit $dc0d
 
-	ldx #$01							; Wait for raster line 0 twice
-:	bit $d011							; to make sure there are no sprites
+	ldx #$01									; Wait for raster line 0 twice
+:	bit $d011									; to make sure there are no sprites
 	bpl :-
 :	bit $d011
 	bmi :-
 	dex
 	bpl :--
 
-	ldx $d012							; Achieve an initial stable raster point
-	inx									; using halve invariance method
+	ldx $d012									; Achieve an initial stable raster point
+	inx											; using halve invariance method
 :	cpx $d012
 	bne :-
 	ldy #$0a
@@ -300,17 +302,17 @@ scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
 	bne :+
 :	.repeat 5
 	nop
-	.endrepeat							; Raster is stable here
+	.endrepeat									; Raster is stable here
 
-	.repeat 13							; add offset to timer (95 cycles)
+	.repeat 13									; add offset to timer (95 cycles)
 		pha
 		pla
 	.endrep
 	nop
 	nop
 
-	lda #$3e							; Start a continious timer
-	sta $dc04							; with 63 ticks each loop
+	lda #$3e									; Start a continious timer
+	sta $dc04									; with 63 ticks each loop
 	sty $dc05
 	lda #%00010001
 	sta $dc0e
@@ -350,13 +352,13 @@ initiatebitmapscores
 	plotdigit score+3, scoredigit3
 	plotdigit score+4, scoredigit4
 	plotdigit score+5, scoredigit5
-	plotdigit lives, livesdigit0
-	plotdigit flags, flagsdigit0
+	plotdigit lives+0, livesdigit0
+	plotdigit flags+0, flagsdigit0
 	rts
 
 ingamefresh
 
-	ldx #$00							; set score to zero
+	ldx #$00									; set score to zero
 	lda #$00
 :	sta score,x
 	sta prevscore,x
@@ -369,10 +371,10 @@ ingamefresh
 	lda #$00
 	sta flags
 
-	jsr ingamestart						; sets $01
+	jsr ingamestart								; sets $01
 	jsr setupinitiallevel
-	jsr setuplevel						; sets $01 to #$37 and returns
-	
+	jsr setuplevel								; sets $01 to #$37 and returns
+
 	jmp ingamefromui
 
 ingamefromlivesleftscreen
@@ -399,7 +401,7 @@ screensafe
 
 statecheck
 state
-:	lda #states::waiting				; selfmodifying - see states enum
+:	lda #states::waiting						; selfmodifying - see states enum
 	beq :-
 
 	cmp #states::loadingsubzone
@@ -488,7 +490,7 @@ setupinitiallevel
 	sta ship0+sprdata::xhigh
 	sta ship0+sprdata::xlow
 	
-	lda #>sprites2							; copy sprites to other bank
+	lda #>sprites2								; copy sprites to other bank
 	sta sprcpy0+2
 	lda #>sprites1
 	sta sprcpy1+2
@@ -512,7 +514,7 @@ sprcpy1
 	sta $7fff
 	sta $bfff
 	
-	ldx startzone						; #$01, #$02, #$03, #$04, #$05, #$06
+	ldx startzone								; #$01, #$02, #$03, #$04, #$05, #$06
 	stx zone
 	dex
 	txa
@@ -520,7 +522,7 @@ sprcpy1
 	asl
 	asl
 	asl
-	ora #$01							; #$01, #$11, #$21, #$31, #$41, #$51
+	ora #$01									; #$01, #$11, #$21, #$31, #$41, #$51
 	sta subzone
 	
 	rts
@@ -576,22 +578,22 @@ setuplevel
 
 	jsr findstartofzone
 		
-	jsr setupfilename					; stores 0 in x, 0 in y
+	jsr setupfilename							; stores 0 in x, 0 in y
 	jsr loadpackd
 
 	;bcc :+
 	;jmp error
 
 :
-	inc file							; file = 1
+	inc file									; file = 1
 	jsr setupfilename
 	jsr loadpackd
 
 	;bcc :+
 	;jmp error
 
-:	jsr incpag2							; set up pointers for initial tile plot
-	inc file							; file = 2
+:	jsr incpag2									; set up pointers for initial tile plot
+	inc file									; file = 2
 	lda #$00
 	sta row
 	sta column
@@ -602,7 +604,7 @@ setuplevel
 	lda #$34
 	sta $01
 
-ps1	lda #$00							; plot initial screens
+ps1	lda #$00									; plot initial screens
 	cmp #$01
 	bne :+
 ps2	lda #$00
@@ -625,7 +627,7 @@ psdone
 	cmp #$02
 	bne sldone
 
-	ldx #$00							; clear temporary tiles from screen - only need to do this for first subzone?
+	ldx #$00									; clear temporary tiles from screen - only need to do this for first subzone?
 	lda #$55
 :	sta bitmap1,x
 	sta bitmap1+64,x
@@ -641,7 +643,7 @@ psdone
 	cpx #$28
 	bne :-
 
-	lda #$20							; empty tiles used for index ordering
+	lda #$20									; empty tiles used for index ordering
 	.repeat 27, i
 	sta loadeddata2+i*50+0
 	.endrepeat
@@ -693,7 +695,7 @@ sldone
 	ldx #$00
 :	sta zonecolours,x
 	inx
-	cpx zone						; zone = $01,$02,$03,$04,$05,$06
+	cpx zone									; zone = $01,$02,$03,$04,$05,$06
 	bne :-
 
 	lda zonecolour0
@@ -717,7 +719,7 @@ sldone
 	rts
 	
 
-resetfirestate							; this makes sure there are no leftover bullets on the screen after death
+resetfirestate									; this makes sure there are no leftover bullets on the screen after death
 	jsr bull0explosiondone
 	jsr bull1explosiondone
 	jsr bomb0explosiondone
@@ -742,7 +744,7 @@ bplcode
 :	.repeat 48
 	lda #$a9
 	.endrepeat
-	lda #$a5							; a5 = lda zp = 3 cycles
+	lda #$a5									; a5 = lda zp = 3 cycles
 
 	nop
 
@@ -756,7 +758,7 @@ page
 	ldx #$6b
 
 foo3
-	bne foo4							; do vsp
+	bne foo4									; do vsp
 foo4
 	.repeat 19
 	lda #$a9
@@ -765,19 +767,19 @@ foo4
 	nop
 
 	stx $d011
-	lda #$3c							; vsp
+	lda #$3c									; vsp
 	sta $d011
 	
 	lda #$ff
 	sta $d015
-	sta $d01c							; sprite multicolour
+	sta $d01c									; sprite multicolour
 
 	lda #$00
-	sta $d01b							; sprite priority
+	sta $d01b									; sprite priority
 
 	jsr normalgameplay
 
-	lda #$40							; #$4c
+	lda #$40									; #$4c
 	jsr cycleperfect
 	
 	lda #<irq2
@@ -787,7 +789,7 @@ foo4
 	
 ; -----------------------------------------------------------------------------------------------
 	
-irq2									; start of bottom border irq
+irq2											; start of bottom border irq
 	pha
 
 	nop
@@ -867,7 +869,7 @@ irq3
 	lda #$00
 	sta $d018
 
-	lda #$00							; #$02 = $4000-$8000, #$01 = $8000-$c000
+	lda #$00									; #$02 = $4000-$8000, #$01 = $8000-$c000
 	sta $dd00
 
 	lda #$0b
@@ -927,13 +929,13 @@ irqtitle
 
 	pha
 
-	lda #$48			; #$4c
+	lda #$48									; #$4c
 	jsr cycleperfect
 
 	lda #$1b
 	sta $d011
 	
-	lda #$00			; no sprites on title screen
+	lda #$00									; no sprites on title screen
 	sta $d015
 	
 	;lda #$0b
@@ -964,10 +966,10 @@ irqlivesleft
 
 	pha
 
-	lda #$48			; #$4c
+	lda #$48									; #$4c
 	jsr cycleperfect
 
-	lda #$00			; no sprites on lives left screen
+	lda #$00									; no sprites on lives left screen
 	sta $d015
 
 	;inc $d020
@@ -1040,7 +1042,7 @@ animship
 
 	rts
 	
-ship0explosiondone						; we died - decrease lives and see if we need to return to the title screen
+ship0explosiondone								; we died - decrease lives and see if we need to return to the title screen
 	lda #$ff
 	sta ship0+sprdata::ylow
 	lda #$00
@@ -1088,7 +1090,7 @@ joyrout
 	lda hascontrol
 	beq yescontrol
 
-	cmp #$ff							; if exploding then no control
+	cmp #$ff									; if exploding then no control
 	beq :+
 
 	dec hascontrol
@@ -1113,31 +1115,31 @@ yescontrol
 
 :	ldx $dc00
 	lda fuel
-	beq down1							; fuel is 0 - not allowed to go up. only down, left, right, fire
+	beq down1									; fuel is 0 - not allowed to go up. only down, left, right, fire
 	txa
-	and #%00000001						; up
+	and #%00000001								; up
 	bne down1
 	dec ship0+sprdata::ylow
 	jmp left1
 down1
 	txa
-	and #%00000010						; down
+	and #%00000010								; down
 	bne left1
 	inc ship0+sprdata::ylow
 left1
 	txa
-	and #%00000100						; left
+	and #%00000100								; left
 	bne right1
 	dec ship0+sprdata::xlow
 	jmp fire1
 right1
 	txa
-	and #%00001000						; right
+	and #%00001000								; right
 	bne fire1
 	inc ship0+sprdata::xlow
 fire1
 	txa
-	and #%00010000						; fire
+	and #%00010000								; fire
 	beq tryfirebullet
 	jmp no1
 	
@@ -1512,14 +1514,14 @@ testbullet0sprcollision
 	jsr calcspritepostospritepos
 	
 	lda calcsprhit
-	beq :++								; 0 = no hit
+	beq :++										; 0 = no hit
 
 	cmp #$02
 	bne :+
 	
-	jmp bullet0bkgsmallexplosion		; 1 = small hit
+	jmp bullet0bkgsmallexplosion				; 1 = small hit
 	
-:	jmp bullet0bkgbigexplosion			; 2 = big hit
+:	jmp bullet0bkgbigexplosion					; 2 = big hit
 
 :	rts
 
@@ -1539,7 +1541,7 @@ handlebullet0bkgcollision
 
 bullet0bkgbigexplosion
 
-	lda #$01							; set big explosion anim
+	lda #$01									; set big explosion anim
 	sta bull0+sprdata::isexploding
 	lda #$ff
 	sta bull0+sprdata::xvel
@@ -1551,7 +1553,7 @@ bullet0bkgbigexplosion
 
 bullet0bkgsmallexplosion
 
-	lda #$02							; set small explosion anim
+	lda #$02									; set small explosion anim
 	sta bull0+sprdata::isexploding
 	lda #$ff
 	sta bull0+sprdata::xvel
@@ -1611,14 +1613,14 @@ testbullet1sprcollision
 	jsr calcspritepostospritepos
 	
 	lda calcsprhit
-	beq :++								; 0 = no hit
+	beq :++										; 0 = no hit
 
 	cmp #$02
 	bne :+
 	
-	jmp bullet1bkgsmallexplosion		; 1 = small hit
+	jmp bullet1bkgsmallexplosion				; 1 = small hit
 	
-:	jmp bullet1bkgbigexplosion			; 2 = big hit
+:	jmp bullet1bkgbigexplosion					; 2 = big hit
 
 :	rts
 
@@ -1638,7 +1640,7 @@ handlebullet1bkgcollision
 
 bullet1bkgbigexplosion
 
-	lda #$01							; set big explosion anim
+	lda #$01									; set big explosion anim
 	sta bull1+sprdata::isexploding
 	lda #$ff
 	sta bull1+sprdata::xvel
@@ -1650,7 +1652,7 @@ bullet1bkgbigexplosion
 
 bullet1bkgsmallexplosion
 
-	lda #$02							; set small explosion anim
+	lda #$02									; set small explosion anim
 	sta bull1+sprdata::isexploding
 	lda #$ff
 	sta bull1+sprdata::xvel
@@ -1676,7 +1678,7 @@ testbomb0bkgcollision
 	sbc #42
 	sta calcylow
 
-	lda bomb0+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
+	lda bomb0+sprdata::ylow						; check if the bomb has gone too low - nasty, but have to do this
 	cmp #$df
 	bpl :+
 	jmp bombinsidescreenok0
@@ -1685,9 +1687,9 @@ testbomb0bkgcollision
 	bmi :+
 	jmp bombinsidescreenok0
 	
-:	lda #$df							; clamp bomb position
+:	lda #$df									; clamp bomb position
 	sta bomb0+sprdata::ylow
-	lda #$ff							; and simulate collision with background
+	lda #$ff									; and simulate collision with background
 	sta calchit
 	jmp handlebomb0bkgcollision
 	
@@ -1756,7 +1758,7 @@ handlebomb0bkgcollision
 bomb0explode
 
 	
-	lda #$01							; set explosion anim
+	lda #$01									; set explosion anim
 	sta bomb0+sprdata::isexploding
 	lda #$00
 	sta bomb0+sprdata::xvel
@@ -1781,7 +1783,7 @@ testbomb1bkgcollision
 	sbc #42
 	sta calcylow
 
-	lda bomb1+sprdata::ylow				; check if the bomb has gone too low - nasty, but have to do this
+	lda bomb1+sprdata::ylow						; check if the bomb has gone too low - nasty, but have to do this
 	cmp #$df
 	bpl :+
 	jmp bombinsidescreenok1
@@ -1790,9 +1792,9 @@ testbomb1bkgcollision
 	bmi :+
 	jmp bombinsidescreenok1
 	
-:	lda #$df							; clamp bomb position
+:	lda #$df									; clamp bomb position
 	sta bomb1+sprdata::ylow
-	lda #$ff							; and simulate collision with background
+	lda #$ff									; and simulate collision with background
 	sta calchit
 	jmp handlebomb1bkgcollision
 	
@@ -1860,7 +1862,7 @@ handlebomb1bkgcollision
 
 bomb1explode
 
-	lda #$01							; set explosion anim
+	lda #$01									; set explosion anim
 	sta bomb1+sprdata::isexploding
 	lda #$00
 	sta bomb1+sprdata::xvel
@@ -1895,14 +1897,14 @@ scheduleremovehitobject
 removescheduledobject
 
 	lda schedulequeue
-	cmp #$ff							; -1 = nothing in queue
+	cmp #$ff									; -1 = nothing in queue
 	bne :+
 	
 	jsr plotfuelplotscoreupdatefuel
 	
 	rts
 
-:	lda scheduledcalcylow				; get first scheduled position to remove
+:	lda scheduledcalcylow						; get first scheduled position to remove
 	sta calcylow
 	
 	lda scheduledcalcylowvsped
@@ -1914,7 +1916,7 @@ removescheduledobject
 	lda scheduledcalcbkghit
 	sta calcbkghit
 	
-	ldx #$00							; move queue
+	ldx #$00									; move queue
 :	lda scheduledcalcylow+1,x
 	sta scheduledcalcylow+0,x
 	lda scheduledcalcylowvsped+1,x
@@ -1927,11 +1929,11 @@ removescheduledobject
 	cpx schedulequeue
 	bmi :-
 
-	dec schedulequeue					; decrease queue
+	dec schedulequeue							; decrease queue
 
 removeobject
 
-	clc									; setup clear bitmap 1 tiles
+	clc											; setup clear bitmap 1 tiles
 	ldx calcylowvsped
 	lda times320lowtable,x
 	adc #<bitmap1-1
@@ -1949,7 +1951,7 @@ removeobject
 	adc hbo0+2
 	sta hbo0+2
 
-	clc									; setup clear bitmap 2 tiles
+	clc											; setup clear bitmap 2 tiles
 	ldx calcylowvsped
 	lda times320lowtable,x
 	adc #<bitmap2-1
@@ -1967,7 +1969,7 @@ removeobject
 	adc hbo1+2
 	sta hbo1+2
 
-	clc									; setup clear charmem 1 tiles
+	clc											; setup clear charmem 1 tiles
 	ldx calcylowvsped
 	lda times40lowtable,x
 	adc #<screen1-1
@@ -1984,7 +1986,7 @@ removeobject
 	adc hbo4+2
 	sta hbo4+2
 
-	clc									; setup clear charmem 2 tiles
+	clc											; setup clear charmem 2 tiles
 	ldx calcylowvsped
 	lda times40lowtable,x
 	adc #<screen2-1
@@ -2001,7 +2003,7 @@ removeobject
 	adc hbo5+2
 	sta hbo5+2
 
-	clc									; setup clear specialtiles/tilemem tiles
+	clc											; setup clear specialtiles/tilemem tiles
 	ldx calcylow
 	lda times40lowtable,x
 	adc #<screenspecial-1
@@ -2018,7 +2020,7 @@ removeobject
 	adc hbo8+2
 	sta hbo8+2
 
-	lda #>clearmisilepositiondata		; setup clear misile position data
+	lda #>clearmisilepositiondata				; setup clear misile position data
 	sta hbo10+2
 	lda #<clearmisilepositiondata
 	sta hbo10+1
@@ -2031,7 +2033,7 @@ removeobject
 	adc hbo10+2
 	sta hbo10+2
 
-	lda flip							; compensate for bank switch
+	lda flip									; compensate for bank switch
 	bne flipped
 	
 	jmp notflipped
@@ -2214,7 +2216,7 @@ bull0explosiondone
 	lda #$00
 	sta shootingbullet0
 	
-	lda #$01							; shoot immediately after bullet is gone
+	lda #$01									; shoot immediately after bullet is gone
 	sta bulletcooloff
 	
 	rts
@@ -2289,7 +2291,7 @@ bull1explosiondone
 	lda #$00
 	sta shootingbullet1
 	
-	lda #$01							; shoot immediately after bullet is gone
+	lda #$01									; shoot immediately after bullet is gone
 	sta bulletcooloff
 
 	rts
@@ -2479,7 +2481,7 @@ updatespritepositions1
 
 :	clc
 	lda bull0+sprdata::xlow
-	adc bull0+sprdata::xvel				; bullet 0 speed
+	adc bull0+sprdata::xvel						; bullet 0 speed
 	sta bull0+sprdata::xlow
 	lda bull0+sprdata::xhigh
 	adc #$00
@@ -2489,7 +2491,7 @@ updatespritepositions1
 	ora highbit+1
 	sta highbit+1
 
-	lda bull0+sprdata::xhigh			; test bullet 0 xhigh
+	lda bull0+sprdata::xhigh					; test bullet 0 xhigh
 	beq handlebullet1speed
 	lda bull0+sprdata::xlow
 	cmp #$48
@@ -2525,7 +2527,7 @@ handlebullet1speed
 
 :	clc
 	lda bull1+sprdata::xlow
-	adc bull1+sprdata::xvel				; bullet 1 speed
+	adc bull1+sprdata::xvel						; bullet 1 speed
 	sta bull1+sprdata::xlow
 	lda bull1+sprdata::xhigh
 	adc #$00
@@ -2536,7 +2538,7 @@ handlebullet1speed
 	ora highbit+1
 	sta highbit+1
 
-	lda bull1+sprdata::xhigh			; test bullet 1 xhigh
+	lda bull1+sprdata::xhigh					; test bullet 1 xhigh
 	beq handlebomb0speed
 	lda bull1+sprdata::xlow
 	cmp #$48
@@ -2567,10 +2569,10 @@ handlebomb0speed
 
 	clc
 	lda bomb0+sprdata::ylow
-	adc bomb0+sprdata::yvel				; bomb 0 y speed
+	adc bomb0+sprdata::yvel						; bomb 0 y speed
 	sta bomb0+sprdata::ylow
 	lda bomb0+sprdata::xlow
-	adc bomb0+sprdata::xvel				; bomb 0 x speed
+	adc bomb0+sprdata::xvel						; bomb 0 x speed
 	sta bomb0+sprdata::xlow
 
 	sec
@@ -2580,10 +2582,10 @@ handlebomb0speed
 
 	clc
 	lda bomb1+sprdata::ylow
-	adc bomb1+sprdata::yvel				; bomb 1 y speed
+	adc bomb1+sprdata::yvel						; bomb 1 y speed
 	sta bomb1+sprdata::ylow
 	lda bomb1+sprdata::xlow
-	adc bomb1+sprdata::xvel				; bomb 1 x speed
+	adc bomb1+sprdata::xvel						; bomb 1 x speed
 	sta bomb1+sprdata::xlow
 
 	sec
@@ -2750,7 +2752,7 @@ increasefuel
 
 	clc
 	lda fuel
-	adc fueladd							; add 8 fuel
+	adc fueladd									; add 8 fuel
 	sta fuel
 	cmp fuelfull
 	bcc :+
@@ -2792,7 +2794,7 @@ launchcomet
 	txa
 	and #$1f
 	tax
-	lda posycomet,x						; between #$38 and #$b4?
+	lda posycomet,x								; between #$38 and #$b4?
 	sta sortsprylow,y
 
 	lda #$3d
@@ -2827,7 +2829,7 @@ hcaloop
 	lda sortsprp,x
 	cmp #$40
 	bcc :+
-	lda #$3d							; $8f40 8f80 8fc0
+	lda #$3d									; $8f40 8f80 8fc0
 	sta sortsprp,x
 :	inx
 	cpx #MAXMULTPLEXSPR
@@ -2844,12 +2846,12 @@ handlecometmovement
 hcmloop
 	lda sortsprylow-1,x
 	cmp #$ff
-	beq :+								; don't move sprites if they are not on screen
+	beq :+										; don't move sprites if they are not on screen
 	inc sortsprlifetime-1,x
 	lda sortsprlifetime-1,x
 	and #%00111111
 	tay
-	sec									; decrease x position
+	sec											; decrease x position
 	lda sortsprxlow-1,x
 	sbc #$06
 	sta sortsprxlow-1,x
@@ -2857,7 +2859,7 @@ hcmloop
 	sbc #$00
 	sta sortsprxhigh-1,x
 	bne :+
-	lda sortsprxlow-1,x					; test if out of screen
+	lda sortsprxlow-1,x							; test if out of screen
 	cmp #$10
 	bcs :+
 	lda #$ff
@@ -2940,7 +2942,7 @@ hualoop
 	lda sortsprp,x
 	cmp #$3d
 	bcc :+
-	lda #$3a				;8E80, 8ec0, 8f00
+	lda #$3a									;8E80, 8ec0, 8f00
 	sta sortsprp,x
 :	inx
 	cpx #MAXMULTPLEXSPR
@@ -2956,14 +2958,14 @@ handleufomovement
 humloop
 	lda sortsprylow-1,x
 	cmp #$ff
-	beq :+								; don't move sprites if they are not on screen
+	beq :+										; don't move sprites if they are not on screen
 	inc sortsprlifetime-1,x
 	lda sortsprlifetime-1,x
 	and #%00111111
 	tay
 	lda sinyufo,y
 	sta sortsprylow-1,x
-	sec									; decrease x position
+	sec											; decrease x position
 	lda sortsprxlow-1,x
 	sbc scrollspeed
 	sta sortsprxlow-1,x
@@ -2971,7 +2973,7 @@ humloop
 	sbc #$00
 	sta sortsprxhigh-1,x
 	bne :+
-	lda sortsprxlow-1,x					; test if out of screen
+	lda sortsprxlow-1,x							; test if out of screen
 	cmp #$10
 	bcs :+
 	lda #$ff
@@ -2988,16 +2990,16 @@ launchmissile
 	lda randomseed
 	beq doeor
 	asl
-	beq noeor							; if the input was $80, skip the EOR
+	beq noeor									; if the input was $80, skip the EOR
 	bcc noeor
 doeor
 	eor #$1f
 noeor
 	sta randomseed
-	and #%00011001						; #%00001111 = pretty good random seed, make sure this is uneven otherwise we get half missiles
+	and #%00011001								; #%00001111 = pretty good random seed, make sure this is uneven otherwise we get half missiles
 	sta misofst+1
 
-	;lda #$25							; testing - launch as soon as possible
+	;lda #$25									; testing - launch as soon as possible
 	;sta misofst+1
 
 	lda #$00
@@ -3127,7 +3129,7 @@ oktoremove
 
 	lda #$32
 	sta sortsprp,y
-	lda #$07								; missile highlight colour
+	lda #$07									; missile highlight colour
 	sta sortsprc,y
 	lda #$0c
 	sta sortsprwidth,y
@@ -3148,14 +3150,14 @@ handlemissilemovement
 hmmloop
 	lda sortsprylow-1,x
 	cmp #$ff
-	beq :++								; don't move sprites if they are not on screen
-	dec sortsprylow-1,x					; decrease y position
-	lda sortsprylow-1,x					; test if out of screen
+	beq :++										; don't move sprites if they are not on screen
+	dec sortsprylow-1,x							; decrease y position
+	lda sortsprylow-1,x							; test if out of screen
 	cmp #$20
 	bcs :+
 	lda #$ff
 	sta sortsprylow-1,x
-:	sec									; decrease x position with scrollspeed
+:	sec											; decrease x position with scrollspeed
 	lda sortsprxlow-1,x
 	sbc scrollspeed
 	sta sortsprxlow-1,x
@@ -3163,7 +3165,7 @@ hmmloop
 	sbc #$00
 	sta sortsprxhigh-1,x
 	bne :+
-	lda sortsprxlow-1,x					; test if out of screen
+	lda sortsprxlow-1,x							; test if out of screen
 	cmp #$10
 	bcs :+
 	lda #$ff
@@ -3212,124 +3214,124 @@ jumpsortptr
 	jmp sortskip1
 
 backsort0
-	ldy sortorder+1						; compare first pair
+	ldy sortorder+1								; compare first pair
 	lda sortsprylow,y
 	ldy sortorder+0
 	cmp sortsprylow,y
-	bcc :+								; swap
-	jmp jumpbackforwardsort				; don't swap, continue with where we were in the forward sort
+	bcc :+										; swap
+	jmp jumpbackforwardsort						; don't swap, continue with where we were in the forward sort
 :	lda sortorder+1
 	sta sortorder+0
 	sty sortorder+1
-	jmp jumpbackforwardsort				; continue with where we were in the forward sort
+	jmp jumpbackforwardsort						; continue with where we were in the forward sort
 
 backsort1
-	ldy sortorder+2						; compare second pair
+	ldy sortorder+2								; compare second pair
 	lda sortsprylow,y
 	ldy sortorder+1
 	cmp sortsprylow,y
-	bcc :+								; swap
-	jmp jumpbackforwardsort				; don't swap, continue with where we were in the forward sort
+	bcc :+										; swap
+	jmp jumpbackforwardsort						; don't swap, continue with where we were in the forward sort
 :	lda sortorder+2
 	sta sortorder+1
 	sty sortorder+2
-	jmp backsort0						; and continue with the first pair
+	jmp backsort0								; and continue with the first pair
 
 backsort2
-	ldy sortorder+3						; compare second pair
+	ldy sortorder+3								; compare second pair
 	lda sortsprylow,y
 	ldy sortorder+2
 	cmp sortsprylow,y
-	bcc :+								; swap
-	jmp jumpbackforwardsort				; don't swap, continue with where we were in the forward sort
+	bcc :+										; swap
+	jmp jumpbackforwardsort						; don't swap, continue with where we were in the forward sort
 :	lda sortorder+3
 	sta sortorder+2
 	sty sortorder+3
-	jmp backsort1						; and continue with the second pair
+	jmp backsort1								; and continue with the second pair
 
 backsort3
-	ldy sortorder+4						; compare second pair
+	ldy sortorder+4								; compare second pair
 	lda sortsprylow,y
 	ldy sortorder+3
 	cmp sortsprylow,y
-	bcc :+								; swap
-	jmp jumpbackforwardsort				; don't swap, continue with where we were in the forward sort
+	bcc :+										; swap
+	jmp jumpbackforwardsort						; don't swap, continue with where we were in the forward sort
 :	lda sortorder+4
 	sta sortorder+3
 	sty sortorder+4
-	jmp backsort2						; and continue with the second pair
+	jmp backsort2								; and continue with the second pair
 
 backsort4
-	ldy sortorder+5						; compare second pair
+	ldy sortorder+5								; compare second pair
 	lda sortsprylow,y
 	ldy sortorder+4
 	cmp sortsprylow,y
-	bcc :+								; swap
-	jmp jumpbackforwardsort				; don't swap, continue with where we were in the forward sort
+	bcc :+										; swap
+	jmp jumpbackforwardsort						; don't swap, continue with where we were in the forward sort
 :	lda sortorder+5
 	sta sortorder+4
 	sty sortorder+5
-	jmp backsort3						; and continue with the second pair
+	jmp backsort3								; and continue with the second pair
 
 backsort5
-	ldy sortorder+6						; compare second pair
+	ldy sortorder+6								; compare second pair
 	lda sortsprylow,y
 	ldy sortorder+5
 	cmp sortsprylow,y
-	bcc :+								; swap
-	jmp jumpbackforwardsort				; don't swap, continue with where we were in the forward sort
+	bcc :+										; swap
+	jmp jumpbackforwardsort						; don't swap, continue with where we were in the forward sort
 :	lda sortorder+6
 	sta sortorder+5
 	sty sortorder+6
-	jmp backsort4						; and continue with the second pair
+	jmp backsort4								; and continue with the second pair
 
 backsort6
-	ldy sortorder+7						; compare second pair
+	ldy sortorder+7								; compare second pair
 	lda sortsprylow,y
 	ldy sortorder+6
 	cmp sortsprylow,y
-	bcc :+								; swap
-	jmp jumpbackforwardsort				; don't swap, continue with where we were in the forward sort
+	bcc :+										; swap
+	jmp jumpbackforwardsort						; don't swap, continue with where we were in the forward sort
 :	lda sortorder+7
 	sta sortorder+6
 	sty sortorder+7
-	jmp backsort5						; and continue with the second pair
+	jmp backsort5								; and continue with the second pair
 
 backsort7
-	ldy sortorder+8						; compare second pair
+	ldy sortorder+8								; compare second pair
 	lda sortsprylow,y
 	ldy sortorder+7
 	cmp sortsprylow,y
-	bcc :+								; swap
-	jmp jumpbackforwardsort				; don't swap, continue with where we were in the forward sort
+	bcc :+										; swap
+	jmp jumpbackforwardsort						; don't swap, continue with where we were in the forward sort
 :	lda sortorder+8
 	sta sortorder+7
 	sty sortorder+8
-	jmp backsort6						; and continue with the second pair
+	jmp backsort6								; and continue with the second pair
 
 backsort8
-	ldy sortorder+9						; compare second pair
+	ldy sortorder+9								; compare second pair
 	lda sortsprylow,y
 	ldy sortorder+8
 	cmp sortsprylow,y
-	bcc :+								; swap
-	jmp jumpbackforwardsort				; don't swap, continue with where we were in the forward sort
+	bcc :+										; swap
+	jmp jumpbackforwardsort						; don't swap, continue with where we were in the forward sort
 :	lda sortorder+9
 	sta sortorder+8
 	sty sortorder+9
-	jmp backsort7						; and continue with the second pair
+	jmp backsort7								; and continue with the second pair
 
 backsort9
-	ldy sortorder+10					; compare second pair
+	ldy sortorder+10							; compare second pair
 	lda sortsprylow,y
 	ldy sortorder+9
 	cmp sortsprylow,y
-	bcc :+								; swap
-	jmp jumpbackforwardsort				; don't swap, continue with where we were in the forward sort
+	bcc :+										; swap
+	jmp jumpbackforwardsort						; don't swap, continue with where we were in the forward sort
 :	lda sortorder+10
 	sta sortorder+9
 	sty sortorder+10
-	jmp backsort8						; and continue with the second pair
+	jmp backsort8								; and continue with the second pair
 
 sortmultsprites
 
@@ -3342,30 +3344,30 @@ sortmultsprites
 
 sortskip0
 
-	ldy sortorder+1						; compare first and second sprite
+	ldy sortorder+1								; compare first and second sprite
 	lda sortsprylow,y
 	ldy sortorder+0
 	cmp sortsprylow,y
-	bcs sortskip1incsortcounter			; don't swap, continue with second and third sprite
-	lda sortorder+1						; swap
+	bcs sortskip1incsortcounter					; don't swap, continue with second and third sprite
+	lda sortorder+1								; swap
 	sta sortorder+0
-	sty sortorder+1						; and continue with second and third sprite
+	sty sortorder+1								; and continue with second and third sprite
 	
 sortskip1incsortcounter
-	inc sortcounter						; we're now sorting the second pair
+	inc sortcounter								; we're now sorting the second pair
 sortskip1
-	ldy sortorder+2						; compare second and third sprite
+	ldy sortorder+2								; compare second and third sprite
 	lda sortsprylow,y
 	ldy sortorder+1
 	cmp sortsprylow,y
-	bcs sortskip2incsortcounter			; don't swap, continue with third and fourth sprite
-	lda sortorder+2						; swap
+	bcs sortskip2incsortcounter					; don't swap, continue with third and fourth sprite
+	lda sortorder+2								; swap
 	sta sortorder+1
 	sty sortorder+2
-	jmp backsort0						; and jump to backwards sort
+	jmp backsort0								; and jump to backwards sort
 	
 sortskip2incsortcounter
-	inc sortcounter						; sorting third pair
+	inc sortcounter								; sorting third pair
 sortskip2
 	ldy sortorder+3
 	lda sortsprylow,y
@@ -3490,22 +3492,22 @@ oldsortmultsprites
 ;	ldx #$00
 ;	stx sreload+1
 ;sloop
-;	ldy sortorder+1,x					; y = second sprite index
-;	lda sortsprylow,y					; a = ypos of second sprite
-;	ldy sortorder,x						; y = first sprite index
-;	cmp sortsprylow,y					; subtract ypos of second sprite with ypos of first sprite 
-;	bcs sskip							; branch (continue) if the ypos of second sprite is equal to or larger than the ypos of the first sprite
+;	ldy sortorder+1,x							; y = second sprite index
+;	lda sortsprylow,y							; a = ypos of second sprite
+;	ldy sortorder,x								; y = first sprite index
+;	cmp sortsprylow,y							; subtract ypos of second sprite with ypos of first sprite 
+;	bcs sskip									; branch (continue) if the ypos of second sprite is equal to or larger than the ypos of the first sprite
 ;
-;	stx sreload+1						; the ypos of the second sprite is lower - store current sort sprite index
+;	stx sreload+1								; the ypos of the second sprite is lower - store current sort sprite index
 ;sswap
-;	lda sortorder+1,x					; swap the first and second sprite
+;	lda sortorder+1,x							; swap the first and second sprite
 ;	sta sortorder,x
 ;	tya
 ;	sta sortorder+1,x
-;	cpx #$00							; are we at the start of the sort order list?
-;	beq sreload							; yes - no need to swap more, continue with the rest of the sprites
-;	dex									; no, decrease the sprite index
-;	ldy sortorder+1,x					; and compare the two sprite indices
+;	cpx #$00									; are we at the start of the sort order list?
+;	beq sreload									; yes - no need to swap more, continue with the rest of the sprites
+;	dex											; no, decrease the sprite index
+;	ldy sortorder+1,x							; and compare the two sprite indices
 ;	lda sortsprylow,y
 ;	ldy sortorder,x
 ;	cmp sortsprylow,y
@@ -3527,7 +3529,7 @@ plotdummymultsprites
 
 plotfirstufomultsprites
 
-	ldy sortorder						; y = index to highest sprite
+	ldy sortorder								; y = index to highest sprite
 	lda sortsprc,y
 	sta $d02c
 	lda sortsprp,y
@@ -3549,7 +3551,7 @@ msbluw
 	lda sortsprylow,y
 	sta $d00b
 
-	ldy sortorder+1						; y = index to second highest sprite
+	ldy sortorder+1								; y = index to second highest sprite
 	lda sortsprc,y
 	sta $d02d
 	lda sortsprp,y
@@ -3571,7 +3573,7 @@ msbluw2
 	lda sortsprylow,y
 	sta $d00d
 
-	ldy sortorder+2						; y = index to third highest sprite
+	ldy sortorder+2								; y = index to third highest sprite
 	lda sortsprc,y
 	sta $d02e
 	lda sortsprp,y
@@ -3601,8 +3603,8 @@ plotrestufomultsprites
 	sta restmultspritesindex
 
 pruloop
-	ldx restmultspritesindex			; x = virtual sprite index (1-MAXMULTPLEXSPR)
-	ldy sortorder,x						; y = index to real sprite index
+	ldx restmultspritesindex					; x = virtual sprite index (1-MAXMULTPLEXSPR)
+	ldy sortorder,x								; y = index to real sprite index
 	lda sortsprylow,y
 	cmp #$ff
 	bne hctst2
@@ -3610,7 +3612,7 @@ pruloop
 	jmp puend
 
 hctst2
-	ldx restmultspritesindex			; see how much time we have before the next sprite
+	ldx restmultspritesindex					; see how much time we have before the next sprite
 	ldy sortorder,x
 	lda sortsprylow,y
 	cmp #$ff
@@ -3619,7 +3621,7 @@ hctst2
 	sec
 	sbc $d012
 	clc
-	cmp #$28							; #$28 rasterlines left? do some stuff!
+	cmp #$28									; #$28 rasterlines left? do some stuff!
 	bcc :+
 	jsr handlecollisions
 	jmp hctst2
@@ -3628,7 +3630,7 @@ hctst2
 	sec
 	sbc #$03
 :	cmp $d012
-	bcs :-								; wait until rasterline reached
+	bcs :-										; wait until rasterline reached
 
 	lda sprtbl,x
 	tax
@@ -3669,7 +3671,7 @@ puend
 
 plotfirstmissilemultsprites
 
-	ldy sortorder						; y = index to highest sprite
+	ldy sortorder								; y = index to highest sprite
 	lda sortsprc,y
 	sta $d02d
 	lda sortsprp,y
@@ -3692,7 +3694,7 @@ msblow
 	lda sortsprylow,y
 	sta $d00d
 
-	ldy sortorder+1						; y = index to second highest sprite
+	ldy sortorder+1								; y = index to second highest sprite
 	lda sortsprc,y
 	sta $d02e
 	lda sortsprp,y
@@ -3724,8 +3726,8 @@ plotrestmissilemultsprites
 	sta restmultspritesindex
 
 prmloop
-	ldx restmultspritesindex			; x = virtual sprite index (1-MAXMULTPLEXSPR)
-	ldy sortorder,x						; y = index to real sprite index
+	ldx restmultspritesindex					; x = virtual sprite index (1-MAXMULTPLEXSPR)
+	ldy sortorder,x								; y = index to real sprite index
 	lda sortsprylow,y
 	cmp #$ff
 	bne hctest
@@ -3733,7 +3735,7 @@ prmloop
 	jmp msend
 	
 hctest
-	ldx restmultspritesindex			; see how much time we have before the next sprite
+	ldx restmultspritesindex					; see how much time we have before the next sprite
 	ldy sortorder,x
 	lda sortsprylow,y
 	cmp #$ff
@@ -3742,7 +3744,7 @@ hctest
 	sec
 	sbc $d012
 	clc
-	cmp #$28							; #$28 rasterlines left? do some stuff!
+	cmp #$28									; #$28 rasterlines left? do some stuff!
 	bcc :+
 	jsr handlecollisions
 	jmp hctest
@@ -3751,7 +3753,7 @@ hctest
 	sec
 	sbc #$0c
 :	cmp $d012
-	bcs :-								; wait until rasterline reached
+	bcs :-										; wait until rasterline reached
 	
 	txa
 	and #$01
@@ -3813,7 +3815,7 @@ gett1
 	lda loadeddata1+0*2
 	sta currenttile+0
 	sta currenttiletimes8+0
-	;adc #$00							; commented out for performance reasons
+	;adc #$00									; commented out for performance reasons
 	sta plotc1+1
 gett2
 	lda loadeddata1+1+0*2
@@ -3822,19 +3824,19 @@ gett2
 	adc #>maptilecolors
 	sta plotc1+2
 	
-	lda currenttile+1					; > 256 = always solid tile
-	;cmp #$00							; commented out for performance reasons
+	lda currenttile+1							; > 256 = always solid tile
+	;cmp #$00									; commented out for performance reasons
 	bne solidtile
 	
 	lda currenttile+0
 	;cmp #$00
-	bmi solidtile						; < 0 = solid tile
+	bmi solidtile								; < 0 = solid tile
 	cmp #$43
-	bpl solidtile						; > 62 = solid tile
+	bpl solidtile								; > 62 = solid tile
 	
 	lda currenttile+0
 	cmp #$20
-	bpl transtile						; > 32 && < 63 = transparent tile
+	bpl transtile								; > 32 && < 63 = transparent tile
 
 missilefuelspecialtile
 	lda currenttile+0
@@ -3862,7 +3864,7 @@ skipspecialtiles
 	
 	clc
 	lda currenttiletimes8+0
-	;adc #$00							; commented out for performance reasons
+	;adc #$00									; commented out for performance reasons
 	sta ploth1+1
 	lda currenttiletimes8+1
 	adc #>maptiles
@@ -3928,7 +3930,7 @@ inccol
 	jmp incpag
 
 inccol2
-	lda gett2+1							; do missile stuff
+	lda gett2+1									; do missile stuff
 	sta plott2+1
 	lda gett2+2
 	sta plott2+2
@@ -3943,7 +3945,7 @@ plott3	sta $c3c0
 
 	clc
 	add16bit gett1, 2
-	add16bit gett2, 2					; end of do missile stuff
+	add16bit gett2, 2							; end of do missile stuff
 
 	sec
 	sub16bit ploth2, 24*320-8
@@ -4000,26 +4002,26 @@ incpag3
 
 incsubzone
 
-	inc subzone							; increase screen/subzone
+	inc subzone									; increase screen/subzone
 	ldx subzone
 	lda subzones,x
-	cmp #$ff							; is it 255?
+	cmp #$ff									; is it 255?
 	bne :++
 	
-:	inc subzone							; yes, keep increasing until it's not 255 any more
+:	inc subzone									; yes, keep increasing until it's not 255 any more
 	ldx subzone
 	lda subzones,x
 	cmp #$ff
 	beq :-
-	inc zone							; increase zone
-	inc subzone							; increase subzone one more time to jump over the 'you're dead, start on this empty screen'-subzone
+	inc zone									; increase zone
+	inc subzone									; increase subzone one more time to jump over the 'you're dead, start on this empty screen'-subzone
 	jmp :++
 	
-:	cmp #$31							; is it the boss screen?
+:	cmp #$31									; is it the boss screen?
 	bne :+
 	dec subzone
 	
-:	ldx subzone							; load next subzone
+:	ldx subzone									; load next subzone
 	lda subzones,x
 	sta file
 	
@@ -4027,7 +4029,7 @@ incsubzone
 
 findstartofzone
 
-	lda subzone							; decrease twice, to make sure we don't skip to the next zone if we die at the end of a zone
+	lda subzone									; decrease twice, to make sure we don't skip to the next zone if we die at the end of a zone
 	cmp #$03
 	bmi :++
 	dec subzone
@@ -4039,7 +4041,7 @@ findstartofzone
 	cmp #$ff
 	beq :-
 
-:	ldx subzone							; decrease subzone until end of previous zone is found
+:	ldx subzone									; decrease subzone until end of previous zone is found
 
 	cpx #$00
 	beq :+
@@ -4160,7 +4162,7 @@ scrollscreen
 
 calcvsp
 
-	sec									; first calculate the inverse numbers
+	sec											; first calculate the inverse numbers
 	lda #<(bitmapwidth-1)
 	sbc screenposlow
 	sta invscreenposlow
@@ -4176,10 +4178,10 @@ calcvsp
 	sta scrlow+1
 
 	clc
-	lda invscreenposhigh				; divide the 16 bit number by 8
-	ror									; shift bit into carry
+	lda invscreenposhigh						; divide the 16 bit number by 8
+	ror											; shift bit into carry
 	lda invscreenposlow
-	ror									; shift carry back in
+	ror											; shift carry back in
 	lsr
 	lsr
 	
@@ -4198,7 +4200,7 @@ cvsppos
 	ldx #$ff
 	cpx #$33
 	bcs not1
-	adc #$07							; #$07 for 2 sprites
+	adc #$07									; #$07 for 2 sprites
 	cpx #$32
 	bcs not1
 	adc #$07
@@ -4219,8 +4221,8 @@ plotfuelplotscoreupdatefuel
 	
 .macro tick arg1, arg2
 	sec
-	lda fuel							; load fuel
-	sbc #(arg2)							; deduct arg2
+	lda fuel									; load fuel
+	sbc #(arg2)									; deduct arg2
 	bcs :+
 	lda #$00
 :	tax
@@ -4486,7 +4488,7 @@ dontintersect2
 
 calcspritepostoscreenpos
 
-	clc									; add inverse vsp position
+	clc											; add inverse vsp position
 	lda calcxlow
 	adc invscreenposlow
 	sta calcxlow
@@ -4494,7 +4496,7 @@ calcspritepostoscreenpos
 	adc invscreenposhigh
 	sta calcxhigh
 
-	lsr calcxhigh						; divide xpos by 8 to get column
+	lsr calcxhigh								; divide xpos by 8 to get column
 	ror calcxlow
 	lsr calcxhigh
 	ror calcxlow
@@ -4516,7 +4518,7 @@ calcspritepostoscreenpos
 	sbc #$28
 	sta calcxlow
 
-:	lsr calcylow						; divide ypos by 8 to get row
+:	lsr calcylow								; divide ypos by 8 to get row
 	lsr calcylow
 	lsr calcylow
 
@@ -4543,7 +4545,7 @@ csptsp0	lda $c001
 	lda #$00
 	sta calcspryoffset
 
-	lda calchit							; find top left position of object hit
+	lda calchit									; find top left position of object hit
 	and #%00000001
 	beq :+
 	dec calcxlow
@@ -4568,7 +4570,7 @@ csptsp0	lda $c001
 
 csbkghit
 
-	lda calcylow						; calculate vsp'ed position of hit tile
+	lda calcylow								; calculate vsp'ed position of hit tile
 	sta calcylowvsped
 	lda flipflop
 	bne :+
@@ -4583,7 +4585,7 @@ csend
 
 calcshippostoscreenpos
 
-	clc									; add inverse vsp position
+	clc											; add inverse vsp position
 	lda calcxlow
 	adc invscreenposlow
 	sta calcxlow
@@ -4591,7 +4593,7 @@ calcshippostoscreenpos
 	adc invscreenposhigh
 	sta calcxhigh
 
-	lsr calcxhigh						; divide xpos by 8 to get column
+	lsr calcxhigh								; divide xpos by 8 to get column
 	ror calcxlow
 	lsr calcxhigh
 	ror calcxlow
@@ -4613,7 +4615,7 @@ calcshippostoscreenpos
 	sbc #$28
 	sta calcxlow
 
-:	lsr calcylow						; divide ypos by 8 to get row
+:	lsr calcylow								; divide ypos by 8 to get row
 	lsr calcylow
 	lsr calcylow
 
@@ -4673,7 +4675,7 @@ handlecollisions
 	sta handlezonetested
 
 handlezonecode
-	jsr handlezone1						; self modified jsr
+	jsr handlezone1								; self modified jsr
 	jmp hcend
 
 :	lda bullet0tested
@@ -4749,30 +4751,30 @@ hcend
 
 ; -----------------------------------------------------------------------------------------------
 
-handlezone1								; missiles	
+handlezone1										; missiles	
 	jsr launchmissile
 	jsr animmissiles
 	jmp handlemissilemovement
 
-handlezone2								; ufos
+handlezone2										; ufos
 	jsr launchufo
 	jsr animufos
 	jmp handleufomovement
 
-handlezone3								; comets
+handlezone3										; comets
 	jsr launchcomet
 	jsr animcomets
 	jmp handlecometmovement
 
-handlezone4								; missiles
+handlezone4										; missiles
 	jsr launchmissile
 	jsr animmissiles
 	jmp handlemissilemovement
 
-handlezone5								; avoid fuel
+handlezone5										; avoid fuel
 	lda gamefinished
 	cmp #$01
-	bpl :+								; if 1 or higher!
+	bpl :+										; if 1 or higher!
 	jmp handlezone5rest
 	
 :	inc gamefinished
@@ -4822,12 +4824,12 @@ normalgameplay2
 
 	jsr scrollscreen
 	
-	jsr joyrout							; 03
+	jsr joyrout									; 03
 	jsr calcvsp
-	jsr animship						; 04
-	jsr animbullet0						; 05
-	jsr animbullet1						; 06
-	jsr animbomb0						; 07
+	jsr animship								; 04
+	jsr animbullet0								; 05
+	jsr animbullet1								; 06
+	jsr animbomb0								; 07
 	
 	lda #$04
 :	cmp $d012
@@ -4852,7 +4854,7 @@ normalgameplay2
 	lda #$07+2*24
 	sta $d00e
 	
-	lda scrollspeed						; we died, scrollspeed is 0
+	lda scrollspeed								; we died, scrollspeed is 0
 	beq wedied
 
 	lda $01
@@ -4881,7 +4883,7 @@ wedied
 	; we are below the bottom border sprites - set up the top border sprites now
 	
 	.repeat 6,i
-	lda #$16							; was 16
+	lda #$16									; was 16
 	sta $d001+i*2
 	lda #$d8+i
 	sta $c3f8+i
@@ -4896,25 +4898,25 @@ wedied
 	sta $d027+4
 	sta $d027+5
 
-	lda #$20+0*24						; UI ship
+	lda #$20+0*24								; UI ship
 	sta $d000
-	lda #$20+1*24						; x
+	lda #$20+1*24								; x
 	sta $d002
 
-	lda #$00+0*24						; empty
+	lda #$00+0*24								; empty
 	sta $d004
-	lda #$00+1*24						; empty
+	lda #$00+1*24								; empty
 	sta $d006
 
-	lda #$1c+0*24						; UI flag
+	lda #$1c+0*24								; UI flag
 	sta $d008
-	lda #$1c+1*24						; x
+	lda #$1c+1*24								; x
 	sta $d00a
 
 	lda #%00111100
 	sta $d010
 	
-	lda #$cf							; empty sprites for missiles in top border (make sure F3C0 - F400 is empty)
+	lda #$cf									; empty sprites for missiles in top border (make sure F3C0 - F400 is empty)
 	sta $c3fe
 	sta $c3ff
 
@@ -4923,35 +4925,35 @@ wedied
 	lda #$01
 	sta $d026
 	
-	jsr tuneplay						; 01
-	jsr animbomb1						; 08
-	jsr removescheduledobject			; 02
+	jsr tuneplay								; 01
+	jsr animbomb1								; 08
+	jsr removescheduledobject					; 02
 
-	jsr sortmultsprites					; 0b
+	jsr sortmultsprites							; 0b
 	
 handlezonecode2
-	jsr plotfirstmissilemultsprites		; 0c
+	jsr plotfirstmissilemultsprites				; 0c
 
-	lda #$1d							; was 1d
+	lda #$1d									; was 1d
 :	cmp $d012
 	bcs :-
 
-	lda #$48							; #$4c
+	lda #$48									; #$4c
 	jsr cycleperfect
 
-	lda #$00							; top of zone blocks
+	lda #$00									; top of zone blocks
 	sta $d010
 
-	.repeat 6,i							; sprite colours for zone blocks
+	.repeat 6,i									; sprite colours for zone blocks
 	lda zonecolours+i
 	sta $d027+i
 	lda #$74+i*24
 	sta $d000+i*2
 	.endrepeat
 
-	jsr updatespritepositions1			; 0a
+	jsr updatespritepositions1					; 0a
 
-	lda #$2a							; was 2a
+	lda #$2a									; was 2a
 :	cmp $d012
 	bcs :-
 		
@@ -4970,7 +4972,7 @@ handlezonecode2
 	sta $d02e
 
 	lda #$ff
-	sta $d01b							; sprite priority
+	sta $d01b									; sprite priority
 
 scrlow
 	lda #$18
@@ -5078,7 +5080,7 @@ titlescreen
 	
 waitkey
 	lda $dc00
-	and #%00010000						; fire
+	and #%00010000								; fire
 	bne waitkey
 	rts
 
@@ -5413,7 +5415,7 @@ sortsprlifetime
 .endrep
 
 fuelticks
-.byte %01010101							; 01 = empty, 10,11 = full
+.byte %01010101									; 01 = empty, 10,11 = full
 .byte %10010101
 .byte %10110101
 .byte %10111001
@@ -5424,7 +5426,7 @@ fuelticks
 timesufotable
 .byte $00, $40, $80, $c0
 
-times8lowtable							; multiplication tables
+times8lowtable									; multiplication tables
 .repeat 80,i
 	.byte <(i*8)
 .endrep
@@ -5472,16 +5474,16 @@ filenameconvtab
 posycometcount
 .byte $00
 
-file									; file loading
+file											; file loading
 .byte $01
 
-zone									; zone handling
+zone											; zone handling
 .byte $00
 subzone
 .byte $01
 
 zonecolours
-.byte $07,$06,$06,$06,$06,$06,$ff		; intentionally one zone too long
+.byte $07,$06,$06,$06,$06,$06,$ff				; intentionally one zone too long
 
 fuel
 .byte $20
@@ -5527,7 +5529,7 @@ comettimer
 cometnum
 .byte $00
 
-screenposlow							; vsp counters
+screenposlow									; vsp counters
 .byte $3f
 screenposhigh
 .byte $01
@@ -5546,7 +5548,7 @@ row
 flip
 .byte $00
 
-ship0: .tag sprdata						; sprite data
+ship0: .tag sprdata								; sprite data
 bull0: .tag sprdata
 bull1: .tag sprdata
 bomb0: .tag sprdata
@@ -5555,7 +5557,7 @@ bomb1: .tag sprdata
 hascontrol
 .byte $30
 
-bulletcooloff							; shooting counters
+bulletcooloff									; shooting counters
 .byte $10
 bombcooloff
 .byte $0f
@@ -5582,25 +5584,25 @@ scheduledcalcxlow
 scheduledcalcbkghit
 .byte $00, $00, $00, $00, $00
 
-curmulsprite							; multiplex stuff
+curmulsprite									; multiplex stuff
 .byte $00
 restmultspritesindex
 .byte $02
 
-randomseed								; randomizer missile liftoff
+randomseed										; randomizer missile liftoff
 .byte $00
 
 startmissileypos
 .byte $00
 
-calcxlow								; collision checking
+calcxlow										; collision checking
 .byte $00
 calcxhigh
 .byte $00
 calcylow
 .byte $00
 
-calcxlowmax								; collision checking
+calcxlowmax										; collision checking
 .byte $00
 calcxhighmax
 .byte $00
@@ -5623,7 +5625,7 @@ calcspryoffset
 calcsprhit
 .byte $00
 
-s0counter								; animation counters
+s0counter										; animation counters
 .byte $00
 s0counter2
 .byte $00
@@ -5646,7 +5648,7 @@ bomb1counter2
 nofuelcounter
 .byte $00
 
-s0anim									; animations
+s0anim											; animations
 .byte $10,$11,$12,$11
 bombanim
 .byte $14,$15,$16,$17,$18,$19,$1a
