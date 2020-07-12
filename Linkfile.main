@@ -8,61 +8,55 @@ MEMORY
 SEGMENTS
 {
 	# comment
-	TABLES:			load = RAM, start=$0400;
+	TABLES:				load = RAM, start=$0400;
 
-	MAIN:			load=RAM, start=$0820;
-	IRQ:			load=RAM, align=256;
+	MAIN:				load=RAM, start=$0820;
+	IRQ:				load=RAM, align=256;
 	
-	MUSIC:			load=RAM, start=$1000;
+	MUSIC:				load=RAM, start=$1000;
 	
-	TITLESCREEN:	load=RAM, start=$2000;
+	TITLESCREEN:		load=RAM, start=$2000;
 
-	SCREEN1:		load=OVERLAPPING_RAM, start=$4000, type=BSS;
+	LOADEDDATA1:		load=RAM, start=$3000;
+	LOADEDDATA2:		load=RAM, start=$3800;
 
-	SCROLLER:		load=RAM, start=$5000;
+	SCREEN1:			load=OVERLAPPING_RAM, start=$4000, type=BSS;
+
+	SCROLLER:			load=RAM, start=$5000;
 
 	# $5c20 - $6000 FREE
 
-	CYCLEPERFECT:   load=RAM, start=$5f00;
+	CYCLEPERFECT:		load=RAM, start=$5f00;
 
-	BITMAP1:		load=OVERLAPPING_RAM, start=$6000, type=BSS;
+	BITMAP1:			load=OVERLAPPING_RAM, start=$6000, type=BSS;
 
-	SCREEN2:		load=OVERLAPPING_RAM, start=$8000, type=BSS;
+	SCREEN2:			load=OVERLAPPING_RAM, start=$8000, type=BSS;
 	
-	S0:				load=RAM, start=$8400;
-	B0:				load=RAM, start=$84C0;
-	BMB0:			load=RAM, start=$8500;
-	EXPL0:			load=RAM, start=$86C0;
-	EXPL1:			load=RAM, start=$8980;
-	EXPL2:			load=RAM, start=$8B00;
-	MISSILE:		load=RAM, start=$8C00;
-	UFO:			load=RAM, start=$8E80;
-	COMET:			load=RAM, start=$8F40;
+	SPRITES1:			load=RAM, start=$8400;
 
-	GAMEPLAY:		load=RAM, start=$9000;
+	GAMEPLAY:			load=RAM, start=$9000;
 
-	BITMAP2:		load=OVERLAPPING_RAM, start=$A000, type=BSS;
+	BITMAP2:			load=OVERLAPPING_RAM, start=$A000, type=BSS;
 
-	SPECIALTILES:	load=OVERLAPPING_RAM, start=$C000, type=BSS;
+	SCREENSPECIAL:		load=OVERLAPPING_RAM, start=$C000, type=BSS;
 	
-	GAMEPLAY2:		load=RAM, start=$C400;
+	GAMEPLAY2:			load=RAM, start=$C400;
 
-	LOADER:			load=RAM,   start=$cc00, define=yes;
+	LOADER:				load=RAM,   start=$cc00, define=yes;
 
-	FONT2:			load=RAM, start=$D000;
-	TSPTS:			load=RAM, start=$D300;
+	UIFONT:				load=RAM, start=$D000;
+	ENEMYICONS:			load=RAM, start=$D300;
 
-	MT:				load=RAM, start=$d400;
+	MAPTILES:			load=RAM, start=$d400;
 	
 	# $E700 - $F300 FREE
 	
-	FONT:			load=RAM, start=$F300;
+	DIGITSPRITEFONT:	load=RAM, start=$F300;
 
 	# $F3C0 - $F400 should be empty missile sprite for upper border
 
-	FUEL:			load=RAM, start=$F400;
+	FUELSPRITES:		load=RAM, start=$F400;
+	ZONESPRITES:		load=RAM, start=$F600;
 
-	B54321:			load=RAM, start=$F600;
-
-	MTC:			load=RAM, start=$F800;
+	MAPTILECOLORS:		load=RAM, start=$F800;
 }

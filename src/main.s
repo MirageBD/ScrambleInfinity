@@ -1,3 +1,5 @@
+; ------------------------------------------------------------------------------------------------------------------------
+
 ; TODO:
 ; show mystery points
 ; highscore + obfuscate (irq loader now loadable after reverting to kernal)
@@ -8,57 +10,7 @@
 ; fancy startup screen
 ; fix bug where ground targets sometimes get cleaned only half when hit
 
-.segment "MUSIC"
-.incbin "./bin/jammer.bin"
-.segment "FONT"
-.incbin "./bin/font.bin"
-.segment "FUEL"
-.incbin "./bin/fuel.bin"
-.segment "B54321"
-.incbin "./bin/b54321.bin"
-.segment "S0"
-.incbin "./bin/s0.bin"
-.segment "B0"
-.incbin "./bin/b0.bin"
-.segment "BMB0"
-.incbin "./bin/bmb0.bin"
-.segment "EXPL0"
-.incbin "./bin/expl0.bin"
-.segment "EXPL1"
-.incbin "./bin/expl1.bin"
-.segment "EXPL2"
-.incbin "./bin/expl2.bin"
-.segment "MISSILE"
-.incbin "./bin/miss.bin"
-.segment "UFO"
-.incbin "./bin/ufo.bin"
-.segment "COMET"
-.incbin "./bin/comet.bin"
-.segment "MT"
-.incbin "./exe/mt.out"
-.segment "MTC"
-.incbin "./exe/mtc.out"
-.segment "FONT2"
-.incbin "./bin/font2.bin"
-.segment "TSPTS"
-.incbin "./bin/tspts.bin"
-
-.include "loadersymbols-c64.inc"
-
-.segment "LOADER"
-.incbin "./exe/loader-c64.prg", $02
-
-.segment "BITMAP1"
-	.res 8192
-.segment "BITMAP2"
-	.res 8192
-.segment "SCREEN1"
-	.res 1024
-.segment "SPECIALTILES"
-	.res 1024
-
-.feature pc_assignment
-.feature labels_without_colons
+; ------------------------------------------------------------------------------------------------------------------------
 
 ; char indices should be ordered like this for the $d800 colours to be $0c
 ; 0123456789abcdef
@@ -69,6 +21,62 @@
 
 ; box-box-intersection-test
 ; if(Axmin < Bxmax && Bxmin < Axmax && Aymin < Bymax && Bymin < Aymax) intersect = true
+
+; ------------------------------------------------------------------------------------------------------------------------
+
+.feature pc_assignment
+.feature labels_without_colons
+
+.include "loadersymbols-c64.inc"
+
+.segment "MUSIC"
+.incbin "./bin/jammer.bin"
+
+.segment "DIGITSPRITEFONT"				; referenced by code. digits to plot into sprites
+.incbin "./bin/font.bin"
+
+.segment "FUELSPRITES"					; referenced by code. score and highscore are plotted in here
+.incbin "./bin/fuel.bin"
+
+.segment "ZONESPRITES"					; referenced by code. lives and flags are plotted in here
+.incbin "./bin/b54321.bin"
+
+.segment "SPRITES1"						; copied to other bank once, used as sprites
+.incbin "./bin/s0.bin"					; ""
+.incbin "./bin/b0.bin"					; ""
+.incbin "./bin/bmb0.bin"				; ""
+.incbin "./bin/expl0.bin"				; ""
+.incbin "./bin/expl1.bin"				; ""
+.incbin "./bin/expl2.bin"				; ""
+.incbin "./bin/miss.bin"				; ""
+.incbin "./bin/ufo.bin"					; ""
+.incbin "./bin/comet.bin"				; ""
+
+.segment "MAPTILES"
+.incbin "./exe/mt.out"
+
+.segment "MAPTILECOLORS"
+.incbin "./exe/mtc.out"
+
+.segment "UIFONT"						; not referenced, used as font
+.incbin "./bin/font2.bin"
+
+.segment "ENEMYICONS"					; not references, used as font
+.incbin "./bin/tspts.bin"
+
+.segment "LOADER"
+.incbin "./exe/loader-c64.prg", $02
+
+.segment "SCREEN1"
+	.res 1024
+.segment "BITMAP1"
+	.res 8192
+.segment "SCREEN2"
+	.res 1024
+.segment "BITMAP2"
+	.res 8192
+.segment "SCREENSPECIAL"
+	.res 1024
 
 ; DEBUG DEFINES ----------------------------------------------------------------------------------------------------------
 
@@ -81,106 +89,79 @@
 .define firebombs			1
 .define startzone			#$01		; #$01 - #$06
 
+; DEFINES ----------------------------------------------------------------------------------------------------------------
+
+.define bank0				$0000
+.define bank1				$4000
+.define bank2				$8000
+.define bank3				$c000
+
+.define fueladd				#$08		; how much to add when you destroy a fuel tanker
+.define fueldecreaseticks	#$20		; frames before fuel decreases by one
+.define fuelfull			#$38		; full tank
+.define startlives			#$03		; initial lives
+.define ufospawntime		#$50		; time before new ufo spawns - can be more, not less
+.define bulletcooldown		#$18
+.define zonecolour0			#$0b
+.define zonecolour1			#$07
+
+.define MAXMULTPLEXSPR		12
+.define sortorder			$a0
+.define sortcounter			$b2
+
 ; ------------------------------------------------------------------------------------------------------------------------
 
-tuneinit	= $1000
-tuneplay	= $1003
-;install	= $6000
-;loader		= $cb00
+tuneinit					= $1000
+tuneplay					= $1003
 
-mtc			= $f800
-mt			= $d400
-font		= $f300
+maptilecolors				= $f800
+maptiles					= $d400
+font						= $f300
 
-bitmap1		= $6000
-bitmap2		= $a000
+loadeddata1					= $3000
+loadeddata2					= $3800
 
-zp0			= $f9
-zp1			= $fa
-zp2			= $fb
-zp3			= $fc
-zp4			= $fd
-zp5			= $fe
-zptemp		= $ff
+screen1						= $4000
+sprites1					= $4400
+bitmap1						= $6000
+screen2						= $8000
+sprites2					= $8400
+bitmap2						= $a000
+screenspecial				= $c000
 
-livesdigit0	= $F600+1*64+ 2*3+2
-flagsdigit0 = $F600+5*64+ 2*3+2
+scoreandfuelsprites			= $f400
+livesandzonesprites			= $f600
 
-scoredigit0 = $f400+0*64+14*3+0
-scoredigit1 = $f400+0*64+14*3+1
-scoredigit2 = $f400+0*64+14*3+2
-scoredigit3 = $f400+1*64+14*3+0
-scoredigit4 = $f400+1*64+14*3+1
-scoredigit5 = $f400+1*64+14*3+2
+zp0							= $f9
+zp1							= $fa
+zp2							= $fb
+zp3							= $fc
+zp4							= $fd
+zp5							= $fe
+zptemp						= $ff
 
-.define MAXMULTPLEXSPR	12
-.define sortorder		$a0
-.define sortcounter		$b2
+livesdigit0					= livesandzonesprites+1*64+ 2*3+2
+flagsdigit0 				= livesandzonesprites+5*64+ 2*3+2
+
+scoredigit0 				= scoreandfuelsprites+0*64+14*3+0
+scoredigit1 				= scoreandfuelsprites+0*64+14*3+1
+scoredigit2 				= scoreandfuelsprites+0*64+14*3+2
+scoredigit3 				= scoreandfuelsprites+1*64+14*3+0
+scoredigit4 				= scoreandfuelsprites+1*64+14*3+1
+scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
+
+; STRUCTS AND ENUMS ------------------------------------------------------------------------------------------------------
 
 .struct sprdata
-	xlow		.byte
-	xhigh		.byte
-	ylow		.byte
-	xvel		.byte
-	yvel		.byte
-	pointer		.byte
-	colour		.byte
-	isexploding	.byte
+	xlow					.byte
+	xhigh					.byte
+	ylow					.byte
+	xvel					.byte
+	yvel					.byte
+	pointer					.byte
+	colour					.byte
+	isexploding				.byte
 .endstruct
-
-; clear carry before using this
-.macro add16bit arg1, arg2
-	lda arg1+1
-	adc #<(arg2)
-	sta arg1+1
-	lda arg1+2
-	adc #>(arg2)
-	sta arg1+2
-.endmacro
-
-; set carry before using this
-.macro sub16bit arg1, arg2
-	lda arg1+1
-	sbc #<(arg2)
-	sta arg1+1
-	lda arg1+2
-	sbc #>(arg2)
-	sta arg1+2
-.endmacro
-
-.macro store16bit arg1, arg2
-	lda #<(arg2)
-	sta arg1+1
-	lda #>(arg2)
-	sta arg1+2
-.endmacro
-
-.macro addpoints arg1, arg2
-	clc
-	lda score+arg2
-	adc arg1
-	sta score+arg2
-	;jmp updatescore
-.endmacro
-
-.macro plotdigit arg1, arg2
-	ldx arg1
-	ldy times8lowtable,x
-	;tax
-
-	lda font+0,y
-	sta arg2+0*3
-	lda font+1,y
-	sta arg2+1*3
-	lda font+2,y
-	sta arg2+2*3
-	lda font+3,y
-	sta arg2+3*3
-	lda font+4,y
-	sta arg2+4*3
-	lda font+5,y
-	sta arg2+5*3
-.endmacro
 
 .enum states
 	waiting					= 0
@@ -209,16 +190,58 @@ scoredigit5 = $f400+1*64+14*3+2
 	flyingcomet				= 3
 .endenum
 
-.define fueladd				#$08		; how much to add when you destroy a fuel tanker
-.define fueldecreaseticks	#$20		; frames before fuel decreases by one
-.define fuelfull			#$38		; full tank
-.define startlives			#$03		; initial lives
-.define ufospawntime		#$50		; time before new ufo spawns - can be more, not less
-.define bulletcooldown		#$18
-.define zonecolour0			#$0b
-.define zonecolour1			#$07
+; MACROS -----------------------------------------------------------------------------------------------------------------
 
-; -----------------------------------------------------------------------------------------------
+.macro add16bit arg1, arg2				; clear carry before using this
+	lda arg1+1
+	adc #<(arg2)
+	sta arg1+1
+	lda arg1+2
+	adc #>(arg2)
+	sta arg1+2
+.endmacro
+
+.macro sub16bit arg1, arg2				; set carry before using this
+	lda arg1+1
+	sbc #<(arg2)
+	sta arg1+1
+	lda arg1+2
+	sbc #>(arg2)
+	sta arg1+2
+.endmacro
+
+.macro store16bit arg1, arg2
+	lda #<(arg2)
+	sta arg1+1
+	lda #>(arg2)
+	sta arg1+2
+.endmacro
+
+.macro addpoints arg1, arg2
+	clc
+	lda score+arg2
+	adc arg1
+	sta score+arg2
+.endmacro
+
+.macro plotdigit arg1, arg2
+	ldx arg1
+	ldy times8lowtable,x
+	lda font+0,y
+	sta arg2+0*3
+	lda font+1,y
+	sta arg2+1*3
+	lda font+2,y
+	sta arg2+2*3
+	lda font+3,y
+	sta arg2+3*3
+	lda font+4,y
+	sta arg2+4*3
+	lda font+5,y
+	sta arg2+5*3
+.endmacro
+
+; MAIN ------------------------------------------------------------------------------------------
 
 .segment "MAIN"
 
@@ -272,11 +295,6 @@ scoredigit5 = $f400+1*64+14*3+2
 :	.repeat 5
 	nop
 	.endrepeat							; Raster is stable here
-	
-	;.repeat 46							; add offset to timer (95 cycles)
-	;nop
-	;.endrepeat
-	;bit $ea
 
 	.repeat 13							; add offset to timer (95 cycles)
 		pha
@@ -475,26 +493,17 @@ setupinitiallevel
 	;lda #$00
 	sta ship0+sprdata::xhigh
 	sta ship0+sprdata::xlow
-
-;	lda #$00							; clear highscore sprites
-;	ldx #$11
-;:	sta $f42a+1*64,x
-;	sta $f42a+2*64,x
-;	sta $f42a+5*64,x
-;	sta $f42a+6*64,x
-;	dex
-;	bpl :-
 	
-	lda #$84							; copy sprites to other bank
+	lda #>sprites2							; copy sprites to other bank
 	sta sprcpy0+2
-	lda #$44
+	lda #>sprites1
 	sta sprcpy1+2
 sprcpy
 	ldx #$00
 sprcpy0
-	lda $8400,x
+	lda sprites2,x
 sprcpy1
-	sta $4400,x
+	sta sprites1,x
 	dex
 	bne sprcpy0
 	inc sprcpy0+2
@@ -565,11 +574,11 @@ setuplevel
 	sty $dd00
 
 	ldx #$10
-	stx $83f8
-	stx $43f8
+	stx screen1+$03f8+0
+	stx screen2+$03f8+0
 	inx
-	stx $83f9
-	stx $43f9
+	stx screen1+$03f8+1
+	stx screen2+$03f8+1
 
 	jsr findstartofzone
 		
@@ -631,16 +640,16 @@ psdone
 	
 	ldx #$00
 :	lda #$66
-	sta $4000,x
+	sta screen1,x
 	lda #$20
-	sta $c000,x
+	sta screenspecial,x
 	inx
 	cpx #$28
 	bne :-
 
 	lda #$20							; empty tiles used for index ordering
 	.repeat 27, i
-	sta $3800+i*50+0
+	sta loadeddata2+i*50+0
 	.endrepeat
 
 sldone
@@ -793,9 +802,6 @@ irq2									; start of bottom border irq
 	nop
 	nop
 	
-	;lda #$40							; #$4c
-	;jsr cycleperfect
-
  	lda #$69
  	sta $d011
  
@@ -1970,10 +1976,10 @@ removeobject
 	clc									; setup clear charmem 1 tiles
 	ldx calcylowvsped
 	lda times40lowtable,x
-	adc #$ff
+	adc #<screen1-1
 	sta hbo4+1
 	lda times40hightable,x
-	adc #$3f
+	adc #>screen1-1
 	sta hbo4+2
 
 	clc
@@ -1987,10 +1993,10 @@ removeobject
 	clc									; setup clear charmem 2 tiles
 	ldx calcylowvsped
 	lda times40lowtable,x
-	adc #$ff
+	adc #<screen2-1
 	sta hbo5+1
 	lda times40hightable,x
-	adc #$7f
+	adc #>screen2-1
 	sta hbo5+2
 
 	clc
@@ -2004,10 +2010,10 @@ removeobject
 	clc									; setup clear specialtiles/tilemem tiles
 	ldx calcylow
 	lda times40lowtable,x
-	adc #$ff
+	adc #<screenspecial-1
 	sta hbo8+1
 	lda times40hightable,x
-	adc #$bf
+	adc #>screenspecial-1
 	sta hbo8+2
 
 	clc
@@ -2117,33 +2123,33 @@ cleartiles
 hbo0
 	sta bitmap1-1,x
 hbo1
-	sta $8000-1,x
+	sta bitmap2-1,x
 hbo2
-	sta $6140-1,x
+	sta bitmap1+320-1,x
 hbo3
-	sta $8140-1,x
+	sta bitmap2+320-1,x
 	dex
 	bne hbo0
 
 	ldx #$02
 	lda #$66
 hbo4
-	sta $4000,x
+	sta screen1,x
 hbo5
-	sta $8000,x
+	sta screen2,x
 hbo6
-	sta $4028,x
+	sta screen1+40,x
 hbo7
-	sta $8028,x
+	sta screen2+40,x
 	dex
 	bne hbo4
 
 	ldx #$02
 	lda #$20
 hbo8
-	sta $c000,x
+	sta screenspecial,x
 hbo9
-	sta $c028,x
+	sta screenspecial+40,x
 	dex
 	bne hbo8
 
@@ -3810,16 +3816,16 @@ plottiles
 plotloop
 	clc
 gett1
-	lda $3000+0*2
+	lda loadeddata1+0*2
 	sta currenttile+0
 	sta currenttiletimes8+0
 	;adc #$00							; commented out for performance reasons
 	sta plotc1+1
 gett2
-	lda $3001+0*2
+	lda loadeddata1+1+0*2
 	sta currenttile+1
 	sta currenttiletimes8+1
-	adc #>mtc
+	adc #>maptilecolors
 	sta plotc1+2
 	
 	lda currenttile+1					; > 256 = always solid tile
@@ -3865,7 +3871,7 @@ skipspecialtiles
 	;adc #$00							; commented out for performance reasons
 	sta ploth1+1
 	lda currenttiletimes8+1
-	adc #>mt
+	adc #>maptiles
 	sta ploth1+2
 
 	ldx #$07
@@ -3879,15 +3885,15 @@ ploth3
 	bpl ploth1
 
 plotc1
-	lda mtc+1
+	lda maptilecolors+1
 plotc2
-	sta $8000+1*40
+	sta screen2+1*40
 plotc3
-	sta $4000+0*40
+	sta screen1+0*40
 
 	lda currenttile+0
 plott1
-	sta $c000
+	sta screenspecial
 
 	clc
 	add16bit gett1, 2
@@ -3938,7 +3944,7 @@ inccol2
 	lda plott1+2
 	sta plott3+2
 	
-plott2	lda $3000
+plott2	lda loadeddata1
 plott3	sta $c3c0
 
 	clc
@@ -3975,25 +3981,25 @@ incpag2
 	sta flip
 	lda #$01
 	sta page+1
-	store16bit gett1, $3000+0*2
-	store16bit gett2, $3001+0*2
+	store16bit gett1, loadeddata1+0*2
+	store16bit gett2, loadeddata1+1+0*2
 	store16bit ploth2, bitmap2+1*320
 	store16bit ploth3, bitmap1+0*320
-	store16bit plotc2, $8000+1*40
-	store16bit plotc3, $4000+0*40
-	store16bit plott1, $c000+0*40
+	store16bit plotc2, screen2+1*40
+	store16bit plotc3, screen1+0*40
+	store16bit plott1, screenspecial+0*40
 	rts
 	
 incpag3
 	lda #$02
 	sta page+1
-	store16bit gett1, $3800+0*2
-	store16bit gett2, $3801+0*2
+	store16bit gett1, loadeddata2+0*2
+	store16bit gett2, loadeddata2+1+0*2
 	store16bit ploth2, bitmap1+1*320
 	store16bit ploth3, bitmap2+0*320
-	store16bit plotc2, $4000+1*40
-	store16bit plotc3, $8000+0*40
-	store16bit plott1, $c000+0*40
+	store16bit plotc2, screen1+1*40
+	store16bit plotc3, screen2+0*40
+	store16bit plott1, screenspecial+0*40
 	rts
 
 ; -----------------------------------------------------------------------------------------------
@@ -4234,24 +4240,24 @@ plotfuelplotscoreupdatefuel
 .endmacro
 
 	;tick $f486+(0*64), 0+(0*3*4)		; 3 * 4 expanded pixels in a sprite horizontally
-	tick $f487+(0*64), 0+(0*3*4)
-	tick $f488+(0*64), 4+(0*3*4)
+	tick scoreandfuelsprites+$0087+(0*64), 0+(0*3*4)
+	tick scoreandfuelsprites+$0088+(0*64), 4+(0*3*4)
 
-	tick $f486+(1*64), 8+(0*3*4)
-	tick $f487+(1*64), 0+(1*3*4)
-	tick $f488+(1*64), 4+(1*3*4)
+	tick scoreandfuelsprites+$0086+(1*64), 8+(0*3*4)
+	tick scoreandfuelsprites+$0087+(1*64), 0+(1*3*4)
+	tick scoreandfuelsprites+$0088+(1*64), 4+(1*3*4)
 
-	tick $f486+(2*64), 8+(1*3*4)
-	tick $f487+(2*64), 0+(2*3*4)
-	tick $f488+(2*64), 4+(2*3*4)
+	tick scoreandfuelsprites+$0086+(2*64), 8+(1*3*4)
+	tick scoreandfuelsprites+$0087+(2*64), 0+(2*3*4)
+	tick scoreandfuelsprites+$0088+(2*64), 4+(2*3*4)
 
-	tick $f486+(3*64), 8+(2*3*4)
-	tick $f487+(3*64), 0+(3*3*4)
-	tick $f488+(3*64), 4+(3*3*4)
+	tick scoreandfuelsprites+$0086+(3*64), 8+(2*3*4)
+	tick scoreandfuelsprites+$0087+(3*64), 0+(3*3*4)
+	tick scoreandfuelsprites+$0088+(3*64), 4+(3*3*4)
 
-	tick $f486+(4*64), 8+(3*3*4)
-	tick $f487+(4*64), 0+(4*3*4)
-	tick $f488+(4*64), 4+(4*3*4)
+	tick scoreandfuelsprites+$0086+(4*64), 8+(3*3*4)
+	tick scoreandfuelsprites+$0087+(4*64), 0+(4*3*4)
+	tick scoreandfuelsprites+$0088+(4*64), 4+(4*3*4)
 
 ; plotscore
 
@@ -5003,10 +5009,10 @@ clearscreen
 
 	ldx #$00
 :	lda #$00
-	sta $c000,x
-	sta $c100,x
-	sta $c200,x
-	sta $c300,x
+	sta screenspecial+(0*256),x
+	sta screenspecial+(1*256),x
+	sta screenspecial+(2*256),x
+	sta screenspecial+(3*256),x
 	inx
 	bne :-
 
@@ -5103,9 +5109,9 @@ livesleftscreen
 	
 	lda lives
 	adc #$2f
-	sta $c000+12*40+14
+	sta screenspecial+(0*256)+12*40+14
 	lda #$01
-	sta $d800+12*40+14
+	sta screenspecial+(0*256)+12*40+14
 
 	ldx #<liveslefttext
 	ldy #>liveslefttext
@@ -5260,7 +5266,7 @@ pt0	lda #$08
 pt1	sta $d800,x
 pt3	lda titletext,x
 	sbc #$60
-pt2	sta $c000,x
+pt2	sta screenspecial+(0*256),x
 	cmp #$00
 	bne :-
 	inx
@@ -5303,7 +5309,7 @@ ploticon
 	sta icol+2
 	iny
 	lda (zp0),y
-itxt sta $c000
+itxt sta screenspecial
 	iny
 	lda (zp0),y
 icol sta $d800
