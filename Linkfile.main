@@ -12,51 +12,30 @@ SEGMENTS
 
 	MAIN:				load=RAM, start=$0820;
 	IRQ:				load=RAM, align=256;
-	
-	MUSIC:				load=RAM, start=$1000;
-	
+	MUSIC:				load=RAM, start=$1000;	
 	TITLESCREEN:		load=RAM, start=$2000;
-
 	LOADEDDATA1:		load=RAM, start=$3000;
 	LOADEDDATA2:		load=RAM, start=$3800;
 
 	SCREEN1:			load=OVERLAPPING_RAM, start=$4000, type=BSS;
-
 	SCROLLER:			load=RAM, start=$5000;
-
-	# $5c20 - $6000 FREE
-
 	CYCLEPERFECT:		load=RAM, align=256;
-
 	BITMAP1:			load=OVERLAPPING_RAM, start=$6000, type=BSS;
 
 	SCREEN2:			load=OVERLAPPING_RAM, start=$8000, type=BSS;
-	
 	SPRITES1:			load=RAM, start=$8400;
-
 	GAMEPLAY:			load=RAM, start=$9000;
-
 	BITMAP2:			load=OVERLAPPING_RAM, start=$A000, type=BSS;
 
 	SCREENSPECIAL:		load=OVERLAPPING_RAM, start=$C000, type=BSS;
-	
 	GAMEPLAY2:			load=RAM, start=$C400;
-
 	LOADER:				load=RAM,   start=$cc00, define=yes;
-
 	UIFONT:				load=RAM, start=$D000;
 	ENEMYICONS:			load=RAM, start=$D300;
-
 	MAPTILES:			load=RAM, start=$d400;
-	
-	# $E700 - $F300 FREE
-	
 	DIGITSPRITEFONT:	load=RAM, start=$F300;
-
 	# $F3C0 - $F400 should be empty missile sprite for upper border
-
 	FUELSPRITES:		load=RAM, start=$F400;
 	ZONESPRITES:		load=RAM, start=$F600;
-
 	MAPTILECOLORS:		load=RAM, start=$F800;
 }
