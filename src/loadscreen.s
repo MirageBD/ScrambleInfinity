@@ -132,9 +132,13 @@
 	bcs error
 
 	sei
+
+	lda #$7b
+	sta $d011
 	lda #$00
 	sta $d020
 	sta $d021
+
 	jmp $080d
 
 error

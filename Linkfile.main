@@ -1,13 +1,15 @@
 MEMORY
 {
 	ZPRAM:			start=$02, size=$fe, type = rw;
-	RAM:			start=$0800, size=$f800;
+	RAM:			start=$0400, size=$fc00;
 	OVERLAPPING_RAM:start=$0000, size=$10000;
 }
 
 SEGMENTS
 {
 	# comment
+	TABLES:			load = RAM, start=$0400;
+
 	MAIN:			load=RAM, start=$0820;
 	IRQ:			load=RAM, align=256;
 	
@@ -35,8 +37,6 @@ SEGMENTS
 	COMET:			load=RAM, start=$8F40;
 
 	GAMEPLAY:		load=RAM, start=$9000;
-
-	TABLES:			load = RAM, start=$9C00;
 
 	BITMAP2:		load=OVERLAPPING_RAM, start=$A000, type=BSS;
 	SCREEN2:		load=OVERLAPPING_RAM, start=$C000, type=BSS;
