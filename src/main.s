@@ -54,7 +54,7 @@
 	.res 8192
 .segment "SCREEN1"
 	.res 1024
-.segment "SCREEN2"
+.segment "SPECIALTILES"
 	.res 1024
 
 .feature pc_assignment
@@ -91,6 +91,9 @@ tuneplay	= $1003
 mtc			= $f800
 mt			= $d400
 font		= $f300
+
+bitmap1		= $6000
+bitmap2		= $a000
 
 zp0			= $f9
 zp1			= $fa
@@ -621,8 +624,8 @@ psdone
 
 	ldx #$00							; clear temporary tiles from screen - only need to do this for first subzone?
 	lda #$55
-:	sta $6000,x
-	sta $6040,x
+:	sta bitmap1,x
+	sta bitmap1+64,x
 	inx
 	bne :-
 	
@@ -1931,10 +1934,10 @@ removeobject
 	clc									; setup clear bitmap 1 tiles
 	ldx calcylowvsped
 	lda times320lowtable,x
-	adc #$ff
+	adc #<bitmap1-1
 	sta hbo0+1
 	lda times320hightable,x
-	adc #$5f
+	adc #>bitmap1-1
 	sta hbo0+2
 	
 	clc
@@ -1949,10 +1952,10 @@ removeobject
 	clc									; setup clear bitmap 2 tiles
 	ldx calcylowvsped
 	lda times320lowtable,x
-	adc #$ff
+	adc #<bitmap2-1
 	sta hbo1+1
 	lda times320hightable,x
-	adc #$9f
+	adc #>bitmap2-1
 	sta hbo1+2
 	
 	clc
@@ -1998,7 +2001,7 @@ removeobject
 	adc hbo5+2
 	sta hbo5+2
 
-	clc									; setup clear tilemem tiles
+	clc									; setup clear specialtiles/tilemem tiles
 	ldx calcylow
 	lda times40lowtable,x
 	adc #$ff
@@ -2112,7 +2115,7 @@ cleartiles
 	ldx #$10
 	lda calcbkghit
 hbo0
-	sta $6000-1,x
+	sta bitmap1-1,x
 hbo1
 	sta $8000-1,x
 hbo2
@@ -3869,9 +3872,9 @@ skipspecialtiles
 ploth1
 	lda $e000,x
 ploth2
-	sta $a000+1*320,x
+	sta bitmap2+1*320,x
 ploth3
-	sta $6000+0*320,x
+	sta bitmap1+0*320,x
 	dex
 	bpl ploth1
 
@@ -3974,8 +3977,8 @@ incpag2
 	sta page+1
 	store16bit gett1, $3000+0*2
 	store16bit gett2, $3001+0*2
-	store16bit ploth2, $a000+1*320
-	store16bit ploth3, $6000+0*320
+	store16bit ploth2, bitmap2+1*320
+	store16bit ploth3, bitmap1+0*320
 	store16bit plotc2, $8000+1*40
 	store16bit plotc3, $4000+0*40
 	store16bit plott1, $c000+0*40
@@ -3986,8 +3989,8 @@ incpag3
 	sta page+1
 	store16bit gett1, $3800+0*2
 	store16bit gett2, $3801+0*2
-	store16bit ploth2, $6000+1*320
-	store16bit ploth3, $a000+0*320
+	store16bit ploth2, bitmap1+1*320
+	store16bit ploth3, bitmap2+0*320
 	store16bit plotc2, $4000+1*40
 	store16bit plotc3, $8000+0*40
 	store16bit plott1, $c000+0*40
