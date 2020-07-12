@@ -5372,6 +5372,67 @@ textboss
 
 .segment "TABLES"
 
+; put stuff that's indexed a lot first to keep runtime cost low
+
+;sortorder = ($a0)
+;.repeat MAXMULTPLEXSPR
+;.byte $00
+;.endrep
+
+sortsprylow
+.repeat MAXMULTPLEXSPR
+.byte $ff
+.endrep
+sortsprxlow
+.repeat MAXMULTPLEXSPR
+.byte $00
+.endrep
+sortsprxlowmax
+.repeat MAXMULTPLEXSPR
+.byte $00
+.endrep
+sortsprxhigh
+.repeat MAXMULTPLEXSPR
+.byte $00
+.endrep
+sortsprxhighmax
+.repeat MAXMULTPLEXSPR
+.byte $00
+.endrep
+sortsprc
+.repeat MAXMULTPLEXSPR
+.byte $00
+.endrep
+sortsprp
+.repeat MAXMULTPLEXSPR
+.byte $00
+.endrep
+sortsprwidth
+.repeat MAXMULTPLEXSPR
+.byte $00
+.endrep
+sortsprheight
+.repeat MAXMULTPLEXSPR
+.byte $00
+.endrep
+sortsprtype
+.repeat MAXMULTPLEXSPR
+.byte $00
+.endrep
+sortsprlifetime
+.repeat MAXMULTPLEXSPR
+.byte $00
+.endrep
+
+fuelticks
+.byte %01010101							; 01 = empty, 10,11 = full
+.byte %10010101
+.byte %10110101
+.byte %10111001
+.repeat 64-4
+.byte %10111011
+.endrepeat
+
 timesufotable
 .byte $00, $40, $80, $c0
 
@@ -5417,15 +5478,6 @@ posycomet
 
 filenameconvtab
 .byte $30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$41,$42,$43,$44,$45,$46
-
-fuelticks
-.byte %01010101							; 01 = empty, 10,11 = full
-.byte %10010101
-.byte %10110101
-.byte %10111001
-.repeat 64-4
-.byte %10111011
-.endrepeat
 
 ; ---------------------- uninitialised
 
@@ -5546,56 +5598,6 @@ curmulsprite							; multiplex stuff
 .byte $00
 restmultspritesindex
 .byte $02
-
-;sortorder = ($a0)
-;.repeat MAXMULTPLEXSPR
-;.byte $00
-;.endrep
-
-sortsprylow
-.repeat MAXMULTPLEXSPR
-.byte $ff
-.endrep
-sortsprxlow
-.repeat MAXMULTPLEXSPR
-.byte $00
-.endrep
-sortsprxlowmax
-.repeat MAXMULTPLEXSPR
-.byte $00
-.endrep
-sortsprxhigh
-.repeat MAXMULTPLEXSPR
-.byte $00
-.endrep
-sortsprxhighmax
-.repeat MAXMULTPLEXSPR
-.byte $00
-.endrep
-sortsprc
-.repeat MAXMULTPLEXSPR
-.byte $00
-.endrep
-sortsprp
-.repeat MAXMULTPLEXSPR
-.byte $00
-.endrep
-sortsprwidth
-.repeat MAXMULTPLEXSPR
-.byte $00
-.endrep
-sortsprheight
-.repeat MAXMULTPLEXSPR
-.byte $00
-.endrep
-sortsprtype
-.repeat MAXMULTPLEXSPR
-.byte $00
-.endrep
-sortsprlifetime
-.repeat MAXMULTPLEXSPR
-.byte $00
-.endrep
 
 randomseed								; randomizer missile liftoff
 .byte $00
