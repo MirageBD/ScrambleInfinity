@@ -2,7 +2,7 @@ MEMORY
 {
  ZPRAM: start = $e8, size = $18;
  INSTALLRAM: start = $5ffe, size = $a002, file = "../build/install-c64.prg";
- RESIDENTRAM: start = $cbfe, size = $3402, file = "../build/loader-c64.prg";
+ RESIDENTRAM: start = $8bfe, size = $7402, file = "../build/loader-c64.prg";
 }
 
 SEGMENTS

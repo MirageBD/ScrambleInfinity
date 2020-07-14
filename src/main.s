@@ -83,6 +83,12 @@
 	.res 8192
 .segment "SCREENSPECIAL"
 	.res 1024
+;.segment "SCREENUI"
+;	.res 1024
+;.segment "SCREENBORDERSPRITES"
+;	.res 1024
+.segment "SPRITES2"
+	.res 1024
 
 ; DEBUG DEFINES ----------------------------------------------------------------------------------------------------------
 
@@ -97,52 +103,58 @@
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
 
-.define bank0				$0000
-.define bank1				$4000
-.define bank2				$8000
-.define bank3				$c000
+.define bank0							$0000
+.define bank1							$4000
+.define bank2							$8000
+.define bank3							$c000
 
-.define fueladd				#$08				; how much to add when you destroy a fuel tanker
-.define fueldecreaseticks	#$20				; frames before fuel decreases by one
-.define fuelfull			#$38				; full tank
-.define startlives			#$03				; initial lives
-.define ufospawntime		#$50				; time before new ufo spawns - can be more, not less
-.define bulletcooldown		#$18
-.define zonecolour0			#$0b
-.define zonecolour1			#$07
+.define fueladd							#$08				; how much to add when you destroy a fuel tanker
+.define fueldecreaseticks				#$20				; frames before fuel decreases by one
+.define fuelfull						#$38				; full tank
+.define startlives						#$03				; initial lives
+.define ufospawntime					#$50				; time before new ufo spawns - can be more, not less
+.define bulletcooldown					#$18
+.define zonecolour0						#$0b
+.define zonecolour1						#$07
 
-.define MAXMULTPLEXSPR		12
-.define sortorder			$a0
-.define sortcounter			$b2
+.define MAXMULTPLEXSPR					12
+.define sortorder						$a0
+.define sortcounter						$b2
 
-.define bitmapwidth			320
+.define bitmapwidth						320
+
+.define d018forscreencharset(scr,cst)	#(((scr&$3fff)/$0400) << 4) | (((cst&$3fff)/$0800) << 1)
+.define bankforaddress(addr)			#(3-(addr>>14))
+.define spriteptrforaddress(addr)		#((addr&$3fff)>>6)
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
 tuneinit					= $1000
 tuneplay					= $1003
 
-maptilecolors				= $f800
-maptiles					= $d400
-font						= $f300
+maptilecolors				= $b400
+maptiles					= $a000
+fontdigits					= $8f80
+fontui						= $8800
 
 loadeddata1					= $3000
 loadeddata2					= $3800
 
 screen1						= $4000
+screen2						= $c000
 sprites1					= $4400
+sprites2					= $c400
 bitmap1						= $6000
-screen2						= $8000
-sprites2					= $8400
-bitmap2						= $a000
-screenspecial				= $c000
-screenui					= $c000
+bitmap2						= $e000
+screenspecial				= $8000
+screenui					= $8000
+screenbordersprites			= $8000
 clearmisilepositiondata		= screenspecial+$03c0
 
-colormem					= $d800
+scoreandfuelsprites			= $8400
+livesandzonesprites			= $8600
 
-scoreandfuelsprites			= $f400
-livesandzonesprites			= $f600
+colormem					= $d800
 
 zp0							= $f9
 zp1							= $fa
@@ -239,17 +251,17 @@ scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
 .macro plotdigit arg1, arg2
 	ldx arg1
 	ldy times8lowtable,x
-	lda font+0,y
+	lda fontdigits+0,y
 	sta arg2+0*3
-	lda font+1,y
+	lda fontdigits+1,y
 	sta arg2+1*3
-	lda font+2,y
+	lda fontdigits+2,y
 	sta arg2+2*3
-	lda font+3,y
+	lda fontdigits+3,y
 	sta arg2+3*3
-	lda font+4,y
+	lda fontdigits+4,y
 	sta arg2+4*3
-	lda font+5,y
+	lda fontdigits+5,y
 	sta arg2+5*3
 .endmacro
 
@@ -320,6 +332,27 @@ scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
 	sty $dc05
 	lda #%00010001
 	sta $dc0e
+
+	lda #$34
+	sta $01
+
+	lda #>sprites1								; copy sprites to other bank
+	sta sprcpy0+2
+	lda #>sprites2
+	sta sprcpy1+2
+sprcpy
+	ldx #$00
+sprcpy0
+	lda sprites1,x
+sprcpy1
+	sta sprites2,x
+	dex
+	bne sprcpy0
+	inc sprcpy0+2
+	inc sprcpy1+2
+	lda sprcpy0+2
+	cmp #>(sprites1+$0c00)
+	bne sprcpy
 
 	lda #$37
 	sta $01
@@ -493,25 +526,7 @@ setupinitiallevel
 	;lda #$00
 	sta ship0+sprdata::xhigh
 	sta ship0+sprdata::xlow
-	
-	lda #>sprites2								; copy sprites to other bank
-	sta sprcpy0+2
-	lda #>sprites1
-	sta sprcpy1+2
-sprcpy
-	ldx #$00
-sprcpy0
-	lda sprites2,x
-sprcpy1
-	sta sprites1,x
-	dex
-	bne sprcpy0
-	inc sprcpy0+2
-	inc sprcpy1+2
-	lda sprcpy0+2
-	cmp #$90
-	bne sprcpy
-	
+		
 	jsr setingamebkgcolours
 	
 	lda #$ff
@@ -567,10 +582,10 @@ setuplevel
 	lda #$17
 	sta $d016
 	
-	lda #$08
+	lda d018forscreencharset(screen2,bitmap2)
 	sta $d018
 	
-	ldy #$01
+	ldy bankforaddress(bitmap2)
 	sty $dd00
 
 	ldx #$10
@@ -588,7 +603,7 @@ setuplevel
 	;bcc :+
 	;jmp error
 
-:
+;:
 	inc file									; file = 1
 	jsr setupfilename
 	jsr loadpackd
@@ -596,7 +611,7 @@ setuplevel
 	;bcc :+
 	;jmp error
 
-:	jsr incpag2									; set up pointers for initial tile plot
+;:	jsr incpag2									; set up pointers for initial tile plot
 	inc file									; file = 2
 	lda #$00
 	sta row
@@ -665,7 +680,7 @@ sldone
 	;bcc :+
 	;jmp error
 
-:	lda #$30
+;:	lda #$30
 	sta hascontrol
 
 	jsr initmultsprites
@@ -753,10 +768,10 @@ bplcode
 	nop
 
 page
-	lda #$01
+	lda bankforaddress(bitmap2)
 	sta $dd00
 	
-	lda #$08
+	lda d018forscreencharset(screen2,bitmap2)
 	sta $d018
 
 	ldx #$6b
@@ -837,22 +852,22 @@ irq2											; start of bottom border irq
 	lda #%10000000
 	sta $d010
 
-	ldx #$d0
-	stx $c3f8
+	ldx spriteptrforaddress(scoreandfuelsprites)
+	stx screenbordersprites+$03f8+0
 	inx
-	stx $c3f9
+	stx screenbordersprites+$03f8+1
 	inx
-	stx $c3fa
+	stx screenbordersprites+$03f8+2
 	inx
-	stx $c3fb
+	stx screenbordersprites+$03f8+3
 	inx
-	stx $c3fc
+	stx screenbordersprites+$03f8+4
 	inx
-	stx $c3fd
+	stx screenbordersprites+$03f8+5
 	inx
-	stx $c3fe
+	stx screenbordersprites+$03f8+6
 	inx
-	stx $c3ff
+	stx screenbordersprites+$03f8+7
 
 	lda #<irq3
 	ldx #>irq3
@@ -867,13 +882,13 @@ irq3
  	ldx #$00
 	lda #$7f
 	ldy #$74
-	sta $d011,x
+	sta $d011,x									; open border
 	sty $d011
 
-	lda #$00
+	lda d018forscreencharset(screenbordersprites,fontui)
 	sta $d018
 
-	lda #$00									; #$02 = $4000-$8000, #$01 = $8000-$c000
+	lda bankforaddress(screenbordersprites)
 	sta $dd00
 
 	lda #$0b
@@ -2610,20 +2625,20 @@ handlebomb0speed
 	sta bomb1+sprdata::ylow
 	
 :	lda ship0+sprdata::pointer
-	sta $83f8
-	sta $43f8
+	sta screen1+$03f8+0
+	sta screen2+$03f8+0
 	lda bull0+sprdata::pointer
-	sta $83f9
-	sta $43f9
+	sta screen1+$03f8+1
+	sta screen2+$03f8+1
 	lda bull1+sprdata::pointer
-	sta $83fa
-	sta $43fa
+	sta screen1+$03f8+2
+	sta screen2+$03f8+2
 	lda bomb0+sprdata::pointer
-	sta $83fb
-	sta $43fb
+	sta screen1+$03f8+3
+	sta screen2+$03f8+3
 	lda bomb1+sprdata::pointer
-	sta $83fc
-	sta $43fc
+	sta screen1+$03f8+4
+	sta screen2+$03f8+4
 
 	rts
 	
@@ -3014,7 +3029,7 @@ misofst
 	stx flipflop
 
 :	tax
-	lda $c3c0,x
+	lda screenspecial+$03c0,x
 	beq :+
 	jmp missilefound
 
@@ -3527,8 +3542,8 @@ plotfirstufomultsprites
 	lda sortsprc,y
 	sta $d02c
 	lda sortsprp,y
-	sta $83fd
-	sta $43fd
+	sta screen1+$03f8+5
+	sta screen2+$03f8+5
 	lda sortsprxhigh,y
 	beq msbluw
 	lda $d010
@@ -3549,8 +3564,8 @@ msbluw
 	lda sortsprc,y
 	sta $d02d
 	lda sortsprp,y
-	sta $83fe
-	sta $43fe
+	sta screen1+$03f8+6
+	sta screen2+$03f8+6
 	lda sortsprxhigh,y
 	beq msbluw2
 	lda $d010
@@ -3571,8 +3586,8 @@ msbluw2
 	lda sortsprc,y
 	sta $d02e
 	lda sortsprp,y
-	sta $83ff
-	sta $43ff
+	sta screen1+$03f8+7
+	sta screen2+$03f8+7
 	lda sortsprxhigh,y
 	beq msbluw3
 	lda $d010
@@ -3631,8 +3646,8 @@ hctst2
 	lda sortsprc,y
 	sta $d02c,x
 	lda sortsprp,y
-	sta $83fd,x
-	sta $43fd,x
+	sta screen1+$03f8+5,x
+	sta screen2+$03f8+5,x
 	lda sortsprxhigh,y
 	beq msbluw4
 	lda $d010
@@ -3669,8 +3684,8 @@ plotfirstmissilemultsprites
 	lda sortsprc,y
 	sta $d02d
 	lda sortsprp,y
-	sta $83fe
-	sta $43fe
+	sta screen1+$03f8+6
+	sta screen2+$03f8+6
 	lda sortsprxhigh,y
 	beq msblow
 	lda $d010
@@ -3692,8 +3707,8 @@ msblow
 	lda sortsprc,y
 	sta $d02e
 	lda sortsprp,y
-	sta $83ff
-	sta $43ff
+	sta screen1+$03f8+7
+	sta screen2+$03f8+7
 	lda sortsprxhigh,y
 	beq msblow2
 	lda $d010
@@ -3755,8 +3770,8 @@ hctest
 	lda sortsprc,y
 	sta $d02d,x
 	lda sortsprp,y
-	sta $83fe,x
-	sta $43fe,x
+	sta screen1+$03f8+6,x
+	sta screen2+$03f8+6,x
 	lda sortsprxhigh,y
 	beq msblow3
 	lda $d010
@@ -3935,7 +3950,7 @@ inccol2
 	sta plott3+2
 	
 plott2	lda loadeddata1
-plott3	sta $c3c0
+plott3	sta screenspecial+$03c0
 
 	clc
 	add16bit gett1, 2
@@ -3969,7 +3984,7 @@ incpag
 incpag2
 	lda #$00
 	sta flip
-	lda #$01
+	lda bankforaddress(bitmap2)
 	sta page+1
 	store16bit gett1, loadeddata1+0*2
 	store16bit gett2, loadeddata1+1+0*2
@@ -3981,7 +3996,7 @@ incpag2
 	rts
 	
 incpag3
-	lda #$02
+	lda bankforaddress(bitmap1)
 	sta page+1
 	store16bit gett1, loadeddata2+0*2
 	store16bit gett2, loadeddata2+1+0*2
@@ -4528,7 +4543,7 @@ calcspritepostoscreenpos
 	adc calcxlow
 	sta csptsp0+1
 	lda csptsp0+2
-	adc #$c0
+	adc #>screenspecial
 	sta csptsp0+2
 
 csptsp0	lda $c001
@@ -4879,8 +4894,8 @@ wedied
 	.repeat 6,i
 	lda #$16									; was 16
 	sta $d001+i*2
-	lda #$d8+i
-	sta $c3f8+i
+	lda spriteptrforaddress(livesandzonesprites+i*64)
+	sta screenbordersprites+$03f8+i
 	.endrepeat
 	
 	lda #$09
@@ -4910,9 +4925,9 @@ wedied
 	lda #%00111100
 	sta $d010
 	
-	lda #$cf									; empty sprites for missiles in top border (make sure F3C0 - F400 is empty)
-	sta $c3fe
-	sta $c3ff
+	lda spriteptrforaddress($87C0)				; empty sprites for missiles in top border (make sure $87C0 - $8800 is empty)
+	sta screenbordersprites+$03f8+6
+	sta screenbordersprites+$03f8+7
 
 	lda #$0c
 	sta $d025
@@ -4982,7 +4997,7 @@ clearscreen
 
 	lda #$18
 	sta $d016
-	lda #%00000100 ; s = screen, c = charset - ssssccc0
+	lda d018forscreencharset(screenui,fontui)
 	sta $d018
 	
 	lda #$0c
@@ -5002,6 +5017,7 @@ clearscreen
 	sta $d020
 	sta $d021
 
+	lda bankforaddress(screenui)
 	sta $dd00
 	
 	rts

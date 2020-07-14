@@ -1,5 +1,5 @@
-; built on Sat, 11 Jul 2020 12:48:59 +0100 using
-; make PLATFORM=c64 prg INSTALL=6000 RESIDENT=cc00 ZP=e8
+; built on Mon, 13 Jul 2020 17:56:59 +0100 using
+; make PLATFORM=c64 prg INSTALL=6000 RESIDENT=8C00 ZP=e8
 
 ; configuration
 config_ALLOW_2_MHZ_ON_C128      = $00
@@ -42,5 +42,5 @@ loader_zp_last                  = $f4
 install                         = $6000
 
 ; resident
-loadraw                         = $cc00
-loadcompd                       = $cc0b
+loadraw                         = $8c00
+loadcompd                       = $8c0b

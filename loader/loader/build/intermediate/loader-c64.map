@@ -35,7 +35,7 @@ RODATA                000000  000000  000000  00001
 ZEROPAGE              000000  000000  000000  00001
 DISKIO_ZP             0000E8  0000F4  00000D  00001
 DISKIO_INSTALL        005FFE  007AE5  001AE8  00001
-DISKIO                00CBFE  00CEA2  0002A5  00001
+DISKIO                008BFE  008EA2  0002A5  00001
 
 
 Exports list by name:
@@ -68,8 +68,8 @@ dcodinit81                00033C  LA    decdesthi                 0000EB  LZ
 decdestlo                 0000EA  LZ    idleloop41                000480  LA    
 idleloop71                0003A7  LA    install                   006000  LA    
 loadaddrhi                0000E9  LZ    loadaddrlo                0000E8  LZ    
-loadcompd                 00CC0B  LA    loader_zp_first           0000E8  EZ    
-loader_zp_last            0000F4  EZ    loadraw                   00CC00  LA    
+loadcompd                 008C0B  LA    loader_zp_first           0000E8  EZ    
+loader_zp_last            0000F4  EZ    loadraw                   008C00  LA    
 status_DEVICE_INCOMPATIBLE 0000FB  EZ    status_DEVICE_NOT_PRESENT 0000FE  EZ    
 status_FILE_NOT_FOUND     0000FF  EZ    status_GENERIC_KERNAL_ERROR 0000FD  EZ    
 status_OK                 000000  EZ    status_TOO_MANY_DEVICES   0000FC  EZ    
@@ -112,7 +112,7 @@ cmdfdfix1                 000540 REA    cmdfdfix2                 000541 REA
 BLOCKBUFFER71             000700  EA    cmdfdfix3                 00070C REA    
 cmdfdfix4                 00070E REA    c1570fix0                 000717 RLA    
 BLOCKBUFFER81             000B00  EA    install                   006000  LA    
-loadraw                   00CC00  LA    loadcompd                 00CC0B  LA    
+loadraw                   008C00  LA    loadcompd                 008C0B  LA    
 
 
 

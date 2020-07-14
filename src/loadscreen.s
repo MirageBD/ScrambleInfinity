@@ -131,8 +131,6 @@
 	jsr loadraw
 	bcs error
 
-	sei
-
 	lda #$7b
 	sta $d011
 	lda #$00

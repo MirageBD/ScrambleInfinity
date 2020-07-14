@@ -1,41 +1,53 @@
 MEMORY
 {
-	ZPRAM:			start=$02, size=$fe, type = rw;
-	RAM:			start=$0400, size=$fc00;
-	OVERLAPPING_RAM:start=$0000, size=$10000;
+	ZPRAM:					start=$02, size=$fe, type = rw;
+	RAM:					start=$0400, size=$fc00;
+	OVERLAPPING_RAM:		start=$0000, size=$10000;
 }
 
 SEGMENTS
 {
 	# comment
-	TABLES:				load = RAM, start=$0400;
+	TABLES:					load = RAM, start=$0400;
 
-	MAIN:				load=RAM, start=$0820;
-	IRQ:				load=RAM, align=256;
-	MUSIC:				load=RAM, start=$1000;	
-	TITLESCREEN:		load=RAM, start=$2000;
-	LOADEDDATA1:		load=RAM, start=$3000;
-	LOADEDDATA2:		load=RAM, start=$3800;
+	MAIN:					load=RAM, start=$0820;
+	IRQ:					load=RAM, align=256;
+	MUSIC:					load=RAM, start=$1000;	
+	TITLESCREEN:			load=RAM, start=$2000;
 
-	SCREEN1:			load=OVERLAPPING_RAM, start=$4000, type=BSS;
-	SCROLLER:			load=RAM, start=$5000;
-	CYCLEPERFECT:		load=RAM, align=256;
-	BITMAP1:			load=OVERLAPPING_RAM, start=$6000, type=BSS;
+	GAMEPLAY2:				load=RAM, start=$2800;
 
-	SCREEN2:			load=OVERLAPPING_RAM, start=$8000, type=BSS;
-	SPRITES1:			load=RAM, start=$8400;
-	GAMEPLAY:			load=RAM, start=$9000;
-	BITMAP2:			load=OVERLAPPING_RAM, start=$A000, type=BSS;
+	LOADEDDATA1:			load=RAM, start=$3000;
+	LOADEDDATA2:			load=RAM, start=$3800;
 
-	SCREENSPECIAL:		load=OVERLAPPING_RAM, start=$C000, type=BSS;
-	GAMEPLAY2:			load=RAM, start=$C400;
-	LOADER:				load=RAM,   start=$cc00, define=yes;
-	UIFONT:				load=RAM, start=$D000;
-	ENEMYICONS:			load=RAM, start=$D300;
-	MAPTILES:			load=RAM, start=$d400;
-	DIGITSPRITEFONT:	load=RAM, start=$F300;
-	# $F3C0 - $F400 should be empty missile sprite for upper border
-	FUELSPRITES:		load=RAM, start=$F400;
-	ZONESPRITES:		load=RAM, start=$F600;
-	MAPTILECOLORS:		load=RAM, start=$F800;
+	SCREEN1:				load=OVERLAPPING_RAM, start=$4000, type=BSS;
+	SPRITES1:				load=RAM, start=$4400;
+
+	SCROLLER:				load=RAM, start=$5200;
+	CYCLEPERFECT:			load=RAM, start=$5f00;
+	BITMAP1:				load=OVERLAPPING_RAM, start=$6000, type=BSS;
+
+	SCREENSPECIAL:			load=OVERLAPPING_RAM, start=$8000, type=BSS;
+	#SCREENUI:				load=OVERLAPPING_RAM, start=$8000, type=BSS;
+	#SCREENBORDERSPRITES:	load=OVERLAPPING_RAM, start=$8000, type=BSS;
+
+	FUELSPRITES:			load=RAM, start=$8400;
+	ZONESPRITES:			load=RAM, start=$8600;
+
+	# $87C0 - $8800 should be empty missile sprite for upper border
+
+	UIFONT:					load=RAM, start=$8800;
+	ENEMYICONS:				load=RAM, start=$8b00;
+
+	LOADER:					load=RAM, start=$8c00, define=yes;
+	DIGITSPRITEFONT:		load=RAM, start=$8f80;
+
+	GAMEPLAY:				load=RAM, start=$9000;
+
+	MAPTILES:				load=RAM, start=$a000;
+	MAPTILECOLORS:			load=RAM, start=$B400;
+
+	SCREEN2:				load=RAM, start=$C000;
+	SPRITES2:				load=RAM, start=$C400;		
+	BITMAP2:				load=RAM, start=$e000, type=BSS;
 }
