@@ -611,7 +611,8 @@ setuplevel
 	;bcc :+
 	;jmp error
 
-;:	jsr incpag2									; set up pointers for initial tile plot
+;:
+	jsr incpag2									; set up pointers for initial tile plot
 	inc file									; file = 2
 	lda #$00
 	sta row
@@ -680,7 +681,8 @@ sldone
 	;bcc :+
 	;jmp error
 
-;:	lda #$30
+;:
+	lda #$30
 	sta hascontrol
 
 	jsr initmultsprites
