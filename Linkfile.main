@@ -34,7 +34,7 @@ SEGMENTS
 	FUELSPRITES:			load=RAM, start=$8400;
 	ZONESPRITES:			load=RAM, start=$8600;
 
-	# $87C0 - $8800 should be empty missile sprite for upper border
+	EMPTYSPRITE:			load=RAM, start=$87c0;
 
 	UIFONT:					load=RAM, start=$8800;
 	ENEMYICONS:				load=RAM, start=$8b00;
@@ -44,8 +44,10 @@ SEGMENTS
 
 	GAMEPLAY:				load=RAM, start=$9000;
 
-	MAPTILES:				load=RAM, start=$a000;
-	MAPTILECOLORS:			load=RAM, start=$B400;
+	# $9c00-$a900 free = $0d00
+
+	MAPTILES:				load=RAM, start=$a900;
+	MAPTILECOLORS:			load=RAM, start=$bd00;
 
 	SCREEN2:				load=RAM, start=$C000;
 	SPRITES2:				load=RAM, start=$C400;		

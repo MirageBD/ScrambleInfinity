@@ -89,6 +89,8 @@
 ;	.res 1024
 .segment "SPRITES2"
 	.res 1024
+.segment "EMPTYSPRITE"
+	.res 64
 
 ; DEBUG DEFINES ----------------------------------------------------------------------------------------------------------
 
@@ -108,8 +110,8 @@
 .define bank2							$8000
 .define bank3							$c000
 
-.define fueladd							#$08				; how much to add when you destroy a fuel tanker
-.define fueldecreaseticks				#$20				; frames before fuel decreases by one
+.define fueladd							#$0a				; how much to add when you destroy a fuel tanker
+.define fueldecreaseticks				#$2c				; frames before fuel decreases by one
 .define fuelfull						#$38				; full tank
 .define startlives						#$03				; initial lives
 .define ufospawntime					#$50				; time before new ufo spawns - can be more, not less
@@ -132,8 +134,8 @@
 tuneinit					= $1000
 tuneplay					= $1003
 
-maptilecolors				= $b400
-maptiles					= $a000
+maptiles					= $a900		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
+maptilecolors				= $bd00
 fontdigits					= $8f80
 fontui						= $8800
 
@@ -150,6 +152,8 @@ screenspecial				= $8000
 screenui					= $8000
 screenbordersprites			= $8000
 clearmisilepositiondata		= screenspecial+$03c0
+
+emptysprite					= $87c0
 
 scoreandfuelsprites			= $8400
 livesandzonesprites			= $8600
@@ -4927,7 +4931,7 @@ wedied
 	lda #%00111100
 	sta $d010
 	
-	lda spriteptrforaddress($87C0)				; empty sprites for missiles in top border (make sure $87C0 - $8800 is empty)
+	lda spriteptrforaddress(emptysprite)		; empty sprites for missiles in top border
 	sta screenbordersprites+$03f8+6
 	sta screenbordersprites+$03f8+7
 
