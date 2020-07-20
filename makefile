@@ -74,7 +74,7 @@ loadscreen_unpacked.prg: loadscreen.o loader-c64.prg install-c64.prg loadersymbo
 	$(LD) $(LDFLAGS) -C Linkfile.loadscreen --mapfile $(EXE_DIR)/loadscreen.map -o $(EXE_DIR)/$@ $(EXE_DIR)/loadscreen.o
 
 loadscreen.prg: loadscreen_unpacked.prg
-	$(PU) -d -l 0x0800 -x 0xc000 -g 0x37 -i 0 $(EXE_DIR)/$? $(EXE_DIR)/$@
+	$(PU) -d -l 0x0800 -x 0x9000 -g 0x37 -i 0 $(EXE_DIR)/$? $(EXE_DIR)/$@
 
 # -----------------------------------------------------------------------------
 

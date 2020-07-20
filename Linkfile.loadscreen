@@ -9,13 +9,19 @@ SEGMENTS
 {
 	# comment
 
-	LOADERZP:		load=ZPRAM, type=zp, define=yes;
+	LOADERZP:		load=ZPRAM,	type=zp, define=yes;
 	
-	LOADERINSTALL:	load = RAM, start = $6000, define = yes; # $6000-$7200
+	LOADERINSTALL:	load = RAM,	start = $6000, define = yes; # $6000-$7200
 
-	LOADER:			load=RAM,   start=$8c00, define=yes;
+	LOADER:			load=RAM,	start=$8c00, define=yes;
 
-	MAIN:			load=RAM, start=$c000;
-	IRQ:			load=RAM, align=256;
-	CYCLEPERFECT:   load=RAM, align=256;
+	MAIN:			load=RAM,	start=$9000;
+	IRQ:			load=RAM,	align=256;
+	CYCLEPERFECT:   load=RAM,	align=256;
+
+	TITLECOL:		load=RAM,	start=$c000;
+
+	TITLESPR:		load=RAM,	start=$c800;
+
+	TITLE:			load=RAM,	start=$e000;
 }
