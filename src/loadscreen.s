@@ -539,7 +539,6 @@ irqlowerborder
 
 	nop
 	nop
-	nop
 
 	lda #$54				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
 	sta $d011
