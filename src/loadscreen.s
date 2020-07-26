@@ -15,6 +15,8 @@
 .incbin "./bin/logospr.bin"
 .segment "WINGSPR"
 .incbin "./bin/wingspr.bin"
+.segment "EXHAUSTSPR"
+.incbin "./bin/exhaustspr.bin"
 
 .feature pc_assignment
 .feature labels_without_colons
@@ -28,6 +30,7 @@ titlecold800 = (titlecol + 40*25)
 titlespr = $c800
 logospr = $ca00
 wingspr = $cc00
+exhaustspr = $cc80
 title = $e000
 
 ; -----------------------------------------------------------------------------------------------
@@ -313,16 +316,15 @@ irqlogosprites
 	cmp #$01
 	beq :+
 	lda #$00
-	sta $d020
+	;sta $d020							; uncomment to see loading flash
 	jmp :++
 
 incd020
 :	lda #$00
-	sta $d020
+	;sta $d020							; uncomment to see loading flash
 	inc incd020+1
 
 :
-
 	lda #$0c
 	sta $d020
 
@@ -442,8 +444,69 @@ irqrightwing
 	opensideborder
 	opensideborder
 
-	lda #$0c
-	sta $d021
+	; set exhaust sprites
+	lda #$ff
+	sta $d015
+	sta $d01c
+	lda #%00000000
+	sta $d010
+
+	lda #$01
+	sta $d025
+	lda #$03
+	sta $d026
+	lda #$0d
+	sta $d027+0
+	sta $d027+1
+	sta $d027+2
+	sta $d027+3
+	sta $d027+4
+	sta $d027+5
+	sta $d027+6
+	sta $d027+7
+
+	lda #$fa
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+	sta $d001+7*2
+
+	lda #(56+0*24)&255
+	sta $d000+0*2
+	lda #(56+1*24)&255
+	sta $d000+1*2
+	lda #(56+2*24)&255
+	sta $d000+2*2
+	lda #(56+3*24)&255
+	sta $d000+3*2
+	lda #(56+4*24)&255
+	sta $d000+4*2
+	lda #(56+5*24)&255
+	sta $d000+5*2
+	lda #(56+6*24)&255
+	sta $d000+6*2
+	lda #(56+7*24)&255
+	sta $d000+7*2
+
+	ldx spriteptrforaddress(exhaustspr)
+	stx titlecol+$03f8+0
+	inx
+	stx titlecol+$03f8+1
+	inx
+	stx titlecol+$03f8+2
+	inx
+	stx titlecol+$03f8+3
+	inx
+	stx titlecol+$03f8+4
+	inx
+	stx titlecol+$03f8+5
+	ldx spriteptrforaddress(exhaustspr+12*64)
+	stx titlecol+$03f8+6
+	stx titlecol+$03f8+7
 
 	lda #<irqopenborder
 	ldx #>irqopenborder
@@ -475,11 +538,6 @@ irqlowerborder
 	pha
 
 	nop
-	nop
-	nop
-	nop
-	nop
-	nop
 
 	lda #$54				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
 	sta $d011
@@ -487,48 +545,47 @@ irqlowerborder
 	lda #$08				; no multicolour or bitmap, otherwise ghostbyte move won't work
 	sta $d016
 
-	lda #%00001111
-	sta $d015
-	lda #%00001110
-	sta $d010
+	lda #$40							; #$4c
+	jsr cycleperfect
 
-	lda #$01
-	sta $d027
-	sta $d028
-	sta $d029
-	sta $d02a
-
-	lda #$ff
+	; second row of exhaust sprites
+	lda #$0f
 	sta $d001+0*2
 	sta $d001+1*2
 	sta $d001+2*2
 	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
 
-	lda #$00
-	sta $d01c
+	lda #$0d
+:	cmp $d012
+	bne :-
 
-	lda loading
-	cmp #$01
-	beq :+
-	ldx spriteptrforaddress(titlespr+4*64)
-	jmp :++
-:	ldx spriteptrforaddress(titlespr)
-:	stx titlecol+$03f8+0
+	lda #$48							; #$4c
+	jsr cycleperfect
+
+	ldx spriteptrforaddress(exhaustspr+6*64)
+	stx titlecol+$03f8+0
 	inx
 	stx titlecol+$03f8+1
 	inx
 	stx titlecol+$03f8+2
 	inx
 	stx titlecol+$03f8+3
+	inx
+	stx titlecol+$03f8+4
+	inx
+	stx titlecol+$03f8+5
 
-	lda #(248+0*24)&255
-	sta $d000+0*2
-	lda #(248+1*24)&255
-	sta $d000+1*2
-	lda #(248+2*24)&255
-	sta $d000+2*2
-	lda #(248+3*24)&255
-	sta $d000+3*2
+	lda #$ff							; put sprites back up so the upper border doesn't draw them again
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+	sta $d001+7*2
 
 	lda #<irqlogosprites
 	ldx #>irqlogosprites

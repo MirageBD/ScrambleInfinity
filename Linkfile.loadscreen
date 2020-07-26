@@ -25,6 +25,7 @@ SEGMENTS
 	TITLESPR:		load=RAM,	start=$c800;
 	LOGOSPR:		load=RAM,	start=$ca00;
 	WINGSPR:		load=RAM,	start=$cc00;
+	EXHAUSTSPR:		load=RAM,	start=$cc80;
 
 	TITLE:			load=RAM,	start=$e000;
 }
