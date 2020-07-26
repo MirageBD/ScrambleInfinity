@@ -18,10 +18,13 @@ SEGMENTS
 	MAIN:			load=RAM,	start=$9000;
 	IRQ:			load=RAM,	align=256;
 	CYCLEPERFECT:   load=RAM,	align=256;
+	SPRRASTER:		load=RAM,	align=256;
 
 	TITLECOL:		load=RAM,	start=$c000;
 
 	TITLESPR:		load=RAM,	start=$c800;
+	LOGOSPR:		load=RAM,	start=$ca00;
+	WINGSPR:		load=RAM,	start=$cc00;
 
 	TITLE:			load=RAM,	start=$e000;
 }

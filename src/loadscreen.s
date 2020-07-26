@@ -11,6 +11,10 @@
 .incbin "./bin/titlecol.bin"
 .segment "TITLESPR"
 .incbin "./bin/titlespr.bin"
+.segment "LOGOSPR"
+.incbin "./bin/logospr.bin"
+.segment "WINGSPR"
+.incbin "./bin/wingspr.bin"
 
 .feature pc_assignment
 .feature labels_without_colons
@@ -22,6 +26,8 @@
 titlecol = $c000
 titlecold800 = (titlecol + 40*25)
 titlespr = $c800
+logospr = $ca00
+wingspr = $cc00
 title = $e000
 
 ; -----------------------------------------------------------------------------------------------
@@ -143,14 +149,18 @@ title = $e000
 	inx
 	bne :-
 
+	lda #$0c
+	sta $d020
+	sta $d021
+
 	lda #$01
 	sta $d01a
 
-	lda #$31
+	lda #$00
 	sta $d012
 
-	lda #<irq1
-	ldx #>irq1
+	lda #<irqlogosprites
+	ldx #>irqlogosprites
 	sta $fffe
 	sta $0314
 	stx $ffff
@@ -183,6 +193,9 @@ title = $e000
 startgame
 	lda #$7b
 	sta $d011
+	lda #$00
+	sta $d020
+	sta $d021
 	jmp $080d
 
 error
@@ -199,14 +212,99 @@ loading
 
 .segment "IRQ"
 
-irq1
+irqlogosprites
 	pha
 
 	lda #$40							; #$4c
 	jsr cycleperfect
-	
- 	lda #$3b
+
+	lda #$00
+	sta $dd00
+ 	lda #$5b
 	sta $d011
+
+	lda #$ff
+	sta $d015
+	sta $d01c
+	lda #%10000000
+	sta $d010
+
+	lda #$02
+	sta $d025
+	lda #$0b
+	sta $d026
+	lda #$00
+	sta $d027+0
+	sta $d027+1
+	sta $d027+2
+	sta $d027+3
+	sta $d027+4
+	sta $d027+5
+	sta $d027+6
+	sta $d027+7
+
+	lda #$1d
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+	sta $d001+7*2
+
+	lda #(88+0*24)&255
+	sta $d000+0*2
+	lda #(88+1*24)&255
+	sta $d000+1*2
+	lda #(88+2*24)&255
+	sta $d000+2*2
+	lda #(88+3*24)&255
+	sta $d000+3*2
+	lda #(88+4*24)&255
+	sta $d000+4*2
+	lda #(88+5*24)&255
+	sta $d000+5*2
+	lda #(88+6*24)&255
+	sta $d000+6*2
+	lda #(88+7*24)&255
+	sta $d000+7*2
+
+	ldx spriteptrforaddress(logospr)
+	stx titlecol+$03f8+0
+	inx
+	stx titlecol+$03f8+1
+	inx
+	stx titlecol+$03f8+2
+	inx
+	stx titlecol+$03f8+3
+	inx
+	stx titlecol+$03f8+4
+	inx
+	stx titlecol+$03f8+5
+	inx
+	stx titlecol+$03f8+6
+	inx
+	stx titlecol+$03f8+7
+
+	ldx #$00
+:	lda sprraster,x
+	sta $d025
+	ldy #$05
+:	dey
+	bne :-
+	bit $ea
+	inx
+	cpx #22
+	bne :--
+
+	nop
+	nop
+
+	ldx #$18
+	ldy #$3b
+	stx $d016
+	sty $d011
 
 	lda #$0c
 	sta $d021
@@ -224,38 +322,156 @@ incd020
 	inc incd020+1
 
 :
-	; big wait to simulate some irq action going on
-	lda #$3a
-:	cmp $d012
-	bne :-
 
-	lda #$00
+	lda #$0c
 	sta $d020
 
-	lda #<irq2
-	ldx #>irq2
-	ldy #$f8
+	; set left wing sprite
+	lda #%00000000
+	sta $d010
+	lda #$9a
+	sta $d001+7*2
+	lda #$00
+	sta $d000+7*2
+	ldx spriteptrforaddress(wingspr)
+	stx titlecol+$03f8+7
+	lda #$0b
+	sta $d025
+	lda #$0f
+	sta $d026
+	lda #$00
+	sta $d027+7
+
+	lda #<irqleftwing
+	ldx #>irqleftwing
+	ldy #$99
 	jmp endirq
 	
 ; -----------------------------------------------------------------------------------------------
 
-irq2
+irqleftwing
+
 	pha
 
-	ldx #$00
-	lda #$3f
-	ldy #$34
-	sta $d011,x
+	lda #$41							; #$4c
+	jsr cycleperfect
+
+	ldx #$17
+	ldy #$18
+	stx $d016
+	sty $d016
+
+.macro opensideborderbadline
+	bit $ea
+	ldx #$17
+	ldy #$18
+	stx $d016
+	sty $d016
+.endmacro
+
+.macro opensideborder
+	jsr waitopenborder
+	ldx #$17
+	ldy #$18
+	stx $d016
+	sty $d016
+.endmacro
+
+	opensideborderbadline
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborderbadline
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborderbadline
+	opensideborder
+
+	; set right wing sprite
+	lda #%10000000
+	sta $d010
+	lda #$dc
+	sta $d001+7*2
+	lda #$58
+	sta $d000+7*2
+	ldx spriteptrforaddress(wingspr+64)
+	stx titlecol+$03f8+7
+	lda #$0b
+	sta $d025
+	lda #$0f
+	sta $d026
+	lda #$00
+	sta $d027+7
+
+	lda #<irqrightwing
+	ldx #>irqrightwing
+	ldy #$db
+	jmp endirq
+
+; -----------------------------------------------------------------------------------------------
+
+irqrightwing
+
+	pha
+
+	lda #$46							; #$4c
+	jsr cycleperfect
+
+	ldx #$17
+	ldy #$18
+	stx $d016
+	sty $d016
+
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborderbadline
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+
+	lda #$0c
+	sta $d021
+
+	lda #<irqopenborder
+	ldx #>irqopenborder
+	ldy #$f8
+	jmp endirq
+
+; -----------------------------------------------------------------------------------------------
+
+irqopenborder
+	pha
+
+	nop
+	nop
+
+	ldy #$3f
 	sty $d011
 
-	lda #<irq3
-	ldx #>irq3
+	lda #$32				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	sta $d011
+
+	lda #<irqlowerborder
+	ldx #>irqlowerborder
 	ldy #$fa
 	jmp endirq
 
 ; -----------------------------------------------------------------------------------------------
 
-irq3
+irqlowerborder
 	pha
 
 	nop
@@ -265,8 +481,11 @@ irq3
 	nop
 	nop
 
-	lda #$00
-	sta $d021
+	lda #$54				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	sta $d011
+
+	lda #$08				; no multicolour or bitmap, otherwise ghostbyte move won't work
+	sta $d016
 
 	lda #%00001111
 	sta $d015
@@ -284,6 +503,9 @@ irq3
 	sta $d001+1*2
 	sta $d001+2*2
 	sta $d001+3*2
+
+	lda #$00
+	sta $d01c
 
 	lda loading
 	cmp #$01
@@ -308,9 +530,9 @@ irq3
 	lda #(248+3*24)&255
 	sta $d000+3*2
 
-	lda #<irq1
-	ldx #>irq1
-	ldy #$31
+	lda #<irqlogosprites
+	ldx #>irqlogosprites
+	ldy #$18
 	jmp endirq
 
 ; -----------------------------------------------------------------------------------------------
@@ -337,6 +559,18 @@ bplcode2
 	lda #$a5
 	nop
 		
+	rts
+
+.segment "SPRRASTER"
+
+sprraster
+.byte $00,$00,$00,$00,$00,$00,$00,$06,$0e,$03,$06,$06,$04,$06,$04,$04,$0e,$0e,$03,$03,$0d,$01
+
+waitopenborder
+	ldx #$06
+:	dex
+	bne :-
+	bit $ea
 	rts
 
 ; -----------------------------------------------------------------------------------------------	
