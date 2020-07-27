@@ -1,7 +1,7 @@
 
-INSTALL     ?= 4000
-RESIDENT    ?= 0200
-ZP          ?= e0
+INSTALL     ?= 6000
+RESIDENT    ?= 8c00
+ZP          ?= e8
 
 export _PLATFORM_ INSTALL RESIDENT ZP
 
