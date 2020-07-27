@@ -36,8 +36,7 @@ default: all
 # -----------------------------------------------------------------------------
 
 $(LOADER)/build/loader-c64.prg:
-	cd $(LOADER)
-	$(MAKE) prg
+	$(MAKE) -C $(LOADER)
 
 # -----------------------------------------------------------------------------
 
@@ -285,6 +284,6 @@ run: specialtiles.exe binsplit.exe addaddr.exe main.d64
 clean:
 	$(RM) $(EXE_DIR)/*.*
 	$(RM) $(EXE_DIR)/*
-	# $(RM) $(LOADER)/build/*.*
-	# $(RM) $(LOADER)/build/intermediate/*.*
+	$(RM) $(LOADER)/build/*.*
+	$(RM) $(LOADER)/build/intermediate/*.*
 	
