@@ -210,7 +210,7 @@ main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
           ma28.b2 ma29.b2 ma2a.b2 ma2b.b2 ma2c.b2 ma2d.b2 ma2e.b2 ma2f.b2 ma30.b2 ma31.b2 \
           ma32.b2 ma33.b2 
 	$(RM) $(EXE_DIR)/$@
-	$(CC1541) -n "    skramble    " -i " 2020" -S 8 -v\
+	$(CC1541) -n "    scramble    " -i " 2020" -S 8 -d 19 -v\
 	 \
 	 -f "scramble 2020" -w $(EXE_DIR)/boot.prg \
 	 -f "ls" -w $(EXE_DIR)/loadscreen.prg \

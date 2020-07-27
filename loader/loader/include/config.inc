@@ -110,7 +110,7 @@ LC_SPEED                        = 6 ; Taboo Levelcrush speed, irrelevant if usin
 
 ; these options change drive-side code
 
-.define DIRTRACK                 18 ; actual directory track, this can be changed to have a shadow directory so that the
+.define DIRTRACK                 19 ; actual directory track, this can be changed to have a shadow directory so that the
                                     ; normal directory does not list the files and can be used entirely for bootstrap and dir-art
 .define DIRTRACK81               40 ; (i.e., the loader's directory can be relocated to hide it from the normal directory command).
                                     ; DIRTRACK must be 18 when LOAD_VIA_KERNAL_FALLBACK != 0
