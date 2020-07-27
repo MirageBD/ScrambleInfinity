@@ -76,6 +76,15 @@ loadscreen_unpacked.prg: loadscreen.o loader-c64.prg install-c64.prg loadersymbo
 loadscreen.prg: loadscreen_unpacked.prg
 	$(PU) -d -l 0x0800 -x 0x9000 -g 0x37 -i 0 $(EXE_DIR)/$? $(EXE_DIR)/$@
 
+boot.o: $(SRC_DIR)/boot.s Makefile Linkfile.boot loader-c64.prg install-c64.prg loadersymbols-c64.inc
+	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(SRC_DIR)/$*.s
+
+boot_unpacked.prg: boot.o loader-c64.prg install-c64.prg loadersymbols-c64.inc Linkfile.boot
+	$(LD) $(LDFLAGS) -C Linkfile.boot --mapfile $(EXE_DIR)/boot.map -o $(EXE_DIR)/$@ $(EXE_DIR)/boot.o
+
+boot.prg: boot_unpacked.prg
+	$(PU) -d -l 0x0800 -x 0x9000 -g 0x37 -i 0 $(EXE_DIR)/$? $(EXE_DIR)/$@
+
 # -----------------------------------------------------------------------------
 
 # Usage: binsplit [type] [add startaddress] [new startaddress] [infile] [outfile] [startaddress] [endaddress]
@@ -192,7 +201,7 @@ ma30.out ma31.out ma32.out ma33.out : mtmmis.out
 	 # -f MH -w mth.bc \
 	
 
-main.d64: loadscreen.prg main.prg install-c64.prg \
+main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
           mth.out mth.b2 \
           ma00.b2 ma01.b2 ma02.b2 ma03.b2 ma04.b2 ma05.b2 ma06.b2 ma07.b2 ma08.b2 ma09.b2 \
           ma0a.b2 ma0b.b2 ma0c.b2 ma0d.b2 ma0e.b2 ma0f.b2 ma10.b2 ma11.b2 ma12.b2 ma13.b2 \
@@ -203,7 +212,8 @@ main.d64: loadscreen.prg main.prg install-c64.prg \
 	$(RM) $(EXE_DIR)/$@
 	$(CC1541) -n "    skramble    " -i " 2020" -S 8\
 	 \
-	 -f "loadscreen" -w $(EXE_DIR)/loadscreen.prg \
+	 -f "scramble 2020" -w $(EXE_DIR)/boot.prg \
+	 -f "ls" -w $(EXE_DIR)/loadscreen.prg \
 	 -f "ff" -w $(EXE_DIR)/main.prg \
 	 -f "li" -w $(EXE_DIR)/install-c64.prg \
 	 \
@@ -269,7 +279,7 @@ tools: specialtiles.exe binsplit.exe addaddr.exe
 all: tools main.d64
 
 run: specialtiles.exe binsplit.exe addaddr.exe main.d64
-	$(VICE) $(VICEFLAGS) "$(EXE_DIR)/main.d64:loadscreen"
+	$(VICE) $(VICEFLAGS) "$(EXE_DIR)/main.d64:scramble 2020"
 
 clean:
 	$(RM) $(EXE_DIR)/*.*
