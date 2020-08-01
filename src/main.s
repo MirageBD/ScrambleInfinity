@@ -103,6 +103,7 @@
 .define firebullets			1
 .define firebombs			1
 .define startzone			#$01				; #$01 - #$06
+.define diedfade			1
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
 
@@ -704,6 +705,9 @@ sldone
 	
 	lda #$01
 	sta scrollspeed
+	lda #$00
+	sta diedframes
+	sta diedframeclearframes
 
 	ldx #>(bitmapwidth-1)
 	ldy #<(bitmapwidth-1)
@@ -1062,7 +1066,7 @@ animship
 
 	rts
 	
-ship0explosiondone								; we died - decrease lives and see if we need to return to the title screen
+ship0explosiondone
 	lda #$ff
 	sta ship0+sprdata::ylow
 	lda #$00
@@ -1071,20 +1075,6 @@ ship0explosiondone								; we died - decrease lives and see if we need to retur
 	sta ship0+sprdata::xvel
 	sta ship0+sprdata::yvel
 	sta ship0+sprdata::isexploding
-
-.if livesdecrease
-	dec lives
-.endif
-	lda lives
-	bne :+
-
-	lda #states::titlescreen
-	sta state+1
-	
-	rts
-	
-:	lda #states::livesleftscreen
-	sta state+1
 
 	rts
 
@@ -4154,6 +4144,10 @@ loadfile
 
 scrollspeed
 .byte $01
+diedframes
+.byte $00
+diedframeclearframes
+.byte $00
 
 scrollscreen
 
@@ -4339,9 +4333,13 @@ updatefuel
 	sta fueltimer
 
 .if fueldecreases
+	lda scrollspeed
+	cmp #$00
+	beq :+
+
 	dec fuel
 .endif
-	lda fuel
+:	lda fuel
 	cmp #$ff
 	bne :+
 
@@ -4883,18 +4881,105 @@ normalgameplay2
 	pla
 	sta $01
 	
-	jmp :+++
+	jmp stillalive
 
 wedied
 
-	ldy #$04
-:	ldx #$40
-:	dex
-	bne :-
-	dey
-	bne :--
+	inc diedframes								; goes up to #$40
+
+	lda diedframes								; has enough time past to continue game?
+	cmp #$80
+	bne wediedclearframe
+
+.if livesdecrease
+	dec lives
+.endif
+	lda lives
+	bne :+
+
+	lda #states::titlescreen
+	sta state+1
+	jmp wediedend
 	
-:	;lda #$00
+:	lda #states::livesleftscreen
+	sta state+1
+	jmp wediedend
+
+wediedclearframe
+	cmp #$38
+	bmi wediedend
+
+	lda diedframeclearframes
+	cmp #24
+	bne :+
+	jmp wediedend
+
+:
+	lsr invscreenposhigh						; divide xpos by 8 to get current vsp column
+	ror invscreenposlow
+	lsr invscreenposhigh
+	ror invscreenposlow
+	lsr invscreenposhigh
+	ror invscreenposlow							; current column
+
+.if diedfade
+
+	clc
+	ldx diedframeclearframes
+	lda times40lowtable,x
+	adc invscreenposlow
+	sta diedclearlinelow
+	lda times40hightable,x
+	adc #$00
+	sta diedclearlinehigh
+
+	clc
+	lda #<screen1
+	adc diedclearlinelow
+	sta sf1+1
+	lda #>screen1
+	adc diedclearlinehigh
+	sta sf1+2
+
+	clc
+	lda #<screen2
+	adc diedclearlinelow
+	sta sf2+1
+	lda #>screen2
+	adc diedclearlinehigh
+	sta sf2+2
+
+	clc
+	lda #<$d800
+	adc diedclearlinelow
+	sta sf3+1
+	lda #>$d800
+	adc diedclearlinehigh
+	sta sf3+2
+
+clearline
+	lda #$00
+	ldx #$00
+:
+sf1	sta screen1,x
+sf2	sta screen2,x
+sf3	sta $d800,x
+	inx
+	cpx #$28
+	bne :-
+
+	inc diedframeclearframes
+
+.endif
+
+wediedend
+
+	lda #$20
+:	cmp $d012
+	bne :-
+
+stillalive	
+	;lda #$00
 	;sta $d020
 	; we are below the bottom border sprites - set up the top border sprites now
 	
@@ -5586,6 +5671,13 @@ column
 row
 .byte $00
 flip
+.byte $00
+
+diedclearline
+.byte $00
+diedclearlinehigh
+.byte $00
+diedclearlinelow
 .byte $00
 
 ship0: .tag sprdata								; sprite data
