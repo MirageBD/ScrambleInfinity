@@ -157,8 +157,8 @@ clearmisilepositiondata		= screenspecial+$03c0
 
 emptysprite					= $87c0
 
-scoreandfuelsprites			= $8400
-livesandzonesprites			= $8600
+scoreandfuelsprites			= $a400
+livesandzonesprites			= $a600
 
 colormem					= $d800
 

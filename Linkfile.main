@@ -21,7 +21,7 @@ SEGMENTS
 	LOADEDDATA2:			load=RAM, start=$3800;
 
 	SCREEN1:				load=OVERLAPPING_RAM, start=$4000, type=BSS;
-	SPRITES1:				load=RAM, start=$4400;
+	SPRITES1:				load=RAM, start=$4400, type=BSS;
 
 	SCROLLER:				load=RAM, start=$5200;
 	CYCLEPERFECT:			load=RAM, start=$5f00;
@@ -31,11 +31,6 @@ SEGMENTS
 	#SCREENUI:				load=OVERLAPPING_RAM, start=$8000, type=BSS;
 	#SCREENBORDERSPRITES:	load=OVERLAPPING_RAM, start=$8000, type=BSS;
 
-	FUELSPRITES:			load=RAM, start=$8400;
-	ZONESPRITES:			load=RAM, start=$8600;
-
-	EMPTYSPRITE:			load=RAM, start=$87c0;
-
 	UIFONT:					load=RAM, start=$8800;
 	ENEMYICONS:				load=RAM, start=$8b00;
 
@@ -43,6 +38,11 @@ SEGMENTS
 	DIGITSPRITEFONT:		load=RAM, start=$8f80;
 
 	GAMEPLAY:				load=RAM, start=$9000;
+
+	FUELSPRITES:			load=RAM, start=$a400;
+	ZONESPRITES:			load=RAM, start=$a600;
+
+	EMPTYSPRITE:			load=RAM, start=$a7c0;
 
 	# $9c00-$a900 free = $0d00
 
