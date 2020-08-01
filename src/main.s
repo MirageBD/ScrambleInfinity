@@ -44,7 +44,7 @@
 .segment "ZONESPRITES"							; referenced by code. lives and flags are plotted in here
 .incbin "./bin/b54321.bin"
 
-.segment "SPRITES1"								; copied to other bank once, used as sprites
+.segment "SPRITES2"								; copied to other bank once, used as sprites
 .incbin "./bin/s0.bin"							; ""
 .incbin "./bin/b0.bin"							; ""
 .incbin "./bin/bmb0.bin"						; ""
@@ -339,27 +339,6 @@ scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
 	lda #%00010001
 	sta $dc0e
 
-	lda #$34
-	sta $01
-
-	lda #>sprites1								; copy sprites to other bank
-	sta sprcpy0+2
-	lda #>sprites2
-	sta sprcpy1+2
-sprcpy
-	ldx #$00
-sprcpy0
-	lda sprites1,x
-sprcpy1
-	sta sprites2,x
-	dex
-	bne sprcpy0
-	inc sprcpy0+2
-	inc sprcpy1+2
-	lda sprcpy0+2
-	cmp #>(sprites1+$0c00)
-	bne sprcpy
-
 	lda #$37
 	sta $01
 
@@ -400,6 +379,24 @@ initiatebitmapscores
 	rts
 
 ingamefresh
+
+	lda #>sprites2								; copy sprites to other bank
+	sta sprcpy0+2
+	lda #>sprites1
+	sta sprcpy1+2
+sprcpy
+	ldx #$00
+sprcpy0
+	lda sprites1,x
+sprcpy1
+	sta sprites2,x
+	dex
+	bne sprcpy0
+	inc sprcpy0+2
+	inc sprcpy1+2
+	lda sprcpy0+2
+	cmp #>(sprites2+$0c00)
+	bne sprcpy
 
 	ldx #$00									; set score to zero
 	lda #$00

@@ -50,6 +50,6 @@ SEGMENTS
 	MAPTILECOLORS:			load=RAM, start=$bd00;
 
 	SCREEN2:				load=RAM, start=$C000;
-	SPRITES2:				load=RAM, start=$C400;		
+	SPRITES2:				load=RAM, start=$C400;
 	BITMAP2:				load=RAM, start=$e000, type=BSS;
 }
