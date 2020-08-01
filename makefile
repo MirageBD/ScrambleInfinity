@@ -18,7 +18,7 @@ VICE         = "..\..\..\winvice\x64sc.exe"
 VICEFLAGS    = -truedrive -moncommands $(EXE_DIR)/symbols
 C1541        = c1541
 
-LOADER       = ./loader/loader
+LOADER       = ./loader
 CC1541       = cc1541
 
 PU           = pucrunch
@@ -35,8 +35,8 @@ default: all
 
 # -----------------------------------------------------------------------------
 
-$(LOADER)/build/loader-c64.prg:
-	$(MAKE) -C $(LOADER)
+$(LOADER)/loader/build/loader-c64.prg:
+	$(MAKE) -C $(LOADER)/loader
 
 # -----------------------------------------------------------------------------
 
@@ -49,14 +49,14 @@ binsplit.exe: $(SRC_DIR)/binsplit.c
 addaddr.exe: $(SRC_DIR)/addaddr.c
 	$(GCC) $(SRC_DIR)/addaddr.c -o $(EXE_DIR)/addaddr.exe
 
-loader-c64.prg: $(LOADER)/build/loader-c64.prg
-	$(CP) $(LOADER)/build/loader-c64.prg $(EXE_DIR)/.
+loader-c64.prg: $(LOADER)/loader/build/loader-c64.prg
+	$(CP) $(LOADER)/loader/build/loader-c64.prg $(EXE_DIR)/.
 	
-install-c64.prg: $(LOADER)/build/install-c64.prg	
-	$(CP) $(LOADER)/build/install-c64.prg $(EXE_DIR)/.
+install-c64.prg: $(LOADER)/loader/build/install-c64.prg	
+	$(CP) $(LOADER)/loader/build/install-c64.prg $(EXE_DIR)/.
 
-loadersymbols-c64.inc: $(LOADER)/build/loadersymbols-c64.inc
-	$(CP) $(LOADER)/build/loadersymbols-c64.inc $(EXE_DIR)/.
+loadersymbols-c64.inc: $(LOADER)/loader/build/loadersymbols-c64.inc
+	$(CP) $(LOADER)/loader/build/loadersymbols-c64.inc $(EXE_DIR)/.
 
 main.o: $(SRC_DIR)/main.s Makefile Linkfile.main loader-c64.prg install-c64.prg mt.out mtc.out loadersymbols-c64.inc
 	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(SRC_DIR)/$*.s
@@ -284,6 +284,6 @@ run: specialtiles.exe binsplit.exe addaddr.exe main.d64
 clean:
 	$(RM) $(EXE_DIR)/*.*
 	$(RM) $(EXE_DIR)/*
-	$(RM) $(LOADER)/build/*.*
-	$(RM) $(LOADER)/build/intermediate/*.*
+	$(RM) $(LOADER)/loader/build/*.*
+	$(RM) $(LOADER)/loader/build/intermediate/*.*
 	

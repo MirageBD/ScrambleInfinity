@@ -11,6 +11,7 @@
 ; fancy startup screen.
 ; fix bug where ground targets sometimes get cleaned only half when hit.
 ; add proper disk fail handling.
+; '1 lives left' - change to '1 life left' or keep because it's funny?
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
@@ -5095,9 +5096,32 @@ titlescreen
 	jmp ingamefresh
 	
 waitkey
+
+checkfire
 	lda $dc00
 	and #%00010000								; fire
-	bne waitkey
+	bne checkspace
+waitreleasefire
+	lda $dc00
+	and #%00010000
+	beq waitreleasefire
+	jmp startgame
+
+checkspace
+	lda #%01111111
+	sta $dc00
+	lda $dc01
+	and #%00010000								; space
+	bne checkfire
+waitreleasespace
+	lda #%01111111
+	sta $dc00
+	lda $dc01
+	and #%00010000
+	beq waitreleasespace
+
+startgame
+
 	rts
 
 livesleftscreen

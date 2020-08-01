@@ -40,7 +40,7 @@ title = $e000
 	sei
 	
 	jsr $e544
-	lda #$00
+	lda #$0c
 	sta $d020
 	sta $d021
 
@@ -54,10 +54,7 @@ title = $e000
 :	cmp #$05							; #STATUS::TOO_MANY_DEVICES
 	beq :+
 	ldx #$00
-:	cli
-
-	sei
-
+:	
 	lda #$00							; Disable all interferences
 	sta $d015							; for a stable timer
 	lda #$35
@@ -137,7 +134,7 @@ title = $e000
 	lda bankforaddress(title)
 	sta $dd00
 
-	lda #$3b
+	lda #$5b
 	sta $d011
 
 	ldx #$00
@@ -188,17 +185,76 @@ title = $e000
 	lda #$00
 	sta loading
 
-:	lda $dc00
+:
+
+checkfire
+	lda $dc00
 	and #%00010000								; fire
-	beq startgame
-	jmp :-
+	bne checkspace
+waitreleasefire
+	lda $dc00
+	and #%00010000
+	beq waitreleasefire
+	jmp startgame
+
+checkspace
+	lda #%01111111
+	sta $dc00
+	lda $dc01
+	and #%00010000								; space
+	bne checkfire
+waitreleasespace
+	lda #%01111111
+	sta $dc00
+	lda $dc01
+	and #%00010000
+	beq waitreleasespace
 
 startgame
+
+	sei
+
 	lda #$7b
 	sta $d011
 	lda #$00
 	sta $d020
 	sta $d021
+	
+	;lda #$0c
+	;sta $d020
+	;sta $d021
+
+	;lda #$1b
+	;sta $d011
+
+	;lda #$14
+	;sta $d018
+	;lda #$08
+	;sta $d016
+	
+	;lda #$03
+	;sta $dd00
+
+	;lda #$00
+	;sta $d015
+
+	;lda #$01
+	;ldx #$00
+:	;sta $d800,x
+	;sta $d900,x
+	;sta $da00,x
+	;sta $db00,x
+	;inx
+	;bne :-
+
+	; entering scramble system
+	;ldx #$00
+:	;lda enteringtext,x
+	;sta $0400+12*40+8,x
+	;inx
+	;cpx #24
+	;bne :-
+
 	jmp $080d
 
 error
@@ -208,6 +264,11 @@ error
 
 loading
 .byte $00
+
+enteringtext
+.byte $05,$0e,$14,$05,$12,$09,$0e,$07
+.byte $20,$13,$03,$12,$01,$0d,$02,$0c
+.byte $05,$20,$13,$19,$13,$14,$05,$0d
 
 ; -----------------------------------------------------------------------------------------------
 ; - START OF IRQ CODE

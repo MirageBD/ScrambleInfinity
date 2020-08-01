@@ -15,9 +15,23 @@
 	sei
 	
 	jsr $e544
-	lda #$00
+	lda #$0c
 	sta $d020
 	sta $d021
+
+	lda #$1b
+	sta $d011
+
+	lda #$14
+	sta $d018
+	lda #$08
+	sta $d016
+	
+	lda #$03
+	sta $dd00
+
+	lda #$00
+	sta $d015
 
 	jsr install							; init drive code
 	
@@ -98,9 +112,52 @@
 	lda #$37
 	sta $01
 
-	lda #$00
+	lda #$0c
 	sta $d020
 	sta $d021
+
+	lda #$1b
+	sta $d011
+
+	lda #$01
+	ldx #$00
+:	sta $d800,x
+	sta $d900,x
+	sta $da00,x
+	sta $db00,x
+	inx
+	bne :-
+
+	; entering scramble system
+	ldx #$00
+:	lda enteringtext,x
+	sta $0400+9*40+8,x
+	inx
+	cpx #24
+	bne :-
+
+	; draw loading bar
+	lda #$70
+	sta $0400+11*40
+	lda #$6e
+	sta $0400+11*40+39
+
+	lda #$5d
+	sta $0400+12*40
+	sta $0400+12*40+39
+
+	lda #$6d
+	sta $0400+13*40
+	lda #$7d
+	sta $0400+13*40+39
+
+	ldx #$00
+	lda #$40
+:	sta $0400+11*40+1,x
+	sta $0400+13*40+1,x
+	inx
+	cpx #38
+	bne :-
 
 	lda #$01
 	sta $d01a
@@ -134,6 +191,15 @@
 	lda #$00
 	sta loading
 
+	lda #$a0
+	ldx #$00
+:	sta $0400+12*40+1,x
+	inx
+	cpx #38
+	bne :-
+
+	lda #$1b
+	sta $d011
 	jmp $080d
 
 error
@@ -144,6 +210,11 @@ error
 loading
 .byte $00
 
+enteringtext
+.byte $05,$0e,$14,$05,$12,$09,$0e,$07
+.byte $20,$13,$03,$12,$01,$0d,$02,$0c
+.byte $05,$20,$13,$19,$13,$14,$05,$0d
+
 ; -----------------------------------------------------------------------------------------------
 ; - START OF IRQ CODE
 ; -----------------------------------------------------------------------------------------------
@@ -153,27 +224,23 @@ loading
 irq0
 	pha
 
+ 	lda #$1b
+	sta $d011
+
 	lda #$40							; #$4c
 	jsr cycleperfect
 
+	;inc $d020
+
 	lda loading
 	cmp #$01
-	beq :+
-	lda #$00
-	sta $d020							; uncomment to see loading flash
-	jmp :++
+	bne :+
 
-incd020
-:	lda #$00
-	sta $d020							; uncomment to see loading flash
-	inc incd020+1
+	jsr drawloadbar
 
 :
-	lda #$00
-	sta $d020
-
-	lda #<irq1
-	ldx #>irq1
+	lda #<irq0
+	ldx #>irq0
 	ldy #$99
 	jmp endirq
 	
@@ -182,6 +249,9 @@ incd020
 irq1
 
 	pha
+
+	ldy #$1f
+	sty $d011
 
 	lda #<irq0
 	ldx #>irq0
@@ -194,6 +264,32 @@ irq1
 
 file01
 .asciiz "LS"
+
+; -----------------------------------------------------------------------------------------------
+
+drawloadbar
+	lda endaddrhi				; don't do anything if too low endaddrhi/endeddrlo loadaddrhi/loadaddrlo
+	cmp #$00
+	bne :+
+	rts
+
+:	lda endaddrhi
+	lsr
+	sta endtmp
+
+	lda #$a0
+	ldx #$00
+:	sta $0400+12*40+1,x
+	inx
+	cpx endtmp
+	bne :-
+
+	rts
+	
+	.byte $00
+
+endtmp
+.byte $00
 
 ; -----------------------------------------------------------------------------------------------
 
