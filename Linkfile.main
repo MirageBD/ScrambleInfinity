@@ -13,38 +13,43 @@ SEGMENTS
 	MAIN:					load=RAM, start=$0820;
 	IRQ:					load=RAM, align=256;
 	MUSIC:					load=RAM, start=$1000;	
-	TITLESCREEN:			load=RAM, start=$2000;
+
+	CYCLEPERFECT:			load=RAM, start=$2740; # $00c0
 
 	GAMEPLAY2:				load=RAM, start=$2800;
 
 	LOADEDDATA1:			load=RAM, start=$3000;
 	LOADEDDATA2:			load=RAM, start=$3800;
 
+	SCREENUI:				load=OVERLAPPING_RAM, start=$4000;
 	SCREEN1:				load=OVERLAPPING_RAM, start=$4000, type=BSS;
-	SPRITES1:				load=RAM, start=$4400, type=BSS;
+	SPRITES1:				load=RAM, start=$4400, type=BSS; # goes until $5000 (at the moment)
 
-	SCROLLER:				load=RAM, start=$5200;
-	CYCLEPERFECT:			load=RAM, start=$5f00;
+	TITLESCREEN:			load=RAM, start=$5400; # $0400
+
+	# free $5400-$5800
+
+	UIFONT:					load=RAM, start=$5800;	# $0300 - Do I still need this in the end?
+	ENEMYICONS:				load=RAM, start=$5b00;  # $0100 - Do I still need this in the end?
+
 	BITMAP1:				load=OVERLAPPING_RAM, start=$6000, type=BSS;
 
 	SCREENSPECIAL:			load=OVERLAPPING_RAM, start=$8000, type=BSS;
-	#SCREENUI:				load=OVERLAPPING_RAM, start=$8000, type=BSS;
-	#SCREENBORDERSPRITES:	load=OVERLAPPING_RAM, start=$8000, type=BSS;
 
-	UIFONT:					load=RAM, start=$8800;
-	ENEMYICONS:				load=RAM, start=$8b00;
+	LOADER:					load=RAM, start=$8400, define=yes; # $0300
 
-	LOADER:					load=RAM, start=$8c00, define=yes;
-	DIGITSPRITEFONT:		load=RAM, start=$8f80;
+	SCROLLER:				load=RAM, start=$8700;	# $0d00
 
-	GAMEPLAY:				load=RAM, start=$9000;
+	GAMEPLAY:				load=RAM, start=$9400;
+
+	# $a000-$a400 free = $0400
 
 	FUELSPRITES:			load=RAM, start=$a400;
 	ZONESPRITES:			load=RAM, start=$a600;
 
 	EMPTYSPRITE:			load=RAM, start=$a7c0;
 
-	# $9c00-$a900 free = $0d00
+	DIGITSPRITEFONT:		load=RAM, start=$a800; # $0080
 
 	MAPTILES:				load=RAM, start=$a900;
 	MAPTILECOLORS:			load=RAM, start=$bd00;

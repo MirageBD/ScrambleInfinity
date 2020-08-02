@@ -44,7 +44,7 @@
 .segment "ZONESPRITES"							; referenced by code. lives and flags are plotted in here
 .incbin "./bin/b54321.bin"
 
-.segment "SPRITES2"								; copied to other bank once, used as sprites
+.segment "SPRITES2"								; copied to other bank when going in-game, used as sprites
 .incbin "./bin/s0.bin"							; ""
 .incbin "./bin/b0.bin"							; ""
 .incbin "./bin/bmb0.bin"						; ""
@@ -127,9 +127,23 @@
 
 .define bitmapwidth						320
 
+.define shipanimstart					0
+.define shipanimframes					3					; needs to be and-able
+.define bulletanimstart					3
+.define bombanimstart					4
+.define bombanimframes					7
+.define bombanimspeed					5
+.define missileanimstart				32
+.define missileanimframes				10
+.define ufoanimstart					42
+.define ufoanimframes					3
+.define cometanimstart					45
+.define cometanimframes					3
+
 .define d018forscreencharset(scr,cst)	#(((scr&$3fff)/$0400) << 4) | (((cst&$3fff)/$0800) << 1)
 .define bankforaddress(addr)			#(3-(addr>>14))
 .define spriteptrforaddress(addr)		#((addr&$3fff)>>6)
+.define bytespriteptrforaddress(addr)	((addr&$3fff)>>6)
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
@@ -138,24 +152,24 @@ tuneplay					= $1003
 
 maptiles					= $a900		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
 maptilecolors				= $bd00
-fontdigits					= $8f80
-fontui						= $8800
+fontdigits					= $a800
+fontui						= $5800
 
 loadeddata1					= $3000
 loadeddata2					= $3800
 
 screen1						= $4000
+screenui					= $4000
 screen2						= $c000
 sprites1					= $4400
 sprites2					= $c400
 bitmap1						= $6000
 bitmap2						= $e000
 screenspecial				= $8000
-screenui					= $8000
 screenbordersprites			= $8000
 clearmisilepositiondata		= screenspecial+$03c0
 
-emptysprite					= $87c0
+emptysprite					= $a7c0
 
 scoreandfuelsprites			= $a400
 livesandzonesprites			= $a600
@@ -368,6 +382,9 @@ scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
 ; -----------------------------------------------------------------------------------------------
 
 initiatebitmapscores
+	sei
+	lda #$35
+	sta $01
 	plotdigit score+0, scoredigit0
 	plotdigit score+1, scoredigit1
 	plotdigit score+2, scoredigit2
@@ -376,6 +393,9 @@ initiatebitmapscores
 	plotdigit score+5, scoredigit5
 	plotdigit lives+0, livesdigit0
 	plotdigit flags+0, flagsdigit0
+	lda #$37
+	sta $01
+	cli
 	rts
 
 ingamefresh
@@ -1078,7 +1098,7 @@ ship0explosiondone
 ship0normalanim
 	inc s0counter
 	lda s0counter
-	and #$03
+	and #shipanimframes
 	tax
 	lda s0anim,x
 	sta ship0+sprdata::pointer
@@ -2225,7 +2245,7 @@ bull0explosiondone
 	rts
 
 bull0normalanim
-	lda #$13
+	lda spriteptrforaddress(sprites2+bulletanimstart*64)
 	sta bull0+sprdata::pointer
 	lda #$01
 	sta bull0+sprdata::colour
@@ -2300,7 +2320,7 @@ bull1explosiondone
 	rts
 
 bull1normalanim
-	lda #$13
+	lda spriteptrforaddress(sprites2+bulletanimstart*64)
 	sta bull1+sprdata::pointer
 	lda #$01
 	sta bull1+sprdata::colour
@@ -2367,7 +2387,7 @@ bomb0normalanim
 
 	inc bomb0counter
 	lda bomb0counter
-	cmp #$07
+	cmp #bombanimframes
 	bne :+
 
 	lda #$05
@@ -2435,7 +2455,7 @@ bomb1normalanim
 
 	inc bomb1counter
 	lda bomb1counter
-	cmp #$07
+	cmp #bombanimframes
 	bne :+
 
 	lda #$05
@@ -2457,11 +2477,11 @@ hmaloop
 	inc sortsprp,x
 	inc sortsprp,x
 	lda sortsprp,x
-	cmp #$3a
+	cmp spriteptrforaddress(sprites2+(missileanimstart+missileanimframes)*64)	; missile end
 	bcc :+
 	sec
 	lda sortsprp,x
-	sbc #$0a
+	sbc #missileanimframes							; missile anim frames
 	sta sortsprp,x
 :	inx
 	cpx #MAXMULTPLEXSPR
@@ -2800,7 +2820,7 @@ launchcomet
 	lda posycomet,x								; between #$38 and #$b4?
 	sta sortsprylow,y
 
-	lda #$3d
+	lda spriteptrforaddress(sprites2+cometanimstart*64)		; comet start
 	sta sortsprp,y
 	lda #$07
 	sta sortsprc,y
@@ -2830,9 +2850,9 @@ animcomets
 hcaloop
 	inc sortsprp,x
 	lda sortsprp,x
-	cmp #$40
+	cmp spriteptrforaddress(sprites2+(cometanimstart+cometanimframes)*64)	; comet end
 	bcc :+
-	lda #$3d									; $8f40 8f80 8fc0
+	lda spriteptrforaddress(sprites2+cometanimstart*64)						; comet start
 	sta sortsprp,x
 :	inx
 	cpx #MAXMULTPLEXSPR
@@ -2906,7 +2926,7 @@ launchufo
 	lda sinyufo
 	sta sortsprylow,y
 
-	lda #$3d
+	lda spriteptrforaddress(sprites2+cometanimstart*64)		; comet start
 	sta sortsprp,y
 	lda #$03
 	sta sortsprc,y
@@ -2943,9 +2963,9 @@ animufos
 hualoop
 	inc sortsprp,x
 	lda sortsprp,x
-	cmp #$3d
+	cmp spriteptrforaddress(sprites2+(ufoanimstart+ufoanimframes)*64)	; ufo end
 	bcc :+
-	lda #$3a									; 8E80, 8ec0, 8f00
+	lda spriteptrforaddress(sprites2+ufoanimstart*64)		; ufo start - 8E80, 8ec0, 8f00
 	sta sortsprp,x
 :	inx
 	cpx #MAXMULTPLEXSPR
@@ -3108,7 +3128,7 @@ oktoremove
 	lda calcylow
 	sta sortsprylow,y
 
-	lda #$33
+	lda spriteptrforaddress(sprites2+(missileanimstart+1)*64)	; missile start + 1 for highlight
 	sta sortsprp,y
 	lda #$02
 	sta sortsprc,y
@@ -3130,9 +3150,9 @@ oktoremove
 	lda calcylow
 	sta sortsprylow,y
 
-	lda #$32
+	lda spriteptrforaddress(sprites2+missileanimstart*64)	; missile highlight start
 	sta sortsprp,y
-	lda #$07									; missile highlight colour
+	lda #$01												; missile highlight colour
 	sta sortsprc,y
 	lda #$0c
 	sta sortsprwidth,y
@@ -5778,25 +5798,50 @@ nofuelcounter
 .byte $00
 
 s0anim											; animations
-.byte $10,$11,$12,$11
+.byte bytespriteptrforaddress(sprites2+(shipanimstart+0)*64)
+.byte bytespriteptrforaddress(sprites2+(shipanimstart+1)*64)
+.byte bytespriteptrforaddress(sprites2+(shipanimstart+2)*64)
+.byte bytespriteptrforaddress(sprites2+(shipanimstart+1)*64)
 bombanim
-.byte $14,$15,$16,$17,$18,$19,$1a
+.byte bytespriteptrforaddress(sprites2+(bombanimstart+0)*64)
+.byte bytespriteptrforaddress(sprites2+(bombanimstart+1)*64)
+.byte bytespriteptrforaddress(sprites2+(bombanimstart+2)*64)
+.byte bytespriteptrforaddress(sprites2+(bombanimstart+3)*64)
+.byte bytespriteptrforaddress(sprites2+(bombanimstart+4)*64)
+.byte bytespriteptrforaddress(sprites2+(bombanimstart+5)*64)
+.byte bytespriteptrforaddress(sprites2+(bombanimstart+6)*64)
 bombcolours
 .byte $01,$01,$07,$07,$0f,$0c,$0c
 bombexplosionanim
-.byte $1b,$1c,$1d,$1e,$1f,$20,$21,$22,$23,$24,$25
+.byte bytespriteptrforaddress(sprites2+11*64)
+.byte bytespriteptrforaddress(sprites2+12*64)
+.byte bytespriteptrforaddress(sprites2+13*64)
+.byte bytespriteptrforaddress(sprites2+14*64)
+.byte bytespriteptrforaddress(sprites2+15*64)
+.byte bytespriteptrforaddress(sprites2+16*64)
+.byte bytespriteptrforaddress(sprites2+17*64)
+.byte bytespriteptrforaddress(sprites2+18*64)
+.byte bytespriteptrforaddress(sprites2+19*64)
+.byte bytespriteptrforaddress(sprites2+20*64)
+.byte bytespriteptrforaddress(sprites2+21*64)
 bombexplosioncolours
 .byte $01,$07,$07,$07,$0a,$0a,$08,$08,$0b,$0b,$0b
 bulletexplosionanim
-.byte $26,$27,$28,$29,$2a,$2b
+.byte bytespriteptrforaddress(sprites2+22*64)
+.byte bytespriteptrforaddress(sprites2+23*64)
+.byte bytespriteptrforaddress(sprites2+24*64)
+.byte bytespriteptrforaddress(sprites2+25*64)
+.byte bytespriteptrforaddress(sprites2+26*64)
+.byte bytespriteptrforaddress(sprites2+27*64)
 bulletexplosioncolours
 .byte $01,$07,$0a,$08,$0b,$0b
 bulletsmallexplosionanim
-.byte $2c,$2d,$2e,$2f
+.byte bytespriteptrforaddress(sprites2+28*64)
+.byte bytespriteptrforaddress(sprites2+29*64)
+.byte bytespriteptrforaddress(sprites2+30*64)
+.byte bytespriteptrforaddress(sprites2+31*64)
 bulletsmallexplosioncolours
 .byte $01,$0f,$0c,$09
-ufoanim
-.byte $3a,$3b,$3c
 
 collisionshandled
 .byte $00
