@@ -25,13 +25,14 @@
 .define bankforaddress(addr)			#(3-(addr>>14))
 .define spriteptrforaddress(addr)		#((addr&$3fff)>>6)
 
-titlecol = $c000
-titlecold800 = (titlecol + 40*25)
-titlespr = $c800
-logospr = $ca00
-wingspr = $cc00
-exhaustspr = $cc80
-title = $e000
+titlecol		= $c000
+titlecold800	= (titlecol + 40*25)
+emptyspr		= $c7c0
+titlespr		= $c800
+logospr			= $cb00
+wingspr			= $cd00
+exhaustspr		= $cd80
+title			= $e000
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -153,14 +154,21 @@ title = $e000
 	sta $d020
 	sta $d021
 
+	lda #$00						; clear empty sprite
+	ldx #$00
+:	sta emptyspr,x
+	inx
+	cpx #$40
+	bne :-
+
 	lda #$01
 	sta $d01a
 
-	lda #$00
+	lda #$f8
 	sta $d012
 
-	lda #<irqlogosprites
-	ldx #>irqlogosprites
+	lda #<initialirqopenborder
+	ldx #>initialirqopenborder
 	sta $fffe
 	sta $0314
 	stx $ffff
@@ -370,24 +378,112 @@ irqlogosprites
 	stx $d016
 	sty $d011
 
+	; set loading sprites
+	lda #%00000000
+	sta $d010
+	lda #$70
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+
+	lda #(124+0*24)&255
+	sta $d000+0*2
+	lda #(124+1*24)&255
+	sta $d000+1*2
+	lda #(124+2*24)&255
+	sta $d000+2*2
+	lda #(124+3*24)&255
+	sta $d000+3*2
+	lda #(124+4*24)&255
+	sta $d000+4*2
+
+	lda #$01
+	sta $d025
+	lda #$00
+	sta $d026
 	lda #$0c
-	sta $d021
+	sta $d027+0
+	sta $d027+1
+	sta $d027+2
+	sta $d027+3
+	sta $d027+4
 
 	lda loading
 	cmp #$01
-	beq :+
+	beq setloadingspritesbase
+
+setpressfiresprites
+
+	ldx spriteptrforaddress(titlespr+5*64)
+	stx titlecol+$03f8+0
+	ldx spriteptrforaddress(titlespr+6*64)
+	stx titlecol+$03f8+1
+	ldx spriteptrforaddress(titlespr+7*64)
+	stx titlecol+$03f8+2
+	ldx spriteptrforaddress(titlespr+8*64)
+	stx titlecol+$03f8+3
+	ldx spriteptrforaddress(titlespr+9*64)
+	stx titlecol+$03f8+4
+
+	jmp setloadingspritesend
+
+setloadingspritesbase
+
+	inc flashtimer
+	lda flashtimer
+	and #%00100000
+	beq setloadingsprites
+
+setloadingspritesempty
+
+	ldx spriteptrforaddress(emptyspr)
+	stx titlecol+$03f8+0
+	stx titlecol+$03f8+1
+	stx titlecol+$03f8+2
+	stx titlecol+$03f8+3
+	stx titlecol+$03f8+4
+
+	jmp setloadingspritesend
+
+setloadingsprites
+
+	ldx spriteptrforaddress(titlespr+0*64)
+	stx titlecol+$03f8+0
+	ldx spriteptrforaddress(titlespr+1*64)
+	stx titlecol+$03f8+1
+	ldx spriteptrforaddress(titlespr+2*64)
+	stx titlecol+$03f8+2
+	ldx spriteptrforaddress(titlespr+3*64)
+	stx titlecol+$03f8+3
+	ldx spriteptrforaddress(titlespr+4*64)
+	stx titlecol+$03f8+4
+
+	jmp setloadingspritesend
+
+setloadingspritesend
+
+	lda #<irqloadingspr
+	ldx #>irqloadingspr
+	ldy #$95
+	jmp endirq
+	
+; -----------------------------------------------------------------------------------------------
+
+irqloadingspr
+
+	pha
+
+	;lda #$90							; #$4c
+	;jsr cycleperfect
+
+	lda #$0b
+	sta $d025
+	lda #$0f
+	sta $d026
 	lda #$00
-	;sta $d020							; uncomment to see loading flash
-	jmp :++
-
-incd020
-:	lda #$00
-	;sta $d020							; uncomment to see loading flash
-	inc incd020+1
-
-:
-	lda #$0c
-	sta $d020
+	sta $d027+7
 
 	; set left wing sprite
 	lda #%00000000
@@ -398,19 +494,14 @@ incd020
 	sta $d000+7*2
 	ldx spriteptrforaddress(wingspr)
 	stx titlecol+$03f8+7
-	lda #$0b
-	sta $d025
-	lda #$0f
-	sta $d026
-	lda #$00
-	sta $d027+7
 
 	lda #<irqleftwing
 	ldx #>irqleftwing
 	ldy #$99
 	jmp endirq
-	
+
 ; -----------------------------------------------------------------------------------------------
+
 
 irqleftwing
 
@@ -655,11 +746,53 @@ irqlowerborder
 	jmp endirq
 
 ; -----------------------------------------------------------------------------------------------
+
+initialirqopenborder
+
+	pha
+
+	nop
+	nop
+
+	ldy #$1f
+	sty $d011
+
+	lda #$32				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	sta $d011
+
+	lda #<initialirqlowerborder
+	ldx #>initialirqlowerborder
+	ldy #$fa
+	jmp endirq
+
+; -----------------------------------------------------------------------------------------------
+
+initialirqlowerborder
+	pha
+
+	nop
+	nop
+
+	lda #$54				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	sta $d011
+
+	lda #$08				; no multicolour or bitmap, otherwise ghostbyte move won't work
+	sta $d016
+
+	lda #<irqlogosprites
+	ldx #>irqlogosprites
+	ldy #$18
+	jmp endirq
+
+; -----------------------------------------------------------------------------------------------
 ; - END OF IRQ CODE
 ; -----------------------------------------------------------------------------------------------
 
 file01
 .asciiz "FF"
+
+flashtimer
+.byte $00
 
 ; -----------------------------------------------------------------------------------------------
 

@@ -121,10 +121,10 @@
 
 	lda #$01
 	ldx #$00
-:	sta $d800,x
-	sta $d900,x
-	sta $da00,x
-	sta $db00,x
+:	sta $d800+0*256,x
+	sta $d800+1*256,x
+	sta $d800+2*256,x
+	sta $d800+3*256,x
 	inx
 	bne :-
 
@@ -191,6 +191,7 @@
 	lda #$00
 	sta loading
 
+	; fill loading bar
 	lda #$a0
 	ldx #$00
 :	sta $0400+12*40+1,x
@@ -230,8 +231,6 @@ irq0
 	lda #$40							; #$4c
 	jsr cycleperfect
 
-	;inc $d020
-
 	lda loading
 	cmp #$01
 	bne :+
@@ -239,14 +238,58 @@ irq0
 	jsr drawloadbar
 
 :
-	lda #<irq0
-	ldx #>irq0
-	ldy #$99
+	lda #<irq1
+	ldx #>irq1
+	ldy #50 + 8*8 - 2
 	jmp endirq
 	
 ; -----------------------------------------------------------------------------------------------
 
 irq1
+
+	pha
+
+	lda #$40							; #$4c
+	jsr cycleperfect
+
+	nop
+	nop
+	nop
+
+	;lda #$00
+	;sta $d020
+	;sta $d021
+
+	lda #<irq2
+	ldx #>irq2
+	ldy #50 + 14*8 + 7
+	jmp endirq
+
+; -----------------------------------------------------------------------------------------------
+
+irq2
+
+	pha
+
+	lda #$40							; #$4c
+	jsr cycleperfect
+
+	nop
+	nop
+	nop
+
+	;lda #$0c
+	;sta $d020
+	;sta $d021
+
+	lda #<irq3
+	ldx #>irq3
+	ldy #$ff
+	jmp endirq
+
+; -----------------------------------------------------------------------------------------------
+
+irq3
 
 	pha
 
