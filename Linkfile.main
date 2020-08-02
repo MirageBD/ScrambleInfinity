@@ -12,7 +12,7 @@ SEGMENTS
 
 	MAIN:					load=RAM, start=$0820;
 	IRQ:					load=RAM, align=256;
-	MUSIC:					load=RAM, start=$1000;	
+	MUSIC:					load=RAM, start=$1000;
 
 	CYCLEPERFECT:			load=RAM, start=$2740; # $00c0
 
@@ -26,6 +26,8 @@ SEGMENTS
 	SPRITES1:				load=RAM, start=$4400, type=BSS; # goes until $5000 (at the moment)
 
 	TITLESCREEN:			load=RAM, start=$5400; # $0400
+	LIVESLEFTSCREEN:		load=RAM;
+	CONGRATULATIONSSCREEN:	load=RAM;
 
 	# free $5400-$5800
 

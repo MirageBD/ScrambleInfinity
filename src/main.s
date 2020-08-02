@@ -5165,12 +5165,12 @@ titlescreen
 	jsr ploticon
 .endmacro
 
-	ploticonsetup textmissile0, (4*40+4)
-	ploticonsetup textmissile1, (7*40+4)
-	ploticonsetup textmystery, (10*40+4)
-	ploticonsetup textufo, (13*40+4)
-	ploticonsetup textfuel, (16*40+4)
-	ploticonsetup textboss, (19*40+4)
+	;ploticonsetup textmissile0, (4*40+4)
+	;ploticonsetup textmissile1, (7*40+4)
+	;ploticonsetup textmystery, (10*40+4)
+	;ploticonsetup textufo, (13*40+4)
+	;ploticonsetup textfuel, (16*40+4)
+	;ploticonsetup textboss, (19*40+4)
 
 	lda #$01
 	sta $d01a
@@ -5225,6 +5225,48 @@ waitreleasespace
 startgame
 
 	rts
+
+titletext
+.byte <( 0*40+18), >( 0*40+18), $07, "play", $60
+.byte <( 2*40+14), >( 2*40+14), $03, "scramble", $80, $92,$90,$92,$90, $60
+.byte <(11*40+ 9), >(11*40+ 9), $02, "how", $80, "far", $80, "can", $80, "you", $80, "invade", $60
+.byte <(13*40+10), >(13*40+10), $02, "our", $80, "scramble", $80, "system", $9f, $60
+.byte <(22*40+12), >(22*40+12), $01, $a0, $80, "copyright", $80, $92,$90,$92,$90, $60
+.byte <(24*40+11), >(24*40+11), $01, "press", $80, "fire", $80, "to", $80, "play", $60, $ff
+
+;iconposlow
+;.byte $00
+;iconposhigh
+;.byte $00
+
+;textmissile0
+;.byte (0*40+0),$60,$09,(0*40+1),$61,$0a
+;.byte (1*40+0),$62,$0b,(1*40+1),$63,$0a
+;.byte (2*40+0),$64,$08,(2*40+1),$65,$08
+;textmissile1
+;.byte (0*40+0),$60,$09,(0*40+1),$61,$0a
+;.byte (1*40+0),$62,$0b,(1*40+1),$63,$0a
+;.byte (2*40+0),$66,$0f,(2*40+1),$67,$0f
+;textmystery
+;.byte (0*40+0),$68,$09,(0*40+1),$69,$0f
+;.byte (1*40+0),$6a,$0f,(1*40+1),$6b,$0a
+;.byte (2*40+0),$6c,$0a,(2*40+1),$6d,$0a
+;textufo
+;.byte (0*40+0),$20,$08,(0*40+1),$20,$08
+;.byte (1*40+0),$6e,$0b,(1*40+1),$6f,$0d
+;.byte (2*40+0),$20,$08,(2*40+1),$20,$08
+;textfuel
+;.byte (0*40+0),$70,$09,(0*40+1),$71,$0b
+;.byte (1*40+0),$72,$0b,(1*40+1),$73,$0d
+;.byte (2*40+0),$74,$0b,(2*40+1),$75,$08
+;textboss
+;.byte (0*40+0),$76,$09,(0*40+1),$77,$0c
+;.byte (1*40+0),$78,$0f,(1*40+1),$79,$0c
+;.byte (2*40+0),$7a,$0c,(2*40+1),$7b,$08
+
+; -----------------------------------------------------------------------------------------------
+
+.segment "LIVESLEFTSCREEN"
 
 livesleftscreen
 
@@ -5292,6 +5334,13 @@ livesleftscreen
 
 	jmp ingamefromlivesleftscreen
 
+liveslefttext
+.byte <(12*40+16), >(12*40+16), $01, "lives", $80, "left", $60, $ff
+
+; -----------------------------------------------------------------------------------------------
+
+.segment "CONGRATULATIONSSCREEN"
+
 congratulations
 
 	sei
@@ -5351,6 +5400,11 @@ congratulations
 	sta state+1
 
 	jmp ingamefromcongratulations
+
+congratstext
+.byte <(10*40+12), >(10*40+12), $02, "congratulations", $60
+.byte <(12*40+ 7), >(12*40+ 7), $07, "you", $80, "completed", $80, "your", $80, "duties", $60
+.byte <(14*40+ 7), >(14*40+ 7), $03, "good", $80, "luck", $80, "next", $80, "time", $80, "again", $60, $ff
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -5420,83 +5474,35 @@ pt5	lda titletext,x
 
 ; -----------------------------------------------------------------------------------------------
 
-ploticon
-	ldy #$00
-:	lda (zp0),y
-	clc
-	adc iconposlow
-	sta itxt+1
-	lda #<screenui
-	adc iconposhigh
-	adc #>screenui
-	sta itxt+2
-	lda (zp0),y
-	clc
-	adc iconposlow
-	sta icol+1
-	lda #$00
-	adc iconposhigh
-	adc #>colormem
-	sta icol+2
-	iny
-	lda (zp0),y
-itxt sta screenui
-	iny
-	lda (zp0),y
-icol sta colormem
-	iny
-	cpy #6*3
-	bne :-
+;ploticon
+;	ldy #$00
+;:	lda (zp0),y
+;	clc
+;	adc iconposlow
+;	sta itxt+1
+;	lda #<screenui
+;	adc iconposhigh
+;	adc #>screenui
+;	sta itxt+2
+;	lda (zp0),y
+;	clc
+;	adc iconposlow
+;	sta icol+1
+;	lda #$00
+;	adc iconposhigh
+;	adc #>colormem
+;	sta icol+2
+;	iny
+;	lda (zp0),y
+;itxt sta screenui
+;	iny
+;	lda (zp0),y
+;icol sta colormem
+;	iny
+;	cpy #6*3
+;	bne :-
 
-	rts
-
-; -----------------------------------------------------------------------------------------------
-
-titletext
-.byte <( 0*40+18), >( 0*40+18), $07, "play", $60
-.byte <( 2*40+14), >( 2*40+14), $03, "scramble", $80, $92,$90,$92,$90, $60
-.byte <(11*40+ 9), >(11*40+ 9), $02, "how", $80, "far", $80, "can", $80, "you", $80, "invade", $60
-.byte <(13*40+10), >(13*40+10), $02, "our", $80, "scramble", $80, "system", $9f, $60
-.byte <(22*40+12), >(22*40+12), $01, $a0, $80, "copyright", $80, $92,$90,$92,$90, $60
-.byte <(24*40+11), >(24*40+11), $01, "press", $80, "fire", $80, "to", $80, "play", $60, $ff
-
-congratstext
-.byte <(10*40+12), >(10*40+12), $02, "congratulations", $60
-.byte <(12*40+ 7), >(12*40+ 7), $07, "you", $80, "completed", $80, "your", $80, "duties", $60
-.byte <(14*40+ 7), >(14*40+ 7), $03, "good", $80, "luck", $80, "next", $80, "time", $80, "again", $60, $ff
-
-liveslefttext
-.byte <(12*40+16), >(12*40+16), $01, "lives", $80, "left", $60, $ff
-
-iconposlow
-.byte $00
-iconposhigh
-.byte $00
-
-textmissile0
-.byte (0*40+0),$60,$09,(0*40+1),$61,$0a
-.byte (1*40+0),$62,$0b,(1*40+1),$63,$0a
-.byte (2*40+0),$64,$08,(2*40+1),$65,$08
-textmissile1
-.byte (0*40+0),$60,$09,(0*40+1),$61,$0a
-.byte (1*40+0),$62,$0b,(1*40+1),$63,$0a
-.byte (2*40+0),$66,$0f,(2*40+1),$67,$0f
-textmystery
-.byte (0*40+0),$68,$09,(0*40+1),$69,$0f
-.byte (1*40+0),$6a,$0f,(1*40+1),$6b,$0a
-.byte (2*40+0),$6c,$0a,(2*40+1),$6d,$0a
-textufo
-.byte (0*40+0),$20,$08,(0*40+1),$20,$08
-.byte (1*40+0),$6e,$0b,(1*40+1),$6f,$0d
-.byte (2*40+0),$20,$08,(2*40+1),$20,$08
-textfuel
-.byte (0*40+0),$70,$09,(0*40+1),$71,$0b
-.byte (1*40+0),$72,$0b,(1*40+1),$73,$0d
-.byte (2*40+0),$74,$0b,(2*40+1),$75,$08
-textboss
-.byte (0*40+0),$76,$09,(0*40+1),$77,$0c
-.byte (1*40+0),$78,$0f,(1*40+1),$79,$0c
-.byte (2*40+0),$7a,$0c,(2*40+1),$7b,$08
+;	rts
 
 ; -----------------------------------------------------------------------------------------------
 ; -----------------------------------------------------------------------------------------------
