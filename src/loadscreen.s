@@ -227,6 +227,7 @@ startgame
 	lda #$00
 	sta $d020
 	sta $d021
+	sta $d015
 	
 	;lda #$0c
 	;sta $d020

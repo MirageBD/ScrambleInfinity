@@ -8,10 +8,9 @@
 ; new music (give option to play without music?) 2channel prefered.
 ; add sound-fx for fire/bomb/explode.
 ; more obfuscate against hackers? On drive? Probably not worth it.
-; fancy startup screen.
 ; fix bug where ground targets sometimes get cleaned only half when hit.
 ; add proper disk fail handling.
-; '1 lives left' - change to '1 life left' or keep because it's funny?
+; zones-indicator updates too soon
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
@@ -61,11 +60,14 @@
 .segment "MAPTILECOLORS"
 .incbin "./exe/mtc.out"
 
-.segment "UIFONT"								; not referenced, used as font
-.incbin "./bin/font2.bin"
+.segment "TSLOGOSPR"
+.incbin "./bin/tslogospr.bin"
 
-.segment "ENEMYICONS"							; not references, used as font
-.incbin "./bin/tspts.bin"
+.segment "CONGRATS"
+.incbin "./bin/ingamemetamap.bin"
+
+.segment "UIFONT"
+.incbin "./bin/ingamemeta.bin"
 
 .segment "LOADER"
 .incbin "./exe/loader-c64.prg", $02
@@ -154,6 +156,7 @@ maptiles					= $a900		; currently still 36 free chars if I want to use them for 
 maptilecolors				= $bd00
 fontdigits					= $a800
 fontui						= $5800
+fontuimap					= $5600
 
 loadeddata1					= $3000
 loadeddata2					= $3800
@@ -163,6 +166,7 @@ screenui					= $4000
 screen2						= $c000
 sprites1					= $4400
 sprites2					= $c400
+tslogospr					= $5500
 bitmap1						= $6000
 bitmap2						= $e000
 screenspecial				= $8000
@@ -193,6 +197,10 @@ scoredigit2 				= scoreandfuelsprites+0*64+14*3+2
 scoredigit3 				= scoreandfuelsprites+1*64+14*3+0
 scoredigit4 				= scoreandfuelsprites+1*64+14*3+1
 scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
+
+titlescreen1bmp				= $6000
+titlescreen10400			= $4000
+titlescreen1d800			= $4400
 
 ; STRUCTS AND ENUMS ------------------------------------------------------------------------------------------------------
 
@@ -359,7 +367,7 @@ scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
 	lda #$01
 	sta $d01a
 
-	lda #$31
+	lda #$18
 	sta $d012
 
 	lda #<irqtitle
@@ -972,49 +980,14 @@ irqloadsubzone
 
 ; -----------------------------------------------------------------------------------------------
 		
-irqtitle
-
-	pha
-
-	lda #$48									; #$4c
-	jsr cycleperfect
-
-	lda #$1b
-	sta $d011
-	
-	lda #$00									; no sprites on title screen
-	sta $d015
-	
-	lda #<irqtitle2
-	ldx #>irqtitle2
-	ldy #$f8
-	jmp endirq
-
-irqtitle2
-	pha
-
- 	ldx #$00
-	lda #$1f
-	ldy #$14
-	sta $d011,x
-	sty $d011
-	
-	lda #<irqtitle
-	ldx #>irqtitle
-	ldy #$31
-	jmp endirq
-	
-; -----------------------------------------------------------------------------------------------
-
 irqlivesleft
 
 	pha
 
-	lda #$48									; #$4c
+	lda #$42									; #$4c
 	jsr cycleperfect
 
-	lda #$00									; no sprites on lives left screen
-	sta $d015
+	jsr drawbarschar
 
 	lda timerreached
 	bne timerreacheddone
@@ -1035,7 +1008,7 @@ irqlivesleft
 timerreacheddone
 	lda #<irqlivesleft
 	ldx #>irqlivesleft
-	ldy #$31
+	ldy #$32+9*8+2
 	jmp endirq
 
 timerlow
@@ -1048,6 +1021,20 @@ timerreachedhigh
 .byte $00
 timerreached
 .byte $00
+
+drawbarschar
+	ldx #$00
+:	lda barsd022,x
+	sta $d022
+	lda barsd023,x
+	sta $d023
+	ldy barswait,x
+:	dey
+	bne :-
+	inx
+	cpx #$23
+	bne :--
+	rts
 
 ; -----------------------------------------------------------------------------------------------
 ; - END OF IRQ CODE
@@ -5109,22 +5096,27 @@ clearscreen
 	lda d018forscreencharset(screenui,fontui)
 	sta $d018
 	
-	lda #$0c
-	sta $d022
-	lda #$09
-	sta $d023
-
 	ldx #$00
 :	lda #$00
 	sta screenui+(0*$0100),x
 	sta screenui+(1*$0100),x
 	sta screenui+(2*$0100),x
 	sta screenui+(3*$0100),x
+	lda #$08
+	sta colormem+(0*$0100),x
+	sta colormem+(1*$0100),x
+	sta colormem+(2*$0100),x
+	sta colormem+(3*$0100),x
 	inx
 	bne :-
 
+	lda #$00
 	sta $d020
 	sta $d021
+	lda #$02
+	sta $d022
+	lda #$0a
+	sta $d023
 
 	lda bankforaddress(screenui)
 	sta $dd00
@@ -5141,42 +5133,41 @@ titlescreen
 	lda #$7b
 	sta $d011
 	
-	jsr clearscreen
-
-	;jsr loadloadinstall
-
-	ldx #<titletext
-	ldy #>titletext
-	stx zp0
-	sty zp1
-	jsr plottext
-
-; -----------------------------------------------------------------------------------------------
-
-.macro ploticonsetup iconptr, location
-	ldx #<iconptr
-	ldy #>iconptr
-	stx zp0
-	sty zp1
-	ldx #<location
-	ldy #>location
-	stx iconposlow
-	sty iconposhigh
-	jsr ploticon
-.endmacro
-
-	;ploticonsetup textmissile0, (4*40+4)
-	;ploticonsetup textmissile1, (7*40+4)
-	;ploticonsetup textmystery, (10*40+4)
-	;ploticonsetup textufo, (13*40+4)
-	;ploticonsetup textfuel, (16*40+4)
-	;ploticonsetup textboss, (19*40+4)
-
 	lda #$01
 	sta $d01a
 
-	lda #$31
+	lda #$00
 	sta $d012
+
+	lda titlescreen1bmpfile
+	sta file01+0
+	lda titlescreen1bmpfile+1
+	sta file01+1
+	jsr loadpackd
+
+	lda titlescreen10400file
+	sta file01+0
+	lda titlescreen10400file+1
+	sta file01+1
+	jsr loadpackd
+
+	lda titlescreen1d800file
+	sta file01+0
+	lda titlescreen1d800file+1
+	sta file01+1
+	jsr loadpackd
+
+	ldx #$00
+:	lda titlescreen1d800+0*256,x
+	sta colormem+0*256,x
+	lda titlescreen1d800+1*256,x
+	sta colormem+1*256,x
+	lda titlescreen1d800+2*256,x
+	sta colormem+2*256,x
+	lda titlescreen1d800+3*256,x
+	sta colormem+3*256,x
+	inx
+	bne :-
 
 	lda #<irqtitle
 	ldx #>irqtitle
@@ -5190,9 +5181,6 @@ titlescreen
 	dec $d019
 	cli
 	
-	lda #$1b
-	sta $d011
-
 	jsr waitkey
 
 	jmp ingamefresh
@@ -5226,43 +5214,124 @@ startgame
 
 	rts
 
-titletext
-.byte <( 0*40+18), >( 0*40+18), $07, "play", $60
-.byte <( 2*40+14), >( 2*40+14), $03, "scramble", $80, $92,$90,$92,$90, $60
-.byte <(11*40+ 9), >(11*40+ 9), $02, "how", $80, "far", $80, "can", $80, "you", $80, "invade", $60
-.byte <(13*40+10), >(13*40+10), $02, "our", $80, "scramble", $80, "system", $9f, $60
-.byte <(22*40+12), >(22*40+12), $01, $a0, $80, "copyright", $80, $92,$90,$92,$90, $60
-.byte <(24*40+11), >(24*40+11), $01, "press", $80, "fire", $80, "to", $80, "play", $60, $ff
+; -----------------------------------------------------------------------------------------------
 
-;iconposlow
-;.byte $00
-;iconposhigh
-;.byte $00
+irqtitle
 
-;textmissile0
-;.byte (0*40+0),$60,$09,(0*40+1),$61,$0a
-;.byte (1*40+0),$62,$0b,(1*40+1),$63,$0a
-;.byte (2*40+0),$64,$08,(2*40+1),$65,$08
-;textmissile1
-;.byte (0*40+0),$60,$09,(0*40+1),$61,$0a
-;.byte (1*40+0),$62,$0b,(1*40+1),$63,$0a
-;.byte (2*40+0),$66,$0f,(2*40+1),$67,$0f
-;textmystery
-;.byte (0*40+0),$68,$09,(0*40+1),$69,$0f
-;.byte (1*40+0),$6a,$0f,(1*40+1),$6b,$0a
-;.byte (2*40+0),$6c,$0a,(2*40+1),$6d,$0a
-;textufo
-;.byte (0*40+0),$20,$08,(0*40+1),$20,$08
-;.byte (1*40+0),$6e,$0b,(1*40+1),$6f,$0d
-;.byte (2*40+0),$20,$08,(2*40+1),$20,$08
-;textfuel
-;.byte (0*40+0),$70,$09,(0*40+1),$71,$0b
-;.byte (1*40+0),$72,$0b,(1*40+1),$73,$0d
-;.byte (2*40+0),$74,$0b,(2*40+1),$75,$08
-;textboss
-;.byte (0*40+0),$76,$09,(0*40+1),$77,$0c
-;.byte (1*40+0),$78,$0f,(1*40+1),$79,$0c
-;.byte (2*40+0),$7a,$0c,(2*40+1),$7b,$08
+	pha
+
+	lda #$40									; #$4c
+	jsr cycleperfect
+
+	lda bankforaddress(tslogospr)
+	sta $dd00
+ 	lda #$5b
+	sta $d011
+
+	lda #$ff
+	sta $d015
+	sta $d01c
+	lda #%10000000
+	sta $d010
+
+	lda #$02
+	sta $d025
+	lda #$0b
+	sta $d026
+	lda #$00
+	sta $d027+0
+	sta $d027+1
+	sta $d027+2
+	sta $d027+3
+	sta $d027+4
+	sta $d027+5
+	sta $d027+6
+	sta $d027+7
+
+	lda #$1d
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+	sta $d001+7*2
+
+	lda #(88+0*24)&255
+	sta $d000+0*2
+	lda #(88+1*24)&255
+	sta $d000+1*2
+	lda #(88+2*24)&255
+	sta $d000+2*2
+	lda #(88+3*24)&255
+	sta $d000+3*2
+	lda #(88+4*24)&255
+	sta $d000+4*2
+	lda #(88+5*24)&255
+	sta $d000+5*2
+	lda #(88+6*24)&255
+	sta $d000+6*2
+	lda #(88+7*24)&255
+	sta $d000+7*2
+
+	ldx spriteptrforaddress(tslogospr)
+	stx screenui+$03f8+0
+	inx
+	stx screenui+$03f8+1
+	inx
+	stx screenui+$03f8+2
+	inx
+	stx screenui+$03f8+3
+	inx
+	stx screenui+$03f8+4
+	inx
+	stx screenui+$03f8+5
+	inx
+	stx screenui+$03f8+6
+	inx
+	stx screenui+$03f8+7
+
+	ldx #$00
+:	lda sprraster,x
+	sta $d025
+	ldy #$05
+:	dey
+	bne :-
+	bit $ea
+	inx
+	cpx #22
+	bne :--
+
+	lda d018forscreencharset(screen1, bitmap1)
+	sta $d018
+
+	ldx #$18
+	stx $d016
+	ldy #$3b
+	sty $d011
+	
+	lda #<irqtitle1
+	ldx #>irqtitle1
+	ldy #$f8
+	jmp endirq
+
+irqtitle1
+	pha
+
+ 	ldx #$00
+	lda #$1f
+	ldy #$14
+	sta $d011,x									; open border
+	sty $d011
+	
+	lda #<irqtitle
+	ldx #>irqtitle
+	ldy #$18
+	jmp endirq
+	
+sprraster
+.byte $00,$00,$00,$00,$00,$00,$00,$06,$0e,$03,$06,$06,$04,$06,$04,$04,$0e,$0e,$03,$03,$0d,$01
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -5275,23 +5344,43 @@ livesleftscreen
 	lda #$37
 	sta $01
 
+	lda #$00									; no sprites on lives left screen
+	sta $d015
+
 	lda #$7f
 	sta $d011
 	
+	lda #$09
+	sta $d021
+
 	jsr clearscreen
 	
 	lda lives
-	adc #$2f
-	sta screenui+12*40+14
-	lda #$01
-	sta colormem+12*40+14
+	asl
+	asl
+	tax
+	lda digits,x
+	sta screenui+11*40+11+0
+	inx
+	lda digits,x
+	sta screenui+11*40+11+1
+	inx
+	lda digits,x
+	sta screenui+12*40+11+0
+	inx
+	lda digits,x
+	sta screenui+12*40+11+1
+	inx
 
-	ldx #<liveslefttext
-	ldy #>liveslefttext
-	stx zp0
-	sty zp1
-	jsr plottext
-	
+	ldx #$00
+:	lda livesleft1,x
+	sta screenui+11*40+14,x
+	lda livesleft2,x
+	sta screenui+12*40+14,x
+	inx
+	cpx #$10
+	bne :-
+
 	lda #$00
 	sta timerlow
 	sta timerhigh
@@ -5307,7 +5396,7 @@ livesleftscreen
 	lda #$01
 	sta $d01a
 
-	lda #$31
+	lda #$32+11*8+2
 	sta $d012
 
 	lda #<irqlivesleft
@@ -5334,8 +5423,22 @@ livesleftscreen
 
 	jmp ingamefromlivesleftscreen
 
-liveslefttext
-.byte <(12*40+16), >(12*40+16), $01, "lives", $80, "left", $60, $ff
+digits ; top left, top right, bottom left, bottom right
+.byte $01,$02,$21,$22
+.byte $00,$03,$00,$23
+.byte $04,$05,$24,$25
+.byte $06,$07,$26,$27
+.byte $08,$09,$28,$29
+.byte $0a,$0b,$2a,$2b
+.byte $0c,$0d,$2c,$2d
+.byte $0e,$0f,$2e,$2f
+.byte $10,$11,$30,$31
+.byte $10,$12,$32,$33
+
+livesleft1
+.byte $13,$14,$15,$16,$17,$18,$19,$0D,$1A,$1B,$1C,$18,$1D,$1E,$1F,$20 
+livesleft2
+.byte $34,$35,$36,$37,$38,$39,$3A,$2B,$3B,$3C,$3D,$39,$3E,$3F,$40,$00 
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -5351,13 +5454,16 @@ congratulations
 	lda #$7f
 	sta $d011
 	
+	lda #$09
+	sta $d021
+
 	jsr clearscreen
 	
-	ldx #<congratstext
-	ldy #>congratstext
-	stx zp0
-	sty zp1
-	jsr plottext
+	ldx #$00
+:	lda fontuimap,x
+	sta screenui+9*40,x
+	inx
+	bne :-
 
 	lda #$00
 	sta timerlow
@@ -5374,7 +5480,7 @@ congratulations
 	lda #$01
 	sta $d01a
 
-	lda #$31
+	lda #$32+9*8+2
 	sta $d012
 
 	lda #<irqlivesleft
@@ -5400,109 +5506,6 @@ congratulations
 	sta state+1
 
 	jmp ingamefromcongratulations
-
-congratstext
-.byte <(10*40+12), >(10*40+12), $02, "congratulations", $60
-.byte <(12*40+ 7), >(12*40+ 7), $07, "you", $80, "completed", $80, "your", $80, "duties", $60
-.byte <(14*40+ 7), >(14*40+ 7), $03, "good", $80, "luck", $80, "next", $80, "time", $80, "again", $60, $ff
-
-; -----------------------------------------------------------------------------------------------
-
-plottext
-	ldy #$00
-
-	clc
-	lda #<screenui
-	adc (zp0),y
-	sta pt2+1
-	lda #<colormem
-	adc (zp0),y
-	sta pt1+1
-	iny
-
-	clc
-	lda #>screenui
-	adc (zp0),y
-	sta pt2+2
-	lda #>colormem
-	adc (zp0),y
-	sta pt1+2
-	iny
-
-	lda (zp0),y
-	sta pt0+1
-
-	clc
-	lda zp0
-	adc #$03
-	sta zp0
-	sta pt3+1
-	sta pt5+1
-	lda zp1
-	adc #$00
-	sta zp1
-	sta pt3+2
-	sta pt5+2
-
-	sec
-	ldx #$ff
-:	inx
-pt0	lda #$08
-pt1	sta colormem,x
-pt3	lda titletext,x
-	sbc #$60
-pt2	sta screenui,x
-	cmp #$00
-	bne :-
-	inx
-pt5	lda titletext,x
-	cmp #$ff
-	beq :+
-
-	clc
-	stx zptemp
-	lda pt5+1
-	adc zptemp
-	sta zp0
-	lda zp1
-	adc #$00
-	sta zp1
-
-	jmp plottext
-
-:	rts
-
-; -----------------------------------------------------------------------------------------------
-
-;ploticon
-;	ldy #$00
-;:	lda (zp0),y
-;	clc
-;	adc iconposlow
-;	sta itxt+1
-;	lda #<screenui
-;	adc iconposhigh
-;	adc #>screenui
-;	sta itxt+2
-;	lda (zp0),y
-;	clc
-;	adc iconposlow
-;	sta icol+1
-;	lda #$00
-;	adc iconposhigh
-;	adc #>colormem
-;	sta icol+2
-;	iny
-;	lda (zp0),y
-;itxt sta screenui
-;	iny
-;	lda (zp0),y
-;icol sta colormem
-;	iny
-;	cpy #6*3
-;	bne :-
-
-;	rts
 
 ; -----------------------------------------------------------------------------------------------
 ; -----------------------------------------------------------------------------------------------
@@ -5957,6 +5960,21 @@ file01
 
 loadinstallfile
 .asciiz "LI"
+
+titlescreen1bmpfile
+.asciiz "T1"
+titlescreen10400file
+.asciiz "T2"
+titlescreen1d800file
+.asciiz "T3"
+
+barsd022
+.byte $07,$0a,$0a,$0a,$08,$08,$02,$02,$02,$02,$02,  $00,  $03,$0e,$04,$0e,$04,$0e,$04,$04,$04,$04,$04,  $00,  $0d,$03,$05,$03,$05,$05,$08,$05,$08,$08,$08
+barsd023
+.byte $01,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a,  $00,  $01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03,  $00,  $01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03
+barswait
+.byte $08,$08,$07,$07,$06,$01,$07,$07,$08,$08,$01,  $36,  $08,$08,$07,$07,$06,$01,$07,$07,$08,$08,$01,  $36,  $08,$08,$07,$07,$06,$01,$07,$07,$08,$08,$01
+
 
 .byte $de,$ad,$be,$ef							; DEADBEEF
 

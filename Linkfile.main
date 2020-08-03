@@ -25,14 +25,13 @@ SEGMENTS
 	SCREEN1:				load=OVERLAPPING_RAM, start=$4000, type=BSS;
 	SPRITES1:				load=RAM, start=$4400, type=BSS; # goes until $5000 (at the moment)
 
-	TITLESCREEN:			load=RAM, start=$5400; # $0400
+	TITLESCREEN:			load=RAM, start=$5000; # $0400
 	LIVESLEFTSCREEN:		load=RAM;
 	CONGRATULATIONSSCREEN:	load=RAM;
 
-	# free $5400-$5800
-
-	UIFONT:					load=RAM, start=$5800;	# $0300 - Do I still need this in the end?
-	ENEMYICONS:				load=RAM, start=$5b00;  # $0100 - Do I still need this in the end?
+	TSLOGOSPR:				load=RAM, start=$5500;
+	CONGRATS:				load=RAM, start=$5700;
+	UIFONT:					load=RAM, start=$5800;
 
 	BITMAP1:				load=OVERLAPPING_RAM, start=$6000, type=BSS;
 
