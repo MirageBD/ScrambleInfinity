@@ -1,7 +1,7 @@
 MEMORY
 {
 	ZPRAM:			start=$02, size=$fe, type = rw;
-	RAM:			start=$0800, size=$f800;
+	RAM:			start=$6000, size=$f800;
 	OVERLAPPING_RAM:start=$0000, size=$10000;
 }
 

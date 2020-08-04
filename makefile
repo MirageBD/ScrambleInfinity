@@ -64,8 +64,12 @@ main.o: $(SRC_DIR)/main.s Makefile Linkfile.main loader-c64.prg install-c64.prg 
 main_unpacked.prg: main.o loader-c64.prg install-c64.prg loadersymbols-c64.inc Linkfile.main
 	$(LD) $(LDFLAGS) -C Linkfile.main --mapfile $(EXE_DIR)/main.map -o $(EXE_DIR)/$@ $(EXE_DIR)/main.o
 
-main.prg: main_unpacked.prg
-	$(PU) -ffast -d -l 0x0400 -x 0x0820 -g 0x37 -i 0 $(EXE_DIR)/$? $(EXE_DIR)/$@
+main_unpacked.prg.addr: main_unpacked.prg
+	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 1024
+
+main.prg: main_unpacked.prg.addr
+	$(BB) -e 0820 $(EXE_DIR)/$?
+	$(MV) $(EXE_DIR)/$?.b2 $(EXE_DIR)/$@
 
 loadscreen.o: $(SRC_DIR)/loadscreen.s Makefile Linkfile.loadscreen loader-c64.prg install-c64.prg loadersymbols-c64.inc
 	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(SRC_DIR)/$*.s
@@ -73,8 +77,12 @@ loadscreen.o: $(SRC_DIR)/loadscreen.s Makefile Linkfile.loadscreen loader-c64.pr
 loadscreen_unpacked.prg: loadscreen.o loader-c64.prg install-c64.prg loadersymbols-c64.inc Linkfile.loadscreen
 	$(LD) $(LDFLAGS) -C Linkfile.loadscreen --mapfile $(EXE_DIR)/loadscreen.map -o $(EXE_DIR)/$@ $(EXE_DIR)/loadscreen.o
 
-loadscreen.prg: loadscreen_unpacked.prg
-	$(PU) -ffast -d -l 0x0800 -x 0x9000 -g 0x37 -i 0 $(EXE_DIR)/$? $(EXE_DIR)/$@
+loadscreen_unpacked.prg.addr: loadscreen_unpacked.prg
+	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 24576
+
+loadscreen.prg: loadscreen_unpacked.prg.addr
+	$(BB) -e 9000 $(EXE_DIR)/$?
+	$(MV) $(EXE_DIR)/$?.b2 $(EXE_DIR)/$@
 
 boot.o: $(SRC_DIR)/boot.s Makefile Linkfile.boot loader-c64.prg install-c64.prg loadersymbols-c64.inc
 	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(SRC_DIR)/$*.s
@@ -82,8 +90,12 @@ boot.o: $(SRC_DIR)/boot.s Makefile Linkfile.boot loader-c64.prg install-c64.prg 
 boot_unpacked.prg: boot.o loader-c64.prg install-c64.prg loadersymbols-c64.inc Linkfile.boot
 	$(LD) $(LDFLAGS) -C Linkfile.boot --mapfile $(EXE_DIR)/boot.map -o $(EXE_DIR)/$@ $(EXE_DIR)/boot.o
 
-boot.prg: boot_unpacked.prg
-	$(PU) -fshort -fdelta -d -l 0x0800 -x 0x9000 -g 0x37 -i 0 $(EXE_DIR)/$? $(EXE_DIR)/$@
+boot_unpacked.prg.addr: boot_unpacked.prg
+	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 24576
+
+boot.prg: boot_unpacked.prg.addr
+	$(BB) -e 9000 $(EXE_DIR)/$?
+	$(MV) $(EXE_DIR)/$?.b2 $(EXE_DIR)/$@
 
 # -----------------------------------------------------------------------------
 
