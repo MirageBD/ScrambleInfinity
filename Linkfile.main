@@ -43,6 +43,8 @@ SEGMENTS
 
 	GAMEPLAY:				load=RAM, start=$9400;
 
+	TSPRESSFIRESPR:			load=RAM, start=$a000;
+
 	# $a000-$a400 free = $0400
 
 	FUELSPRITES:			load=RAM, start=$a400;

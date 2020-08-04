@@ -63,6 +63,9 @@
 .segment "TSLOGOSPR"
 .incbin "./bin/tslogospr.bin"
 
+.segment "TSPRESSFIRESPR"
+.incbin "./bin/tspressfirespr.bin"
+
 .segment "CONGRATS"
 .incbin "./bin/ingamemetamap.bin"
 
@@ -163,6 +166,7 @@ loadeddata2					= $3800
 
 screen1						= $4000
 screenui					= $4000
+screenui2					= $a000		; only used in lower border for sprite ptrs
 screen2						= $c000
 sprites1					= $4400
 sprites2					= $c400
@@ -172,6 +176,8 @@ bitmap2						= $e000
 screenspecial				= $8000
 screenbordersprites			= $8000
 clearmisilepositiondata		= screenspecial+$03c0
+
+tspressfirespr				= $a000
 
 emptysprite					= $a7c0
 
@@ -5130,6 +5136,9 @@ titlescreen
 	lda #$37
 	sta $01
 
+	lda #$00
+	sta $d01b									; sprite priority
+
 	lda #$7b
 	sta $d011
 	
@@ -5220,13 +5229,16 @@ irqtitle
 
 	pha
 
-	lda #$40									; #$4c
+	lda #$46									; #$4c
 	jsr cycleperfect
 
 	lda bankforaddress(tslogospr)
 	sta $dd00
  	lda #$5b
 	sta $d011
+
+	lda d018forscreencharset(screenui,$0000)
+	sta $d018
 
 	lda #$ff
 	sta $d015
@@ -5311,6 +5323,62 @@ irqtitle
 	ldy #$3b
 	sty $d011
 	
+	lda #$f8					; prepare lower border sprites
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+	sta $d001+7*2
+
+	lda #(112+0*24)&255
+	sta $d000+0*2
+	lda #(112+1*24)&255
+	sta $d000+1*2
+	lda #(112+2*24)&255
+	sta $d000+2*2
+	lda #(112+3*24)&255
+	sta $d000+3*2
+	lda #(112+4*24)&255
+	sta $d000+4*2
+	lda #(112+5*24)&255
+	sta $d000+5*2
+	lda #$00
+	sta $d000+6*2
+	sta $d000+7*2
+
+	lda #$01
+	sta $d025
+	lda #$00
+	sta $d026
+	lda #$0c
+	sta $d027+0
+	sta $d027+1
+	sta $d027+2
+	sta $d027+3
+	sta $d027+4
+	sta $d027+5
+	sta $d027+6
+	sta $d027+7
+
+	lda #%00000000
+	sta $d010
+
+	ldx spriteptrforaddress(tspressfirespr)
+	stx screenui2+$03f8+0
+	inx
+	stx screenui2+$03f8+1
+	inx
+	stx screenui2+$03f8+2
+	inx
+	stx screenui2+$03f8+3
+	inx
+	stx screenui2+$03f8+4
+	inx
+	stx screenui2+$03f8+5
+
 	lda #<irqtitle1
 	ldx #>irqtitle1
 	ldy #$f8
@@ -5319,17 +5387,84 @@ irqtitle
 irqtitle1
 	pha
 
- 	ldx #$00
-	lda #$1f
-	ldy #$14
-	sta $d011,x									; open border
+	nop
+	nop
+
+	ldy #$3f
 	sty $d011
+
+	lda #$32				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	sta $d011
 	
+	lda #<irqtitle2
+	ldx #>irqtitle2
+	ldy #$fa
+	jmp endirq
+	
+irqtitle2										; top of 'press fire' sprites
+	pha
+
+	lda bankforaddress(screenui2)
+	sta $dd00
+	lda d018forscreencharset(screenui2,$0000)
+	sta $d018
+
+	lda #$54				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	sta $d011
+
+	lda #$08				; no multicolour or bitmap, otherwise ghostbyte move won't work
+	sta $d016
+
+	lda #$40							; #$4c
+	jsr cycleperfect
+
+	clc
+	lda $d001+0*2
+	adc #21
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+	sta $d001+7*2
+
+	lda #$0b
+:	cmp $d012
+	bne :-
+
+	lda #$48							; #$4c
+	jsr cycleperfect
+
+	ldx spriteptrforaddress(tspressfirespr+6*64)
+	stx screenui2+$03f8+0
+	inx
+	stx screenui2+$03f8+1
+	inx
+	stx screenui2+$03f8+2
+	inx
+	stx screenui2+$03f8+3
+	inx
+	stx screenui2+$03f8+4
+	inx
+	stx screenui2+$03f8+5
+
+	lda #$ff							; put sprites back up so the upper border doesn't draw them again
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+	sta $d001+7*2
+
 	lda #<irqtitle
 	ldx #>irqtitle
 	ldy #$18
 	jmp endirq
-	
+
 sprraster
 .byte $00,$00,$00,$00,$00,$00,$00,$06,$0e,$03,$06,$06,$04,$06,$04,$04,$0e,$0e,$03,$03,$0d,$01
 
@@ -5350,11 +5485,11 @@ livesleftscreen
 	lda #$7f
 	sta $d011
 	
+	jsr clearscreen
+	
 	lda #$09
 	sta $d021
 
-	jsr clearscreen
-	
 	lda lives
 	asl
 	asl
@@ -5396,7 +5531,7 @@ livesleftscreen
 	lda #$01
 	sta $d01a
 
-	lda #$32+11*8+2
+	lda #$32+9*8+2
 	sta $d012
 
 	lda #<irqlivesleft

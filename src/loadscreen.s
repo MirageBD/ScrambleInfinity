@@ -288,7 +288,7 @@ enteringtext
 irqlogosprites
 	pha
 
-	lda #$40							; #$4c
+	lda #$46							; #$4c
 	jsr cycleperfect
 
 	lda #$00
@@ -299,6 +299,8 @@ irqlogosprites
 	lda #$ff
 	sta $d015
 	sta $d01c
+	lda #$00
+	sta $d01b							; sprite priority
 	lda #%10000000
 	sta $d010
 
