@@ -11,9 +11,10 @@ SEGMENTS
 	
 	LOADERINSTALL:	load = RAM,	start = $6000, define = yes; # $6000-$7200
 
-	LOADER:			load=RAM,	start=$8400, define=yes;
-
-	MAIN:			load=RAM,	start=$9000;
+	MAIN:			load=RAM,	start=$c000;
 	IRQ:			load=RAM,	align=256;
 	CYCLEPERFECT:   load=RAM,	align=256;
+
+	LOADER:			load=RAM,	start=$c400, define=yes;
+	SCREEN:			load = RAM, start = $c400;
 }

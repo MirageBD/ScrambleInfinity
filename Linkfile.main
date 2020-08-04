@@ -1,18 +1,20 @@
 MEMORY
 {
 	ZPRAM:					start=$02, size=$fe, type = rw;
-	RAM:					start=$0400, size=$fc00;
+	RAM:					start=$0820, size=$fe00;
 	OVERLAPPING_RAM:		start=$0000, size=$10000;
 }
 
 SEGMENTS
 {
-	# comment
-	TABLES:					load = RAM, start=$0400;
+	#LOADER:					load=RAM, start=$0200, define=yes; # $0300
 
+	# comment
 	MAIN:					load=RAM, start=$0820;
 	IRQ:					load=RAM, align=256;
 	MUSIC:					load=RAM, start=$1000;
+
+	TABLES:					load = RAM, start=$2300;
 
 	CYCLEPERFECT:			load=RAM, start=$2740; # $00c0
 
@@ -36,8 +38,6 @@ SEGMENTS
 	BITMAP1:				load=OVERLAPPING_RAM, start=$6000, type=BSS;
 
 	SCREENSPECIAL:			load=OVERLAPPING_RAM, start=$8000, type=BSS;
-
-	LOADER:					load=RAM, start=$8400, define=yes; # $0300
 
 	SCROLLER:				load=RAM, start=$8700;	# $0d00
 

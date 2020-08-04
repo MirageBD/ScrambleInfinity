@@ -1,6 +1,6 @@
 
 INSTALL     ?= 6000
-RESIDENT    ?= 8400
+RESIDENT    ?= 0400
 ZP          ?= e8
 
 export _PLATFORM_ INSTALL RESIDENT ZP

@@ -10,31 +10,20 @@
 
 ; -----------------------------------------------------------------------------------------------
 
+.define d018forscreencharset(scr,cst)	#(((scr&$3fff)/$0400) << 4) | (((cst&$3fff)/$0800) << 1)
+.define bankforaddress(addr)			#(3-(addr>>14))
+.define spriteptrforaddress(addr)		#((addr&$3fff)>>6)
+
+screen = $bc00
+
+; -----------------------------------------------------------------------------------------------
+
 .segment "MAIN"
 
 	sei
 	
-	jsr $e544
-	lda #$0c
-	sta $d020
-	sta $d021
-
-	lda #$1b
-	sta $d011
-
-	lda #$14
-	sta $d018
-	lda #$08
-	sta $d016
-	
-	lda #$03
-	sta $dd00
-
-	lda #$00
-	sta $d015
-
 	jsr install							; init drive code
-	
+
 	ldx #$00
 	bcc :++
 	cmp #$04							; #STATUS::DEVICE_INCOMPATIBLE
@@ -109,52 +98,73 @@
 	lda #%00010001
 	sta $dc0e
 
+	; copy loader to $0200
+	ldx #$00
+:	lda $c400+0*256,x
+	sta $0400+0*256,x
+	lda $c400+1*256,x
+	sta $0400+1*256,x
+	lda $c400+2*256,x
+	sta $0400+2*256,x
+	inx
+	bne :-
+
 	lda #$37
 	sta $01
+
+	lda #$1b
+	sta $d011
 
 	lda #$0c
 	sta $d020
 	sta $d021
 
-	lda #$1b
-	sta $d011
-
-	lda #$01
 	ldx #$00
-:	sta $d800+0*256,x
+:	lda #$01
+	sta $d800+0*256,x
 	sta $d800+1*256,x
 	sta $d800+2*256,x
 	sta $d800+3*256,x
+	lda #$20
+	sta screen+0*256,x
+	sta screen+1*256,x
+	sta screen+2*256,x
+	sta screen+3*256,x
 	inx
 	bne :-
+
+	lda d018forscreencharset(screen,$1000)
+	sta $d018
+	lda bankforaddress(screen)
+	sta $dd00
 
 	; entering scramble system
 	ldx #$00
 :	lda enteringtext,x
-	sta $0400+9*40+8,x
+	sta screen+9*40+8,x
 	inx
 	cpx #24
 	bne :-
 
 	; draw loading bar
 	lda #$70
-	sta $0400+11*40
+	sta screen+11*40
 	lda #$6e
-	sta $0400+11*40+39
+	sta screen+11*40+39
 
 	lda #$5d
-	sta $0400+12*40
-	sta $0400+12*40+39
+	sta screen+12*40
+	sta screen+12*40+39
 
 	lda #$6d
-	sta $0400+13*40
+	sta screen+13*40
 	lda #$7d
-	sta $0400+13*40+39
+	sta screen+13*40+39
 
 	ldx #$00
 	lda #$40
-:	sta $0400+11*40+1,x
-	sta $0400+13*40+1,x
+:	sta screen+11*40+1,x
+	sta screen+13*40+1,x
 	inx
 	cpx #38
 	bne :-
@@ -194,7 +204,7 @@
 	; fill loading bar
 	lda #$a0
 	ldx #$00
-:	sta $0400+12*40+1,x
+:	sta screen+12*40+1,x
 	inx
 	cpx #38
 	bne :-
@@ -322,7 +332,7 @@ drawloadbar
 
 	lda #$a0
 	ldx #$00
-:	sta $0400+12*40+1,x
+:	sta screen+12*40+1,x
 	inx
 	cpx endtmp
 	bne :-

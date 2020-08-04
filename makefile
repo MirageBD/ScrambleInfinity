@@ -65,7 +65,7 @@ main_unpacked.prg: main.o loader-c64.prg install-c64.prg loadersymbols-c64.inc L
 	$(LD) $(LDFLAGS) -C Linkfile.main --mapfile $(EXE_DIR)/main.map -o $(EXE_DIR)/$@ $(EXE_DIR)/main.o
 
 main_unpacked.prg.addr: main_unpacked.prg
-	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 1024
+	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 2080
 
 main.prg: main_unpacked.prg.addr
 	$(BB) -e 0820 $(EXE_DIR)/$?
@@ -78,7 +78,7 @@ loadscreen_unpacked.prg: loadscreen.o loader-c64.prg install-c64.prg loadersymbo
 	$(LD) $(LDFLAGS) -C Linkfile.loadscreen --mapfile $(EXE_DIR)/loadscreen.map -o $(EXE_DIR)/$@ $(EXE_DIR)/loadscreen.o
 
 loadscreen_unpacked.prg.addr: loadscreen_unpacked.prg
-	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 24576
+	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 20480
 
 loadscreen.prg: loadscreen_unpacked.prg.addr
 	$(BB) -e 9000 $(EXE_DIR)/$?
@@ -94,7 +94,7 @@ boot_unpacked.prg.addr: boot_unpacked.prg
 	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 24576
 
 boot.prg: boot_unpacked.prg.addr
-	$(BB) -e 9000 $(EXE_DIR)/$?
+	$(BB) -e c000 $(EXE_DIR)/$?
 	$(MV) $(EXE_DIR)/$?.b2 $(EXE_DIR)/$@
 
 # -----------------------------------------------------------------------------

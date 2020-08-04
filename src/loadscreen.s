@@ -1,7 +1,7 @@
-.segment "LOADERINSTALL"
-.incbin "./exe/install-c64.prg", $02
-.segment "LOADER"
-.incbin "./exe/loader-c64.prg", $02
+;.segment "LOADERINSTALL"
+;.incbin "./exe/install-c64.prg", $02
+;.segment "LOADER"
+;.incbin "./exe/loader-c64.prg", $02
 
 .include "loadersymbols-c64.inc"
 
@@ -40,21 +40,21 @@ title			= $e000
 
 	sei
 	
-	jsr $e544
+	;jsr $e544
 	lda #$0c
 	sta $d020
 	sta $d021
 
-	jsr install							; init drive code
+	;jsr install							; init drive code
 	
-	ldx #$00
-	bcc :++
-	cmp #$04							; #STATUS::DEVICE_INCOMPATIBLE
-	beq :+
-	ldx #$04
-:	cmp #$05							; #STATUS::TOO_MANY_DEVICES
-	beq :+
-	ldx #$00
+	;ldx #$00
+	;bcc :++
+	;cmp #$04							; #STATUS::DEVICE_INCOMPATIBLE
+	;beq :+
+	;ldx #$04
+:	;cmp #$05							; #STATUS::TOO_MANY_DEVICES
+	;beq :+
+	;ldx #$00
 :	
 	lda #$00							; Disable all interferences
 	sta $d015							; for a stable timer
@@ -123,7 +123,118 @@ title			= $e000
 	lda #%00010001
 	sta $dc0e
 
-	lda #$37
+	lda #$34
+	sta $01
+
+	ldx #$00
+copymem
+	lda $5000+0*256,x
+	sta $c000+0*256,x
+	lda $5000+1*256,x
+	sta $c000+1*256,x
+	lda $5000+2*256,x
+	sta $c000+2*256,x
+	lda $5000+3*256,x
+	sta $c000+3*256,x
+	lda $5000+4*256,x
+	sta $c000+4*256,x
+	lda $5000+5*256,x
+	sta $c000+5*256,x
+	lda $5000+6*256,x
+	sta $c000+6*256,x
+	lda $5000+7*256,x
+	sta $c000+7*256,x
+	lda $5000+8*256,x
+	sta $c000+8*256,x
+	lda $5000+9*256,x
+	sta $c000+9*256,x
+	lda $5000+10*256,x
+	sta $c000+10*256,x
+	lda $5000+11*256,x
+	sta $c000+11*256,x
+	lda $5000+12*256,x
+	sta $c000+12*256,x
+	lda $5000+13*256,x
+	sta $c000+13*256,x
+	lda $5000+14*256,x
+	sta $c000+14*256,x
+	lda $5000+15*256,x
+	sta $c000+15*256,x
+
+	lda $6000+0*256,x
+	sta $d000+0*256,x
+
+	lda $7000+0*256,x
+	sta $e000+0*256,x
+	lda $7000+1*256,x
+	sta $e000+1*256,x
+	lda $7000+2*256,x
+	sta $e000+2*256,x
+	lda $7000+3*256,x
+	sta $e000+3*256,x
+	lda $7000+4*256,x
+	sta $e000+4*256,x
+	lda $7000+5*256,x
+	sta $e000+5*256,x
+	lda $7000+6*256,x
+	sta $e000+6*256,x
+	lda $7000+7*256,x
+	sta $e000+7*256,x
+	lda $7000+8*256,x
+	sta $e000+8*256,x
+	lda $7000+9*256,x
+	sta $e000+9*256,x
+	lda $7000+10*256,x
+	sta $e000+10*256,x
+	lda $7000+11*256,x
+	sta $e000+11*256,x
+	lda $7000+12*256,x
+	sta $e000+12*256,x
+	lda $7000+13*256,x
+	sta $e000+13*256,x
+	lda $7000+14*256,x
+	sta $e000+14*256,x
+	lda $7000+15*256,x
+	sta $e000+15*256,x
+
+	lda $8000+0*256,x
+	sta $f000+0*256,x
+	lda $8000+1*256,x
+	sta $f000+1*256,x
+	lda $8000+2*256,x
+	sta $f000+2*256,x
+	lda $8000+3*256,x
+	sta $f000+3*256,x
+	lda $8000+4*256,x
+	sta $f000+4*256,x
+	lda $8000+5*256,x
+	sta $f000+5*256,x
+	lda $8000+6*256,x
+	sta $f000+6*256,x
+	lda $8000+7*256,x
+	sta $f000+7*256,x
+	lda $8000+8*256,x
+	sta $f000+8*256,x
+	lda $8000+9*256,x
+	sta $f000+9*256,x
+	lda $8000+10*256,x
+	sta $f000+10*256,x
+	lda $8000+11*256,x
+	sta $f000+11*256,x
+	lda $8000+12*256,x
+	sta $f000+12*256,x
+	lda $8000+13*256,x
+	sta $f000+13*256,x
+	lda $8000+14*256,x
+	sta $f000+14*256,x
+	lda $8000+15*256,x
+	sta $f000+15*256,x
+
+	inx
+	beq :+
+	jmp copymem
+
+:	lda #$37
 	sta $01
 
 	lda d018forscreencharset(titlecol,title)

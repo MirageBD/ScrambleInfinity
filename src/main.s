@@ -72,8 +72,8 @@
 .segment "UIFONT"
 .incbin "./bin/ingamemeta.bin"
 
-.segment "LOADER"
-.incbin "./exe/loader-c64.prg", $02
+;.segment "LOADER"
+;.incbin "./exe/loader-c64.prg", $02
 
 .segment "LOADEDDATA1"
 	.res 2048
