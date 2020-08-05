@@ -81,7 +81,7 @@ loadscreen_unpacked.prg.addr: loadscreen_unpacked.prg
 	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 20480
 
 loadscreen.prg: loadscreen_unpacked.prg.addr
-	$(BB) -e 9000 $(EXE_DIR)/$?
+	$(BB) $(EXE_DIR)/$?
 	$(MV) $(EXE_DIR)/$?.b2 $(EXE_DIR)/$@
 
 boot.o: $(SRC_DIR)/boot.s Makefile Linkfile.boot loader-c64.prg install-c64.prg loadersymbols-c64.inc

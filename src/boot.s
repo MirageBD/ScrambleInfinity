@@ -98,17 +98,6 @@ screen = $bc00
 	lda #%00010001
 	sta $dc0e
 
-	; copy loader to $0200
-	ldx #$00
-:	lda $c400+0*256,x
-	sta $0400+0*256,x
-	lda $c400+1*256,x
-	sta $0400+1*256,x
-	lda $c400+2*256,x
-	sta $0400+2*256,x
-	inx
-	bne :-
-
 	lda #$37
 	sta $01
 
@@ -132,11 +121,6 @@ screen = $bc00
 	sta screen+3*256,x
 	inx
 	bne :-
-
-	lda d018forscreencharset(screen,$1000)
-	sta $d018
-	lda bankforaddress(screen)
-	sta $dd00
 
 	; entering scramble system
 	ldx #$00
@@ -169,6 +153,23 @@ screen = $bc00
 	cpx #38
 	bne :-
 
+	lda d018forscreencharset(screen,$1000)
+	sta $d018
+	lda bankforaddress(screen)
+	sta $dd00
+
+	; copy loader to $0400
+	ldx #$00
+:	lda $c400+0*256,x
+	sta $0400+0*256,x
+	lda $c400+1*256,x
+	sta $0400+1*256,x
+	lda $c400+2*256,x
+	sta $0400+2*256,x
+	inx
+	bne :-
+
+
 	lda #$01
 	sta $d01a
 
@@ -195,7 +196,7 @@ screen = $bc00
 
 	ldx #<file01
 	ldy #>file01
-	jsr loadraw
+	jsr loadcompd ; loadraw
 	bcs error
 
 	lda #$00
@@ -211,7 +212,7 @@ screen = $bc00
 
 	lda #$1b
 	sta $d011
-	jmp $080d
+	jmp $9000 ; $080d
 
 error
 	lda #$02
@@ -326,7 +327,10 @@ drawloadbar
 	bne :+
 	rts
 
-:	lda endaddrhi
+:
+	sec
+	lda endaddrhi
+	sbc #$68
 	lsr
 	sta endtmp
 

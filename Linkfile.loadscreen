@@ -11,18 +11,14 @@ SEGMENTS
 
 	LOADERZP:		load=ZPRAM,	type=zp, define=yes;
 	
-	#LOADER:			load=RAM,	start=$0200, define=yes;
-
-	#LOADERINSTALL:	load = RAM,	start = $6000, define = yes; # $6000-$7200
-
-	TITLECOL:		load=RAM,	start=$5000;
+	TITLECOL:		load=RAM,	start=$5000;	# gets moved to $c000
 
 	TITLESPR:		load=RAM,	start=$5800;
 	LOGOSPR:		load=RAM,	start=$5b00;
 	WINGSPR:		load=RAM,	start=$5d00;
 	EXHAUSTSPR:		load=RAM,	start=$5d80;
 
-	TITLE:			load=RAM,	start=$7000;
+	TITLE:			load=RAM,	start=$7000;	# gets moved to $e000
 	
 	MAIN:			load=RAM,	start=$9000;
 
