@@ -58,6 +58,54 @@ tuneplay		= $ae20
 
 .segment "MAIN"
 
+	jmp mainentry
+
+; -----------------------------------------------------------------------------------------------
+
+; time critical code and small tables
+
+cycleperfect
+	sec
+	sbc $dc04
+	sta bplcode2+1
+bplcode2
+	bpl :+
+:	.repeat 48
+	lda #$a9
+	.endrepeat
+	lda #$a5
+	nop		
+	rts
+
+sprraster
+.byte $00,$00,$00,$00,$00,$00,$00,$06,$0e,$03,$06,$06,$04,$06,$04,$04,$0e,$0e,$03,$03,$0d,$01
+
+waitopenborder
+	ldx #$06
+:	dex
+	bne :-
+	bit $ea
+	rts
+
+copymem
+	ldx #$00
+copymemfrom
+	lda $1000,x
+copymemto
+	sta $2000,x
+	dex
+	bne copymemfrom
+	inc copymemfrom+2
+	inc copymemto+2
+	lda copymemfrom+2
+copymemsize
+	cmp #>($1000+$0c00)
+	bne copymemfrom
+	rts
+
+; -----------------------------------------------------------------------------------------------
+
+mainentry
 	sei
 	
 	lda #$0c
@@ -276,7 +324,7 @@ enteringtext
 ; - START OF IRQ CODE
 ; -----------------------------------------------------------------------------------------------
 
-.segment "IRQ"
+;.segment "IRQ"
 
 irqlogosprites
 	pha
@@ -797,53 +845,6 @@ flashtimer
 .byte $00
 
 ; -----------------------------------------------------------------------------------------------
-
-.segment "CYCLEPERFECT"
-
-cycleperfect
-
-	sec
-	sbc $dc04
-	sta bplcode2+1
-bplcode2
-	bpl :+
-:	.repeat 48
-	lda #$a9
-	.endrepeat
-	lda #$a5
-	nop
-		
-	rts
-
-copymem
-	ldx #$00
-copymemfrom
-	lda $1000,x
-copymemto
-	sta $2000,x
-	dex
-	bne copymemfrom
-	inc copymemfrom+2
-	inc copymemto+2
-	lda copymemfrom+2
-copymemsize
-	cmp #>($1000+$0c00)
-	bne copymemfrom
-	rts
-
-.segment "SPRRASTER"
-
-sprraster
-.byte $00,$00,$00,$00,$00,$00,$00,$06,$0e,$03,$06,$06,$04,$06,$04,$04,$0e,$0e,$03,$03,$0d,$01
-
-waitopenborder
-	ldx #$06
-:	dex
-	bne :-
-	bit $ea
-	rts
-
-; -----------------------------------------------------------------------------------------------	
 
 endirq	
 	sta $fffe

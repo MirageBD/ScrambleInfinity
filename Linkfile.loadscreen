@@ -23,8 +23,4 @@ SEGMENTS
 	MUSIC:			load=RAM,	start=$a000;
 
 	MAIN:			load=RAM,	start=$c400;
-
-	IRQ:			load=RAM,	align=256;
-	CYCLEPERFECT:   load=RAM,	align=256;
-	SPRRASTER:		load=RAM,	align=256;
 }
