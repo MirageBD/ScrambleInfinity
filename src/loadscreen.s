@@ -5,6 +5,9 @@
 
 .include "loadersymbols-c64.inc"
 
+.segment "MUSIC"
+.incbin "./bin/sanxiona000.bin"
+
 .segment "TITLE"
 .incbin "./bin/title.bin"
 .segment "TITLECOL"
@@ -26,13 +29,30 @@
 .define spriteptrforaddress(addr)		#((addr&$3fff)>>6)
 
 titlecol		= $c000
-titlecold800	= (titlecol + 40*25)
-emptyspr		= $c7c0
-titlespr		= $c800
-logospr			= $cb00
-wingspr			= $cd00
-exhaustspr		= $cd80
+titlecold800	= ($5000 + 40*25)
+titlespr		= $cf00
+logospr			= $cf00+$0300
+wingspr			= $cf00+$0500
+exhaustspr		= $cf00+$0580
+emptyspr		= $cf00+$0880
 title			= $e000
+
+tunestart		= $a000
+tuneinit		= $ae00
+tuneplay		= $ae20
+
+; -----------------------------------------------------------------------------------------------
+
+.macro copymemblocks from, to, size
+	clc
+	lda #>from								; copy sprites to other bank
+	sta copymemfrom+2
+	adc #>size
+	sta copymemsize+1
+	lda #>to
+	sta copymemto+2
+	jsr copymem
+.endmacro
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -40,21 +60,9 @@ title			= $e000
 
 	sei
 	
-	;jsr $e544
 	lda #$0c
 	sta $d020
 	sta $d021
-
-	;jsr install							; init drive code
-	
-	;ldx #$00
-	;bcc :++
-	;cmp #$04							; #STATUS::DEVICE_INCOMPATIBLE
-	;beq :+
-	;ldx #$04
-:	;cmp #$05							; #STATUS::TOO_MANY_DEVICES
-	;beq :+
-	;ldx #$00
 :	
 	lda #$00							; Disable all interferences
 	sta $d015							; for a stable timer
@@ -123,130 +131,10 @@ title			= $e000
 	lda #%00010001
 	sta $dc0e
 
-	lda #$34
+	lda #$37
 	sta $01
 
-	ldx #$00
-copymem
-	lda $5000+0*256,x
-	sta $c000+0*256,x
-	lda $5000+1*256,x
-	sta $c000+1*256,x
-	lda $5000+2*256,x
-	sta $c000+2*256,x
-	lda $5000+3*256,x
-	sta $c000+3*256,x
-	lda $5000+4*256,x
-	sta $c000+4*256,x
-	lda $5000+5*256,x
-	sta $c000+5*256,x
-	lda $5000+6*256,x
-	sta $c000+6*256,x
-	lda $5000+7*256,x
-	sta $c000+7*256,x
-	lda $5000+8*256,x
-	sta $c000+8*256,x
-	lda $5000+9*256,x
-	sta $c000+9*256,x
-	lda $5000+10*256,x
-	sta $c000+10*256,x
-	lda $5000+11*256,x
-	sta $c000+11*256,x
-	lda $5000+12*256,x
-	sta $c000+12*256,x
-	lda $5000+13*256,x
-	sta $c000+13*256,x
-	lda $5000+14*256,x
-	sta $c000+14*256,x
-	lda $5000+15*256,x
-	sta $c000+15*256,x
-
-	lda $6000+0*256,x
-	sta $d000+0*256,x
-
-	lda $7000+0*256,x
-	sta $e000+0*256,x
-	lda $7000+1*256,x
-	sta $e000+1*256,x
-	lda $7000+2*256,x
-	sta $e000+2*256,x
-	lda $7000+3*256,x
-	sta $e000+3*256,x
-	lda $7000+4*256,x
-	sta $e000+4*256,x
-	lda $7000+5*256,x
-	sta $e000+5*256,x
-	lda $7000+6*256,x
-	sta $e000+6*256,x
-	lda $7000+7*256,x
-	sta $e000+7*256,x
-	lda $7000+8*256,x
-	sta $e000+8*256,x
-	lda $7000+9*256,x
-	sta $e000+9*256,x
-	lda $7000+10*256,x
-	sta $e000+10*256,x
-	lda $7000+11*256,x
-	sta $e000+11*256,x
-	lda $7000+12*256,x
-	sta $e000+12*256,x
-	lda $7000+13*256,x
-	sta $e000+13*256,x
-	lda $7000+14*256,x
-	sta $e000+14*256,x
-	lda $7000+15*256,x
-	sta $e000+15*256,x
-
-	lda $8000+0*256,x
-	sta $f000+0*256,x
-	lda $8000+1*256,x
-	sta $f000+1*256,x
-	lda $8000+2*256,x
-	sta $f000+2*256,x
-	lda $8000+3*256,x
-	sta $f000+3*256,x
-	lda $8000+4*256,x
-	sta $f000+4*256,x
-	lda $8000+5*256,x
-	sta $f000+5*256,x
-	lda $8000+6*256,x
-	sta $f000+6*256,x
-	lda $8000+7*256,x
-	sta $f000+7*256,x
-	lda $8000+8*256,x
-	sta $f000+8*256,x
-	lda $8000+9*256,x
-	sta $f000+9*256,x
-	lda $8000+10*256,x
-	sta $f000+10*256,x
-	lda $8000+11*256,x
-	sta $f000+11*256,x
-	lda $8000+12*256,x
-	sta $f000+12*256,x
-	lda $8000+13*256,x
-	sta $f000+13*256,x
-	lda $8000+14*256,x
-	sta $f000+14*256,x
-	lda $8000+15*256,x
-	sta $f000+15*256,x
-
-	inx
-	beq :+
-	jmp copymem
-
-:	lda #$37
-	sta $01
-
-	lda d018forscreencharset(titlecol,title)
-	sta $d018
-
-	lda #$18
-	sta $d016
-
-	lda bankforaddress(title)
-	sta $dd00
-
-	lda #$5b
+	lda #$00
 	sta $d011
 
 	ldx #$00
@@ -261,16 +149,43 @@ copymem
 	inx
 	bne :-
 
-	lda #$0c
-	sta $d020
-	sta $d021
-
+	lda #$34
+	sta $01
+	copymemblocks $5000, $c000, $0400	; colors, etc.
+	copymemblocks $5800, $cf00, $0900	; sprites
+	copymemblocks $7000, $e000, $2000
 	lda #$00						; clear empty sprite
 	ldx #$00
 :	sta emptyspr,x
 	inx
 	cpx #$40
 	bne :-
+
+	lda #$37
+	sta $01
+
+	lda d018forscreencharset(titlecol,title)
+	sta $d018
+
+	lda #$18
+	sta $d016
+
+	lda bankforaddress(title)
+	sta $dd00
+
+	lda #$5b
+	sta $d011
+
+	lda #$0c
+	sta $d020
+	sta $d021
+
+	lda #$36
+	sta $01
+	lda #$00
+	jsr tuneinit
+	lda #$37
+	sta $01
 
 	lda #$01
 	sta $d01a
@@ -333,47 +248,14 @@ startgame
 
 	sei
 
+	lda #$00
+	sta $d418
 	lda #$7b
 	sta $d011
 	lda #$00
 	sta $d020
 	sta $d021
 	sta $d015
-	
-	;lda #$0c
-	;sta $d020
-	;sta $d021
-
-	;lda #$1b
-	;sta $d011
-
-	;lda #$14
-	;sta $d018
-	;lda #$08
-	;sta $d016
-	
-	;lda #$03
-	;sta $dd00
-
-	;lda #$00
-	;sta $d015
-
-	;lda #$01
-	;ldx #$00
-:	;sta $d800,x
-	;sta $d900,x
-	;sta $da00,x
-	;sta $db00,x
-	;inx
-	;bne :-
-
-	; entering scramble system
-	;ldx #$00
-:	;lda enteringtext,x
-	;sta $0400+12*40+8,x
-	;inx
-	;cpx #24
-	;bne :-
 
 	jmp $080d
 
@@ -854,6 +736,12 @@ irqlowerborder
 	sta $d001+6*2
 	sta $d001+7*2
 
+	lda #$36
+	sta $01
+	jsr tuneplay
+	lda #$37
+	sta $01
+
 	lda #<irqlogosprites
 	ldx #>irqlogosprites
 	ldy #$18
@@ -925,6 +813,22 @@ bplcode2
 	lda #$a5
 	nop
 		
+	rts
+
+copymem
+	ldx #$00
+copymemfrom
+	lda $1000,x
+copymemto
+	sta $2000,x
+	dex
+	bne copymemfrom
+	inc copymemfrom+2
+	inc copymemto+2
+	lda copymemfrom+2
+copymemsize
+	cmp #>($1000+$0c00)
+	bne copymemfrom
 	rts
 
 .segment "SPRRASTER"

@@ -14,7 +14,7 @@
 .define bankforaddress(addr)			#(3-(addr>>14))
 .define spriteptrforaddress(addr)		#((addr&$3fff)>>6)
 
-screen = $bc00
+screen = $0800
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -160,15 +160,14 @@ screen = $bc00
 
 	; copy loader to $0400
 	ldx #$00
-:	lda $c400+0*256,x
+:	lda $5800+0*256,x
 	sta $0400+0*256,x
-	lda $c400+1*256,x
+	lda $5800+1*256,x
 	sta $0400+1*256,x
-	lda $c400+2*256,x
+	lda $5800+2*256,x
 	sta $0400+2*256,x
 	inx
 	bne :-
-
 
 	lda #$01
 	sta $d01a
@@ -194,10 +193,16 @@ screen = $bc00
 	lda #$01
 	sta loading
 
+	lda #$36
+	sta $01
+
 	ldx #<file01
 	ldy #>file01
 	jsr loadcompd ; loadraw
 	bcs error
+
+	lda #$37
+	sta $01
 
 	lda #$00
 	sta loading
@@ -209,10 +214,10 @@ screen = $bc00
 	inx
 	cpx #38
 	bne :-
-
+	
 	lda #$1b
 	sta $d011
-	jmp $9000 ; $080d
+	jmp $c400 ; $080d
 
 error
 	lda #$02
@@ -324,9 +329,14 @@ file01
 drawloadbar
 	lda endaddrhi				; don't do anything if too low endaddrhi/endeddrlo loadaddrhi/loadaddrlo
 	cmp #$00
-	bne :+
+	beq :+
+	cmp #$b8
+	bpl :+
+	jmp dlb2
+:
 	rts
 
+dlb2
 :
 	sec
 	lda endaddrhi

@@ -43,7 +43,7 @@
 .segment "ZONESPRITES"							; referenced by code. lives and flags are plotted in here
 .incbin "./bin/b54321.bin"
 
-.segment "SPRITES2"								; copied to other bank when going in-game, used as sprites
+.segment "SPRITES1"								; copied to other bank when going in-game, used as sprites
 .incbin "./bin/s0.bin"							; ""
 .incbin "./bin/b0.bin"							; ""
 .incbin "./bin/bmb0.bin"						; ""
@@ -83,18 +83,18 @@
 	.res 1024
 .segment "BITMAP1"
 	.res 8192
-.segment "SCREEN2"
-	.res 1024
-.segment "BITMAP2"
-	.res 8192
+;.segment "SCREEN2"
+;	.res 1024
+;.segment "BITMAP2"
+;	.res 8192
 .segment "SCREENSPECIAL"
 	.res 1024
 ;.segment "SCREENUI"
 ;	.res 1024
 ;.segment "SCREENBORDERSPRITES"
 ;	.res 1024
-.segment "SPRITES2"
-	.res 1024
+;.segment "SPRITES2"
+;	.res 1024
 .segment "EMPTYSPRITE"
 	.res 64
 
@@ -299,6 +299,17 @@ titlescreen1d800			= $4400
 	sta arg2+5*3
 .endmacro
 
+.macro copymemblocks from, to, size
+	clc
+	lda #>from								; copy sprites to other bank
+	sta copymemfrom+2
+	adc #>size
+	sta copymemsize+1
+	lda #>to
+	sta copymemto+2
+	jsr copymem
+.endmacro
+
 ; MAIN ------------------------------------------------------------------------------------------
 
 .segment "MAIN"
@@ -367,6 +378,8 @@ titlescreen1d800			= $4400
 	lda #%00010001
 	sta $dc0e
 
+	copymemblocks sprites1, sprites2, $0c00
+
 	lda #$37
 	sta $01
 
@@ -412,25 +425,25 @@ initiatebitmapscores
 	cli
 	rts
 
+copymem
+	ldx #$00
+copymemfrom
+	lda $1000,x
+copymemto
+	sta $2000,x
+	dex
+	bne copymemfrom
+	inc copymemfrom+2
+	inc copymemto+2
+	lda copymemfrom+2
+copymemsize
+	cmp #>($1000+$0c00)
+	bne copymemfrom
+	rts
+
 ingamefresh
 
-	lda #>sprites2								; copy sprites to other bank
-	sta sprcpy0+2
-	lda #>sprites1
-	sta sprcpy1+2
-sprcpy
-	ldx #$00
-sprcpy0
-	lda sprites1,x
-sprcpy1
-	sta sprites2,x
-	dex
-	bne sprcpy0
-	inc sprcpy0+2
-	inc sprcpy1+2
-	lda sprcpy0+2
-	cmp #>(sprites2+$0c00)
-	bne sprcpy
+	copymemblocks sprites2, sprites1, $0c00
 
 	ldx #$00									; set score to zero
 	lda #$00

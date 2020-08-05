@@ -20,7 +20,9 @@ SEGMENTS
 
 	TITLE:			load=RAM,	start=$7000;	# gets moved to $e000
 	
-	MAIN:			load=RAM,	start=$9000;
+	MUSIC:			load=RAM,	start=$a000;
+
+	MAIN:			load=RAM,	start=$c400;
 
 	IRQ:			load=RAM,	align=256;
 	CYCLEPERFECT:   load=RAM,	align=256;

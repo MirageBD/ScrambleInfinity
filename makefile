@@ -91,10 +91,10 @@ boot_unpacked.prg: boot.o loader-c64.prg install-c64.prg loadersymbols-c64.inc L
 	$(LD) $(LDFLAGS) -C Linkfile.boot --mapfile $(EXE_DIR)/boot.map -o $(EXE_DIR)/$@ $(EXE_DIR)/boot.o
 
 boot_unpacked.prg.addr: boot_unpacked.prg
-	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 24576
+	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 16384
 
 boot.prg: boot_unpacked.prg.addr
-	$(BB) -e c000 $(EXE_DIR)/$?
+	$(BB) -e 4000 $(EXE_DIR)/$?
 	$(MV) $(EXE_DIR)/$?.b2 $(EXE_DIR)/$@
 
 # -----------------------------------------------------------------------------

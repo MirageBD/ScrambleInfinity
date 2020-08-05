@@ -25,7 +25,7 @@ SEGMENTS
 
 	SCREENUI:				load=OVERLAPPING_RAM, start=$4000;
 	SCREEN1:				load=OVERLAPPING_RAM, start=$4000, type=BSS;
-	SPRITES1:				load=RAM, start=$4400, type=BSS; # goes until $5000 (at the moment)
+	SPRITES1:				load=RAM, start=$4400; # goes until $5000 (at the moment)
 
 	TITLESCREEN:			load=RAM, start=$5000; # $0400
 	LIVESLEFTSCREEN:		load=RAM;
@@ -45,8 +45,6 @@ SEGMENTS
 
 	TSPRESSFIRESPR:			load=RAM, start=$a000;
 
-	# $a000-$a400 free = $0400
-
 	FUELSPRITES:			load=RAM, start=$a400;
 	ZONESPRITES:			load=RAM, start=$a600;
 
@@ -57,7 +55,7 @@ SEGMENTS
 	MAPTILES:				load=RAM, start=$a900;
 	MAPTILECOLORS:			load=RAM, start=$bd00;
 
-	SCREEN2:				load=RAM, start=$C000;
-	SPRITES2:				load=RAM, start=$C400;
-	BITMAP2:				load=RAM, start=$e000, type=BSS;
+	#SCREEN2:				load=RAM, start=$C000;
+	#SPRITES2:				load=RAM, start=$C400;
+	#BITMAP2:				load=RAM, start=$e000, type=BSS;
 }
