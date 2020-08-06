@@ -94,7 +94,6 @@ waitcycles
 	nop
 	nop
 	nop
-	nop
 	nop	
 	nop	
 	nop	
@@ -569,14 +568,15 @@ irqleftwing
 	jsr cycleperfect
 
 	ldx #$00
-	nop
-
 	lda #$17
+
+	nop
 	sta $d016
 	ldy #$18
 	sty $d016
 
 .macro opensideborder
+	nop
 	jsr waitcycles
 
 	ldy #$18
