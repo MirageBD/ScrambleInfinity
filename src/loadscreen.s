@@ -564,22 +564,22 @@ irqleftwing
 
 	pha
 
-	lda #$45							; #$4c
+	lda #$47							; #$4c
 	jsr cycleperfect
 
-	ldx #$00
 	lda #$17
-
-	nop
-	sta $d016
 	ldy #$18
+	nop
+	nop
+
+	sta $d016
 	sty $d016
+	nop
 
 .macro opensideborder
-	nop
 	jsr waitcycles
-
-	ldy #$18
+	nop
+	nop
 	sta $d016
 	sty $d016
 .endmacro
@@ -587,7 +587,7 @@ irqleftwing
 .macro opensideborderbadline
 	bit $ea
 	nop
-	ldy #$18
+	nop
 	sta $d016
 	sty $d016
 	opensideborder
@@ -630,16 +630,17 @@ irqrightwing
 
 	pha
 
-	lda #$4a							; #$4c
+	lda #$4c							; #$4c
 	jsr cycleperfect
 
-	ldx #$00
+	lda #$17
+	ldy #$18
+	nop
 	nop
 
-	lda #$17
 	sta $d016
-	ldy #$18
 	sty $d016
+	nop
 
 	opensideborder
 	opensideborder
