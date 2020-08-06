@@ -80,11 +80,25 @@ bplcode2
 sprraster
 .byte $00,$00,$00,$00,$00,$00,$00,$06,$0e,$03,$06,$06,$04,$06,$04,$04,$0e,$0e,$03,$03,$0d,$01
 
-waitopenborder
-	ldx #$06
-:	dex
-	bne :-
-	bit $ea
+waitcycles
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop	
+	nop	
+	nop
 	rts
 
 copymem
@@ -551,48 +565,43 @@ irqleftwing
 
 	pha
 
-	lda #$41							; #$4c
+	lda #$45							; #$4c
 	jsr cycleperfect
 
-	ldx #$17
+	ldx #$00
+	nop
+
+	lda #$17
+	sta $d016
 	ldy #$18
-	stx $d016
 	sty $d016
+
+.macro opensideborder
+	jsr waitcycles
+
+	ldy #$18
+	sta $d016
+	sty $d016
+.endmacro
 
 .macro opensideborderbadline
 	bit $ea
-	ldx #$17
+	nop
 	ldy #$18
-	stx $d016
+	sta $d016
 	sty $d016
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
+	opensideborder
 .endmacro
 
-.macro opensideborder
-	jsr waitopenborder
-	ldx #$17
-	ldy #$18
-	stx $d016
-	sty $d016
-.endmacro
-
 	opensideborderbadline
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
 	opensideborderbadline
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
 	opensideborderbadline
-	opensideborder
 
 	; set right wing sprite
 	lda #%10000000
@@ -621,12 +630,15 @@ irqrightwing
 
 	pha
 
-	lda #$46							; #$4c
+	lda #$4a							; #$4c
 	jsr cycleperfect
 
-	ldx #$17
+	ldx #$00
+	nop
+
+	lda #$17
+	sta $d016
 	ldy #$18
-	stx $d016
 	sty $d016
 
 	opensideborder
@@ -635,10 +647,6 @@ irqrightwing
 	opensideborder
 	opensideborder
 	opensideborderbadline
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
 
 	; set exhaust sprites
 	lda #$ff
