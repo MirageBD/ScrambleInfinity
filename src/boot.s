@@ -65,6 +65,11 @@ endirq
 	pla
 	rti
 
+cols
+.byte $04,$0a,$0a,$0a,$02,$02,$09,$09,$01
+tims
+.byte $01,$09,$09,$09,$09,$09,$09,$09,$01
+
 ; -----------------------------------------------------------------------------------------------
 
 mainentry
@@ -278,14 +283,6 @@ mainentry
 	lda #$00
 	sta loading
 
-	; fill loading bar
-	;lda #$a0
-	;ldx #$00
-:	;sta screen+12*40+1,x
-	;inx
-	;cpx #38
-	;bne :-
-	
 	lda #$1b
 	sta $d011
 	jmp $c400 ; $080d
@@ -320,7 +317,7 @@ irq0
 :
 	lda #<irq1
 	ldx #>irq1
-	ldy #50 + 8*8 - 2
+	ldy #50 + 12*8 - 1
 	jmp endirq
 	
 ; -----------------------------------------------------------------------------------------------
@@ -332,49 +329,15 @@ irq1
 	lda #$40							; #$4c
 	jsr cycleperfect
 
-	nop
-	nop
-	nop
-
-	;lda #$00
-	;sta $d020
-	;sta $d021
-
-	lda #<irq2
-	ldx #>irq2
-	ldy #50 + 14*8 + 7
-	jmp endirq
-
-; -----------------------------------------------------------------------------------------------
-
-irq2
-
-	pha
-
-	lda #$40							; #$4c
-	jsr cycleperfect
-
-	nop
-	nop
-	nop
-
-	;lda #$0c
-	;sta $d020
-	;sta $d021
-
-	lda #<irq3
-	ldx #>irq3
-	ldy #$ff
-	jmp endirq
-
-; -----------------------------------------------------------------------------------------------
-
-irq3
-
-	pha
-
-	ldy #$1f
-	sty $d011
+	ldy #$00
+:	lda cols,y
+	sta $d022
+	ldx tims,y
+:	dex
+	bne :-
+	iny
+	cpy #$09
+	bne :--
 
 	lda #<irq0
 	ldx #>irq0
