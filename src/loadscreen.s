@@ -80,7 +80,13 @@ bplcode2
 sprraster
 .byte $00,$00,$00,$00,$00,$00,$00,$06,$0e,$03,$06,$06,$04,$06,$04,$04,$0e,$0e,$03,$03,$0d,$01
 
-waitcycles
+opensideborder
+
+	ldx #$06
+:	sta $d016
+	sty $d016
+	nop
+	nop
 	nop
 	nop
 	nop
@@ -96,8 +102,40 @@ waitcycles
 	nop
 	nop	
 	nop	
+	nop
+	nop
+	nop
+	nop
+	bit $ea
+	dex
+	bne :-
+
+	sta $d016,x
+	sty $d016
+	nop
+	nop
+	bit $ea
+	sta $d016
+	sty $d016
+
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
 	nop	
 	nop
+	ldx #$06
+	stx opensideborder+1
+
 	rts
 
 copymem
@@ -545,7 +583,7 @@ irqloadingspr
 	; set left wing sprite
 	lda #%00000000
 	sta $d010
-	lda #$9a
+	lda #$99
 	sta $d001+7*2
 	lda #$00
 	sta $d000+7*2
@@ -554,7 +592,7 @@ irqloadingspr
 
 	lda #<irqleftwing
 	ldx #>irqleftwing
-	ldy #$99
+	ldy #$99							; 2 lines before badline
 	jmp endirq
 
 ; -----------------------------------------------------------------------------------------------
@@ -564,49 +602,50 @@ irqleftwing
 
 	pha
 
-	lda #$47							; #$4c
+	lda #$4c							; #$4c
 	jsr cycleperfect
 
 	lda #$17
 	ldy #$18
+	ldx #$00
 	nop
 	nop
-
-	sta $d016
-	sty $d016
-	nop
-
-.macro opensideborder
-	jsr waitcycles
 	nop
 	nop
-	sta $d016
-	sty $d016
-.endmacro
-
-.macro opensideborderbadline
+	nop
+	nop
+	nop
+	nop
 	bit $ea
-	nop
-	nop
 	sta $d016
 	sty $d016
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-.endmacro
-
-	opensideborderbadline
-	opensideborderbadline
-	opensideborderbadline
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop	
+	nop
+	ldx #$06
+	stx opensideborder+1
+	jsr opensideborder
+	jsr opensideborder
 
 	; set right wing sprite
 	lda #%10000000
 	sta $d010
-	lda #$dc
+	lda #$db
 	sta $d001+7*2
 	lda #$58
 	sta $d000+7*2
@@ -630,24 +669,15 @@ irqrightwing
 
 	pha
 
-	lda #$4c							; #$4c
+	lda #$54							; #$4c
 	jsr cycleperfect
 
 	lda #$17
 	ldy #$18
-	nop
-	nop
-
-	sta $d016
-	sty $d016
-	nop
-
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborder
-	opensideborderbadline
+	ldx #$05
+	stx opensideborder+1
+	jsr opensideborder
+	jsr opensideborder
 
 	; set exhaust sprites
 	lda #$ff
