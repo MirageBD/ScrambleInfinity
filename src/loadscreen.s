@@ -159,76 +159,18 @@ copymemsize
 mainentry
 	sei
 	
-	lda #$0c
-	sta $d020
-	sta $d021
-:	
-	lda #$00							; Disable all interferences
-	sta $d015							; for a stable timer
-	lda #$35
+	lda #$34
 	sta $01
-	lda #$7f
-	sta $dc0d
-	bit $dc0d
 
-	ldx #$01							; Wait for raster line 0 twice
-:	bit $d011							; to make sure there are no sprites
-	bpl :-
-:	bit $d011
-	bmi :-
-	dex
-	bpl :--
-
-	ldx $d012							; Achieve an initial stable raster point
-	inx									; using halve invariance method
-:	cpx $d012
-	bne :-
-	ldy #$0a
-:	dey
-	bne :-
+	copymemblocks $5000, $c000, $0400	; colors, etc.
+	copymemblocks $5800, $cf00, $0900	; sprites
+	copymemblocks $7000, $e000, $2000
+	lda #$00						; clear empty sprite
+	ldx #$00
+:	sta emptyspr,x
 	inx
-	cpx $d012
-	nop
-	beq :+
-	nop
-	bit $24
-:	ldy #$09
-:	dey
+	cpx #$40
 	bne :-
-	nop
-	nop
-	inx
-	cpx $d012
-	nop
-	beq :+
-	bit $24
-:	ldy #$0a
-:	dey
-	bne :-
-	inx
-	cpx $d012
-	bne :+
-:	.repeat 5
-	nop
-	.endrepeat							; Raster is stable here
-	
-	;.repeat 46							; add offset to timer (95 cycles)
-	;nop
-	;.endrepeat
-	;bit $ea
-
-	.repeat 13							; add offset to timer (95 cycles)
-		pha
-		pla
-	.endrep
-	nop
-	nop
-
-	lda #$3e							; Start a continious timer
-	sta $dc04							; with 63 ticks each loop
-	sty $dc05
-	lda #%00010001
-	sta $dc0e
 
 	lda #$37
 	sta $01
@@ -248,21 +190,6 @@ mainentry
 	inx
 	bne :-
 
-	lda #$34
-	sta $01
-	copymemblocks $5000, $c000, $0400	; colors, etc.
-	copymemblocks $5800, $cf00, $0900	; sprites
-	copymemblocks $7000, $e000, $2000
-	lda #$00						; clear empty sprite
-	ldx #$00
-:	sta emptyspr,x
-	inx
-	cpx #$40
-	bne :-
-
-	lda #$37
-	sta $01
-
 	lda d018forscreencharset(titlecol,title)
 	sta $d018
 
@@ -274,10 +201,6 @@ mainentry
 
 	lda #$5b
 	sta $d011
-
-	lda #$0c
-	sta $d020
-	sta $d021
 
 	lda #$36
 	sta $01
