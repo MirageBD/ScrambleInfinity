@@ -7,14 +7,11 @@ MEMORY
 
 SEGMENTS
 {
-	# LOADERZP:		load=ZPRAM,	type=zp, define=yes;
-	
-	# SCREEN:			load = RAM, start = $0800;
-
 	MAIN:			load=RAM,	start=$4000;
-	IRQ:			load=RAM,	align=256;
-	CYCLEPERFECT:   load=RAM,	align=256;
 
+	LOADBARFONT:	load=RAM, start=$4800;
+	LOADBARSCR:		load=RAM, start=$4c00;
+	
 	LOADER:			load=RAM,	start=$5800, define=yes;
 
 	LOADERINSTALL:	load = RAM,	start = $6000, define = yes; # $6000-$7200

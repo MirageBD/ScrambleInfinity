@@ -3,6 +3,11 @@
 .segment "LOADER"
 .incbin "./exe/loader-c64.prg", $02
 
+.segment "LOADBARFONT"
+.incbin "./bin/loaderbar.bin"
+.segment "LOADBARSCR"
+.incbin "./bin/loaderbarscr.bin"
+
 .include "loadersymbols-c64.inc"
 
 .feature pc_assignment
@@ -14,12 +19,55 @@
 .define bankforaddress(addr)			#(3-(addr>>14))
 .define spriteptrforaddress(addr)		#((addr&$3fff)>>6)
 
-screen = $0800
+screen = $4400
+loadbarfont = $4800
+loadbarsrc = $4c00
 
 ; -----------------------------------------------------------------------------------------------
 
 .segment "MAIN"
 
+	jmp mainentry
+
+; -----------------------------------------------------------------------------------------------
+
+cycleperfect
+
+	sec
+	sbc $dc04
+	sta bplcode2+1
+bplcode2
+	bpl :+
+:	.repeat 48
+	lda #$a9
+	.endrepeat
+	lda #$a5
+	nop
+		
+	rts
+
+; -----------------------------------------------------------------------------------------------	
+
+endirq	
+	sta $fffe
+	sta $0314
+	stx $ffff
+	stx $0315
+	sty $d012
+	dec $d019
+
+	lda #%00000010
+	and $01
+	beq :+
+	pla
+	jmp $ea81
+:
+	pla
+	rti
+
+; -----------------------------------------------------------------------------------------------
+
+mainentry
 	sei
 	
 	jsr install							; init drive code
@@ -109,12 +157,12 @@ screen = $0800
 	sta $d021
 
 	ldx #$00
-:	lda #$01
+:	lda #$08
 	sta $d800+0*256,x
 	sta $d800+1*256,x
 	sta $d800+2*256,x
 	sta $d800+3*256,x
-	lda #$20
+	lda #$10
 	sta screen+0*256,x
 	sta screen+1*256,x
 	sta screen+2*256,x
@@ -122,41 +170,64 @@ screen = $0800
 	inx
 	bne :-
 
-	; entering scramble system
 	ldx #$00
-:	lda enteringtext,x
-	sta screen+9*40+8,x
+:	lda loadbarsrc,x
+	sta screen+9*40,x
 	inx
-	cpx #24
+	cpx #$50
 	bne :-
 
 	; draw loading bar
-	lda #$70
-	sta screen+11*40
-	lda #$6e
-	sta screen+11*40+39
 
-	lda #$5d
-	sta screen+12*40
-	sta screen+12*40+39
-
-	lda #$6d
-	sta screen+13*40
-	lda #$7d
-	sta screen+13*40+39
-
+	; long horizontal bits
 	ldx #$00
-	lda #$40
-:	sta screen+11*40+1,x
+:	lda #$05
+	sta screen+11*40+1,x
+	lda #$09
+	sta screen+12*40+1,x
+	lda #$0d
 	sta screen+13*40+1,x
+	lda #$0d
 	inx
 	cpx #38
 	bne :-
 
-	lda d018forscreencharset(screen,$1000)
+	; upper corners
+	lda #$03
+	sta screen+11*40+0
+	lda #$04
+	sta screen+11*40+1
+	lda #$06
+	sta screen+11*40+38
+	lda #$07
+	sta screen+11*40+39
+
+	; middle sides
+	lda #$08
+	sta screen+12*40+0
+	lda #$0a
+	sta screen+12*40+39
+
+	; bottom corners
+	lda #$0b
+	sta screen+13*40+0
+	lda #$0c
+	sta screen+13*40+1
+	lda #$0e
+	sta screen+13*40+38
+	lda #$0f
+	sta screen+13*40+39
+
+	lda d018forscreencharset(screen,loadbarfont)
 	sta $d018
 	lda bankforaddress(screen)
 	sta $dd00
+	lda #$18
+	sta $d016
+	lda #$01
+	sta $d022
+	lda #$0b
+	sta $d023
 
 	; copy loader to $0400
 	ldx #$00
@@ -208,12 +279,12 @@ screen = $0800
 	sta loading
 
 	; fill loading bar
-	lda #$a0
-	ldx #$00
-:	sta screen+12*40+1,x
-	inx
-	cpx #38
-	bne :-
+	;lda #$a0
+	;ldx #$00
+:	;sta screen+12*40+1,x
+	;inx
+	;cpx #38
+	;bne :-
 	
 	lda #$1b
 	sta $d011
@@ -227,16 +298,9 @@ error
 loading
 .byte $00
 
-enteringtext
-.byte $05,$0e,$14,$05,$12,$09,$0e,$07
-.byte $20,$13,$03,$12,$01,$0d,$02,$0c
-.byte $05,$20,$13,$19,$13,$14,$05,$0d
-
 ; -----------------------------------------------------------------------------------------------
 ; - START OF IRQ CODE
 ; -----------------------------------------------------------------------------------------------
-
-.segment "IRQ"
 
 irq0
 	pha
@@ -340,13 +404,20 @@ dlb2
 :
 	sec
 	lda endaddrhi
-	sbc #$68
-	lsr
-	sta endtmp
+	sbc #$88
+	cmp #36
+	bmi :+
+	lda #$02
+	sta screen+12*40+38
+	lda #36
+:	sta endtmp
 
-	lda #$a0
+	lda #$00
+	sta screen+12*40+1
+
+	lda #$01
 	ldx #$00
-:	sta screen+12*40+1,x
+:	sta screen+12*40+2,x
 	inx
 	cpx endtmp
 	bne :-
@@ -357,43 +428,5 @@ dlb2
 
 endtmp
 .byte $00
-
-; -----------------------------------------------------------------------------------------------
-
-.segment "CYCLEPERFECT"
-
-cycleperfect
-
-	sec
-	sbc $dc04
-	sta bplcode2+1
-bplcode2
-	bpl :+
-:	.repeat 48
-	lda #$a9
-	.endrepeat
-	lda #$a5
-	nop
-		
-	rts
-
-; -----------------------------------------------------------------------------------------------	
-
-endirq	
-	sta $fffe
-	sta $0314
-	stx $ffff
-	stx $0315
-	sty $d012
-	dec $d019
-
-	lda #%00000010
-	and $01
-	beq :+
-	pla
-	jmp $ea81
-:
-	pla
-	rti
 
 ; -----------------------------------------------------------------------------------------------	
