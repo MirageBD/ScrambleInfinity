@@ -52,6 +52,7 @@
 .incbin "./bin/miss.bin"						; ""
 .incbin "./bin/ufo.bin"							; ""
 .incbin "./bin/comet.bin"						; ""
+.incbin "./bin/mysteryspr.bin"					; ""
 
 .segment "MAPTILES"
 .incbin "./exe/mt.out"
@@ -143,6 +144,9 @@
 .define ufoanimframes					3
 .define cometanimstart					45
 .define cometanimframes					3
+.define mystery100start					48
+.define mystery200start					49
+.define mystery300start					50
 
 .define d018forscreencharset(scr,cst)	#(((scr&$3fff)/$0400) << 4) | (((cst&$3fff)/$0800) << 1)
 .define bankforaddress(addr)			#(3-(addr>>14))
@@ -176,7 +180,7 @@ screenspecial				= $8000
 screenbordersprites			= $8000
 clearmisilepositiondata		= screenspecial+$03c0
 
-tspressfirespr				= $a000
+tspressfirespr				= $a100
 
 emptysprite					= $a7c0
 
@@ -318,7 +322,7 @@ titlescreen1d800			= loadeddata1
 	lda #$34
 	sta $01
 
-	copymemblocks sprites1, sprites2, $0c00
+	copymemblocks sprites1, sprites2, $0d00
 
 	lda #$37
 	sta $01
@@ -377,7 +381,7 @@ copymemto
 	inc copymemto+2
 	lda copymemfrom+2
 copymemsize
-	cmp #>($1000+$0c00)
+	cmp #>($1000+$0d00)
 	bne copymemfrom
 	rts
 
@@ -386,7 +390,7 @@ ingamefresh
 	sei
 	lda #$34
 	sta $01
-	copymemblocks sprites2, sprites1, $0c00
+	copymemblocks sprites2, sprites1, $0d00
 	lda #$37
 	sta $01
 	cli
@@ -1520,6 +1524,13 @@ handlebullet0bkgcollision
 
 bullet0bkgbigexplosion
 
+	lda calchit
+	and #%11111100
+	cmp #bkgcollision::mysterynoncave
+	beq bullet0explodemystery
+	cmp #bkgcollision::mysterycave
+	beq bullet0explodemystery
+
 	lda #$01									; set big explosion anim
 	sta bull0+sprdata::isexploding
 	lda #$ff
@@ -1527,7 +1538,16 @@ bullet0bkgbigexplosion
 	lda #$00
 	sta bull0+sprdata::yvel
 	sta bull0counter
+	rts
 
+bullet0explodemystery
+	lda #$01									; set big explosion anim
+	sta bull0+sprdata::isexploding
+	lda #$ff
+	sta bull0+sprdata::xvel
+	lda #$00
+	sta bull0+sprdata::yvel
+	sta bull0counter
 	rts
 
 bullet0bkgsmallexplosion
@@ -1619,6 +1639,13 @@ handlebullet1bkgcollision
 
 bullet1bkgbigexplosion
 
+	lda calchit
+	and #%11111100
+	cmp #bkgcollision::mysterynoncave
+	beq bullet1explodemystery
+	cmp #bkgcollision::mysterycave
+	beq bullet1explodemystery
+
 	lda #$01									; set big explosion anim
 	sta bull1+sprdata::isexploding
 	lda #$ff
@@ -1626,7 +1653,16 @@ bullet1bkgbigexplosion
 	lda #$00
 	sta bull1+sprdata::yvel
 	sta bull1counter
+	rts
 
+bullet1explodemystery
+	lda #$01									; set big explosion anim
+	sta bull1+sprdata::isexploding
+	lda #$ff
+	sta bull1+sprdata::xvel
+	lda #$00
+	sta bull1+sprdata::yvel
+	sta bull1counter
 	rts
 
 bullet1bkgsmallexplosion
@@ -1736,14 +1772,28 @@ handlebomb0bkgcollision
 
 bomb0explode
 
-	
+	lda calchit
+	and #%11111100
+	cmp #bkgcollision::mysterynoncave
+	beq bomb0explodemystery
+	cmp #bkgcollision::mysterycave
+	beq bomb0explodemystery
+
 	lda #$01									; set explosion anim
 	sta bomb0+sprdata::isexploding
 	lda #$00
 	sta bomb0+sprdata::xvel
 	sta bomb0+sprdata::yvel
 	sta bomb0counter
+	rts
 
+bomb0explodemystery
+	lda #$01									; set explosion anim
+	sta bomb0+sprdata::isexploding
+	lda #$00
+	sta bomb0+sprdata::xvel
+	sta bomb0+sprdata::yvel
+	sta bomb0counter
 	rts
 
 ; -----------------------------------------------------------------------------------------------
@@ -1840,6 +1890,24 @@ handlebomb1bkgcollision
 	jsr scheduleremovehitobject
 
 bomb1explode
+
+	lda calchit
+	and #%11111100
+	cmp #bkgcollision::mysterynoncave
+	beq bomb1explodemystery
+	cmp #bkgcollision::mysterycave
+	beq bomb1explodemystery
+
+	lda #$01									; set explosion anim
+	sta bomb1+sprdata::isexploding
+	lda #$00
+	sta bomb1+sprdata::xvel
+	sta bomb1+sprdata::yvel
+	sta bomb1counter
+
+	rts
+
+bomb1explodemystery
 
 	lda #$01									; set explosion anim
 	sta bomb1+sprdata::isexploding

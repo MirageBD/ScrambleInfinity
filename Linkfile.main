@@ -37,11 +37,13 @@ SEGMENTS
 
 	SCREENSPECIAL:			load=OVERLAPPING_RAM, start=$8000, type=BSS;
 
-	SCROLLER:				load=RAM, start=$8700;	# $0d00
+	SCROLLER:				load=RAM, start=$8400;	# $0d00
 
-	GAMEPLAY:				load=RAM, start=$9400;
+	GAMEPLAY:				load=RAM, start=$9100;
 
-	TSPRESSFIRESPR:			load=RAM, start=$a000;
+	# FREE!!! $9e00-$a100
+
+	TSPRESSFIRESPR:			load=RAM, start=$a100;
 
 	FUELSPRITES:			load=RAM, start=$a400;
 	ZONESPRITES:			load=RAM, start=$a600;
