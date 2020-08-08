@@ -2846,11 +2846,7 @@ launchufo
 
 	clc
 	lda subzone
-	cmp #$13
-	bpl :+
-	rts
-
-:	cmp #$18
+	cmp #$18
 	bmi :+
 	rts
 
