@@ -210,7 +210,7 @@ tsbmp10400.b2: $(BIN_DIR)/tsbmp10400.bin
 	$(MV) $(EXE_DIR)/tsbmp10400.rel.bin.b2 $(EXE_DIR)/tsbmp10400.b2
 
 tsbmp1d800.b2: $(BIN_DIR)/tsbmp1d800.bin
-	$(ADDADDR) $(BIN_DIR)/tsbmp1d800.bin $(EXE_DIR)/tsbmp1d800.rel.bin 17408
+	$(ADDADDR) $(BIN_DIR)/tsbmp1d800.bin $(EXE_DIR)/tsbmp1d800.rel.bin 12288
 	$(BB) $(EXE_DIR)/tsbmp1d800.rel.bin
 	$(MV) $(EXE_DIR)/tsbmp1d800.rel.bin.b2 $(EXE_DIR)/tsbmp1d800.b2
 

@@ -167,9 +167,9 @@ screenui					= $4000
 screenui2					= $a000		; only used in lower border for sprite ptrs
 fontdigits					= $a800
 screen2						= $c000
-sprites1					= $4400
-sprites2					= $c400
-tslogospr					= $5500
+sprites1					= $4b00
+sprites2					= $cb00
+tslogospr					= $4800
 bitmap1						= $6000
 bitmap2						= $e000
 screenspecial				= $8000
@@ -203,9 +203,9 @@ scoredigit3 				= scoreandfuelsprites+1*64+14*3+0
 scoredigit4 				= scoreandfuelsprites+1*64+14*3+1
 scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
 
-titlescreen1bmp				= $6000
-titlescreen10400			= $4000
-titlescreen1d800			= $4400
+titlescreen1bmp				= bitmap1
+titlescreen10400			= screenui
+titlescreen1d800			= loadeddata1
 
 ; STRUCTS AND ENUMS ------------------------------------------------------------------------------------------------------
 
@@ -315,6 +315,9 @@ titlescreen1d800			= $4400
 
 	sei
 
+	lda #$34
+	sta $01
+
 	copymemblocks sprites1, sprites2, $0c00
 
 	lda #$37
@@ -380,7 +383,13 @@ copymemsize
 
 ingamefresh
 
+	sei
+	lda #$34
+	sta $01
 	copymemblocks sprites2, sprites1, $0c00
+	lda #$37
+	sta $01
+	cli
 
 	ldx #$00									; set score to zero
 	lda #$00
@@ -2846,7 +2855,11 @@ launchufo
 
 	clc
 	lda subzone
-	cmp #$18
+	cmp #$13
+	bpl :+
+	rts
+
+:	cmp #$18
 	bmi :+
 	rts
 
