@@ -406,6 +406,9 @@ ingamefresh
 	lda #$37
 	sta $01
 
+	lda #$7b
+	sta $d011
+
 	lda #<irqlimbo								; set limbo irq so it doesn't mess with $d011/$d018/$dd00 causing all kinds of glitches
 	ldx #>irqlimbo
 	sta $fffe
