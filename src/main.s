@@ -136,8 +136,13 @@
 .define shipanimframes					3					; needs to be and-able
 .define bulletanimstart					3
 .define bombanimstart					4
+.define bombanimloopframe				5
 .define bombanimframes					7
 .define bombanimspeed					5
+.define bombexplosionanimframes			12
+.define bulletsmallexplosionanimframes	5
+.define bulletbigexplosionanimframes	7
+.define mysteryanimframes				10
 .define missileanimstart				32
 .define missileanimframes				10
 .define ufoanimstart					42
@@ -232,6 +237,13 @@ titlescreen1d800			= loadeddata1
 	livesleftscreen			= 4
 	gameover				= 5
 	congratulations			= 6
+.endenum
+
+.enum explosiontypes
+	none					= 0
+	big						= 1
+	small					= 2
+	mystery					= 4
 .endenum
 
 .enum bkgcollision								; 3rd bit for cave?
@@ -1024,23 +1036,18 @@ animship
 	
 :	lda #$00
 	sta s0counter2
-
 	lda ship0+sprdata::isexploding
-	cmp #$00
+	cmp #explosiontypes::none
 	beq ship0normalanim
-
 	ldx s0counter
 	lda bombexplosionanim,x
 	sta ship0+sprdata::pointer
-	
 	lda bombexplosioncolours,x
 	sta ship0+sprdata::colour
-	
 	inc s0counter
 	lda s0counter
 	cmp #$08
 	beq ship0explosiondone
-
 	rts
 	
 ship0explosiondone
@@ -1052,7 +1059,6 @@ ship0explosiondone
 	sta ship0+sprdata::xvel
 	sta ship0+sprdata::yvel
 	sta ship0+sprdata::isexploding
-
 	rts
 
 ship0normalanim
@@ -1062,10 +1068,8 @@ ship0normalanim
 	tax
 	lda s0anim,x
 	sta ship0+sprdata::pointer
-
 	lda #$01
 	sta ship0+sprdata::colour
-
 	rts
 
 ; -----------------------------------------------------------------------------------------------
@@ -1396,7 +1400,7 @@ testshipbkgcollision
 	sta ship0+sprdata::xvel
 	lda #$ff
 	sta hascontrol
-	lda #$01
+	lda #explosiontypes::big
 	sta ship0+sprdata::isexploding
 	rts
 
@@ -1440,7 +1444,7 @@ testshipsprcollision
 	sta ship0+sprdata::xvel
 	lda #$ff
 	sta hascontrol
-	lda #$01
+	lda #explosiontypes::big
 	sta ship0+sprdata::isexploding
 	rts
 
@@ -1527,11 +1531,11 @@ bullet0bkgbigexplosion
 	lda calchit
 	and #%11111100
 	cmp #bkgcollision::mysterynoncave
-	beq bullet0explodemystery
+	beq bullet0bkgmystery
 	cmp #bkgcollision::mysterycave
-	beq bullet0explodemystery
+	beq bullet0bkgmystery
 
-	lda #$01									; set big explosion anim
+	lda #explosiontypes::big						; set big explosion anim
 	sta bull0+sprdata::isexploding
 	lda #$ff
 	sta bull0+sprdata::xvel
@@ -1540,8 +1544,8 @@ bullet0bkgbigexplosion
 	sta bull0counter
 	rts
 
-bullet0explodemystery
-	lda #$01									; set big explosion anim
+bullet0bkgmystery
+	lda #explosiontypes::mystery					; set mystery explosion anim
 	sta bull0+sprdata::isexploding
 	lda #$ff
 	sta bull0+sprdata::xvel
@@ -1552,14 +1556,13 @@ bullet0explodemystery
 
 bullet0bkgsmallexplosion
 
-	lda #$02									; set small explosion anim
+	lda #explosiontypes::small						; set small explosion anim
 	sta bull0+sprdata::isexploding
 	lda #$ff
 	sta bull0+sprdata::xvel
 	lda #$00
 	sta bull0+sprdata::yvel
 	sta bull0counter
-
 	rts
 
 ; -----------------------------------------------------------------------------------------------
@@ -1642,11 +1645,11 @@ bullet1bkgbigexplosion
 	lda calchit
 	and #%11111100
 	cmp #bkgcollision::mysterynoncave
-	beq bullet1explodemystery
+	beq bullet1bkgmystery
 	cmp #bkgcollision::mysterycave
-	beq bullet1explodemystery
+	beq bullet1bkgmystery
 
-	lda #$01									; set big explosion anim
+	lda #explosiontypes::big					; set big explosion anim
 	sta bull1+sprdata::isexploding
 	lda #$ff
 	sta bull1+sprdata::xvel
@@ -1655,8 +1658,8 @@ bullet1bkgbigexplosion
 	sta bull1counter
 	rts
 
-bullet1explodemystery
-	lda #$01									; set big explosion anim
+bullet1bkgmystery
+	lda #explosiontypes::mystery				; set mystery explosion anim
 	sta bull1+sprdata::isexploding
 	lda #$ff
 	sta bull1+sprdata::xvel
@@ -1667,14 +1670,13 @@ bullet1explodemystery
 
 bullet1bkgsmallexplosion
 
-	lda #$02									; set small explosion anim
+	lda #explosiontypes::small					; set small explosion anim
 	sta bull1+sprdata::isexploding
 	lda #$ff
 	sta bull1+sprdata::xvel
 	lda #$00
 	sta bull1+sprdata::yvel
 	sta bull1counter
-
 	rts
 
 ; -----------------------------------------------------------------------------------------------
@@ -1779,7 +1781,7 @@ bomb0explode
 	cmp #bkgcollision::mysterycave
 	beq bomb0explodemystery
 
-	lda #$01									; set explosion anim
+	lda #explosiontypes::big					; set big explosion anim
 	sta bomb0+sprdata::isexploding
 	lda #$00
 	sta bomb0+sprdata::xvel
@@ -1788,7 +1790,7 @@ bomb0explode
 	rts
 
 bomb0explodemystery
-	lda #$01									; set explosion anim
+	lda #explosiontypes::mystery				; set mystery explosion anim
 	sta bomb0+sprdata::isexploding
 	lda #$00
 	sta bomb0+sprdata::xvel
@@ -1898,24 +1900,22 @@ bomb1explode
 	cmp #bkgcollision::mysterycave
 	beq bomb1explodemystery
 
-	lda #$01									; set explosion anim
+	lda #explosiontypes::big					; set big explosion anim
 	sta bomb1+sprdata::isexploding
 	lda #$00
 	sta bomb1+sprdata::xvel
 	sta bomb1+sprdata::yvel
 	sta bomb1counter
-
 	rts
 
 bomb1explodemystery
 
-	lda #$01									; set explosion anim
+	lda #explosiontypes::mystery				; set mystery explosion anim
 	sta bomb1+sprdata::isexploding
 	lda #$00
 	sta bomb1+sprdata::xvel
 	sta bomb1+sprdata::yvel
 	sta bomb1counter
-
 	rts
 
 ; -----------------------------------------------------------------------------------------------
@@ -2217,11 +2217,21 @@ animbullet0
 	sta bull0counter2
 
 	lda bull0+sprdata::isexploding
-	cmp #$00
-	beq bull0normalanim
-	cmp #$01
+	cmp #explosiontypes::big
 	beq bull0biganim
+	cmp #explosiontypes::small
+	beq bull0smallanim
+	cmp #explosiontypes::mystery
+	beq bull0mysteryanim
 
+bull0normalanim
+	lda spriteptrforaddress(sprites2+bulletanimstart*64)
+	sta bull0+sprdata::pointer
+	lda #$01
+	sta bull0+sprdata::colour
+	rts
+
+bull0smallanim
 	ldx bull0counter
 	lda bulletsmallexplosionanim,x
 	sta bull0+sprdata::pointer
@@ -2231,22 +2241,22 @@ animbullet0
 	
 	inc bull0counter
 	lda bull0counter
-	cmp #$05
+	cmp #bulletsmallexplosionanimframes
 	beq bull0explosiondone
 
 	rts
 	
 bull0biganim
 	ldx bull0counter
-	lda bulletexplosionanim,x
+	lda bulletbigexplosionanim,x
 	sta bull0+sprdata::pointer
 	
-	lda bulletexplosioncolours,x
+	lda bulletbigexplosioncolours,x
 	sta bull0+sprdata::colour
 	
 	inc bull0counter
 	lda bull0counter
-	cmp #$07
+	cmp #bulletbigexplosionanimframes
 	beq bull0explosiondone
 
 	rts
@@ -2268,11 +2278,18 @@ bull0explosiondone
 	
 	rts
 
-bull0normalanim
-	lda spriteptrforaddress(sprites2+bulletanimstart*64)
+bull0mysteryanim
+	ldx bull0counter
+	lda mysteryanim,x
 	sta bull0+sprdata::pointer
-	lda #$01
+	
+	lda mysterycolours,x
 	sta bull0+sprdata::colour
+	
+	inc bull0counter
+	lda bull0counter
+	cmp #mysteryanimframes
+	beq bull0explosiondone
 
 	rts
 
@@ -2291,10 +2308,21 @@ animbullet1
 	sta bull1counter2
 
 	lda bull1+sprdata::isexploding
-	cmp #$00
-	beq bull1normalanim
-	cmp #$01
+	cmp #explosiontypes::big
 	beq bull1biganim
+	cmp #explosiontypes::small
+	beq bull1smallanim
+	cmp #explosiontypes::mystery
+	beq bull1mysteryanim
+
+bull1normalanim
+	lda spriteptrforaddress(sprites2+bulletanimstart*64)
+	sta bull1+sprdata::pointer
+	lda #$01
+	sta bull1+sprdata::colour
+	rts
+
+bull1smallanim
 
 	ldx bull1counter
 	lda bulletsmallexplosionanim,x
@@ -2305,7 +2333,7 @@ animbullet1
 	
 	inc bull1counter
 	lda bull1counter
-	cmp #$05
+	cmp #bulletsmallexplosionanimframes
 	beq bull1explosiondone
 
 	rts
@@ -2313,15 +2341,15 @@ animbullet1
 bull1biganim
 
 	ldx bull1counter
-	lda bulletexplosionanim,x
+	lda bulletbigexplosionanim,x
 	sta bull1+sprdata::pointer
 	
-	lda bulletexplosioncolours,x
+	lda bulletbigexplosioncolours,x
 	sta bull1+sprdata::colour
 	
 	inc bull1counter
 	lda bull1counter
-	cmp #$07
+	cmp #bulletbigexplosionanimframes
 	beq bull1explosiondone
 
 	rts
@@ -2335,7 +2363,6 @@ bull1explosiondone
 	sta bull1+sprdata::xvel
 	sta bull1+sprdata::yvel
 	sta bull1+sprdata::isexploding
-	lda #$00
 	sta shootingbullet1
 	
 	lda #$01									; shoot immediately after bullet is gone
@@ -2343,11 +2370,18 @@ bull1explosiondone
 
 	rts
 
-bull1normalanim
-	lda spriteptrforaddress(sprites2+bulletanimstart*64)
+bull1mysteryanim
+	ldx bull1counter
+	lda mysteryanim,x
 	sta bull1+sprdata::pointer
-	lda #$01
+	
+	lda mysterycolours,x
 	sta bull1+sprdata::colour
+	
+	inc bull1counter
+	lda bull1counter
+	cmp #mysteryanimframes
+	beq bull1explosiondone
 
 	rts
 
@@ -2366,39 +2400,10 @@ animbomb0
 	sta bomb0counter2
 
 	lda bomb0+sprdata::isexploding
-	cmp #$00
-	beq bomb0normalanim
-
-	ldx bomb0counter
-	lda bombexplosionanim,x
-	sta bomb0+sprdata::pointer
-	
-	lda bombexplosioncolours,x
-	sta bomb0+sprdata::colour
-	
-	inc bomb0counter
-	lda bomb0counter
-	cmp #$0c
-	beq bomb0explosiondone
-
-	rts
-	
-bomb0explosiondone
-	lda #$ff
-	sta bomb0+sprdata::ylow
-	lda #$00
-	sta bomb0+sprdata::xlow
-	sta bomb0+sprdata::xhigh
-	sta bomb0+sprdata::xvel
-	sta bomb0+sprdata::yvel
-	sta bomb0+sprdata::isexploding
-	lda #$00
-	sta shootingbomb0
-	
-	lda #$01
-	sta bombcooloff
-	
-	rts
+	cmp #explosiontypes::big
+	beq bomb0explosionanim
+	cmp #explosiontypes::mystery
+	beq bomb0mysteryanim
 
 bomb0normalanim
 
@@ -2414,10 +2419,56 @@ bomb0normalanim
 	cmp #bombanimframes
 	bne :+
 
-	lda #$05
+	lda #bombanimloopframe
 	sta bomb0counter
 
 :	rts
+
+bomb0explosionanim
+	ldx bomb0counter
+	lda bombexplosionanim,x
+	sta bomb0+sprdata::pointer
+	
+	lda bombexplosioncolours,x
+	sta bomb0+sprdata::colour
+	
+	inc bomb0counter
+	lda bomb0counter
+	cmp #bombexplosionanimframes
+	beq bomb0explosiondone
+
+	rts
+	
+bomb0explosiondone
+	lda #$ff
+	sta bomb0+sprdata::ylow
+	lda #$00
+	sta bomb0+sprdata::xlow
+	sta bomb0+sprdata::xhigh
+	sta bomb0+sprdata::xvel
+	sta bomb0+sprdata::yvel
+	sta bomb0+sprdata::isexploding
+	sta shootingbomb0
+	
+	lda #$01
+	sta bombcooloff
+	
+	rts
+
+bomb0mysteryanim
+	ldx bomb0counter
+	lda mysteryanim,x
+	sta bomb0+sprdata::pointer
+	
+	lda mysterycolours,x
+	sta bomb0+sprdata::colour
+	
+	inc bomb0counter
+	lda bomb0counter
+	cmp #mysteryanimframes
+	beq bomb0explosiondone
+
+	rts
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -2434,39 +2485,10 @@ animbomb1
 	sta bomb1counter2
 
 	lda bomb1+sprdata::isexploding
-	cmp #$00
-	beq bomb1normalanim
-
-	ldx bomb1counter
-	lda bombexplosionanim,x
-	sta bomb1+sprdata::pointer
-	
-	lda bombexplosioncolours,x
-	sta bomb1+sprdata::colour
-	
-	inc bomb1counter
-	lda bomb1counter
-	cmp #$0c
-	beq bomb1explosiondone
-
-	rts
-	
-bomb1explosiondone
-	lda #$ff
-	sta bomb1+sprdata::ylow
-	lda #$00
-	sta bomb1+sprdata::xlow
-	sta bomb1+sprdata::xhigh
-	sta bomb1+sprdata::xvel
-	sta bomb1+sprdata::yvel
-	sta bomb1+sprdata::isexploding
-	lda #$00
-	sta shootingbomb1
-	
-	lda #$01
-	sta bombcooloff
-
-	rts
+	cmp #explosiontypes::big
+	beq bomb1explosionanim
+	cmp #explosiontypes::mystery
+	beq bomb1mysteryanim
 
 bomb1normalanim
 
@@ -2482,10 +2504,56 @@ bomb1normalanim
 	cmp #bombanimframes
 	bne :+
 
-	lda #$05
+	lda #bombanimloopframe
 	sta bomb1counter
 
 :	rts
+
+bomb1explosionanim
+	ldx bomb1counter
+	lda bombexplosionanim,x
+	sta bomb1+sprdata::pointer
+	
+	lda bombexplosioncolours,x
+	sta bomb1+sprdata::colour
+	
+	inc bomb1counter
+	lda bomb1counter
+	cmp #bombexplosionanimframes
+	beq bomb1explosiondone
+
+	rts
+	
+bomb1explosiondone
+	lda #$ff
+	sta bomb1+sprdata::ylow
+	lda #$00
+	sta bomb1+sprdata::xlow
+	sta bomb1+sprdata::xhigh
+	sta bomb1+sprdata::xvel
+	sta bomb1+sprdata::yvel
+	sta bomb1+sprdata::isexploding
+	sta shootingbomb1
+	
+	lda #$01
+	sta bombcooloff
+
+	rts
+
+bomb1mysteryanim
+	ldx bomb1counter
+	lda mysteryanim,x
+	sta bomb1+sprdata::pointer
+	
+	lda mysterycolours,x
+	sta bomb1+sprdata::colour
+	
+	inc bomb1counter
+	lda bomb1counter
+	cmp #mysteryanimframes
+	beq bomb1explosiondone
+
+	rts
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -4735,6 +4803,7 @@ handlezonecode
 	lda shootingbullet0
 	beq :+
 	lda bull0+sprdata::isexploding
+	cmp #explosiontypes::none
 	bne :+
 	jsr testbullet0bkgcollision
 	jsr testbullet0sprcollision
@@ -4748,6 +4817,7 @@ handlezonecode
 	lda shootingbullet1
 	beq :+
 	lda bull1+sprdata::isexploding
+	cmp #explosiontypes::none
 	bne :+
 	jsr testbullet1bkgcollision
 	jsr testbullet1sprcollision
@@ -4761,6 +4831,7 @@ handlezonecode
 	lda shootingbomb0
 	beq :+
 	lda bomb0+sprdata::isexploding
+	cmp #explosiontypes::none
 	bne :+
 	jsr testbomb0bkgcollision
 	jsr testbomb0sprcollision
@@ -4774,6 +4845,7 @@ handlezonecode
 	lda shootingbomb1
 	beq :+
 	lda bomb1+sprdata::isexploding
+	cmp #explosiontypes::none
 	bne :+
 	jsr testbomb1bkgcollision
 	jsr testbomb1sprcollision
@@ -4786,6 +4858,7 @@ handlezonecode
 	lda hascontrol
 	bne :+
 	lda ship0+sprdata::isexploding
+	cmp #explosiontypes::none
 	bne :+
 .if shipbkgcollision
 	jsr testshipbkgcollision
@@ -5995,14 +6068,14 @@ bombexplosionanim
 .byte bytespriteptrforaddress(sprites2+21*64)
 bombexplosioncolours
 .byte $01,$07,$07,$07,$0a,$0a,$08,$08,$0b,$0b,$0b
-bulletexplosionanim
+bulletbigexplosionanim
 .byte bytespriteptrforaddress(sprites2+22*64)
 .byte bytespriteptrforaddress(sprites2+23*64)
 .byte bytespriteptrforaddress(sprites2+24*64)
 .byte bytespriteptrforaddress(sprites2+25*64)
 .byte bytespriteptrforaddress(sprites2+26*64)
 .byte bytespriteptrforaddress(sprites2+27*64)
-bulletexplosioncolours
+bulletbigexplosioncolours
 .byte $01,$07,$0a,$08,$0b,$0b
 bulletsmallexplosionanim
 .byte bytespriteptrforaddress(sprites2+28*64)
@@ -6134,6 +6207,19 @@ barsd023
 .byte $01,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a,  $00,  $01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03,  $00,  $01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03
 barswait
 .byte $08,$08,$07,$07,$06,$01,$07,$07,$08,$07,$01,  $36,  $08,$08,$07,$07,$06,$01,$07,$07,$08,$06,$01,  $36,  $08,$08,$07,$07,$06,$01,$07,$07,$08,$07,$01
+
+mysteryanim
+.byte bytespriteptrforaddress(sprites2+22*64)
+.byte bytespriteptrforaddress(sprites2+23*64)
+.byte bytespriteptrforaddress(sprites2+24*64)
+.byte bytespriteptrforaddress(sprites2+48*64)
+.byte bytespriteptrforaddress(sprites2+48*64)
+.byte bytespriteptrforaddress(sprites2+48*64)
+.byte bytespriteptrforaddress(sprites2+48*64)
+.byte bytespriteptrforaddress(sprites2+48*64)
+.byte bytespriteptrforaddress(sprites2+48*64)
+mysterycolours
+.byte $01,$07,$0a,$01,$01,$01,$01,$01,$01
 
 
 .byte $de,$ad,$be,$ef							; DEADBEEF
