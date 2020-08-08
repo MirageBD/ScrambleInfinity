@@ -405,6 +405,18 @@ ingamefresh
 	copymemblocks sprites2, sprites1, $0d00
 	lda #$37
 	sta $01
+
+	lda #<irqlimbo								; set limbo irq so it doesn't mess with $d011/$d018/$dd00 causing all kinds of glitches
+	ldx #>irqlimbo
+	sta $fffe
+	sta $0314
+	stx $ffff
+	stx $0315
+
+	lda $dc0d
+	lda $dd0d
+	dec $d019
+
 	cli
 
 	ldx #$00									; set score to zero
@@ -1020,6 +1032,15 @@ drawbarschar
 	cpx #$23
 	bne :--
 	rts
+
+; -----------------------------------------------------------------------------------------------
+
+irqlimbo
+	pha
+	lda #<irqlimbo
+	ldx #>irqlimbo
+	ldy #$00
+	jmp endirq
 
 ; -----------------------------------------------------------------------------------------------
 ; - END OF IRQ CODE
