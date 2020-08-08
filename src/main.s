@@ -10,7 +10,6 @@
 ; more obfuscate against hackers? On drive? Probably not worth it.
 ; fix bug where ground targets sometimes get cleaned only half when hit.
 ; add proper disk fail handling.
-; zones-indicator updates too soon
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
@@ -107,7 +106,7 @@
 .define livesdecrease		1
 .define firebullets			1
 .define firebombs			1
-.define startzone			#$01				; #$01 - #$06
+.define startzone			#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
 .define diedfade			1
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
@@ -157,9 +156,8 @@ tuneplay					= $1003
 
 maptiles					= $a900		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
 maptilecolors				= $bd00
-fontdigits					= $a800
+fontuimap					= $5700
 fontui						= $5800
-fontuimap					= $5600
 
 loadeddata1					= $3000
 loadeddata2					= $3800
@@ -167,6 +165,7 @@ loadeddata2					= $3800
 screen1						= $4000
 screenui					= $4000
 screenui2					= $a000		; only used in lower border for sprite ptrs
+fontdigits					= $a800
 screen2						= $c000
 sprites1					= $4400
 sprites2					= $c400
@@ -315,68 +314,6 @@ titlescreen1d800			= $4400
 .segment "MAIN"
 
 	sei
-
-	lda #$00									; Disable all interferences
-	sta $d015									; for a stable timer
-	lda #$35
-	sta $01
-	lda #$7f
-	sta $dc0d
-	bit $dc0d
-
-	ldx #$01									; Wait for raster line 0 twice
-:	bit $d011									; to make sure there are no sprites
-	bpl :-
-:	bit $d011
-	bmi :-
-	dex
-	bpl :--
-
-	ldx $d012									; Achieve an initial stable raster point
-	inx											; using halve invariance method
-:	cpx $d012
-	bne :-
-	ldy #$0a
-:	dey
-	bne :-
-	inx
-	cpx $d012
-	nop
-	beq :+
-	nop
-	bit $24
-:	ldy #$09
-:	dey
-	bne :-
-	nop
-	nop
-	inx
-	cpx $d012
-	nop
-	beq :+
-	bit $24
-:	ldy #$0a
-:	dey
-	bne :-
-	inx
-	cpx $d012
-	bne :+
-:	.repeat 5
-	nop
-	.endrepeat									; Raster is stable here
-
-	.repeat 13									; add offset to timer (95 cycles)
-		pha
-		pla
-	.endrep
-	nop
-	nop
-
-	lda #$3e									; Start a continious timer
-	sta $dc04									; with 63 ticks each loop
-	sty $dc05
-	lda #%00010001
-	sta $dc0e
 
 	copymemblocks sprites1, sprites2, $0c00
 
@@ -583,10 +520,8 @@ setupinitiallevel
 	sta $7fff
 	sta $bfff
 	
-	ldx startzone								; #$01, #$02, #$03, #$04, #$05, #$06
-	stx zone
-	dex
-	txa
+	lda startzone								; #$00, #$01, #$02, #$03, #$04, #$05
+	sta zone
 	asl
 	asl
 	asl
@@ -670,7 +605,7 @@ setuplevel
 	sta flip
 	sta ps1+1
 	sta ps2+1
-	
+
 	lda #$34
 	sta $01
 
@@ -680,7 +615,7 @@ ps1	lda #$00									; plot initial screens
 ps2	lda #$00
 	cmp #$40
 	bne :+
-	jmp psdone
+	jmp plotinitialscreendone
 :	jsr plottiles
 	inc ps2+1
 	lda ps2+1
@@ -689,13 +624,13 @@ ps2	lda #$00
 	inc ps1+1
 	jmp ps1
 
-psdone
+plotinitialscreendone
 
 	inc file
 	inc subzone
 	lda file
 	cmp #$02
-	bne sldone
+	bne setupleveldone
 
 	ldx #$00									; clear temporary tiles from screen - only need to do this for first subzone?
 	lda #$55
@@ -718,16 +653,18 @@ psdone
 	sta loadeddata2+i*50+0
 	.endrepeat
 
-sldone
+setupleveldone
 	lda #$37
 	sta $01
 
 	lda #states::waiting
 	sta state+1
 
-	jsr setupfilename	
+	jsr setupfilename							; we've loaded and set up 2 subzones, now pre-emptively load subzone 3
 	jsr loadpackd
 
+	jsr calculatezonefromsubzone				; and calculate the zone from the subzone (can subtract 3 now)
+	
 	;bcc :+
 	;jmp error
 
@@ -765,18 +702,22 @@ sldone
 	cpx #MAXMULTPLEXSPR
 	bne :-
 
-	lda zonecolour1
-	ldx #$00
-:	sta zonecolours,x
+	; ---------------------------------------------------------
+
+	lda zonecolour1								; SET ZONE COLOURS!!! THIS GETS CALLED ONLY WHEN WE ENTER THE GAME OR HAVE DIED
+	ldx #$ff
+:	sta zonecolours+1,x
 	inx
-	cpx zone									; zone = $01,$02,$03,$04,$05,$06
+	cpx zone									; zone = $00,$01,$02,$03,$04,$05
 	bne :-
 
 	lda zonecolour0
-:	sta zonecolours,x
+:	sta zonecolours+1,x
 	inx
-	cpx #$07
+	cpx #$06
 	bne :-
+
+	; ---------------------------------------------------------
 
 	lda #$01
 	sta bulletcooloff
@@ -3992,7 +3933,7 @@ incpag
 	sta column
 	
 	jsr incsubzone
-	jsr loadfile
+	jsr loadsubzone
 
 	inc flip
 	lda flip
@@ -4042,7 +3983,7 @@ incsubzone
 	lda subzones,x
 	cmp #$ff
 	beq :-
-	inc zone									; increase zone
+	;inc zone									; increase zone
 	inc subzone									; increase subzone one more time to jump over the 'you're dead, start on this empty screen'-subzone
 	jmp :++
 	
@@ -4052,35 +3993,34 @@ incsubzone
 	
 :	ldx subzone									; load next subzone
 	lda subzones,x
-	sta file
-	
+	sta file	
+
+	jsr calculatezonefromsubzone
+
+	rts
+
+calculatezonefromsubzone
+	lda subzone									; get subzone (NOT subzones,x) and div by 16 to get zone
+	cmp #$10
+	bmi :+
+	sec											; only subtract 3 when we're in zone 1 or higher
+	sbc #$02
+:	lsr
+	lsr
+	lsr
+	lsr
+	sta zone
 	rts
 
 findstartofzone
 
-	lda subzone									; decrease twice, to make sure we don't skip to the next zone if we die at the end of a zone
-	cmp #$03
-	bmi :++
-	dec subzone
-	dec subzone
+	lda zone
+	asl
+	asl
+	asl
+	asl
+	sta subzone
 
-:	dec subzone
-	ldx subzone
-	lda subzones,x
-	cmp #$ff
-	beq :-
-
-:	ldx subzone									; decrease subzone until end of previous zone is found
-
-	cpx #$00
-	beq :+
-	dec subzone
-	ldx subzone
-	lda subzones,x
-	cmp #$ff
-	bne :-
-	inc subzone
-	
 :	ldx subzone
 	lda subzones,x
 	sta file
@@ -4100,12 +4040,9 @@ subzones
 zonetab
 .byte $01,$0d,$15,$1d,$29,$31
 
-loadfile
+loadsubzone
 	lda file
 
-	;cmp #$02
-	;bne :+
-	
 	ldx #$00
 :	lda zonetab,x
 	cmp file
@@ -4137,9 +4074,7 @@ loadfile
 
 	jsr initmultsprites
 
-:	ldx zone
-	dex
-
+:	ldx zone											; SET ONE ZONE BLOCK WHEN LOADING NEW DATA!!!
 	lda zonecolour1
 	sta zonecolours,x
 
@@ -5602,11 +5537,11 @@ congratulations
 	lda #$7f
 	sta $d011
 	
+	jsr clearscreen
+	
 	lda #$09
 	sta $d021
 
-	jsr clearscreen
-	
 	ldx #$00
 :	lda fontuimap,x
 	sta screenui+9*40,x
@@ -6121,7 +6056,7 @@ barsd022
 barsd023
 .byte $01,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a,  $00,  $01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03,  $00,  $01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03
 barswait
-.byte $08,$08,$07,$07,$06,$01,$07,$07,$08,$08,$01,  $36,  $08,$08,$07,$07,$06,$01,$07,$07,$08,$08,$01,  $36,  $08,$08,$07,$07,$06,$01,$07,$07,$08,$08,$01
+.byte $08,$08,$07,$07,$06,$01,$07,$07,$08,$07,$01,  $36,  $08,$08,$07,$07,$06,$01,$07,$07,$08,$06,$01,  $36,  $08,$08,$07,$07,$06,$01,$07,$07,$08,$07,$01
 
 
 .byte $de,$ad,$be,$ef							; DEADBEEF

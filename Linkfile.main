@@ -25,7 +25,7 @@ SEGMENTS
 
 	SCREENUI:				load=OVERLAPPING_RAM, start=$4000;
 	SCREEN1:				load=OVERLAPPING_RAM, start=$4000, type=BSS;
-	SPRITES1:				load=RAM, start=$4400; # goes until $5000 (at the moment)
+	SPRITES1:				load=RAM, start=$4400; # goes until $5000 (at the moment) # gets loaded, then copied to c400, then copied back to 4400 each time we go ingame
 
 	TITLESCREEN:			load=RAM, start=$5000; # $0400
 	LIVESLEFTSCREEN:		load=RAM;

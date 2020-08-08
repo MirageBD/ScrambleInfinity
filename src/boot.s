@@ -308,13 +308,6 @@ irq0
 	lda #$40							; #$4c
 	jsr cycleperfect
 
-	lda loading
-	cmp #$01
-	bne :+
-
-	jsr drawloadbar
-
-:
 	lda #<irq1
 	ldx #>irq1
 	ldy #50 + 12*8 - 1
@@ -339,6 +332,13 @@ irq1
 	cpy #$09
 	bne :--
 
+	lda loading
+	cmp #$01
+	bne :+
+
+	jsr drawloadbar
+
+:
 	lda #<irq0
 	ldx #>irq0
 	ldy #$00
