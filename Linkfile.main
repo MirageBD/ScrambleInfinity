@@ -18,15 +18,15 @@ SEGMENTS
 
 	GAMEPLAY2:				load=RAM, start=$2800;
 
-	LOADEDDATA1:			load=RAM, start=$3000;
-	LOADEDDATA2:			load=RAM, start=$3800;
+	TSLOGOSPR:				load=RAM, start=$3000;
+	#LOADEDDATA1:			load=RAM, start=$3000;
+	#LOADEDDATA2:			load=RAM, start=$3800;
 
 	SCREENUI:				load=OVERLAPPING_RAM, start=$4000;
 	SCREEN1:				load=OVERLAPPING_RAM, start=$4000, type=BSS;
 
 	TITLESCREEN:			load=RAM, start=$4400; # $0300
 
-	TSLOGOSPR:				load=RAM, start=$4900;
 	SPRITES1:				load=RAM, start=$4b00; # goes until $5700/$d700 (at the moment) # gets loaded, then copied to cb00, then copied back to 4b00 each time we go ingame
 
 	UIFONT:					load=RAM, start=$5800;
@@ -56,7 +56,7 @@ SEGMENTS
 	LIVESLEFTSCREEN:		load=RAM, start=$c400;
 	CONGRATULATIONSSCREEN:	load=RAM;
 	CLEARSCREEN:			load=RAM;
-	CONGRATS:				load=RAM; #, start=$4a00;
+	CONGRATS:				load=RAM, start=$c600;
 
 	TABLES:					load = RAM, start=$c700;
 
