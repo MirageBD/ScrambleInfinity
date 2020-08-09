@@ -63,6 +63,6 @@ SEGMENTS
 	TABLES:					load = RAM, start=$c700;
 
 	#SCREEN2:				load=RAM, start=$c000;
-	#SPRITES2:				load=RAM, start=$cb00;
+	SPRITES2:				load=RAM, start=$cb00;
 	#BITMAP2:				load=RAM, start=$e000, type=BSS;
 }

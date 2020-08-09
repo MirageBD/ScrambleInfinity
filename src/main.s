@@ -92,8 +92,8 @@
 ;	.res 1024
 ;.segment "SCREENBORDERSPRITES"
 ;	.res 1024
-;.segment "SPRITES2"
-;	.res 1024
+.segment "SPRITES2"
+	.res 64
 .segment "EMPTYSPRITE"
 	.res 64
 
