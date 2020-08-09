@@ -419,9 +419,9 @@ irqlogosprites
 
 	lda #$01
 	sta $d025
-	lda #$00
+	lda #$02
 	sta $d026
-	lda #$0c
+	lda #$0a
 	sta $d027+0
 	sta $d027+1
 	sta $d027+2
@@ -679,33 +679,16 @@ irqopenborder
 	nop
 	nop
 
-	ldy #$3f
-	sty $d011
-
 	lda #$32				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
 	sta $d011
 
-	lda #<irqlowerborder
-	ldx #>irqlowerborder
-	ldy #$fa
-	jmp endirq
-
-; -----------------------------------------------------------------------------------------------
-
-irqlowerborder
-	pha
-
-	nop
-	nop
-
-	lda #$54				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
-	sta $d011
-
-	lda #$08				; no multicolour or bitmap, otherwise ghostbyte move won't work
-	sta $d016
-
-	lda #$40							; #$4c
+	lda #$41							; #$4c
 	jsr cycleperfect
+
+	ldx #$54				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	ldy #$08				; no multicolour or bitmap, otherwise ghostbyte move won't work
+	stx $d011
+	sty $d016
 
 	; second row of exhaust sprites
 	lda #$0f

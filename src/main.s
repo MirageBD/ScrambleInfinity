@@ -106,7 +106,7 @@
 .define livesdecrease		1
 .define firebullets			1
 .define firebombs			1
-.define startzone			#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
+.define startzone			#$04				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
 .define diedfade			1
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
@@ -164,7 +164,7 @@ tuneplay					= $1003
 
 maptiles					= $a900		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
 maptilecolors				= $bd00
-fontuimap					= $5700
+fontuimap					= $4a00
 fontui						= $5800
 
 loadeddata1					= $3000
