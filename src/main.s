@@ -53,6 +53,15 @@
 .incbin "./bin/comet.bin"						; ""
 .incbin "./bin/mysteryspr.bin"					; ""
 
+;.segment "TSPOINTSPR"							; $0900
+;.incbin "./bin/tspointspr.bin"
+;.incbin "./bin/tsmissilespr.bin"
+;.incbin "./bin/tsmissileflyspr.bin"
+;.incbin "./bin/tsbosspr.bin"
+;.incbin "./bin/tsufospr.bin"
+;.incbin "./bin/tsfluelspr.bin"
+;.incbin "./bin/tsmysspr.bin"
+
 .segment "MAPTILES"
 .incbin "./exe/mt.out"
 
@@ -5350,6 +5359,12 @@ titlescreen
 	sta file01+1
 	jsr loadpackd
 
+	lda titlescreenpointsprfile
+	sta file01+0
+	lda titlescreenpointsprfile+1
+	sta file01+1
+	jsr loadpackd
+
 	ldx #$00
 :	lda titlescreen1d800+0*256,x
 	sta colormem+0*256,x
@@ -5511,6 +5526,92 @@ irqtitle
 	sta $d020
 	sta $d021
 
+	lda #%00000000
+	sta $d010
+
+	lda #$09
+	sta $d025
+	lda #$08
+	sta $d026
+	lda #$07
+	sta $d027+0
+	sta $d027+2
+	sta $d027+4
+	lda #$0a
+	sta $d027+1
+	sta $d027+3
+	sta $d027+5
+
+	lda #$80
+	sta $d000+0*2
+	sta $d000+1*2
+	sta $d000+2*2
+	sta $d000+3*2
+	sta $d000+4*2
+	sta $d000+5*2
+
+	lda #$68+0*24					; show how many points sprites
+	sta $d001+0*2
+	sta $d001+1*2
+	lda #$68+1*24
+	sta $d001+2*2
+	sta $d001+3*2
+	lda #$68+2*24
+	sta $d001+4*2
+	sta $d001+5*2
+
+	ldx spriteptrforaddress(sprites1+0*(6*64)+1*64)
+	stx screenui+$03f8+0
+	ldx spriteptrforaddress(sprites1+0*(6*64)+0*64)
+	stx screenui+$03f8+1
+	ldx spriteptrforaddress(sprites1+1*(6*64)+1*64)
+	stx screenui+$03f8+2
+	ldx spriteptrforaddress(sprites1+1*(6*64)+0*64)
+	stx screenui+$03f8+3
+	ldx spriteptrforaddress(sprites1+2*(6*64)+1*64)
+	stx screenui+$03f8+4
+	ldx spriteptrforaddress(sprites1+2*(6*64)+0*64)
+	stx screenui+$03f8+5
+
+	lda #<irqtitle1
+	ldx #>irqtitle1
+	ldy #$b0-3
+	jmp endirq
+
+irqtitle1
+	pha
+
+	lda #$68+3*24					; show how many points sprites
+	sta $d001+0*2
+	sta $d001+1*2
+	lda #$68+4*24
+	sta $d001+2*2
+	sta $d001+3*2
+	lda #$68+5*24
+	sta $d001+4*2
+	sta $d001+5*2
+
+	ldx spriteptrforaddress(sprites1+3*(6*64)+1*64)
+	stx screenui+$03f8+0
+	ldx spriteptrforaddress(sprites1+3*(6*64)+0*64)
+	stx screenui+$03f8+1
+	ldx spriteptrforaddress(sprites1+4*(6*64)+1*64)
+	stx screenui+$03f8+2
+	ldx spriteptrforaddress(sprites1+4*(6*64)+0*64)
+	stx screenui+$03f8+3
+	ldx spriteptrforaddress(sprites1+5*(6*64)+1*64)
+	stx screenui+$03f8+4
+	ldx spriteptrforaddress(sprites1+5*(6*64)+0*64)
+	stx screenui+$03f8+5
+
+	lda #<irqtitle2
+	ldx #>irqtitle2
+	ldy #$f2
+	jmp endirq
+
+irqtitle2
+	pha
+
 	lda #$f8					; prepare lower border sprites
 	sta $d001+0*2
 	sta $d001+1*2
@@ -5520,6 +5621,19 @@ irqtitle
 	sta $d001+5*2
 	sta $d001+6*2
 	sta $d001+7*2
+
+	ldx spriteptrforaddress(tspressfirespr)
+	stx screenui2+$03f8+0
+	inx
+	stx screenui2+$03f8+1
+	inx
+	stx screenui2+$03f8+2
+	inx
+	stx screenui2+$03f8+3
+	inx
+	stx screenui2+$03f8+4
+	inx
+	stx screenui2+$03f8+5
 
 	lda #(112+0*24)&255
 	sta $d000+0*2
@@ -5537,42 +5651,12 @@ irqtitle
 	sta $d000+6*2
 	sta $d000+7*2
 
-	lda #$01
-	sta $d025
-	lda #$00
-	sta $d026
-	lda #$0c
-	sta $d027+0
-	sta $d027+1
-	sta $d027+2
-	sta $d027+3
-	sta $d027+4
-	sta $d027+5
-	sta $d027+6
-	sta $d027+7
-
-	lda #%00000000
-	sta $d010
-
-	ldx spriteptrforaddress(tspressfirespr)
-	stx screenui2+$03f8+0
-	inx
-	stx screenui2+$03f8+1
-	inx
-	stx screenui2+$03f8+2
-	inx
-	stx screenui2+$03f8+3
-	inx
-	stx screenui2+$03f8+4
-	inx
-	stx screenui2+$03f8+5
-
-	lda #<irqtitle1
-	ldx #>irqtitle1
+	lda #<irqtitle3
+	ldx #>irqtitle3
 	ldy #$f8
 	jmp endirq
 
-irqtitle1
+irqtitle3
 	pha
 
 	lda #$32				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
@@ -5594,6 +5678,23 @@ irqtitle1
 	sta $dd00
 	lda d018forscreencharset(screenui2,$0000)
 	sta $d018
+
+	lda #$01
+	sta $d025
+	lda #$00
+	sta $d026
+	lda #$0c
+	sta $d027+0
+	sta $d027+1
+	sta $d027+2
+	sta $d027+3
+	sta $d027+4
+	sta $d027+5
+	sta $d027+6
+	sta $d027+7
+
+	lda #%00000000
+	sta $d010
 
 	clc
 	lda $d001+0*2
@@ -6279,6 +6380,8 @@ titlescreen10400file
 .asciiz "T2"
 titlescreen1d800file
 .asciiz "T3"
+titlescreenpointsprfile
+.asciiz "T4"
 
 barsd022
 .byte $07,$0a,$0a,$0a,$08,$08,$02,$02,$02,$02,$02,  $00,  $03,$0e,$04,$0e,$04,$0e,$04,$04,$04,$04,$04,  $00,  $0d,$03,$05,$03,$05,$05,$08,$05,$08,$08,$08

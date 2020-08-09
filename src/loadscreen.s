@@ -419,9 +419,9 @@ irqlogosprites
 
 	lda #$01
 	sta $d025
-	lda #$02
+	lda #$00
 	sta $d026
-	lda #$0a
+	lda #$0c
 	sta $d027+0
 	sta $d027+1
 	sta $d027+2
