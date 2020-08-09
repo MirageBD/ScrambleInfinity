@@ -5614,22 +5614,22 @@ irqtitle3
 	lda #$32				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
 	sta $d011
 
-	lda #$52							; #$4c
-	jsr cycleperfect
-
-	lda #$0b
-	sta $d020
-	sta $d021
-
-	ldx #$34				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
-	ldy #$18				; no multicolour or bitmap, otherwise ghostbyte move won't work
-	stx $d011
-	sty $d016
-
 	lda bankforaddress(screenui2)
 	sta $dd00
 	lda d018forscreencharset(screenui2,$0000)
 	sta $d018
+
+	lda #$52							; #$4c
+	jsr cycleperfect
+
+	;lda #$00
+	;sta $d020
+	;sta $d021
+
+	;ldx #$34				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	;ldy #$18				; no multicolour or bitmap, otherwise ghostbyte move won't work
+	;stx $d011
+	;sty $d016
 
 	lda #$01
 	sta $d025
