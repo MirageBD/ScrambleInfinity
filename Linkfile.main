@@ -11,7 +11,7 @@ SEGMENTS
 
 	# comment
 	MAIN:					load=RAM, start=$0820;
-	IRQ:					load=RAM, align=256;
+	IRQ:					load=RAM; # , align=256;
 	MUSIC:					load=RAM, start=$1000;
 
 	CYCLEPERFECT:			load=RAM, start=$2740; # $00c0
@@ -26,9 +26,7 @@ SEGMENTS
 
 	TITLESCREEN:			load=RAM, start=$4400; # $0300
 
-	TSLOGOSPR:				load=RAM, start=$4800;
-	CONGRATS:				load=RAM, start=$4a00;
-
+	TSLOGOSPR:				load=RAM, start=$4900;
 	SPRITES1:				load=RAM, start=$4b00; # goes until $5700/$d700 (at the moment) # gets loaded, then copied to cb00, then copied back to 4b00 each time we go ingame
 
 	UIFONT:					load=RAM, start=$5800;
@@ -57,8 +55,8 @@ SEGMENTS
 
 	LIVESLEFTSCREEN:		load=RAM, start=$c400;
 	CONGRATULATIONSSCREEN:	load=RAM;
-
-	# FREE!!! $c600-$c700
+	CLEARSCREEN:			load=RAM;
+	CONGRATS:				load=RAM; #, start=$4a00;
 
 	TABLES:					load = RAM, start=$c700;
 
