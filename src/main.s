@@ -5418,7 +5418,7 @@ irqtitle
 
 	lda bankforaddress(tslogospr)
 	sta $dd00
- 	lda #$5b
+ 	lda #$3b
 	sta $d011
 
 	lda d018forscreencharset(screenui,$0000)
@@ -5507,6 +5507,10 @@ irqtitle
 	ldy #$3b
 	sty $d011
 	
+	lda #$00
+	sta $d020
+	sta $d021
+
 	lda #$f8					; prepare lower border sprites
 	sta $d001+0*2
 	sta $d001+1*2
@@ -5571,36 +5575,25 @@ irqtitle
 irqtitle1
 	pha
 
-	nop
-	nop
-
-	ldy #$3f
-	sty $d011
-
 	lda #$32				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
 	sta $d011
-	
-	lda #<irqtitle2
-	ldx #>irqtitle2
-	ldy #$fa
-	jmp endirq
-	
-irqtitle2										; top of 'press fire' sprites
-	pha
+
+	lda #$52							; #$4c
+	jsr cycleperfect
+
+	lda #$0b
+	sta $d020
+	sta $d021
+
+	ldx #$34				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	ldy #$18				; no multicolour or bitmap, otherwise ghostbyte move won't work
+	stx $d011
+	sty $d016
 
 	lda bankforaddress(screenui2)
 	sta $dd00
 	lda d018forscreencharset(screenui2,$0000)
 	sta $d018
-
-	lda #$54				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
-	sta $d011
-
-	lda #$08				; no multicolour or bitmap, otherwise ghostbyte move won't work
-	sta $d016
-
-	lda #$40							; #$4c
-	jsr cycleperfect
 
 	clc
 	lda $d001+0*2
