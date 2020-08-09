@@ -2,7 +2,6 @@
 
 ; TODO:
 
-; show mystery points.
 ; highscore + obfuscate (irq loader now loadable after reverting to kernal).
 ; stars at startup-screen (or maybe something more fancy).
 ; new music (give option to play without music?) 2channel prefered.
@@ -142,7 +141,7 @@
 .define bombexplosionanimframes			12
 .define bulletsmallexplosionanimframes	5
 .define bulletbigexplosionanimframes	7
-.define mysteryanimframes				10
+.define mysteryanimframes				12
 .define missileanimstart				32
 .define missileanimframes				10
 .define ufoanimstart					42
@@ -226,7 +225,7 @@ titlescreen1d800			= loadeddata1
 	yvel					.byte
 	pointer					.byte
 	colour					.byte
-	isexploding				.byte
+	isexploding				.byte		; upper 4 bits used for mystery points, lower 4 for small, big, mystery explosion
 .endstruct
 
 .enum states
@@ -1569,7 +1568,12 @@ bullet0bkgbigexplosion
 	rts
 
 bullet0bkgmystery
-	lda #explosiontypes::mystery					; set mystery explosion anim
+	lda mysterytimer								; store 1,2,3 in higher 4 bits
+	asl
+	asl
+	asl
+	asl
+	ora #explosiontypes::mystery					; set mystery explosion anim
 	sta bull0+sprdata::isexploding
 	lda #$ff
 	sta bull0+sprdata::xvel
@@ -1683,7 +1687,12 @@ bullet1bkgbigexplosion
 	rts
 
 bullet1bkgmystery
-	lda #explosiontypes::mystery				; set mystery explosion anim
+	lda mysterytimer								; store 1,2,3 in higher 4 bits
+	asl
+	asl
+	asl
+	asl
+	ora #explosiontypes::mystery					; set mystery explosion anim
 	sta bull1+sprdata::isexploding
 	lda #$ff
 	sta bull1+sprdata::xvel
@@ -1814,7 +1823,12 @@ bomb0explode
 	rts
 
 bomb0explodemystery
-	lda #explosiontypes::mystery				; set mystery explosion anim
+	lda mysterytimer								; store 1,2,3 in higher 4 bits
+	asl
+	asl
+	asl
+	asl
+	ora #explosiontypes::mystery					; set mystery explosion anim
 	sta bomb0+sprdata::isexploding
 	lda #$00
 	sta bomb0+sprdata::xvel
@@ -1933,8 +1947,12 @@ bomb1explode
 	rts
 
 bomb1explodemystery
-
-	lda #explosiontypes::mystery				; set mystery explosion anim
+	lda mysterytimer								; store 1,2,3 in higher 4 bits
+	asl
+	asl
+	asl
+	asl
+	ora #explosiontypes::mystery					; set mystery explosion anim
 	sta bomb1+sprdata::isexploding
 	lda #$00
 	sta bomb1+sprdata::xvel
@@ -2241,6 +2259,7 @@ animbullet0
 	sta bull0counter2
 
 	lda bull0+sprdata::isexploding
+	and #%00001111
 	cmp #explosiontypes::big
 	beq bull0biganim
 	cmp #explosiontypes::small
@@ -2304,8 +2323,18 @@ bull0explosiondone
 
 bull0mysteryanim
 	ldx bull0counter
-	lda mysteryanim,x
-	sta bull0+sprdata::pointer
+	cpx #$03
+	bmi :+
+	lda bull0+sprdata::isexploding
+	lsr
+	lsr
+	lsr
+	lsr
+	tay
+	lda mystery100200300spriteptrs,y
+	jmp :++
+:	lda mysteryanim,x
+:	sta bull0+sprdata::pointer
 	
 	lda mysterycolours,x
 	sta bull0+sprdata::colour
@@ -2332,6 +2361,7 @@ animbullet1
 	sta bull1counter2
 
 	lda bull1+sprdata::isexploding
+	and #%00001111
 	cmp #explosiontypes::big
 	beq bull1biganim
 	cmp #explosiontypes::small
@@ -2396,8 +2426,18 @@ bull1explosiondone
 
 bull1mysteryanim
 	ldx bull1counter
-	lda mysteryanim,x
-	sta bull1+sprdata::pointer
+	cpx #$03
+	bmi :+
+	lda bull1+sprdata::isexploding
+	lsr
+	lsr
+	lsr
+	lsr
+	tay
+	lda mystery100200300spriteptrs,y
+	jmp :++
+:	lda mysteryanim,x
+:	sta bull1+sprdata::pointer
 	
 	lda mysterycolours,x
 	sta bull1+sprdata::colour
@@ -2424,6 +2464,7 @@ animbomb0
 	sta bomb0counter2
 
 	lda bomb0+sprdata::isexploding
+	and #%00001111
 	cmp #explosiontypes::big
 	beq bomb0explosionanim
 	cmp #explosiontypes::mystery
@@ -2481,8 +2522,18 @@ bomb0explosiondone
 
 bomb0mysteryanim
 	ldx bomb0counter
-	lda mysteryanim,x
-	sta bomb0+sprdata::pointer
+	cpx #$03
+	bmi :+
+	lda bomb0+sprdata::isexploding
+	lsr
+	lsr
+	lsr
+	lsr
+	tay
+	lda mystery100200300spriteptrs,y
+	jmp :++
+:	lda mysteryanim,x
+:	sta bomb0+sprdata::pointer
 	
 	lda mysterycolours,x
 	sta bomb0+sprdata::colour
@@ -2509,6 +2560,7 @@ animbomb1
 	sta bomb1counter2
 
 	lda bomb1+sprdata::isexploding
+	and #%00001111
 	cmp #explosiontypes::big
 	beq bomb1explosionanim
 	cmp #explosiontypes::mystery
@@ -2566,8 +2618,18 @@ bomb1explosiondone
 
 bomb1mysteryanim
 	ldx bomb1counter
-	lda mysteryanim,x
-	sta bomb1+sprdata::pointer
+	cpx #$03
+	bmi :+
+	lda bomb1+sprdata::isexploding
+	lsr
+	lsr
+	lsr
+	lsr
+	tay
+	lda mystery100200300spriteptrs,y
+	jmp :++
+:	lda mysteryanim,x
+:	sta bomb1+sprdata::pointer
 	
 	lda mysterycolours,x
 	sta bomb1+sprdata::colour
@@ -6236,15 +6298,15 @@ mysteryanim
 .byte bytespriteptrforaddress(sprites2+22*64)
 .byte bytespriteptrforaddress(sprites2+23*64)
 .byte bytespriteptrforaddress(sprites2+24*64)
-.byte bytespriteptrforaddress(sprites2+48*64)
-.byte bytespriteptrforaddress(sprites2+48*64)
-.byte bytespriteptrforaddress(sprites2+48*64)
-.byte bytespriteptrforaddress(sprites2+48*64)
-.byte bytespriteptrforaddress(sprites2+48*64)
-.byte bytespriteptrforaddress(sprites2+48*64)
+; rest of anim ptrs are handled by code and read from mystery100200300spriteptrs
 mysterycolours
-.byte $01,$07,$0a,$01,$01,$01,$01,$01,$01
+.byte $01,$07,$0a,$01,$01,$01,$01,$03,$0e,$04,$06
 
+mystery100200300spriteptrs
+.byte 0
+.byte bytespriteptrforaddress(sprites2+mystery100start*64)
+.byte bytespriteptrforaddress(sprites2+mystery200start*64)
+.byte bytespriteptrforaddress(sprites2+mystery300start*64)
 
 .byte $de,$ad,$be,$ef							; DEADBEEF
 
