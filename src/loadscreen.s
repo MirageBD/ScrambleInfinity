@@ -199,6 +199,15 @@ mainentry
 	lda bankforaddress(title)
 	sta $dd00
 
+	lda #$00									; set all default values here
+	sta $d017
+	sta $d01b
+	sta $d01c
+	sta $d01d
+	sta $d022
+	sta $d023
+	sta $d024
+
 	lda #$5b
 	sta $d011
 
