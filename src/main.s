@@ -5466,7 +5466,7 @@ irqtitle
 	cpx #22
 	bne :--
 
-	lda d018forscreencharset(screen1, bitmap1)
+	lda d018forscreencharset(screen1, bitmap1)				; start of screen below sprite logo, set right regs for bitmap etc.
 	sta $d018
 
 	lda bankforaddress(bitmap1)
@@ -5479,91 +5479,27 @@ irqtitle
 	sta $d020
 	sta $d021
 
-	lda #%00000000
-	sta $d010
-
-	lda #$09
-	sta $d025
-	lda #$08
-	sta $d026
-	lda #$07
-	sta $d027+0
-	sta $d027+2
-	sta $d027+4
-	lda #$0a
-	sta $d027+1
-	sta $d027+3
-	sta $d027+5
-
-	lda #$80
-	sta $d000+0*2
-	sta $d000+1*2
-	sta $d000+2*2
-	sta $d000+3*2
-	sta $d000+4*2
-	sta $d000+5*2
-
-	lda #$68+0*24					; show how many points sprites
-	sta $d001+0*2
-	sta $d001+1*2
-	lda #$68+1*24
-	sta $d001+2*2
-	sta $d001+3*2
-	lda #$68+2*24
-	sta $d001+4*2
-	sta $d001+5*2
-
-	ldx spriteptrforaddress(sprites1+0*(6*64)+1*64)
-	stx screenui+$03f8+0
-	ldx spriteptrforaddress(sprites1+0*(6*64)+0*64)
-	stx screenui+$03f8+1
-	ldx spriteptrforaddress(sprites1+1*(6*64)+1*64)
-	stx screenui+$03f8+2
-	ldx spriteptrforaddress(sprites1+1*(6*64)+0*64)
-	stx screenui+$03f8+3
-	ldx spriteptrforaddress(sprites1+2*(6*64)+1*64)
-	stx screenui+$03f8+4
-	ldx spriteptrforaddress(sprites1+2*(6*64)+0*64)
-	stx screenui+$03f8+5
-
-	lda #<irqtitle1
-	ldx #>irqtitle1
-	ldy #$b0-3
-	jmp endirq
-
-irqtitle1
-	pha
-
-	lda #$68+3*24					; show how many points sprites
-	sta $d001+0*2
-	sta $d001+1*2
-	lda #$68+4*24
-	sta $d001+2*2
-	sta $d001+3*2
-	lda #$68+5*24
-	sta $d001+4*2
-	sta $d001+5*2
-
-	ldx spriteptrforaddress(sprites1+3*(6*64)+1*64)
-	stx screenui+$03f8+0
-	ldx spriteptrforaddress(sprites1+3*(6*64)+0*64)
-	stx screenui+$03f8+1
-	ldx spriteptrforaddress(sprites1+4*(6*64)+1*64)
-	stx screenui+$03f8+2
-	ldx spriteptrforaddress(sprites1+4*(6*64)+0*64)
-	stx screenui+$03f8+3
-	ldx spriteptrforaddress(sprites1+5*(6*64)+1*64)
-	stx screenui+$03f8+4
-	ldx spriteptrforaddress(sprites1+5*(6*64)+0*64)
-	stx screenui+$03f8+5
-
 	lda #<irqtitle2
 	ldx #>irqtitle2
-	ldy #$f2
+	ldy #$62
 	jmp endirq
 
 irqtitle2
+
 	pha
+
+	ldy #0*17
+	jsr showpointsline
+	ldy #1*17
+	jsr showpointsline
+	ldy #2*17
+	jsr showpointsline
+	ldy #3*17
+	jsr showpointsline
+	ldy #4*17
+	jsr showpointsline
+	ldy #5*17
+	jsr showpointsline
 
 	lda #$f8					; prepare lower border sprites
 	sta $d001+0*2
@@ -5608,6 +5544,175 @@ irqtitle2
 	ldx #>irqtitle3
 	ldy #$f8
 	jmp endirq
+
+showpointsline
+
+	lda #$46									; #$4c
+	jsr cycleperfect
+
+	inc $d020
+
+	lda pointlinesdata,y
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+	sta $d001+7*2
+
+	clc
+	adc #18
+	sta showpointsline2+1
+
+	iny
+
+	lda #$09
+	sta $d025
+	lda #$08
+	sta $d026
+	lda #$07
+	sta $d027+0
+	lda #$0a
+	sta $d027+1
+	lda #$01
+	sta $d027+2
+	sta $d027+3
+	sta $d027+4
+	sta $d027+5
+	sta $d027+6
+	sta $d027+7
+
+	clc
+	lda pointlinesdata,y
+	sta $d000+0*2
+	iny
+	adc pointlinesdata,y
+	sta $d000+1*2
+	iny
+	adc pointlinesdata,y
+	sta $d000+2*2
+	iny
+	adc pointlinesdata,y
+	sta $d000+3*2
+	iny
+	adc pointlinesdata,y
+	sta $d000+4*2
+	iny
+	adc pointlinesdata,y
+	sta $d000+5*2
+	iny
+	adc pointlinesdata,y
+	sta $d000+6*2
+	iny
+	adc pointlinesdata,y
+	sta $d000+7*2
+	iny
+
+	lda #%00000000
+	sta $d010
+
+	lda pointlinesdata,y
+	sta screenui+$03f8+0
+	iny
+	lda pointlinesdata,y
+	sta screenui+$03f8+1
+	iny
+	lda pointlinesdata,y
+	sta screenui+$03f8+2
+	iny
+	lda pointlinesdata,y
+	sta screenui+$03f8+3
+	iny
+	lda pointlinesdata,y
+	sta screenui+$03f8+4
+	iny
+	lda pointlinesdata,y
+	sta screenui+$03f8+5
+	iny
+	lda pointlinesdata,y
+	sta screenui+$03f8+6
+	iny
+	lda pointlinesdata,y
+	sta screenui+$03f8+7
+	iny
+
+showpointsline2
+	lda #$00
+:	cmp $d012
+	bne :-
+
+	dec $d020
+
+	rts
+
+pointlinesdata
+.byte $68+0*24
+.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte bytespriteptrforaddress(sprites1+0*(6*64)+1*64)
+.byte bytespriteptrforaddress(sprites1+0*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+
+.byte $68+1*24
+.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte bytespriteptrforaddress(sprites1+1*(6*64)+1*64)
+.byte bytespriteptrforaddress(sprites1+1*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+
+.byte $68+2*24
+.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte bytespriteptrforaddress(sprites1+2*(6*64)+1*64)
+.byte bytespriteptrforaddress(sprites1+2*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+
+.byte $68+3*24
+.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte bytespriteptrforaddress(sprites1+3*(6*64)+1*64)
+.byte bytespriteptrforaddress(sprites1+3*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+
+.byte $68+4*24
+.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte bytespriteptrforaddress(sprites1+4*(6*64)+1*64)
+.byte bytespriteptrforaddress(sprites1+4*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+
+.byte $68+5*24
+.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte bytespriteptrforaddress(sprites1+5*(6*64)+1*64)
+.byte bytespriteptrforaddress(sprites1+5*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 
 irqtitle3
 	pha
