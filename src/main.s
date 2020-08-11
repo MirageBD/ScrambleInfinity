@@ -83,10 +83,10 @@
 ;.segment "LOADER"
 ;.incbin "./exe/loader-c64.prg", $02
 
-;.segment "LOADEDDATA1"
-;	.res 2048
-;.segment "LOADEDDATA2"
-;	.res 2048
+.segment "LOADEDDATA1"
+	.res 2048
+.segment "LOADEDDATA2"
+	.res 2048
 .segment "SCREEN1"
 	.res 1024
 .segment "BITMAP1"
@@ -173,7 +173,7 @@ tuneplay					= $1003
 
 maptiles					= $a900		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
 maptilecolors				= $bd00
-congratsscreen				= $c600
+fontuimap					= $c700
 fontui						= $5800
 
 loadeddata1					= $3000
@@ -186,8 +186,7 @@ fontdigits					= $a800
 screen2						= $c000
 sprites1					= $4b00
 sprites2					= $cb00
-tslogosprorg				= $3000
-tslogospr					= $de00
+tslogospr					= $4900
 bitmap1						= $6000
 bitmap2						= $e000
 screenspecial				= $8000
@@ -344,7 +343,6 @@ titlescreen1d800			= loadeddata1
 	sta $01
 
 	copymemblocks sprites1, sprites2, $0d00
-	copymemblocks tslogosprorg, tslogospr, $0200
 
 	lda #$37
 	sta $01
@@ -3076,6 +3074,7 @@ hcmloop
 :	dex
 	bne hcmloop
 
+
 	rts
 	
 ; -----------------------------------------------------------------------------------------------	
@@ -5293,17 +5292,6 @@ titlescreen
 	lda #$37
 	sta $01
 
-	jsr clearscreen
-
-	ldx #$00
-:	lda #$00
-	sta colormem+(0*$0100),x
-	sta colormem+(1*$0100),x
-	sta colormem+(2*$0100),x
-	sta colormem+(3*$0100),x
-	inx
-	bne :-
-
 	lda #$00
 	sta $d01b									; sprite priority
 	sta $7fff
@@ -5317,6 +5305,19 @@ titlescreen
 
 	lda #$00
 	sta $d012
+
+	lda #$00
+	ldx #$00
+:	sta screenui+0*256,x
+	sta screenui+1*256,x
+	sta screenui+2*256,x
+	sta screenui+3*256,x
+	sta colormem+0*256,x
+	sta colormem+1*256,x
+	sta colormem+2*256,x
+	sta colormem+3*256,x
+	inx
+	bne :-
 
 	lda titlescreen1bmpfile
 	sta file01+0
@@ -5342,7 +5343,7 @@ titlescreen
 	sta file01+1
 	jsr loadpackd
 
-	ldx #$00								; where is this garbage coming from? the loader?
+	ldx #$00
 :	sta bitmap1+7*320,x
 	inx
 	bne :-
@@ -5438,21 +5439,21 @@ irqtitle
 	sta $d000+7*2
 
 	ldx spriteptrforaddress(tslogospr)
-	stx screen2+$03f8+0
+	stx screenui+$03f8+0
 	inx
-	stx screen2+$03f8+1
+	stx screenui+$03f8+1
 	inx
-	stx screen2+$03f8+2
+	stx screenui+$03f8+2
 	inx
-	stx screen2+$03f8+3
+	stx screenui+$03f8+3
 	inx
-	stx screen2+$03f8+4
+	stx screenui+$03f8+4
 	inx
-	stx screen2+$03f8+5
+	stx screenui+$03f8+5
 	inx
-	stx screen2+$03f8+6
+	stx screenui+$03f8+6
 	inx
-	stx screen2+$03f8+7
+	stx screenui+$03f8+7
 
 	ldx #$00
 :	lda sprraster,x
@@ -5468,11 +5469,10 @@ irqtitle
 	lda d018forscreencharset(screen1, bitmap1)
 	sta $d018
 
-	lda bankforaddress(bitmap1)
-	sta $dd00
-
 	ldx #$18
 	stx $d016
+	ldy #$3b
+	sty $d011
 	
 	lda #$00
 	sta $d020
@@ -5614,22 +5614,22 @@ irqtitle3
 	lda #$32				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
 	sta $d011
 
+	lda #$52							; #$4c
+	jsr cycleperfect
+
+	lda #$0b
+	sta $d020
+	sta $d021
+
+	ldx #$34				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	ldy #$18				; no multicolour or bitmap, otherwise ghostbyte move won't work
+	stx $d011
+	sty $d016
+
 	lda bankforaddress(screenui2)
 	sta $dd00
 	lda d018forscreencharset(screenui2,$0000)
 	sta $d018
-
-	lda #$52							; #$4c
-	jsr cycleperfect
-
-	;lda #$00
-	;sta $d020
-	;sta $d021
-
-	;ldx #$34				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
-	;ldy #$18				; no multicolour or bitmap, otherwise ghostbyte move won't work
-	;stx $d011
-	;sty $d016
 
 	lda #$01
 	sta $d025
@@ -5825,7 +5825,7 @@ congratulations
 	sta $d021
 
 	ldx #$00
-:	lda congratsscreen,x
+:	lda fontuimap,x
 	sta screenui+9*40,x
 	inx
 	bne :-
