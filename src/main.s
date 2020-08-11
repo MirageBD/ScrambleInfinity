@@ -83,10 +83,10 @@
 ;.segment "LOADER"
 ;.incbin "./exe/loader-c64.prg", $02
 
-.segment "LOADEDDATA1"
-	.res 2048
-.segment "LOADEDDATA2"
-	.res 2048
+;.segment "LOADEDDATA1"
+;	.res 2048
+;.segment "LOADEDDATA2"
+;	.res 2048
 .segment "SCREEN1"
 	.res 1024
 .segment "BITMAP1"
@@ -171,9 +171,9 @@
 tuneinit					= $1000
 tuneplay					= $1003
 
-maptiles					= $a900		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
+maptiles					= $aa00		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
 maptilecolors				= $bd00
-fontuimap					= $c700
+congratsscreen				= $c600
 fontui						= $5800
 
 loadeddata1					= $3000
@@ -182,23 +182,24 @@ loadeddata2					= $3800
 screen1						= $4000
 screenui					= $4000
 screenui2					= $a000		; only used in lower border for sprite ptrs
-fontdigits					= $a800
+fontdigits					= $a900
 screen2						= $c000
 sprites1					= $4b00
 sprites2					= $cb00
-tslogospr					= $4900
+tslogosprorg				= $3000
+tslogospr					= $a000		; consider moving this to $dc00/$de00
 bitmap1						= $6000
 bitmap2						= $e000
 screenspecial				= $8000
 screenbordersprites			= $8000
 clearmisilepositiondata		= screenspecial+$03c0
 
-tspressfirespr				= $a100
+tspressfirespr				= $a200
 
-emptysprite					= $a7c0
+emptysprite					= $a8c0
 
-scoreandfuelsprites			= $a400
-livesandzonesprites			= $a600
+scoreandfuelsprites			= $a500
+livesandzonesprites			= $a700
 
 colormem					= $d800
 
@@ -343,6 +344,7 @@ titlescreen1d800			= loadeddata1
 	sta $01
 
 	copymemblocks sprites1, sprites2, $0d00
+	copymemblocks tslogosprorg, tslogospr, $0200
 
 	lda #$37
 	sta $01
@@ -5292,6 +5294,17 @@ titlescreen
 	lda #$37
 	sta $01
 
+	jsr clearscreen
+
+	ldx #$00
+:	lda #$00
+	sta colormem+(0*$0100),x
+	sta colormem+(1*$0100),x
+	sta colormem+(2*$0100),x
+	sta colormem+(3*$0100),x
+	inx
+	bne :-
+
 	lda #$00
 	sta $d01b									; sprite priority
 	sta $7fff
@@ -5305,19 +5318,6 @@ titlescreen
 
 	lda #$00
 	sta $d012
-
-	lda #$00
-	ldx #$00
-:	sta screenui+0*256,x
-	sta screenui+1*256,x
-	sta screenui+2*256,x
-	sta screenui+3*256,x
-	sta colormem+0*256,x
-	sta colormem+1*256,x
-	sta colormem+2*256,x
-	sta colormem+3*256,x
-	inx
-	bne :-
 
 	lda titlescreen1bmpfile
 	sta file01+0
@@ -5389,7 +5389,7 @@ irqtitle
  	lda #$3b
 	sta $d011
 
-	lda d018forscreencharset(screenui,$0000)
+	lda d018forscreencharset(screenspecial,$0000)
 	sta $d018
 
 	lda #$ff
@@ -5439,21 +5439,21 @@ irqtitle
 	sta $d000+7*2
 
 	ldx spriteptrforaddress(tslogospr)
-	stx screenui+$03f8+0
+	stx screenspecial+$03f8+0
 	inx
-	stx screenui+$03f8+1
+	stx screenspecial+$03f8+1
 	inx
-	stx screenui+$03f8+2
+	stx screenspecial+$03f8+2
 	inx
-	stx screenui+$03f8+3
+	stx screenspecial+$03f8+3
 	inx
-	stx screenui+$03f8+4
+	stx screenspecial+$03f8+4
 	inx
-	stx screenui+$03f8+5
+	stx screenspecial+$03f8+5
 	inx
-	stx screenui+$03f8+6
+	stx screenspecial+$03f8+6
 	inx
-	stx screenui+$03f8+7
+	stx screenspecial+$03f8+7
 
 	ldx #$00
 :	lda sprraster,x
@@ -5469,10 +5469,11 @@ irqtitle
 	lda d018forscreencharset(screen1, bitmap1)
 	sta $d018
 
+	lda bankforaddress(bitmap1)
+	sta $dd00
+
 	ldx #$18
 	stx $d016
-	ldy #$3b
-	sty $d011
 	
 	lda #$00
 	sta $d020
@@ -5825,7 +5826,7 @@ congratulations
 	sta $d021
 
 	ldx #$00
-:	lda fontuimap,x
+:	lda congratsscreen,x
 	sta screenui+9*40,x
 	inx
 	bne :-

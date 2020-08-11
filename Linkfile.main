@@ -11,22 +11,22 @@ SEGMENTS
 
 	# comment
 	MAIN:					load=RAM, start=$0820;
-	IRQ:					load=RAM; # , align=256;
+	IRQ:					load=RAM, align=256;
 	MUSIC:					load=RAM, start=$1000;
 
 	CYCLEPERFECT:			load=RAM, start=$2740; # $00c0
 
 	GAMEPLAY2:				load=RAM, start=$2800;
 
-	LOADEDDATA1:			load=RAM, start=$3000;
-	LOADEDDATA2:			load=RAM, start=$3800;
+	TSLOGOSPR:				load=RAM, start=$3000;
+	#LOADEDDATA1:			load=RAM, start=$3000;
+	#LOADEDDATA2:			load=RAM, start=$3800;
 
 	SCREENUI:				load=OVERLAPPING_RAM, start=$4000;
 	SCREEN1:				load=OVERLAPPING_RAM, start=$4000, type=BSS;
 
 	TITLESCREEN:			load=RAM, start=$4400; # $0300
 
-	TSLOGOSPR:				load=RAM, start=$4900;
 	SPRITES1:				load=RAM, start=$4b00; # goes until $5700/$d700 (at the moment) # gets loaded, then copied to cb00, then copied back to 4b00 each time we go ingame
 
 	UIFONT:					load=RAM, start=$5800;
@@ -41,16 +41,16 @@ SEGMENTS
 
 	# FREE!!! $9e00-$a100
 
-	TSPRESSFIRESPR:			load=RAM, start=$a100;
+	TSPRESSFIRESPR:			load=RAM, start=$a200;
 
-	FUELSPRITES:			load=RAM, start=$a400;
-	ZONESPRITES:			load=RAM, start=$a600;
+	FUELSPRITES:			load=RAM, start=$a500;
+	ZONESPRITES:			load=RAM, start=$a700;
 
-	EMPTYSPRITE:			load=RAM, start=$a7c0;
+	EMPTYSPRITE:			load=RAM, start=$a8c0;
 
-	DIGITSPRITEFONT:		load=RAM, start=$a800; # $0080
+	DIGITSPRITEFONT:		load=RAM, start=$a900; # $0080
 
-	MAPTILES:				load=RAM, start=$a900;
+	MAPTILES:				load=RAM, start=$aa00;
 	MAPTILECOLORS:			load=RAM, start=$bd00;
 
 	LIVESLEFTSCREEN:		load=RAM, start=$c400;
