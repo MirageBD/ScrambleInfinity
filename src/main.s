@@ -9,6 +9,8 @@
 ; more obfuscate against hackers? On drive? Probably not worth it.
 ; fix bug where ground targets sometimes get cleaned only half when hit.
 ; add proper disk fail handling.
+; congrats screen is broken again
+; make final zone more exciting. Use $d021 to blink parts?
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
@@ -173,7 +175,7 @@ tuneplay					= $1003
 
 maptiles					= $aa00		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
 maptilecolors				= $bd00
-congratsscreen				= $c600
+congratsscreen				= $c500
 fontui						= $5800
 
 loadeddata1					= $3000
@@ -5479,7 +5481,19 @@ irqtitle
 	sta $d020
 	sta $d021
 
-	lda #<irqtitle2
+	inc tsanimframedelay
+	lda tsanimframedelay
+	cmp #$06
+	bne :+
+
+	lda #$00
+	sta tsanimframedelay
+	inc tsanimframe
+	lda tsanimframe
+	and #$03
+	sta tsanimframe
+
+:	lda #<irqtitle2
 	ldx #>irqtitle2
 	ldy #$62
 	jmp endirq
@@ -5488,17 +5502,17 @@ irqtitle2
 
 	pha
 
-	ldy #0*17
+	ldy #0*21
 	jsr showpointsline
-	ldy #1*17
+	ldy #1*21
 	jsr showpointsline
-	ldy #2*17
+	ldy #2*21
 	jsr showpointsline
-	ldy #3*17
+	ldy #3*21
 	jsr showpointsline
-	ldy #4*17
+	ldy #4*21
 	jsr showpointsline
-	ldy #5*17
+	ldy #5*21
 	jsr showpointsline
 
 	lda #$f8					; prepare lower border sprites
@@ -5550,8 +5564,6 @@ showpointsline
 	lda #$46									; #$4c
 	jsr cycleperfect
 
-	inc $d020
-
 	lda pointlinesdata,y
 	sta $d001+0*2
 	sta $d001+1*2
@@ -5567,22 +5579,6 @@ showpointsline
 	sta showpointsline2+1
 
 	iny
-
-	lda #$09
-	sta $d025
-	lda #$08
-	sta $d026
-	lda #$07
-	sta $d027+0
-	lda #$0a
-	sta $d027+1
-	lda #$01
-	sta $d027+2
-	sta $d027+3
-	sta $d027+4
-	sta $d027+5
-	sta $d027+6
-	sta $d027+7
 
 	clc
 	lda pointlinesdata,y
@@ -5614,9 +5610,32 @@ showpointsline
 	sta $d010
 
 	lda pointlinesdata,y
+	sta $d025
+	iny
+	lda pointlinesdata,y
+	sta $d026
+	iny
+	lda pointlinesdata,y
+	sta $d027+1
+	iny
+	lda pointlinesdata,y
+	sta $d027+0
+	iny
+	lda #$01
+	sta $d027+2
+	sta $d027+3
+	sta $d027+4
+	sta $d027+5
+	sta $d027+6
+	sta $d027+7
+
+	clc
+	lda pointlinesdata,y
+	adc tsanimframe
 	sta screenui+$03f8+0
 	iny
 	lda pointlinesdata,y
+	adc tsanimframe
 	sta screenui+$03f8+1
 	iny
 	lda pointlinesdata,y
@@ -5643,13 +5662,12 @@ showpointsline2
 :	cmp $d012
 	bne :-
 
-	dec $d020
-
 	rts
 
 pointlinesdata
 .byte $68+0*24
 .byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $09,$02,$0a,$07
 .byte bytespriteptrforaddress(sprites1+0*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+0*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
@@ -5661,6 +5679,7 @@ pointlinesdata
 
 .byte $68+1*24
 .byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $09,$02,$0a,$07
 .byte bytespriteptrforaddress(sprites1+1*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+1*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
@@ -5672,6 +5691,7 @@ pointlinesdata
 
 .byte $68+2*24
 .byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $09,$04,$0a,$01
 .byte bytespriteptrforaddress(sprites1+2*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+2*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
@@ -5683,6 +5703,7 @@ pointlinesdata
 
 .byte $68+3*24
 .byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $09,$08,$05,$01
 .byte bytespriteptrforaddress(sprites1+3*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+3*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
@@ -5694,6 +5715,7 @@ pointlinesdata
 
 .byte $68+4*24
 .byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $09,$08,$05,$01
 .byte bytespriteptrforaddress(sprites1+4*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+4*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
@@ -5705,6 +5727,7 @@ pointlinesdata
 
 .byte $68+5*24
 .byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $09,$04,$0a,$07
 .byte bytespriteptrforaddress(sprites1+5*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+5*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
@@ -5713,6 +5736,11 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+
+tsanimframe
+.byte $00
+tsanimframedelay
+.byte $00
 
 irqtitle3
 	pha

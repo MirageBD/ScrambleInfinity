@@ -54,7 +54,7 @@ SEGMENTS
 	MAPTILECOLORS:			load=RAM, start=$bd00;
 
 	LIVESLEFTSCREEN:		load=RAM, start=$c400;
-	CONGRATULATIONSSCREEN:	load=RAM;
+	CONGRATULATIONSSCREEN:	load=RAM, align=256;
 	CLEARSCREEN:			load=RAM;
 	CONGRATS:				load=RAM; #, start=$4a00;
 
