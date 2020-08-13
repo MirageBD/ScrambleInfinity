@@ -5489,8 +5489,11 @@ irqtitle
 	lda #$00
 	sta tsanimframedelay
 	inc tsanimframe
+	inc tsanimframe
 	lda tsanimframe
-	and #$03
+	cmp #$06
+	bne :+
+	lda #$00
 	sta tsanimframe
 
 :	lda #<irqtitle2
@@ -5634,6 +5637,7 @@ showpointsline
 	adc tsanimframe
 	sta screenui+$03f8+0
 	iny
+	clc
 	lda pointlinesdata,y
 	adc tsanimframe
 	sta screenui+$03f8+1
