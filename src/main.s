@@ -5478,7 +5478,7 @@ irqtitle
 	stx $d016
 	
 	lda #$00
-	sta $d020
+	;sta $d020
 	sta $d021
 
 	inc tsanimframedelay
@@ -5544,21 +5544,32 @@ irqtitle2
 	inx
 	stx screenui2+$03f8+5
 
-	lda #(112+0*24)&255
-	sta $d000+0*2
-	lda #(112+1*24)&255
-	sta $d000+1*2
-	lda #(112+2*24)&255
-	sta $d000+2*2
-	lda #(112+3*24)&255
-	sta $d000+3*2
-	lda #(112+4*24)&255
-	sta $d000+4*2
-	lda #(112+5*24)&255
-	sta $d000+5*2
 	lda #$00
+	sta $d000+0*2
+	sta $d000+1*2
+	sta $d000+2*2
+	sta $d000+3*2
+	sta $d000+4*2
+	sta $d000+5*2
 	sta $d000+6*2
 	sta $d000+7*2
+
+	lda #$01
+	sta $d025
+	lda #$00
+	sta $d026
+	lda #$0c
+	sta $d027+0
+	sta $d027+1
+	sta $d027+2
+	sta $d027+3
+	sta $d027+4
+	sta $d027+5
+	sta $d027+6
+	sta $d027+7
+
+	lda #$00
+	sta $d010
 
 	lda #<irqtitle3
 	ldx #>irqtitle3
@@ -5675,16 +5686,16 @@ testspriteoffs
 
 	ldx #$00					; sprite row 0-5
 
-:	inc spriterowxstartlo,x		; do sine stuff here
-	lda spriterowxstartlo,x
-	cmp #$00
-	bne :+
-	lda spriterowxstarthi,x
-	eor #1
-	sta spriterowxstarthi,x
-:	inx
-	cpx #$06
-	bne :--
+:	;inc spriterowxstartlo,x		; do sine stuff here
+	;lda spriterowxstartlo,x
+	;cmp #$00
+	;bne :+
+	;lda spriterowxstarthi,x
+	;eor #1
+	;sta spriterowxstarthi,x
+:	;inx
+	;cpx #$06
+	;bne :--
 
 	ldx #$00
 
@@ -5736,13 +5747,13 @@ tso13
 	rts
 
 spriterowxstartlo
-.byte <(360+0*16),<(360+0*16),<(360+0*16),<(360+0*16),<(360+0*16),<(360+0*16)
+.byte <(104),<(104),<(104),<(104),<(104),<(104)
 spriterowxstarthi
-.byte >(360+0*16),>(360+0*16),>(360+0*16),>(360+0*16),>(360+0*16),>(360+0*16)
+.byte >(104),>(104),>(104),>(104),>(104),>(104)
 
 spriterowoffs
-.byte $00,$00,$18,$30,$48,$60,$68-0*4,$80
-.byte $00,$00,$18,$30,$48,$60,$68-0*4,$80
+.byte $00,$00,$18,$30,$48,$60,$68-0*4,$80	; total width 152 - middle start = 24 + (320-152) / 2 = 108 (-4 for some sprite variation on the left) = 104
+.byte $00,$00,$18,$30,$48,$60,$68-0*4,$80	; sin wave needs to go from (344 -> 104 -> -136) = ( $0158 -> $0068 -> $0178)
 .byte $00,$00,$18,$30,$48,$60,$68-1*4,$80
 .byte $00,$00,$18,$30,$48,$60,$68-1*4,$80
 .byte $00,$00,$18,$30,$48,$60-0*4,$68,$80
@@ -5865,22 +5876,21 @@ irqtitle3
 	lda d018forscreencharset(screenui2,$0000)
 	sta $d018
 
-	lda #$01
-	sta $d025
+	lda #(116+0*24)&255
+	sta $d000+0*2
+	lda #(116+1*24)&255
+	sta $d000+1*2
+	lda #(116+2*24)&255
+	sta $d000+2*2
+	lda #(116+3*24)&255
+	sta $d000+3*2
+	lda #(116+4*24)&255
+	sta $d000+4*2
+	lda #(116+5*24)&255
+	sta $d000+5*2
 	lda #$00
-	sta $d026
-	lda #$0c
-	sta $d027+0
-	sta $d027+1
-	sta $d027+2
-	sta $d027+3
-	sta $d027+4
-	sta $d027+5
-	sta $d027+6
-	sta $d027+7
-
-	lda #%00000000
-	sta $d010
+	sta $d000+6*2
+	sta $d000+7*2
 
 	clc
 	lda $d001+0*2
