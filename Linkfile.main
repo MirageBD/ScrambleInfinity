@@ -39,6 +39,7 @@ SEGMENTS
 
 	GAMEPLAY:				load=RAM, start=$9100;
 
+	EASEFUNC:				load=RAM, start=$9e00;
 	# FREE!!! $9e00-$a100
 
 	TSPRESSFIRESPR:			load=RAM, start=$a200;
