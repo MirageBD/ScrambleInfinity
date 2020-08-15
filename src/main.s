@@ -5496,7 +5496,10 @@ irqtitle
 	lda #$00
 	sta tsanimframe
 
-:	lda #<irqtitle2
+:	
+	jsr testspriteoffs
+
+	lda #<irqtitle2
 	ldx #>irqtitle2
 	ldy #$62
 	jmp endirq
@@ -5505,17 +5508,17 @@ irqtitle2
 
 	pha
 
-	ldy #0*21
+	ldy #0*22
 	jsr showpointsline
-	ldy #1*21
+	ldy #1*22
 	jsr showpointsline
-	ldy #2*21
+	ldy #2*22
 	jsr showpointsline
-	ldy #3*21
+	ldy #3*22
 	jsr showpointsline
-	ldy #4*21
+	ldy #4*22
 	jsr showpointsline
-	ldy #5*21
+	ldy #5*22
 	jsr showpointsline
 
 	lda #$f8					; prepare lower border sprites
@@ -5564,9 +5567,6 @@ irqtitle2
 
 showpointsline
 
-	lda #$46									; #$4c
-	jsr cycleperfect
-
 	lda pointlinesdata,y
 	sta $d001+0*2
 	sta $d001+1*2
@@ -5583,34 +5583,37 @@ showpointsline
 
 	iny
 
-	clc
+	lda pointlinesdata,y
+	sta $d010
+	iny
+
 	lda pointlinesdata,y
 	sta $d000+0*2
 	iny
-	adc pointlinesdata,y
+	lda pointlinesdata,y
 	sta $d000+1*2
 	iny
-	adc pointlinesdata,y
+	lda pointlinesdata,y
 	sta $d000+2*2
 	iny
-	adc pointlinesdata,y
+	lda pointlinesdata,y
 	sta $d000+3*2
 	iny
-	adc pointlinesdata,y
+	lda pointlinesdata,y
 	sta $d000+4*2
 	iny
-	adc pointlinesdata,y
+	lda pointlinesdata,y
 	sta $d000+5*2
 	iny
-	adc pointlinesdata,y
+	lda pointlinesdata,y
 	sta $d000+6*2
 	iny
-	adc pointlinesdata,y
+	lda pointlinesdata,y
 	sta $d000+7*2
 	iny
 
-	lda #%00000000
-	sta $d010
+	lda #$46									; #$4c
+	jsr cycleperfect
 
 	lda pointlinesdata,y
 	sta $d025
@@ -5668,9 +5671,97 @@ showpointsline2
 
 	rts
 
+testspriteoffs
+
+	ldx #$00					; sprite row 0-5
+
+:	inc spriterowxstartlo,x		; do sine stuff here
+	lda spriterowxstartlo,x
+	cmp #$00
+	bne :+
+	lda spriterowxstarthi,x
+	eor #1
+	sta spriterowxstarthi,x
+:	inx
+	cpx #$06
+	bne :--
+
+	ldx #$00
+
+spriterowloop
+
+	lda tso0lo,x
+	sta tso0+1
+	lda tso0hi,x
+	sta tso0+2
+
+	clc
+	lda tso1lo,x
+	adc #$01
+	sta tso11+1
+	sta tso13+1
+	adc #$01
+	sta tso12+1
+	lda tso1hi,x
+	sta tso11+2
+	sta tso12+2
+	sta tso13+2
+
+	ldy #$00					; sprite 0-7
+
+	lda #$00
+tso11
+	sta pointlinesdata+1
+
+	clc
+:	lda spriterowxstartlo,x
+tso0
+	adc spriterowoffs,y
+tso12
+	sta pointlinesdata+2,y
+	lda spriterowxstarthi,x
+	adc #$00
+	and #$01
+	lsr
+tso13
+	ror pointlinesdata+1
+	iny
+	cpy #$08
+	bne :-
+
+	inx
+	cpx #$06
+	bne spriterowloop
+
+	rts
+
+spriterowxstartlo
+.byte $68,$68,$68,$68,$68,$68
+spriterowxstarthi
+.byte $01,$01,$01,$01,$01,$01
+
+spriterowoffs
+.byte $00,$00,$18,$30,$48,$60,$78,$90
+.byte $00,$00,$18,$30,$48,$60,$78,$90
+.byte $00,$00,$18,$30,$48,$60,$78,$90
+.byte $00,$00,$18,$30,$48,$60,$78,$90
+.byte $00,$00,$18,$30,$48,$60,$78,$90
+.byte $00,$00,$18,$30,$48,$60,$78,$90
+
+tso0lo
+.byte <(spriterowoffs+0*8), <(spriterowoffs+1*8), <(spriterowoffs+2*8), <(spriterowoffs+3*8), <(spriterowoffs+4*8), <(spriterowoffs+5*8)
+tso0hi
+.byte >(spriterowoffs+0*8), >(spriterowoffs+1*8), >(spriterowoffs+2*8), >(spriterowoffs+3*8), >(spriterowoffs+4*8), >(spriterowoffs+5*8)
+
+tso1lo
+.byte <(pointlinesdata+0*22), <(pointlinesdata+1*22), <(pointlinesdata+2*22), <(pointlinesdata+3*22), <(pointlinesdata+4*22), <(pointlinesdata+5*22)
+tso1hi
+.byte >(pointlinesdata+0*22), >(pointlinesdata+1*22), >(pointlinesdata+2*22), >(pointlinesdata+3*22), >(pointlinesdata+4*22), >(pointlinesdata+5*22)
+
 pointlinesdata
 .byte $68+0*24
-.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $00
+.byte $00,$00,$18,$30,$48,$60,$78,$90
 .byte $09,$02,$0a,$07
 .byte bytespriteptrforaddress(sprites1+0*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+0*(6*64)+0*64)
@@ -5682,7 +5773,8 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 
 .byte $68+1*24
-.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $00
+.byte $00,$00,$18,$30,$48,$60,$78,$90
 .byte $09,$02,$0a,$07
 .byte bytespriteptrforaddress(sprites1+1*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+1*(6*64)+0*64)
@@ -5694,7 +5786,8 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 
 .byte $68+2*24
-.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $00
+.byte $00,$00,$18,$30,$48,$60,$78,$90
 .byte $09,$04,$0a,$01
 .byte bytespriteptrforaddress(sprites1+2*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+2*(6*64)+0*64)
@@ -5706,7 +5799,8 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 
 .byte $68+3*24
-.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $00
+.byte $00,$00,$18,$30,$48,$60,$78,$90
 .byte $09,$08,$05,$01
 .byte bytespriteptrforaddress(sprites1+3*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+3*(6*64)+0*64)
@@ -5718,7 +5812,8 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 
 .byte $68+4*24
-.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $00
+.byte $00,$00,$18,$30,$48,$60,$78,$90
 .byte $09,$08,$05,$01
 .byte bytespriteptrforaddress(sprites1+4*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+4*(6*64)+0*64)
@@ -5730,7 +5825,8 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 
 .byte $68+5*24
-.byte $60,$00,$18,$18,$18,$18,$18,$18
+.byte $00
+.byte $00,$00,$18,$30,$48,$60,$78,$90
 .byte $09,$04,$0a,$07
 .byte bytespriteptrforaddress(sprites1+5*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+5*(6*64)+0*64)
