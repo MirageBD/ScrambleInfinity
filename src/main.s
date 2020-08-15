@@ -5612,7 +5612,7 @@ showpointsline
 	sta $d000+7*2
 	iny
 
-	lda #$46									; #$4c
+	lda #$40									; #$4c
 	jsr cycleperfect
 
 	lda pointlinesdata,y
@@ -5697,10 +5697,10 @@ spriterowloop
 
 	clc
 	lda tso1lo,x
-	adc #$01
+	adc #$01					; watch out, bit dangerous if there is a page crossover
 	sta tso11+1
 	sta tso13+1
-	adc #$01
+	adc #$01					; watch out, bit dangerous if there is a page crossover
 	sta tso12+1
 	lda tso1hi,x
 	sta tso11+2
@@ -5736,17 +5736,17 @@ tso13
 	rts
 
 spriterowxstartlo
-.byte $68,$68,$68,$68,$68,$68
+.byte <(360+0*16),<(360+0*16),<(360+0*16),<(360+0*16),<(360+0*16),<(360+0*16)
 spriterowxstarthi
-.byte $01,$01,$01,$01,$01,$01
+.byte >(360+0*16),>(360+0*16),>(360+0*16),>(360+0*16),>(360+0*16),>(360+0*16)
 
 spriterowoffs
-.byte $00,$00,$18,$30,$48,$60,$78,$90
-.byte $00,$00,$18,$30,$48,$60,$78,$90
-.byte $00,$00,$18,$30,$48,$60,$78,$90
-.byte $00,$00,$18,$30,$48,$60,$78,$90
-.byte $00,$00,$18,$30,$48,$60,$78,$90
-.byte $00,$00,$18,$30,$48,$60,$78,$90
+.byte $00,$00,$18,$30,$48,$60,$68-0*4,$80
+.byte $00,$00,$18,$30,$48,$60,$68-0*4,$80
+.byte $00,$00,$18,$30,$48,$60,$68-1*4,$80
+.byte $00,$00,$18,$30,$48,$60,$68-1*4,$80
+.byte $00,$00,$18,$30,$48,$60-0*4,$68,$80
+.byte $00,$00,$18,$30,$48-3*4,$50,$68,$80
 
 tso0lo
 .byte <(spriterowoffs+0*8), <(spriterowoffs+1*8), <(spriterowoffs+2*8), <(spriterowoffs+3*8), <(spriterowoffs+4*8), <(spriterowoffs+5*8)
@@ -5761,7 +5761,7 @@ tso1hi
 pointlinesdata
 .byte $68+0*24
 .byte $00
-.byte $00,$00,$18,$30,$48,$60,$78,$90
+.byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $09,$02,$0a,$07
 .byte bytespriteptrforaddress(sprites1+0*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+0*(6*64)+0*64)
@@ -5770,11 +5770,11 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+1*64)	; 50
 
 .byte $68+1*24
 .byte $00
-.byte $00,$00,$18,$30,$48,$60,$78,$90
+.byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $09,$02,$0a,$07
 .byte bytespriteptrforaddress(sprites1+1*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+1*(6*64)+0*64)
@@ -5783,11 +5783,11 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+2*64)	; 80
 
 .byte $68+2*24
 .byte $00
-.byte $00,$00,$18,$30,$48,$60,$78,$90
+.byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $09,$04,$0a,$01
 .byte bytespriteptrforaddress(sprites1+2*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+2*(6*64)+0*64)
@@ -5796,11 +5796,11 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+3*64)	; 100
 
 .byte $68+3*24
 .byte $00
-.byte $00,$00,$18,$30,$48,$60,$78,$90
+.byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $09,$08,$05,$01
 .byte bytespriteptrforaddress(sprites1+3*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+3*(6*64)+0*64)
@@ -5809,11 +5809,11 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+4*64)	; 150
 
 .byte $68+4*24
 .byte $00
-.byte $00,$00,$18,$30,$48,$60,$78,$90
+.byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $09,$08,$05,$01
 .byte bytespriteptrforaddress(sprites1+4*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+4*(6*64)+0*64)
@@ -5821,8 +5821,8 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+5*64)	; 800
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+6*64)
 
 .byte $68+5*24
 .byte $00
@@ -5833,9 +5833,9 @@ pointlinesdata
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+7*64)	; mystery
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+8*64)
+.byte bytespriteptrforaddress(sprites1+6*(6*64)+9*64)
 
 tsanimframe
 .byte $00
