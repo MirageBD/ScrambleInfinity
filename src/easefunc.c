@@ -5,15 +5,15 @@
 
 #define columns 16
 
-double EaseInSine(double x)
-{
-	return 1.0f - cos((x * M_PI) / 2);
-}
+// Easing functions from https://easings.net/
 
-double EaseOutSine(double x)
-{
-	return sin((x * M_PI) / 2);
-}
+double EaseInSine(double x)		{ return 1.0f - cos((x * M_PI) / 2);	}
+double EaseOutSine(double x)	{ return sin((x * M_PI) / 2);			}
+double EaseInCubic(double x)	{ return x * x * x;						}
+double EaseOutCubic(double x)	{ return 1.0f - pow(1.0f - x, 3);		}
+
+double EaseInElastic(double x)	{ const double c4 = (2 * M_PI) / 3; return x == 0 ? 0 : x == 1 ? 1 : -pow(2,  10 * x - 10) * sin((x * 10 - 10.75) * c4);     }
+double EaseOutElastic(double x) { const double c4 = (2 * M_PI) / 3; return x == 0 ? 0 : x == 1 ? 1 :  pow(2, -10 * x     ) * sin((x * 10 -  0.75) * c4) + 1; }
 
 int main(int argc, char* argv[])
 {
@@ -22,6 +22,10 @@ int main(int argc, char* argv[])
 		printf("\nUsage: easefunc start end period type\n");
 		printf("type 0 = easeInSine\n");
 		printf("type 1 = easeOutSine\n");
+		printf("type 2 = EaseInCubic\n");
+		printf("type 3 = EaseOutCubic\n");
+		printf("type 4 = EaseInElastic\n");
+		printf("type 5 = EaseOutElastic\n");
 		printf("e.g. easefunc 344 104 64 0\n");
 		exit(1);
 	}
@@ -38,10 +42,16 @@ int main(int argc, char* argv[])
 	{
 		double x = (double)i / (period-1);
 
-		if (type == 0)
-			easetab[i] = (int)(start + size * EaseInSine(x));
-		else if (type == 1)
-			easetab[i] = (int)(start + size * EaseOutSine(x));
+		switch (type)
+		{
+			case 0: easetab[i] = (int)(start + size * EaseInSine(x)); break;
+			case 1: easetab[i] = (int)(start + size * EaseOutSine(x)); break;
+			case 2: easetab[i] = (int)(start + size * EaseInCubic(x)); break;
+			case 3: easetab[i] = (int)(start + size * EaseOutCubic(x)); break;
+			case 4: easetab[i] = (int)(start + size * EaseInElastic(x)); break;
+			case 5: easetab[i] = (int)(start + size * EaseOutElastic(x)); break;
+			default: break;
+		}
 	}
 
 	printf("\neasetablo");
