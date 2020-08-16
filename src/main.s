@@ -117,7 +117,7 @@
 .define livesdecrease					1
 .define firebullets						1
 .define firebombs						1
-.define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
+.define startzone						#$04				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
 .define diedfade						1
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
@@ -5743,9 +5743,9 @@ pointlinesdata
 .byte $64+2*24
 .byte $00
 .byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$04,$0a,$01
-.byte bytespriteptrforaddress(sprites1+2*(6*64)+1*64)
-.byte bytespriteptrforaddress(sprites1+2*(6*64)+0*64)
+.byte $09,$08,$05,$01
+.byte bytespriteptrforaddress(sprites1+4*(6*64)+1*64)					; this will bite me in the ass later... fuel = 2, boss = 4
+.byte bytespriteptrforaddress(sprites1+4*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
@@ -5769,9 +5769,9 @@ pointlinesdata
 .byte $64+4*24
 .byte $00
 .byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$08,$05,$01
-.byte bytespriteptrforaddress(sprites1+4*(6*64)+1*64)
-.byte bytespriteptrforaddress(sprites1+4*(6*64)+0*64)
+.byte $09,$02,$0a,$03
+.byte bytespriteptrforaddress(sprites1+2*(6*64)+1*64)					; this will bite me in the ass later... fuel = 2, boss = 4
+.byte bytespriteptrforaddress(sprites1+2*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
@@ -5782,7 +5782,7 @@ pointlinesdata
 .byte $64+5*24
 .byte $00
 .byte $00,$00,$18,$30,$48,$60,$78,$90
-.byte $09,$04,$0a,$07
+.byte $09,$04,$0e,$03
 .byte bytespriteptrforaddress(sprites1+5*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+5*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
@@ -6634,7 +6634,7 @@ bkgpulsetimer
 .byte $00
 
 bkgpulsecolors
-.byte $00,$09,$08,$05,$03,$0d,$01,$0d,$03,$05,$08,$09,$00,$00,$00,$00
+.byte $00,$09,$08,$0a,$0f,$07d,$01,$07,$0f,$0a,$08,$09,$00,$00,$00,$00
 
 .byte $de,$ad,$be,$ef							; DEADBEEF
 
