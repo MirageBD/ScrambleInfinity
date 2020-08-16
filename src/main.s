@@ -122,6 +122,9 @@
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
 
+.define firstsolidtile					68
+.define firsttransparenttile			32
+
 .define bank0							$0000
 .define bank1							$4000
 .define bank2							$8000
@@ -135,6 +138,8 @@
 .define bulletcooldown					#$18
 .define zonecolour0						#$0b
 .define zonecolour1						#$07
+
+.define clearbmptile					#$55				; calcbkghit = #$55 = clear blue, #$aa = clear blue, #$ff = clear d800 / $0c
 
 .define MAXMULTPLEXSPR					12
 .define sortorder						$a0
@@ -175,7 +180,7 @@ tuneplay					= $1003
 
 maptiles					= $aa00		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
 maptilecolors				= $bd00
-congratsscreen				= $c500
+congratsscreen				= $4a00
 fontui						= $5800
 
 loadeddata1					= $3000
@@ -266,6 +271,7 @@ titlescreen1d800			= loadeddata1
 	mysterycave				= %00010100
 	fuelcave				= %00011000
 	bosscave				= %00011100
+	cavemask				= %00010000
 .endenum
 
 .enum sprcollision
@@ -420,6 +426,7 @@ ingamefresh
 	sta $d015
 	sta $d020
 	sta $d021
+	sta $d418
 
 	lda #<irqlimbo								; set limbo irq so it doesn't mess with $d011/$d018/$dd00 causing all kinds of glitches
 	ldx #>irqlimbo
@@ -691,9 +698,9 @@ plotinitialscreendone
 	bne setupleveldone
 
 	ldx #$00									; clear temporary tiles from screen - only need to do this for first subzone?
-	lda #$55
+	lda clearbmptile
 :	sta bitmap1,x
-	sta bitmap1+64,x
+	sta bitmap1+80,x
 	inx
 	bne :-
 	
@@ -843,6 +850,9 @@ foo4
 	lda #$3c									; vsp
 	sta $d011
 	
+	lda #$00									; ingame bkg colour
+	sta $d021
+
 	lda #$ff
 	sta $d015
 	sta $d01c									; sprite multicolour
@@ -2068,39 +2078,39 @@ removeobject
 	adc hbo1+2
 	sta hbo1+2
 
-	clc											; setup clear charmem 1 tiles
-	ldx calcylowvsped
-	lda times40lowtable,x
-	adc #<screen1-1
-	sta hbo4+1
-	lda times40hightable,x
-	adc #>screen1-1
-	sta hbo4+2
+	;clc											; setup clear charmem 1 tiles
+	;ldx calcylowvsped
+	;lda times40lowtable,x
+	;adc #<screen1-1
+	;sta hbo4+1
+	;lda times40hightable,x
+	;adc #>screen1-1
+	;sta hbo4+2
 
-	clc
-	lda calcxlow
-	adc hbo4+1
-	sta hbo4+1
-	lda #$00
-	adc hbo4+2
-	sta hbo4+2
+	;clc
+	;lda calcxlow
+	;adc hbo4+1
+	;sta hbo4+1
+	;lda #$00
+	;adc hbo4+2
+	;sta hbo4+2
 
-	clc											; setup clear charmem 2 tiles
-	ldx calcylowvsped
-	lda times40lowtable,x
-	adc #<screen2-1
-	sta hbo5+1
-	lda times40hightable,x
-	adc #>screen2-1
-	sta hbo5+2
+	;clc											; setup clear charmem 2 tiles
+	;ldx calcylowvsped
+	;lda times40lowtable,x
+	;adc #<screen2-1
+	;sta hbo5+1
+	;lda times40hightable,x
+	;adc #>screen2-1
+	;sta hbo5+2
 
-	clc
-	lda calcxlow
-	adc hbo5+1
-	sta hbo5+1
-	lda #$00
-	adc hbo5+2
-	sta hbo5+2
+	;clc
+	;lda calcxlow
+	;adc hbo5+1
+	;sta hbo5+1
+	;lda #$00
+	;adc hbo5+2
+	;sta hbo5+2
 
 	clc											; setup clear specialtiles/tilemem tiles
 	ldx calcylow
@@ -2145,13 +2155,13 @@ flipped	clc
 	adc #$01
 	sta hbo0+2
 	
-	clc
-	lda hbo4+1
-	adc #$28
-	sta hbo4+1
-	lda hbo4+2
-	adc #$00
-	sta hbo4+2
+	;clc
+	;lda hbo4+1
+	;adc #$28
+	;sta hbo4+1
+	;lda hbo4+2
+	;adc #$00
+	;sta hbo4+2
 	
 	jmp cleartiles
 	
@@ -2164,13 +2174,13 @@ notflipped
 	adc #$01
 	sta hbo1+2
 
-	clc
-	lda hbo5+1
-	adc #$28
-	sta hbo5+1
-	lda hbo5+2
-	adc #$00
-	sta hbo5+2
+	;clc
+	;lda hbo5+1
+	;adc #$28
+	;sta hbo5+1
+	;lda hbo5+2
+	;adc #$00
+	;sta hbo5+2
 
 cleartiles
 	clc
@@ -2190,20 +2200,20 @@ cleartiles
 	sta hbo3+2
 
 	;clc
-	lda hbo4+1
-	adc #$28
-	sta hbo6+1
-	lda hbo4+2
-	adc #$00
-	sta hbo6+2
+	;lda hbo4+1
+	;adc #$28
+	;sta hbo6+1
+	;lda hbo4+2
+	;adc #$00
+	;sta hbo6+2
 	
 	;clc
-	lda hbo5+1
-	adc #$28
-	sta hbo7+1
-	lda hbo5+2
-	adc #$00
-	sta hbo7+2
+	;lda hbo5+1
+	;adc #$28
+	;sta hbo7+1
+	;lda hbo5+2
+	;adc #$00
+	;sta hbo7+2
 
 	;clc
 	lda hbo8+1
@@ -2226,18 +2236,18 @@ hbo3
 	dex
 	bne hbo0
 
-	ldx #$02
-	lda #$66
-hbo4
-	sta screen1,x
-hbo5
-	sta screen2,x
-hbo6
-	sta screen1+40,x
-hbo7
-	sta screen2+40,x
-	dex
-	bne hbo4
+;	ldx #$02
+;	lda #$66
+;hbo4
+;	sta screen1,x
+;hbo5
+;	sta screen2,x
+;hbo6
+;	sta screen1+40,x
+;hbo7
+;	sta screen2+40,x
+;	dex
+;	bne hbo4
 
 	ldx #$02
 	lda #$20
@@ -3242,7 +3252,7 @@ missilefound
 	sta calcylow
 	sta calcylowvsped
 	stx calcxlow
-	lda #$aa
+	lda clearbmptile
 	sta calcbkghit
 	
 	lda flipflop
@@ -4042,12 +4052,12 @@ gett2
 	lda currenttile+0
 	;cmp #$00
 	bmi solidtile								; < 0 = solid tile
-	cmp #$43
-	bpl solidtile								; > 62 = solid tile
+	cmp #firstsolidtile
+	bpl solidtile								; > 67 = solid tile
 	
 	lda currenttile+0
-	cmp #$20
-	bpl transtile								; > 32 && < 63 = transparent tile
+	cmp #firsttransparenttile
+	bpl transtile								; > 32 && < 68 = transparent tile
 
 missilefuelspecialtile
 	lda currenttile+0
@@ -4758,7 +4768,7 @@ csptsp0	lda $c001
 	lda #$00
 	sta calcspryoffset
 
-	lda calchit									; find top left position of object hit
+	lda calchit										; find top left position of object hit
 	and #%00000001
 	beq :+
 	dec calcxlow
@@ -4770,16 +4780,8 @@ csptsp0	lda $c001
 	lda #$08
 	sta calcspryoffset
 :	
-	lda calchit
-	and #%00010000
-	beq :+
-	lda #$00
+	lda clearbmptile
 	sta calcbkghit
-	jmp :++
-	
-:	lda #$55
-	sta calcbkghit
-:
 
 csbkghit
 
@@ -5297,6 +5299,10 @@ titlescreen
 	sta $01
 
 	jsr clearscreen
+
+	ldx #$00
+	ldy #$00
+	jsr tuneinit
 
 	ldx #$00
 :	lda #$00
@@ -5926,6 +5932,8 @@ irqtitle3
 	sta $d001+5*2
 	sta $d001+6*2
 	sta $d001+7*2
+
+	jsr tuneplay
 
 	lda #<irqtitle
 	ldx #>irqtitle

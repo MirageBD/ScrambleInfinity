@@ -27,6 +27,8 @@ SEGMENTS
 
 	TITLESCREEN:			load=RAM, start=$4400; # $0300
 
+	CONGRATS:				load=RAM; #, start=$4a00;
+
 	SPRITES1:				load=RAM, start=$4b00; # goes until $5700/$d700 (at the moment) # gets loaded, then copied to cb00, then copied back to 4b00 each time we go ingame
 
 	UIFONT:					load=RAM, start=$5800;
@@ -40,7 +42,7 @@ SEGMENTS
 	GAMEPLAY:				load=RAM, start=$9100;
 
 	EASEFUNC:				load=RAM, start=$9e00;
-	# FREE!!! $9e00-$a100
+	# FREE!!! $a000-$a100
 
 	TSPRESSFIRESPR:			load=RAM, start=$a200;
 
@@ -57,7 +59,6 @@ SEGMENTS
 	LIVESLEFTSCREEN:		load=RAM, start=$c400;
 	CONGRATULATIONSSCREEN:	load=RAM, align=256;
 	CLEARSCREEN:			load=RAM;
-	CONGRATS:				load=RAM; #, start=$4a00;
 
 	TABLES:					load = RAM, start=$c700;
 
