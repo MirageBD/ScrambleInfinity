@@ -110,15 +110,15 @@
 
 ; DEBUG DEFINES ----------------------------------------------------------------------------------------------------------
 
-.define fueldecreases		1					; HACKS
-.define pointsforbeingalive	1
-.define shipbkgcollision	1
-.define shipsprcollision	1
-.define livesdecrease		1
-.define firebullets			1
-.define firebombs			1
-.define startzone			#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
-.define diedfade			1
+.define fueldecreases					1					; HACKS
+.define pointsforbeingalive				1
+.define shipbkgcollision				1
+.define shipsprcollision				1
+.define livesdecrease					1
+.define firebullets						1
+.define firebombs						1
+.define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
+.define diedfade						1
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
 
@@ -700,7 +700,7 @@ plotinitialscreendone
 	ldx #$00									; clear temporary tiles from screen - only need to do this for first subzone?
 	lda clearbmptile
 :	sta bitmap1,x
-	sta bitmap1+80,x
+	sta bitmap1+64,x
 	inx
 	bne :-
 	
@@ -714,7 +714,7 @@ plotinitialscreendone
 	bne :-
 
 	lda #$20									; empty tiles used for index ordering
-	.repeat 27, i
+	.repeat 28, i
 	sta loadeddata2+i*50+0
 	.endrepeat
 
@@ -2078,40 +2078,6 @@ removeobject
 	adc hbo1+2
 	sta hbo1+2
 
-	;clc											; setup clear charmem 1 tiles
-	;ldx calcylowvsped
-	;lda times40lowtable,x
-	;adc #<screen1-1
-	;sta hbo4+1
-	;lda times40hightable,x
-	;adc #>screen1-1
-	;sta hbo4+2
-
-	;clc
-	;lda calcxlow
-	;adc hbo4+1
-	;sta hbo4+1
-	;lda #$00
-	;adc hbo4+2
-	;sta hbo4+2
-
-	;clc											; setup clear charmem 2 tiles
-	;ldx calcylowvsped
-	;lda times40lowtable,x
-	;adc #<screen2-1
-	;sta hbo5+1
-	;lda times40hightable,x
-	;adc #>screen2-1
-	;sta hbo5+2
-
-	;clc
-	;lda calcxlow
-	;adc hbo5+1
-	;sta hbo5+1
-	;lda #$00
-	;adc hbo5+2
-	;sta hbo5+2
-
 	clc											; setup clear specialtiles/tilemem tiles
 	ldx calcylow
 	lda times40lowtable,x
@@ -2155,14 +2121,6 @@ flipped	clc
 	adc #$01
 	sta hbo0+2
 	
-	;clc
-	;lda hbo4+1
-	;adc #$28
-	;sta hbo4+1
-	;lda hbo4+2
-	;adc #$00
-	;sta hbo4+2
-	
 	jmp cleartiles
 	
 notflipped	
@@ -2174,14 +2132,6 @@ notflipped
 	adc #$01
 	sta hbo1+2
 
-	;clc
-	;lda hbo5+1
-	;adc #$28
-	;sta hbo5+1
-	;lda hbo5+2
-	;adc #$00
-	;sta hbo5+2
-
 cleartiles
 	clc
 	lda hbo0+1
@@ -2191,7 +2141,7 @@ cleartiles
 	adc #$01
 	sta hbo2+2
 	
-	;clc
+	clc
 	lda hbo1+1
 	adc #$40
 	sta hbo3+1
@@ -2199,23 +2149,7 @@ cleartiles
 	adc #$01
 	sta hbo3+2
 
-	;clc
-	;lda hbo4+1
-	;adc #$28
-	;sta hbo6+1
-	;lda hbo4+2
-	;adc #$00
-	;sta hbo6+2
-	
-	;clc
-	;lda hbo5+1
-	;adc #$28
-	;sta hbo7+1
-	;lda hbo5+2
-	;adc #$00
-	;sta hbo7+2
-
-	;clc
+	clc
 	lda hbo8+1
 	adc #$28
 	sta hbo9+1
@@ -2235,19 +2169,6 @@ hbo3
 	sta bitmap2+bitmapwidth-1,x
 	dex
 	bne hbo0
-
-;	ldx #$02
-;	lda #$66
-;hbo4
-;	sta screen1,x
-;hbo5
-;	sta screen2,x
-;hbo6
-;	sta screen1+40,x
-;hbo7
-;	sta screen2+40,x
-;	dex
-;	bne hbo4
 
 	ldx #$02
 	lda #$20
