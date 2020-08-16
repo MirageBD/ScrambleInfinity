@@ -571,6 +571,10 @@ setingamebkgcolours
 	sta colormem+(3*$0100),x
 	dex
 	bne :-
+
+	lda #$00
+	sta ingamebkgcolor+1
+
 	rts
 
 setupinitiallevel
@@ -849,7 +853,8 @@ foo4
 	stx $d011
 	lda #$3c									; vsp
 	sta $d011
-	
+
+ingamebkgcolor	
 	lda #$00									; ingame bkg colour
 	sta $d021
 
@@ -4918,7 +4923,9 @@ handlezone5										; avoid fuel
 	bpl :+										; if 1 or higher!
 	jmp handlezone5rest
 	
-:	inc gamefinished
+:	lda #$00
+	sta ingamebkgcolor+1
+	inc gamefinished
 	cmp #$30
 	beq handlegamefinished
 	jmp handlezone5rest
@@ -4933,7 +4940,23 @@ handlegamefinished
 	rts
 
 handlezone5rest
-	jsr animmissiles
+	clc
+	lda subzone
+	cmp #$43
+	bpl :+
+	lda #$00
+	sta ingamebkgcolor+1
+	jmp :++
+
+:	inc bkgpulsetimer
+	lda bkgpulsetimer
+	lsr
+	and #$0f
+	tax
+	lda bkgpulsecolors,x
+	sta ingamebkgcolor+1
+
+:	jsr animmissiles
 	jmp handlemissilemovement
 	
 ; -----------------------------------------------------------------------------------------------
@@ -6604,6 +6627,12 @@ mystery100200300spriteptrs
 
 easetimer
 .byte $00
+
+bkgpulsetimer
+.byte $00
+
+bkgpulsecolors
+.byte $00,$09,$08,$05,$03,$0d,$01,$0d,$03,$05,$08,$09,$00,$00,$00,$00
 
 .byte $de,$ad,$be,$ef							; DEADBEEF
 
