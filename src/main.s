@@ -178,7 +178,7 @@
 tuneinit					= $1000
 tuneplay					= $1003
 
-maptiles					= $aa00		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
+maptiles					= $a900		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
 maptilecolors				= $bd00
 congratsscreen				= $4a00
 fontui						= $5800
@@ -189,7 +189,7 @@ loadeddata2					= $3800
 screen1						= $4000
 screenui					= $4000
 screenui2					= $a000		; only used in lower border for sprite ptrs
-fontdigits					= $a900
+fontdigits					= $bf80
 screen2						= $c000
 sprites1					= $4b00
 sprites2					= $cb00

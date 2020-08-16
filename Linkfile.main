@@ -51,10 +51,10 @@ SEGMENTS
 
 	EMPTYSPRITE:			load=RAM, start=$a8c0;
 
-	DIGITSPRITEFONT:		load=RAM, start=$a900; # $0080
-
-	MAPTILES:				load=RAM, start=$aa00;
+	MAPTILES:				load=RAM, start=$a900;
 	MAPTILECOLORS:			load=RAM, start=$bd00;
+
+	DIGITSPRITEFONT:		load=RAM, start=$bf80; # $0080
 
 	LIVESLEFTSCREEN:		load=RAM, start=$c400;
 	CONGRATULATIONSSCREEN:	load=RAM, align=256;
