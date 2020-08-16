@@ -4926,6 +4926,7 @@ handlezone5										; avoid fuel
 :	lda #$00
 	sta ingamebkgcolor+1
 	inc gamefinished
+	lda gamefinished
 	cmp #$30
 	beq handlegamefinished
 	jmp handlezone5rest
