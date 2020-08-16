@@ -122,7 +122,7 @@
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
 
-.define firstsolidtile					68
+.define firstsolidtile					74
 .define firsttransparenttile			32
 
 .define bank0							$0000
@@ -4920,7 +4920,23 @@ handlezone4										; missiles
 handlezone5										; avoid fuel
 	lda gamefinished
 	cmp #$01
-	bpl :+										; if 1 or higher!
+	bpl :++										; if 1 or higher!
+
+	clc
+	lda subzone
+	cmp #$43
+	bpl :+
+	lda #$00
+	sta ingamebkgcolor+1
+	jmp handlezone5rest
+
+:	inc bkgpulsetimer
+	lda bkgpulsetimer
+	lsr
+	and #$0f
+	tax
+	lda bkgpulsecolors,x
+	sta ingamebkgcolor+1
 	jmp handlezone5rest
 	
 :	lda #$00
@@ -4941,23 +4957,7 @@ handlegamefinished
 	rts
 
 handlezone5rest
-	clc
-	lda subzone
-	cmp #$43
-	bpl :+
-	lda #$00
-	sta ingamebkgcolor+1
-	jmp :++
-
-:	inc bkgpulsetimer
-	lda bkgpulsetimer
-	lsr
-	and #$0f
-	tax
-	lda bkgpulsecolors,x
-	sta ingamebkgcolor+1
-
-:	jsr animmissiles
+	jsr animmissiles
 	jmp handlemissilemovement
 	
 ; -----------------------------------------------------------------------------------------------
