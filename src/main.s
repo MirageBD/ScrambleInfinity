@@ -5447,6 +5447,8 @@ irqtitle
 	sta $d020
 	sta $d021
 
+	;dec $d020
+
 	inc tsanimframedelay
 	lda tsanimframedelay
 	cmp #$06
@@ -5465,19 +5467,13 @@ irqtitle
 :	
 	jsr testspriteoffs
 
-	lda pointlinesdata ; ,y
-	sta $d001+0*2
-	sta $d001+1*2
-	sta $d001+2*2
-	sta $d001+3*2
-	sta $d001+4*2
-	sta $d001+5*2
-	sta $d001+6*2
-	sta $d001+7*2
+	ldy #0*22
+	jsr showpointsline
+	;inc $d020
 
 	lda #<irqtitle2
 	ldx #>irqtitle2
-	ldy #$5f
+	ldy #$68
 	jmp endirq
 
 irqtitle2
@@ -5487,8 +5483,8 @@ irqtitle2
 	lda #$40									; #$4c
 	jsr cycleperfect
 
-	inc $d020
-	inc $d021
+	;inc $d020
+	;inc $d021
 
 	lda d018forscreencharset(screen1,$7000)
 	sta $d018
@@ -5499,21 +5495,25 @@ irqtitle2
 	lda #$04
 	sta $d023
 
-	dec $d020
-	dec $d021
+	;dec $d020
+	;dec $d021
 
-	ldy #0*22
-	jsr showpointsline
+	jsr showpointsline2
 	ldy #1*22
 	jsr showpointsline
+	jsr showpointsline2
 	ldy #2*22
 	jsr showpointsline
+	jsr showpointsline2
 	ldy #3*22
 	jsr showpointsline
+	jsr showpointsline2
 	ldy #4*22
 	jsr showpointsline
+	jsr showpointsline2
 	ldy #5*22
 	jsr showpointsline
+	jsr showpointsline2
 
 	lda #$f8					; prepare lower border sprites
 	sta $d001+0*2
@@ -5653,7 +5653,7 @@ showpointsline
 	iny
 	lda pointlinesdata,y
 	sta screenui+$03f8+7
-	iny
+	rts
 
 showpointsline2
 	lda #$00
@@ -5808,7 +5808,7 @@ pointlinesdata
 .byte $64+4*24
 .byte $00
 .byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$02,$0a,$03
+.byte $09,$02,$0a,$07
 .byte bytespriteptrforaddress(sprites1+2*(6*64)+1*64)					; this will bite me in the ass later... fuel = 2, boss = 4
 .byte bytespriteptrforaddress(sprites1+2*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
