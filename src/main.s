@@ -5297,6 +5297,12 @@ titlescreen
 	sta file01+1
 	jsr loadpackd
 
+	lda titlescreenbkgfile
+	sta file01+0
+	lda titlescreenbkgfile+1
+	sta file01+1
+	jsr loadpackd
+
 	ldx #$00
 :	sta bitmap1+7*320,x
 	inx
@@ -5307,6 +5313,14 @@ titlescreen
 	sta colormem+0*256,x
 	lda titlescreen1d800+0*256+24,x
 	sta colormem+0*256+24,x
+	inx
+	bne :-
+
+	ldx #$00
+:	lda #$0e
+	sta colormem+1*256,x
+	sta colormem+2*256,x
+	sta colormem+3*256,x
 	inx
 	bne :-
 
@@ -5451,14 +5465,42 @@ irqtitle
 :	
 	jsr testspriteoffs
 
+	lda pointlinesdata ; ,y
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+	sta $d001+7*2
+
 	lda #<irqtitle2
 	ldx #>irqtitle2
-	ldy #$5e
+	ldy #$5f
 	jmp endirq
 
 irqtitle2
 
 	pha
+
+	lda #$40									; #$4c
+	jsr cycleperfect
+
+	inc $d020
+	inc $d021
+
+	lda d018forscreencharset(screen1,$7000)
+	sta $d018
+	lda #$1b
+	sta $d011
+	lda #$0e
+	sta $d022
+	lda #$04
+	sta $d023
+
+	dec $d020
+	dec $d021
 
 	ldy #0*22
 	jsr showpointsline
@@ -5563,9 +5605,6 @@ showpointsline
 	lda pointlinesdata,y
 	sta $d000+7*2
 	iny
-
-	lda #$40									; #$4c
-	jsr cycleperfect
 
 	lda pointlinesdata,y
 	sta $d025
@@ -6605,6 +6644,8 @@ titlescreen1d800file
 .asciiz "T3"
 titlescreenpointsprfile
 .asciiz "T4"
+titlescreenbkgfile
+.asciiz "T5"
 
 barsd022
 .byte $07,$0a,$0a,$0a,$08,$08,$02,$02,$02,$02,$02,  $00,  $03,$0e,$04,$0e,$04,$0e,$04,$04,$04,$04,$04,  $00,  $0d,$03,$05,$03,$05,$05,$08,$05,$08,$08,$08
