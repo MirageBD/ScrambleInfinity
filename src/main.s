@@ -5572,7 +5572,7 @@ showpointsline
 	sta $d001+7*2
 
 	clc
-	adc #18
+	adc #20
 	sta showpointsline2+1
 
 	iny
@@ -5821,7 +5821,7 @@ pointlinesdata
 .byte $64+5*24
 .byte $00
 .byte $00,$00,$18,$30,$48,$60,$78,$90
-.byte $09,$04,$0e,$03
+.byte $06,$04,$0e,$03
 .byte bytespriteptrforaddress(sprites1+5*(6*64)+1*64)
 .byte bytespriteptrforaddress(sprites1+5*(6*64)+0*64)
 .byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
