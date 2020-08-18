@@ -117,7 +117,7 @@
 .define livesdecrease					1
 .define firebullets						1
 .define firebombs						1
-.define startzone						#$04				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
+.define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
 .define diedfade						1
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
@@ -1434,7 +1434,7 @@ testshipbkgcollision
 	sta calcxhigh
 	sec
 	lda ship0+sprdata::ylow
-	sbc #$26
+	sbc #$2a
 	sta calcylow
 
 	jsr calcshippostoscreenpos
