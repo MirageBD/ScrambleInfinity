@@ -283,6 +283,12 @@ mainentry
 	lda #$00
 	sta loading
 
+	ldx #$00
+	lda #$10
+:	sta screen+9*40,x
+	inx
+	bne :-
+	
 	lda #$1b
 	sta $d011
 	jmp $c400 ; $080d
