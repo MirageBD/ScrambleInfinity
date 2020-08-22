@@ -9,8 +9,6 @@
 ; more obfuscate against hackers? On drive? Probably not worth it.
 ; fix bug where ground targets sometimes get cleaned only half when hit.
 ; add proper disk fail handling.
-; congrats screen is broken again
-; make final zone more exciting. Use $d021 to blink parts?
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
@@ -5483,7 +5481,7 @@ irqtitle
 	sta tsanimframe
 
 :	
-	jsr testspriteoffs
+	jsr setspritexoffs
 
 	ldy #0*28
 	jsr showpointsline
@@ -5699,7 +5697,7 @@ showpointsline2
 
 	rts
 
-testspriteoffs
+setspritexoffs
 
 	inc easetimer
 
