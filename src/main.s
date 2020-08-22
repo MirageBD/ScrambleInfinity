@@ -5452,9 +5452,9 @@ irqtitle
 	jsr setspritexoffs
 
 	ldy #0*10
-	jsr showpointsline0
+	jsr setpointlinespositions
 	ldy #0*18
-	jsr showpointsline1
+	jsr setpointlinesptrcolors
 	;inc $d020
 
 	lda #<irqtitle2
@@ -5484,37 +5484,37 @@ irqtitle2
 	;dec $d020
 	;dec $d021
 
-	jsr showpointsline2
+	jsr waitnextpointline
 	;inc $d021
 	ldy #1*10
-	jsr showpointsline0
+	jsr setpointlinespositions
 	ldy #1*18
-	jsr showpointsline1
-	jsr showpointsline2
+	jsr setpointlinesptrcolors
+	jsr waitnextpointline
 	;inc $d021
 	ldy #2*10
-	jsr showpointsline0
+	jsr setpointlinespositions
 	ldy #2*18
-	jsr showpointsline1
-	jsr showpointsline2
+	jsr setpointlinesptrcolors
+	jsr waitnextpointline
 	;inc $d021
 	ldy #3*10
-	jsr showpointsline0
+	jsr setpointlinespositions
 	ldy #3*18
-	jsr showpointsline1
-	jsr showpointsline2
+	jsr setpointlinesptrcolors
+	jsr waitnextpointline
 	;inc $d021
 	ldy #4*10
-	jsr showpointsline0
+	jsr setpointlinespositions
 	ldy #4*18
-	jsr showpointsline1
-	jsr showpointsline2
+	jsr setpointlinesptrcolors
+	jsr waitnextpointline
 	;inc $d021
 	ldy #5*10
-	jsr showpointsline0
+	jsr setpointlinespositions
 	ldy #5*18
-	jsr showpointsline1
-	jsr showpointsline2
+	jsr setpointlinesptrcolors
+	jsr waitnextpointline
 	;lda #$00
 	;sta $d021
 
@@ -5560,8 +5560,9 @@ irqtitle2
 	ldy #$f8
 	jmp endirq
 
-showpointsline0
-	lda pointlinesdata0,y
+setpointlinespositions
+
+	lda pointlinespositions,y
 	sta $d001+0*2
 	sta $d001+1*2
 	sta $d001+2*2
@@ -5573,41 +5574,41 @@ showpointsline0
 
 	clc
 	adc #21
-	sta showpointsline2+1
+	sta waitnextpointline+1
 
 	iny
 
-	lda pointlinesdata0,y
+	lda pointlinespositions,y
 	sta $d010
 	iny
 
-	lda pointlinesdata0,y
+	lda pointlinespositions,y
 	sta $d000+0*2
 	iny
-	lda pointlinesdata0,y
+	lda pointlinespositions,y
 	sta $d000+1*2
 	iny
-	lda pointlinesdata0,y
+	lda pointlinespositions,y
 	sta $d000+2*2
 	iny
-	lda pointlinesdata0,y
+	lda pointlinespositions,y
 	sta $d000+3*2
 	iny
-	lda pointlinesdata0,y
+	lda pointlinespositions,y
 	sta $d000+4*2
 	iny
-	lda pointlinesdata0,y
+	lda pointlinespositions,y
 	sta $d000+5*2
 	iny
-	lda pointlinesdata0,y
+	lda pointlinespositions,y
 	sta $d000+6*2
 	iny
-	lda pointlinesdata0,y
+	lda pointlinespositions,y
 	sta $d000+7*2
 
 	rts
 
-showpointsline1
+setpointlinesptrcolors
 
 	clc
 	lda pointlinesdata1,y
@@ -5670,7 +5671,7 @@ showpointsline1
 
 	rts
 
-showpointsline2
+waitnextpointline
 
 	lda #$00
 :	cmp $d012
@@ -5700,19 +5701,19 @@ setspritexoffs
 
 spriterowloop
 
-	lda tso0lo,x
+	lda tsro1lo,x				; LV - get row offsets
 	sta tso0+1
-	lda tso0hi,x
+	lda tsro1hi,x
 	sta tso0+2
 
 	clc
-	lda tso1lo,x
-	adc #$01					; watch out, bit dangerous if there is a page crossover
+	lda tsplposlo,x				; LV - get 
+	adc #$01
 	sta tso11+1
 	sta tso13+1
-	adc #$01					; watch out, bit dangerous if there is a page crossover
+	adc #$01
 	sta tso12+1
-	lda tso1hi,x
+	lda tsplposhi,x
 	sta tso11+2
 	sta tso12+2
 	sta tso13+2
@@ -5721,20 +5722,20 @@ spriterowloop
 
 	lda #$00
 tso11
-	sta pointlinesdata0+1
+	sta pointlinespositions+1
 
 	clc
 :	lda spriterowxstartlo,x
 tso0
-	adc spriterowoffs,y
+	adc spriterowoffs1,y
 tso12
-	sta pointlinesdata0+2,y
+	sta pointlinespositions+2,y
 	lda spriterowxstarthi,x
 	adc #$00
 	and #$01
 	lsr
 tso13
-	ror pointlinesdata0+1
+	ror pointlinespositions+1
 	iny
 	cpy #$08
 	bne :-
@@ -5750,7 +5751,7 @@ spriterowxstartlo									; these values get filled from the easing tables
 spriterowxstarthi									; these values get filled from the easing tables
 .byte >(104),>(104),>(104),>(104),>(104),>(104)
 
-spriterowoffs
+spriterowoffs1
 .byte $00,$00,$18,$30,$48,$60,$68-0*4,$80			; total width 152 - middle start = 24 + (320-152) / 2 = 108 (-4 for some sprite variation on the left) = 104
 .byte $00,$00,$18,$30,$48,$60,$68-0*4,$80			; sin wave needs to go from (344 -> 104 -> -136) = ( $0158 -> $0068 -> $0178)
 .byte $00,$00,$18,$30,$48,$60,$68-1*4,$80			; ./easefunc 344 104 64 0
@@ -5758,19 +5759,27 @@ spriterowoffs
 .byte $00,$00,$18,$30,$48,$60-0*4,$68,$80
 .byte $00,$00,$18,$30,$48-3*4,$50,$68,$80
 
-tso0lo
-.byte <(spriterowoffs+0*8), <(spriterowoffs+1*8), <(spriterowoffs+2*8), <(spriterowoffs+3*8), <(spriterowoffs+4*8), <(spriterowoffs+5*8)
-tso0hi
-.byte >(spriterowoffs+0*8), >(spriterowoffs+1*8), >(spriterowoffs+2*8), >(spriterowoffs+3*8), >(spriterowoffs+4*8), >(spriterowoffs+5*8)
+spriterowoffs2
+.byte $00,$08,$20,$38,$50,$68,$80,$80
+.byte $00,$08,$20,$38,$50,$68,$80,$80
+.byte $00,$08,$20,$38,$50,$68,$80,$80
+.byte $00,$08,$20,$38,$50,$68,$80,$80
+.byte $00,$08,$20,$38,$50,$68,$80,$80
+.byte $00,$08,$20,$38,$50,$68,$80,$80
 
-tso1lo
-.byte <(pointlinesdata0+0*10), <(pointlinesdata0+1*10), <(pointlinesdata0+2*10), <(pointlinesdata0+3*10), <(pointlinesdata0+4*10), <(pointlinesdata0+5*10)
-tso1hi
-.byte >(pointlinesdata0+0*10), >(pointlinesdata0+1*10), >(pointlinesdata0+2*10), >(pointlinesdata0+3*10), >(pointlinesdata0+4*10), >(pointlinesdata0+5*10)
+tsro1lo
+.byte <(spriterowoffs1+0*8), <(spriterowoffs1+1*8), <(spriterowoffs1+2*8), <(spriterowoffs1+3*8), <(spriterowoffs1+4*8), <(spriterowoffs1+5*8)
+tsro1hi
+.byte >(spriterowoffs1+0*8), >(spriterowoffs1+1*8), >(spriterowoffs1+2*8), >(spriterowoffs1+3*8), >(spriterowoffs1+4*8), >(spriterowoffs1+5*8)
+
+tsplposlo
+.byte <(pointlinespositions+0*10), <(pointlinespositions+1*10), <(pointlinespositions+2*10), <(pointlinespositions+3*10), <(pointlinespositions+4*10), <(pointlinespositions+5*10)
+tsplposhi
+.byte >(pointlinespositions+0*10), >(pointlinespositions+1*10), >(pointlinespositions+2*10), >(pointlinespositions+3*10), >(pointlinespositions+4*10), >(pointlinespositions+5*10)
 
 ; ---------------------------------------------------------------
 
-pointlinesdata0
+pointlinespositions
 .byte $64+0*24,$00,$00,$00,$00,$00,$00,$00,$00,$00	; yoffset, $d010, $d000++
 .byte $64+1*24,$00,$00,$00,$00,$00,$00,$00,$00,$00
 .byte $64+2*24,$00,$00,$00,$00,$00,$00,$00,$00,$00
