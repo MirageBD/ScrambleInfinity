@@ -5254,6 +5254,9 @@ titlescreen
 	lda #$37
 	sta $01
 
+	lda #$7b
+	sta $d011
+
 	jsr clearscreen
 
 	ldx #$00
@@ -5261,27 +5264,12 @@ titlescreen
 	jsr tuneinit
 
 	ldx #$00
-:	lda #$00
-	sta colormem+(0*$0100),x
-	sta colormem+(1*$0100),x
-	sta colormem+(2*$0100),x
-	sta colormem+(3*$0100),x
+	stx $d01b									; sprite priority
+	stx $7fff
+	stx $bfff
+	stx $d012
 	inx
-	bne :-
-
-	lda #$00
-	sta $d01b									; sprite priority
-	sta $7fff
-	sta $bfff
-
-	lda #$7b
-	sta $d011
-	
-	lda #$01
-	sta $d01a
-
-	lda #$00
-	sta $d012
+	stx $d01a
 
 	lda titlescreen1bmpfile
 	sta file01+0
@@ -5320,7 +5308,12 @@ titlescreen
 	jsr loadpackd
 
 	ldx #$00
-:	sta bitmap1+7*320,x
+:	lda #$0e
+	sta colormem+(1*$0100),x
+	sta colormem+(2*$0100),x
+	sta colormem+(3*$0100),x
+	lda #$00
+	sta bitmap1+7*320,x
 	inx
 	bne :-
 
@@ -5331,17 +5324,6 @@ titlescreen
 	sta colormem+0*256+24,x
 	inx
 	bne :-
-
-	ldx #$00
-:	lda #$0e
-	sta colormem+1*256,x
-	sta colormem+2*256,x
-	sta colormem+3*256,x
-	inx
-	bne :-
-
-	lda #$ff
-	sta $d015
 
 	lda #<irqtitle
 	ldx #>irqtitle
@@ -5365,9 +5347,6 @@ irqtitle
 
 	pha
 
-	lda #$46									; #$4c
-	jsr cycleperfect
-
 	lda bankforaddress(tslogospr)
 	sta $dd00
  	lda #$3b
@@ -5378,6 +5357,7 @@ irqtitle
 
 	lda #$ff
 	sta $d01c
+	sta $d015
 	lda #%10000000
 	sta $d010
 
@@ -5385,25 +5365,18 @@ irqtitle
 	sta $d025
 	lda #$0b
 	sta $d026
-	lda #$00
-	sta $d027+0
-	sta $d027+1
-	sta $d027+2
-	sta $d027+3
-	sta $d027+4
-	sta $d027+5
-	sta $d027+6
-	sta $d027+7
 
+	ldx #$00
+	ldy #$00
+:	lda #$00
+	sta $d027,x
 	lda #$1d
-	sta $d001+0*2
-	sta $d001+1*2
-	sta $d001+2*2
-	sta $d001+3*2
-	sta $d001+4*2
-	sta $d001+5*2
-	sta $d001+6*2
-	sta $d001+7*2
+	sta $d001,y
+	iny
+	iny
+	inx
+	cpx #$08
+	bne :-
 
 	lda #(88+0*24)&255
 	sta $d000+0*2
@@ -5422,22 +5395,17 @@ irqtitle
 	lda #(88+7*24)&255
 	sta $d000+7*2
 
+	ldy #$00
 	ldx spriteptrforaddress(tslogospr)
-	stx screenspecial+$03f8+0
+:	txa
+	sta screenspecial+$03f8+0,y
 	inx
-	stx screenspecial+$03f8+1
-	inx
-	stx screenspecial+$03f8+2
-	inx
-	stx screenspecial+$03f8+3
-	inx
-	stx screenspecial+$03f8+4
-	inx
-	stx screenspecial+$03f8+5
-	inx
-	stx screenspecial+$03f8+6
-	inx
-	stx screenspecial+$03f8+7
+	iny
+	cpy #$08
+	bne :-
+
+	lda #$56									; #$4c
+	jsr cycleperfect
 
 	ldx #$00
 :	lda sprraster,x
@@ -5538,15 +5506,13 @@ irqtitle2
 	;lda #$00
 	;sta $d021
 
+	ldx #$00
 	lda #$f8					; prepare lower border sprites
-	sta $d001+0*2
-	sta $d001+1*2
-	sta $d001+2*2
-	sta $d001+3*2
-	sta $d001+4*2
-	sta $d001+5*2
-	sta $d001+6*2
-	sta $d001+7*2
+:	sta $d001+0*2,x
+	inx
+	inx
+	cpx #$10
+	bne :-
 
 	ldx spriteptrforaddress(tspressfirespr)
 	stx screenui2+$03f8+0
@@ -5969,7 +5935,7 @@ irqtitle3
 
 	lda #<irqtitle
 	ldx #>irqtitle
-	ldy #$18
+	ldy #$14
 	jmp endirq
 
 sprraster
