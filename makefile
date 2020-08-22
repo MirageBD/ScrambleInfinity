@@ -214,15 +214,25 @@ tsbmp1d800.b2: $(BIN_DIR)/tsbmp1d800.bin
 	$(BB) $(EXE_DIR)/tsbmp1d800.rel.bin
 	$(MV) $(EXE_DIR)/tsbmp1d800.rel.bin.b2 $(EXE_DIR)/tsbmp1d800.b2
 
+# $4b00 - $5700 = $0c00 (REPLACES SPRITES1 SEGMENT)
 tspointspr.b2: $(BIN_DIR)/tspointspr.bin
 	$(ADDADDR) $(BIN_DIR)/tspointspr.bin $(EXE_DIR)/tspointspr.rel.bin 19200
 	$(BB) $(EXE_DIR)/tspointspr.rel.bin
 	$(MV) $(EXE_DIR)/tspointspr.rel.bin.b2 $(EXE_DIR)/tspointspr.b2
 
+# more room for sprites from $7400-$8000 = $0c00... at $7800 for now
+tshowfar.b2: $(BIN_DIR)/tshowfar.bin
+	$(ADDADDR) $(BIN_DIR)/tshowfar.bin $(EXE_DIR)/tshowfar.rel.bin 30720
+	$(BB) $(EXE_DIR)/tshowfar.rel.bin
+	$(MV) $(EXE_DIR)/tshowfar.rel.bin.b2 $(EXE_DIR)/tshowfar.b2
+
+# $7000 - $7400
 tsbkg.b2:  $(BIN_DIR)/metabkg.bin
 	$(ADDADDR) $(BIN_DIR)/metabkg.bin $(EXE_DIR)/metabkg.rel.bin 28672
 	$(BB) $(EXE_DIR)/metabkg.rel.bin
 	$(MV) $(EXE_DIR)/metabkg.rel.bin.b2 $(EXE_DIR)/tsbkg.b2
+
+
 
 # -----------------------------------------------------------------------------
 
@@ -240,7 +250,7 @@ tsbkg.b2:  $(BIN_DIR)/metabkg.bin
 
 main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
           mth.out mth.b2 \
-		  tsbmp1.b2 tsbmp10400.b2 tsbmp1d800.b2 tspointspr.b2 tsbkg.b2 \
+		  tsbmp1.b2 tsbmp10400.b2 tsbmp1d800.b2 tspointspr.b2 tsbkg.b2 tshowfar.b2 \
           ma00.b2 ma01.b2 ma02.b2 ma03.b2 ma04.b2 ma05.b2 ma06.b2 ma07.b2 ma08.b2 ma09.b2 \
           ma0a.b2 ma0b.b2 ma0c.b2 ma0d.b2 ma0e.b2 ma0f.b2 ma10.b2 ma11.b2 ma12.b2 ma13.b2 \
           ma14.b2 ma15.b2 ma16.b2 ma17.b2 ma18.b2 ma19.b2 ma1a.b2 ma1b.b2 ma1c.b2 ma1d.b2 \
@@ -312,6 +322,7 @@ main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
 	 -f "t3" -w $(EXE_DIR)/tsbmp1d800.b2 \
 	 -f "t4" -w $(EXE_DIR)/tspointspr.b2 \
 	 -f "t5" -w $(EXE_DIR)/tsbkg.b2 \
+	 -f "t6" -w $(EXE_DIR)/tshowfar.b2 \
 	$(EXE_DIR)/$@
 	cat $(EXE_DIR)/main.map
 

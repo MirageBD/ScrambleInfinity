@@ -192,6 +192,7 @@ screenui2					= $a000		; only used in lower border for sprite ptrs
 fontdigits					= $bf80
 screen2						= $c000
 sprites1					= $4b00
+titlescreenpointsspr		= $4b00
 sprites2					= $cb00
 tslogosprorg				= $3000
 tslogospr					= $a000		; consider moving this to $dc00/$de00
@@ -5314,6 +5315,12 @@ titlescreen
 	sta file01+1
 	jsr loadpackd
 
+	lda titlescreenhowfar
+	sta file01+0
+	lda titlescreenhowfar+1
+	sta file01+1
+	jsr loadpackd
+
 	ldx #$00
 :	sta bitmap1+7*320,x
 	inx
@@ -5478,7 +5485,7 @@ irqtitle
 :	
 	jsr testspriteoffs
 
-	ldy #0*22
+	ldy #0*28
 	jsr showpointsline
 	;inc $d020
 
@@ -5491,7 +5498,7 @@ irqtitle2
 
 	pha
 
-	lda #$40									; #$4c
+	lda #$50									; #$4c
 	jsr cycleperfect
 
 	;inc $d020
@@ -5510,21 +5517,28 @@ irqtitle2
 	;dec $d021
 
 	jsr showpointsline2
-	ldy #1*22
+	;inc $d021
+	ldy #1*28
 	jsr showpointsline
 	jsr showpointsline2
-	ldy #2*22
+	;inc $d021
+	ldy #2*28
 	jsr showpointsline
 	jsr showpointsline2
-	ldy #3*22
+	;inc $d021
+	ldy #3*28
 	jsr showpointsline
 	jsr showpointsline2
-	ldy #4*22
+	;inc $d021
+	ldy #4*28
 	jsr showpointsline
 	jsr showpointsline2
-	ldy #5*22
+	;inc $d021
+	ldy #5*28
 	jsr showpointsline
 	jsr showpointsline2
+	;lda #$00
+	;sta $d021
 
 	lda #$f8					; prepare lower border sprites
 	sta $d001+0*2
@@ -5653,17 +5667,27 @@ showpointsline
 	sta $d026
 	iny
 	lda pointlinesdata,y
+	sta $d027+0
+	iny
+	lda pointlinesdata,y
 	sta $d027+1
 	iny
 	lda pointlinesdata,y
-	sta $d027+0
-	iny
-	lda #$01
 	sta $d027+2
+	iny
+	lda pointlinesdata,y
 	sta $d027+3
+	iny
+	lda pointlinesdata,y
 	sta $d027+4
+	iny
+	lda pointlinesdata,y
 	sta $d027+5
+	iny
+	lda pointlinesdata,y
 	sta $d027+6
+	iny
+	lda pointlinesdata,y
 	sta $d027+7
 
 	rts
@@ -5761,88 +5785,100 @@ tso0hi
 .byte >(spriterowoffs+0*8), >(spriterowoffs+1*8), >(spriterowoffs+2*8), >(spriterowoffs+3*8), >(spriterowoffs+4*8), >(spriterowoffs+5*8)
 
 tso1lo
-.byte <(pointlinesdata+0*22), <(pointlinesdata+1*22), <(pointlinesdata+2*22), <(pointlinesdata+3*22), <(pointlinesdata+4*22), <(pointlinesdata+5*22)
+.byte <(pointlinesdata+0*28), <(pointlinesdata+1*28), <(pointlinesdata+2*28), <(pointlinesdata+3*28), <(pointlinesdata+4*28), <(pointlinesdata+5*28)
 tso1hi
-.byte >(pointlinesdata+0*22), >(pointlinesdata+1*22), >(pointlinesdata+2*22), >(pointlinesdata+3*22), >(pointlinesdata+4*22), >(pointlinesdata+5*22)
+.byte >(pointlinesdata+0*28), >(pointlinesdata+1*28), >(pointlinesdata+2*28), >(pointlinesdata+3*28), >(pointlinesdata+4*28), >(pointlinesdata+5*28)
+
+; ---------------------------------------------------------------
 
 pointlinesdata
 .byte $64+0*24
 .byte $00
-.byte bytespriteptrforaddress(sprites1+0*(6*64)+1*64)
-.byte bytespriteptrforaddress(sprites1+0*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+1*64)	; 50
+.byte bytespriteptrforaddress(titlescreenpointsspr+0*(6*64)+1*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+0*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+1*64)	; 50
 .byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$02,$0a,$01
+.byte $09,$02
+.byte $01,$0a,$01,$01,$01,$01,$01,$01
 
 .byte $64+1*24
 .byte $00
-.byte bytespriteptrforaddress(sprites1+1*(6*64)+1*64)
-.byte bytespriteptrforaddress(sprites1+1*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+2*64)	; 80
+.byte bytespriteptrforaddress(titlescreenpointsspr+1*(6*64)+1*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+1*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+2*64)	; 80
 .byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$02,$0a,$07
+.byte $09,$02
+.byte $07,$0a,$01,$01,$01,$01,$01,$01
 
 .byte $64+2*24
 .byte $00
-.byte bytespriteptrforaddress(sprites1+4*(6*64)+1*64)					; this will bite me in the ass later... fuel = 2, boss = 4
-.byte bytespriteptrforaddress(sprites1+4*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+3*64)	; 100
+.byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+1*64)					; this will bite me in the ass later... fuel = 2, boss = 4
+.byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+3*64)	; 100
 .byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$08,$05,$01
+.byte $09,$08
+.byte $01,$05,$01,$01,$01,$01,$01,$01
 
 .byte $64+3*24
 .byte $00
-.byte bytespriteptrforaddress(sprites1+3*(6*64)+1*64)
-.byte bytespriteptrforaddress(sprites1+3*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+4*64)	; 150
+.byte bytespriteptrforaddress(titlescreenpointsspr+3*(6*64)+1*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+3*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+4*64)	; 150
 .byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$08,$05,$01
+.byte $09,$08
+.byte $01,$05,$01,$01,$01,$01,$01,$01
 
 .byte $64+4*24
 .byte $00
-.byte bytespriteptrforaddress(sprites1+2*(6*64)+1*64)					; this will bite me in the ass later... fuel = 2, boss = 4
-.byte bytespriteptrforaddress(sprites1+2*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+5*64)	; 800
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+6*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+2*(6*64)+1*64)					; this will bite me in the ass later... fuel = 2, boss = 4
+.byte bytespriteptrforaddress(titlescreenpointsspr+2*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+5*64)	; 800
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+6*64)
 .byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$02,$0a,$07
+.byte $09,$02
+.byte $07,$0a,$01,$01,$01,$01,$01,$01
 
 .byte $64+5*24
 .byte $00
-.byte bytespriteptrforaddress(sprites1+5*(6*64)+1*64)
-.byte bytespriteptrforaddress(sprites1+5*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+7*64)	; mystery
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+8*64)
-.byte bytespriteptrforaddress(sprites1+6*(6*64)+9*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+5*(6*64)+1*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+5*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+7*64)	; mystery
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+8*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+9*64)
 .byte $00,$00,$18,$30,$48,$60,$78,$90
-.byte $06,$04,$0e,$03
+.byte $06,$04
+.byte $03,$0e,$01,$01,$01,$01,$01,$01
+
+; ---------------------------------------------------------------
+
+; ---------------------------------------------------------------
 
 tsanimframe
 .byte $00
@@ -6659,6 +6695,8 @@ titlescreenpointsprfile
 .asciiz "T4"
 titlescreenbkgfile
 .asciiz "T5"
+titlescreenhowfar
+.asciiz "T6"
 
 barsd022
 .byte $07,$0a,$0a,$0a,$08,$08,$02,$02,$02,$02,$02,  $00,  $03,$0e,$04,$0e,$04,$0e,$04,$04,$04,$04,$04,  $00,  $0d,$03,$05,$03,$05,$05,$08,$05,$08,$08,$08
