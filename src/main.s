@@ -3635,7 +3635,7 @@ sortskip11incsortcounter
 sortskip11
 	rts
 
-oldsortmultsprites
+;oldsortmultsprites
 	
 ;	ldx #$00
 ;	stx sreload+1
@@ -3675,9 +3675,13 @@ oldsortmultsprites
 plotdummymultsprites
 	rts
 
-plotfirstufomultsprites
+plotfirstufocometmultsprites
 
-	ldy sortorder								; y = index to highest sprite
+	;lda scrollspeed
+	;bne :+
+	;rts
+
+:	ldy sortorder								; y = index to highest sprite
 	lda sortsprc,y
 	sta $d02c
 	lda sortsprp,y
@@ -3745,9 +3749,13 @@ msbluw3
 
 	rts
 
-plotrestufomultsprites
+plotrestufocometmultsprites
 
-	lda #$03
+	lda scrollspeed
+	bne :+
+	rts
+
+:	lda #$03
 	sta restmultspritesindex
 
 pruloop
@@ -3769,8 +3777,11 @@ hctst2
 	sec
 	sbc $d012
 	clc
-	cmp #$28									; #$28 rasterlines left? do some stuff!
+	cmp #$28
 	bcc :+
+	lda zone									; #$28 rasterlines left? do some stuff, but not in zone 2, because it's heavy on multiplex
+	cmp #$01
+	beq :+
 	jsr handlecollisions
 	jmp hctst2
 
@@ -5058,7 +5069,9 @@ wedied
 	jmp wediedend
 
 wediedclearframe
-	cmp #$38
+
+.if diedfade
+	cmp #$18
 	bmi wediedend
 
 	lda diedframeclearframes
@@ -5073,8 +5086,6 @@ wediedclearframe
 	ror invscreenposlow
 	lsr invscreenposhigh
 	ror invscreenposlow							; current column
-
-.if diedfade
 
 	clc
 	ldx diedframeclearframes
@@ -6564,45 +6575,45 @@ zonecodeptrshigh
 
 zonecode2ptrslow
 .byte <plotfirstmissilemultsprites
-.byte <plotdummymultsprites
-.byte <plotdummymultsprites
+.byte <plotdummymultsprites						; ufos
+.byte <plotdummymultsprites						; comets
 .byte <plotfirstmissilemultsprites
 .byte <plotfirstmissilemultsprites
 .byte <plotdummymultsprites
 zonecode2ptrshigh
 .byte >plotfirstmissilemultsprites
-.byte >plotdummymultsprites
-.byte >plotdummymultsprites
+.byte >plotdummymultsprites						; ufos
+.byte >plotdummymultsprites						; comets
 .byte >plotfirstmissilemultsprites
 .byte >plotfirstmissilemultsprites
 .byte >plotdummymultsprites
 
 zonecode3ptrslow
 .byte <plotdummymultsprites
-.byte <plotfirstufomultsprites
-.byte <plotfirstufomultsprites
+.byte <plotfirstufocometmultsprites						; ufos
+.byte <plotfirstufocometmultsprites						; comets
 .byte <plotdummymultsprites
 .byte <plotdummymultsprites
 .byte <plotdummymultsprites
 zonecode3ptrshigh
 .byte >plotdummymultsprites
-.byte >plotfirstufomultsprites
-.byte >plotfirstufomultsprites
+.byte >plotfirstufocometmultsprites						; ufos
+.byte >plotfirstufocometmultsprites						; comets
 .byte >plotdummymultsprites
 .byte >plotdummymultsprites
 .byte >plotdummymultsprites
 
 zonecode4ptrslow
 .byte <plotrestmissilemultsprites
-.byte <plotrestufomultsprites
-.byte <plotrestufomultsprites
+.byte <plotrestufocometmultsprites						; ufos
+.byte <plotrestufocometmultsprites						; comets
 .byte <plotrestmissilemultsprites
 .byte <plotrestmissilemultsprites
 .byte <plotdummymultsprites
 zonecode4ptrshigh
 .byte >plotrestmissilemultsprites
-.byte >plotrestufomultsprites
-.byte >plotrestufomultsprites
+.byte >plotrestufocometmultsprites						; ufos
+.byte >plotrestufocometmultsprites						; comets
 .byte >plotrestmissilemultsprites
 .byte >plotrestmissilemultsprites
 .byte >plotdummymultsprites
