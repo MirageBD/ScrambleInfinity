@@ -5451,8 +5451,10 @@ irqtitle
 :	
 	jsr setspritexoffs
 
-	ldy #0*28
-	jsr showpointsline
+	ldy #0*10
+	jsr showpointsline0
+	ldy #0*18
+	jsr showpointsline1
 	;inc $d020
 
 	lda #<irqtitle2
@@ -5484,24 +5486,34 @@ irqtitle2
 
 	jsr showpointsline2
 	;inc $d021
-	ldy #1*28
-	jsr showpointsline
+	ldy #1*10
+	jsr showpointsline0
+	ldy #1*18
+	jsr showpointsline1
 	jsr showpointsline2
 	;inc $d021
-	ldy #2*28
-	jsr showpointsline
+	ldy #2*10
+	jsr showpointsline0
+	ldy #2*18
+	jsr showpointsline1
 	jsr showpointsline2
 	;inc $d021
-	ldy #3*28
-	jsr showpointsline
+	ldy #3*10
+	jsr showpointsline0
+	ldy #3*18
+	jsr showpointsline1
 	jsr showpointsline2
 	;inc $d021
-	ldy #4*28
-	jsr showpointsline
+	ldy #4*10
+	jsr showpointsline0
+	ldy #4*18
+	jsr showpointsline1
 	jsr showpointsline2
 	;inc $d021
-	ldy #5*28
-	jsr showpointsline
+	ldy #5*10
+	jsr showpointsline0
+	ldy #5*18
+	jsr showpointsline1
 	jsr showpointsline2
 	;lda #$00
 	;sta $d021
@@ -5548,9 +5560,8 @@ irqtitle2
 	ldy #$f8
 	jmp endirq
 
-showpointsline
-
-	lda pointlinesdata,y
+showpointsline0
+	lda pointlinesdata0,y
 	sta $d001+0*2
 	sta $d001+1*2
 	sta $d001+2*2
@@ -5566,97 +5577,101 @@ showpointsline
 
 	iny
 
-	lda pointlinesdata,y
+	lda pointlinesdata0,y
 	sta $d010
 	iny
 
+	lda pointlinesdata0,y
+	sta $d000+0*2
+	iny
+	lda pointlinesdata0,y
+	sta $d000+1*2
+	iny
+	lda pointlinesdata0,y
+	sta $d000+2*2
+	iny
+	lda pointlinesdata0,y
+	sta $d000+3*2
+	iny
+	lda pointlinesdata0,y
+	sta $d000+4*2
+	iny
+	lda pointlinesdata0,y
+	sta $d000+5*2
+	iny
+	lda pointlinesdata0,y
+	sta $d000+6*2
+	iny
+	lda pointlinesdata0,y
+	sta $d000+7*2
+
+	rts
+
+showpointsline1
+
 	clc
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	adc tsanimframe
 	sta screenui+$03f8+0
 	iny
 	clc
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	adc tsanimframe
 	sta screenui+$03f8+1
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta screenui+$03f8+2
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta screenui+$03f8+3
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta screenui+$03f8+4
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta screenui+$03f8+5
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta screenui+$03f8+6
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta screenui+$03f8+7
 	iny
 
-	lda pointlinesdata,y
-	sta $d000+0*2
-	iny
-	lda pointlinesdata,y
-	sta $d000+1*2
-	iny
-	lda pointlinesdata,y
-	sta $d000+2*2
-	iny
-	lda pointlinesdata,y
-	sta $d000+3*2
-	iny
-	lda pointlinesdata,y
-	sta $d000+4*2
-	iny
-	lda pointlinesdata,y
-	sta $d000+5*2
-	iny
-	lda pointlinesdata,y
-	sta $d000+6*2
-	iny
-	lda pointlinesdata,y
-	sta $d000+7*2
-	iny
-
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta $d025
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta $d026
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta $d027+0
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta $d027+1
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta $d027+2
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta $d027+3
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta $d027+4
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta $d027+5
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta $d027+6
 	iny
-	lda pointlinesdata,y
+	lda pointlinesdata1,y
 	sta $d027+7
 
 	rts
 
 showpointsline2
+
 	lda #$00
 :	cmp $d012
 	bne :-
@@ -5695,7 +5710,7 @@ spriterowloop
 	adc #$01					; watch out, bit dangerous if there is a page crossover
 	sta tso11+1
 	sta tso13+1
-	adc #$09					; watch out, bit dangerous if there is a page crossover
+	adc #$01					; watch out, bit dangerous if there is a page crossover
 	sta tso12+1
 	lda tso1hi,x
 	sta tso11+2
@@ -5706,20 +5721,20 @@ spriterowloop
 
 	lda #$00
 tso11
-	sta pointlinesdata+1
+	sta pointlinesdata0+1
 
 	clc
 :	lda spriterowxstartlo,x
 tso0
 	adc spriterowoffs,y
 tso12
-	sta pointlinesdata+2,y
+	sta pointlinesdata0+2,y
 	lda spriterowxstarthi,x
 	adc #$00
 	and #$01
 	lsr
 tso13
-	ror pointlinesdata+1
+	ror pointlinesdata0+1
 	iny
 	cpy #$08
 	bne :-
@@ -5730,16 +5745,16 @@ tso13
 
 	rts
 
-spriterowxstartlo
+spriterowxstartlo									; these values get filled from the easing tables
 .byte <(104),<(104),<(104),<(104),<(104),<(104)
-spriterowxstarthi
+spriterowxstarthi									; these values get filled from the easing tables
 .byte >(104),>(104),>(104),>(104),>(104),>(104)
 
 spriterowoffs
-.byte $00,$00,$18,$30,$48,$60,$68-0*4,$80	; total width 152 - middle start = 24 + (320-152) / 2 = 108 (-4 for some sprite variation on the left) = 104
-.byte $00,$00,$18,$30,$48,$60,$68-0*4,$80	; sin wave needs to go from (344 -> 104 -> -136) = ( $0158 -> $0068 -> $0178)
-.byte $00,$00,$18,$30,$48,$60,$68-1*4,$80	; ./easefunc 344 104 64 0
-.byte $00,$00,$18,$30,$48,$60,$68-1*4,$80	; ./easefunc 104 -136 64 1
+.byte $00,$00,$18,$30,$48,$60,$68-0*4,$80			; total width 152 - middle start = 24 + (320-152) / 2 = 108 (-4 for some sprite variation on the left) = 104
+.byte $00,$00,$18,$30,$48,$60,$68-0*4,$80			; sin wave needs to go from (344 -> 104 -> -136) = ( $0158 -> $0068 -> $0178)
+.byte $00,$00,$18,$30,$48,$60,$68-1*4,$80			; ./easefunc 344 104 64 0
+.byte $00,$00,$18,$30,$48,$60,$68-1*4,$80			; ./easefunc 104 -136 64 1
 .byte $00,$00,$18,$30,$48,$60-0*4,$68,$80
 .byte $00,$00,$18,$30,$48-3*4,$50,$68,$80
 
@@ -5749,15 +5764,21 @@ tso0hi
 .byte >(spriterowoffs+0*8), >(spriterowoffs+1*8), >(spriterowoffs+2*8), >(spriterowoffs+3*8), >(spriterowoffs+4*8), >(spriterowoffs+5*8)
 
 tso1lo
-.byte <(pointlinesdata+0*28), <(pointlinesdata+1*28), <(pointlinesdata+2*28), <(pointlinesdata+3*28), <(pointlinesdata+4*28), <(pointlinesdata+5*28)
+.byte <(pointlinesdata0+0*10), <(pointlinesdata0+1*10), <(pointlinesdata0+2*10), <(pointlinesdata0+3*10), <(pointlinesdata0+4*10), <(pointlinesdata0+5*10)
 tso1hi
-.byte >(pointlinesdata+0*28), >(pointlinesdata+1*28), >(pointlinesdata+2*28), >(pointlinesdata+3*28), >(pointlinesdata+4*28), >(pointlinesdata+5*28)
+.byte >(pointlinesdata0+0*10), >(pointlinesdata0+1*10), >(pointlinesdata0+2*10), >(pointlinesdata0+3*10), >(pointlinesdata0+4*10), >(pointlinesdata0+5*10)
 
 ; ---------------------------------------------------------------
 
-pointlinesdata
-.byte $64+0*24
-.byte $00
+pointlinesdata0
+.byte $64+0*24,$00,$00,$00,$00,$00,$00,$00,$00,$00	; yoffset, $d010, $d000++
+.byte $64+1*24,$00,$00,$00,$00,$00,$00,$00,$00,$00
+.byte $64+2*24,$00,$00,$00,$00,$00,$00,$00,$00,$00
+.byte $64+3*24,$00,$00,$00,$00,$00,$00,$00,$00,$00
+.byte $64+4*24,$00,$00,$00,$00,$00,$00,$00,$00,$00
+.byte $64+5*24,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenpointsspr+0*(6*64)+1*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+0*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
@@ -5766,12 +5787,8 @@ pointlinesdata
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+1*64)	; 50
-.byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$02
-.byte $01,$0a,$01,$01,$01,$01,$01,$01
+.byte $09,$02, $01,$0a,$01,$01,$01,$01,$01,$01
 
-.byte $64+1*24
-.byte $00
 .byte bytespriteptrforaddress(titlescreenpointsspr+1*(6*64)+1*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+1*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
@@ -5780,12 +5797,8 @@ pointlinesdata
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+2*64)	; 80
-.byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$02
-.byte $07,$0a,$01,$01,$01,$01,$01,$01
+.byte $09,$02, $07,$0a,$01,$01,$01,$01,$01,$01
 
-.byte $64+2*24
-.byte $00
 .byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+1*64)					; this will bite me in the ass later... fuel = 2, boss = 4
 .byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
@@ -5794,12 +5807,8 @@ pointlinesdata
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+3*64)	; 100
-.byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$08
-.byte $01,$05,$01,$01,$01,$01,$01,$01
+.byte $09,$08, $01,$05,$01,$01,$01,$01,$01,$01
 
-.byte $64+3*24
-.byte $00
 .byte bytespriteptrforaddress(titlescreenpointsspr+3*(6*64)+1*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+3*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
@@ -5808,12 +5817,8 @@ pointlinesdata
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+4*64)	; 150
-.byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$08
-.byte $01,$05,$01,$01,$01,$01,$01,$01
+.byte $09,$08, $01,$05,$01,$01,$01,$01,$01,$01
 
-.byte $64+4*24
-.byte $00
 .byte bytespriteptrforaddress(titlescreenpointsspr+2*(6*64)+1*64)					; this will bite me in the ass later... fuel = 2, boss = 4
 .byte bytespriteptrforaddress(titlescreenpointsspr+2*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
@@ -5822,12 +5827,8 @@ pointlinesdata
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+5*64)	; 800
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+6*64)
-.byte $00,$00,$00,$00,$00,$00,$00,$00
-.byte $09,$02
-.byte $07,$0a,$01,$01,$01,$01,$01,$01
+.byte $09,$02, $07,$0a,$01,$01,$01,$01,$01,$01
 
-.byte $64+5*24
-.byte $00
 .byte bytespriteptrforaddress(titlescreenpointsspr+5*(6*64)+1*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+5*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
@@ -5836,11 +5837,7 @@ pointlinesdata
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+7*64)	; mystery
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+8*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+9*64)
-.byte $00,$00,$18,$30,$48,$60,$78,$90
-.byte $06,$04
-.byte $03,$0e,$01,$01,$01,$01,$01,$01
-
-; ---------------------------------------------------------------
+.byte $06,$04, $03,$0e,$01,$01,$01,$01,$01,$01
 
 ; ---------------------------------------------------------------
 
