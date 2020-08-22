@@ -166,6 +166,9 @@
 .define mystery200start					49
 .define mystery300start					50
 
+.define pointlinespositionsblocksize	10
+.define pointlinesdatablocksize			18
+
 .define d018forscreencharset(scr,cst)	#(((scr&$3fff)/$0400) << 4) | (((cst&$3fff)/$0800) << 1)
 .define bankforaddress(addr)			#(3-(addr>>14))
 .define spriteptrforaddress(addr)		#((addr&$3fff)>>6)
@@ -191,6 +194,7 @@ fontdigits					= $bf80
 screen2						= $c000
 sprites1					= $4b00
 titlescreenpointsspr		= $4b00
+titlescreenhowfarspr		= $7800
 sprites2					= $cb00
 tslogosprorg				= $3000
 tslogospr					= $a000		; consider moving this to $dc00/$de00
@@ -5404,7 +5408,7 @@ irqtitle
 	cpy #$08
 	bne :-
 
-	lda #$56									; #$4c
+	lda #$56												; #$4c
 	jsr cycleperfect
 
 	ldx #$00
@@ -5431,8 +5435,6 @@ irqtitle
 	sta $d020
 	sta $d021
 
-	;dec $d020
-
 	inc tsanimframedelay
 	lda tsanimframedelay
 	cmp #$06
@@ -5448,14 +5450,18 @@ irqtitle
 	lda #$00
 	sta tsanimframe
 
-:	
-	jsr setspritexoffs
+:	jsr setspritexoffs
 
-	ldy #0*10
+	ldx #0*pointlinespositionsblocksize
 	jsr setpointlinespositions
-	ldy #0*18
-	jsr setpointlinesptrcolors
-	;inc $d020
+
+hatseflatsikweetgeennamenmeer:
+	lda #$00
+	beq :+
+	ldy #((1*6+0)*pointlinesdatablocksize)
+	jmp :++
+:	ldy #((0*6+0)*pointlinesdatablocksize)
+:	jsr setpointlinesptrcolors
 
 	lda #<irqtitle2
 	ldx #>irqtitle2
@@ -5466,11 +5472,8 @@ irqtitle2
 
 	pha
 
-	lda #$50									; #$4c
+	lda #$50
 	jsr cycleperfect
-
-	;inc $d020
-	;inc $d021
 
 	lda d018forscreencharset(screen1,$7000)
 	sta $d018
@@ -5481,42 +5484,35 @@ irqtitle2
 	lda #$04
 	sta $d023
 
-	;dec $d020
-	;dec $d021
+	jsr waitnextpointline
 
-	jsr waitnextpointline
-	;inc $d021
-	ldy #1*10
-	jsr setpointlinespositions
-	ldy #1*18
+	ldx #1*pointlinespositionsblocksize			; careful! x and y get automatically increased by setpointlinespositions and setpointlinesptrcolors
+
+	lda hatseflatsikweetgeennamenmeer+1
+	beq :+
+	ldy #((1*6+1)*pointlinesdatablocksize)
+	jmp :++
+:	ldy #((0*6+1)*pointlinesdatablocksize)
+
+:	jsr setpointlinespositions
 	jsr setpointlinesptrcolors
 	jsr waitnextpointline
-	;inc $d021
-	ldy #2*10
+
 	jsr setpointlinespositions
-	ldy #2*18
 	jsr setpointlinesptrcolors
 	jsr waitnextpointline
-	;inc $d021
-	ldy #3*10
+
 	jsr setpointlinespositions
-	ldy #3*18
 	jsr setpointlinesptrcolors
 	jsr waitnextpointline
-	;inc $d021
-	ldy #4*10
+
 	jsr setpointlinespositions
-	ldy #4*18
 	jsr setpointlinesptrcolors
 	jsr waitnextpointline
-	;inc $d021
-	ldy #5*10
+
 	jsr setpointlinespositions
-	ldy #5*18
 	jsr setpointlinesptrcolors
 	jsr waitnextpointline
-	;lda #$00
-	;sta $d021
 
 	ldx #$00
 	lda #$f8					; prepare lower border sprites
@@ -5562,7 +5558,7 @@ irqtitle2
 
 setpointlinespositions
 
-	lda pointlinespositions,y
+	lda pointlinespositions,x
 	sta $d001+0*2
 	sta $d001+1*2
 	sta $d001+2*2
@@ -5571,40 +5567,40 @@ setpointlinespositions
 	sta $d001+5*2
 	sta $d001+6*2
 	sta $d001+7*2
+	inx
 
 	clc
-	adc #21
+	adc #20
 	sta waitnextpointline+1
 
-	iny
-
-	lda pointlinespositions,y
+	lda pointlinespositions,x
 	sta $d010
-	iny
+	inx
 
-	lda pointlinespositions,y
+	lda pointlinespositions,x
 	sta $d000+0*2
-	iny
-	lda pointlinespositions,y
+	inx
+	lda pointlinespositions,x
 	sta $d000+1*2
-	iny
-	lda pointlinespositions,y
+	inx
+	lda pointlinespositions,x
 	sta $d000+2*2
-	iny
-	lda pointlinespositions,y
+	inx
+	lda pointlinespositions,x
 	sta $d000+3*2
-	iny
-	lda pointlinespositions,y
+	inx
+	lda pointlinespositions,x
 	sta $d000+4*2
-	iny
-	lda pointlinespositions,y
+	inx
+	lda pointlinespositions,x
 	sta $d000+5*2
-	iny
-	lda pointlinespositions,y
+	inx
+	lda pointlinespositions,x
 	sta $d000+6*2
-	iny
-	lda pointlinespositions,y
+	inx
+	lda pointlinespositions,x
 	sta $d000+7*2
+	inx
 
 	rts
 
@@ -5668,6 +5664,7 @@ setpointlinesptrcolors
 	iny
 	lda pointlinesdata1,y
 	sta $d027+7
+	iny
 
 	rts
 
@@ -5850,6 +5847,69 @@ pointlinesdata1
 
 ; ---------------------------------------------------------------
 
+; how far can you invade data
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; how far
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+ 1*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+ 2*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+ 3*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+ 4*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; can you
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+5*64+ 0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+5*64+ 1*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+5*64+ 2*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+5*64+ 3*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; invade
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+9*64+ 0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+9*64+ 1*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+9*64+ 2*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+9*64+ 3*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; our
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+13*64+ 0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+13*64+ 1*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; scramble
+.byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 1*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 2*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 3*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 4*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 5*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; system
+.byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 1*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 2*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 3*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 4*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 5*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+
+; ---------------------------------------------------------------
+
 tsanimframe
 .byte $00
 tsanimframedelay
@@ -5858,7 +5918,7 @@ tsanimframedelay
 irqtitle3
 	pha
 
-	lda #$32				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	lda #$32							; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
 	sta $d011
 
 	lda #$52							; #$4c
@@ -5868,8 +5928,8 @@ irqtitle3
 	sta $d020
 	sta $d021
 
-	ldx #$34				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
-	ldy #$18				; no multicolour or bitmap, otherwise ghostbyte move won't work
+	ldx #$34							; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	ldy #$18							; no multicolour or bitmap, otherwise ghostbyte move won't work
 	stx $d011
 	sty $d016
 
