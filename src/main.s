@@ -5329,6 +5329,10 @@ titlescreen
 	inx
 	bne :-
 
+	lda #$00
+	sta easetimer
+	jsr setpage1						; start with 'how far can you'
+
 	lda #<irqtitle
 	ldx #>irqtitle
 	sta $fffe
@@ -5719,8 +5723,6 @@ setspriteanims
 
 setspritexoffs
 
-	inc easetimer
-
 	ldx #$00					; sprite row 0-5
 
 	ldy easetimer
@@ -5739,13 +5741,13 @@ setspritexoffs
 
 spriterowloop
 
-	lda tsro1lo,x				; LV - get row offsets
+	lda tsro1lo,x
 	sta tso0+1
 	lda tsro1hi,x
 	sta tso0+2
 
 	clc
-	lda tsplposlo,x				; LV - get 
+	lda tsplposlo,x
 	adc #$01
 	sta tso11+1
 	sta tso13+1
@@ -6056,24 +6058,11 @@ irqtitle3
 
 	jsr tuneplay
 
-	; copy x offsets for this page
-	lda hatseflatsikweetgeennamenmeer+1
-	beq :++
-	ldx #$00
-:	lda spriterowoffs2,x
-	sta spriterowoffs0,x
-	inx
-	cpx #6*8
-	bne :-
-	jmp :++
-	ldx #$00
-:	lda spriterowoffs1,x
-	sta spriterowoffs0,x
-	inx
-	cpx #6*8
-	bne :-
+	inc easetimer
+	lda easetimer
+	bne :+
+	jsr flippage
 :
-
 	lda #<irqtitle
 	ldx #>irqtitle
 	ldy #$14
@@ -6081,6 +6070,33 @@ irqtitle3
 
 sprraster
 .byte $00,$00,$00,$00,$00,$00,$00,$06,$0e,$03,$06,$06,$04,$06,$04,$04,$0e,$0e,$03,$03,$0d,$01
+
+flippage
+	; copy x offsets for this page
+	lda hatseflatsikweetgeennamenmeer+1
+	beq setpage1
+setpage0
+	lda #$00
+	sta hatseflatsikweetgeennamenmeer+1
+	ldx #$00
+:	lda spriterowoffs1,x
+	sta spriterowoffs0,x
+	inx
+	cpx #6*8
+	bne :-
+	jmp setpageend
+setpage1
+	lda #$01
+	sta hatseflatsikweetgeennamenmeer+1
+	ldx #$00
+:	lda spriterowoffs2,x
+	sta spriterowoffs0,x
+	inx
+	cpx #6*8
+	bne :-
+
+setpageend
+	rts
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -6938,11 +6954,12 @@ ingameend
 
 easetablo
 .byte $58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58
-.byte $58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58,$58
 .byte $58,$33,$ff,$c5,$8c,$5b,$34,$1b,$0f,$0f,$19,$29,$3d,$52,$65,$74
 .byte $7f,$85,$87,$85,$80,$7a,$72,$6b,$65,$61,$5e,$5c,$5d,$5e,$60,$62
 .byte $65,$67,$69,$6b,$6b,$6b,$6b,$6b,$6a,$69,$68,$67,$67,$66,$66,$66
 .byte $66,$67,$67,$67,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$67,$68
+.byte $68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68
+.byte $68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68
 .byte $68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68
 .byte $68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68
 .byte $68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68,$68
@@ -6952,9 +6969,7 @@ easetablo
 .byte $bd,$b9,$b5,$b1,$ad,$a9,$a6,$a2,$9f,$9c,$99,$96,$93,$90,$8e,$8b
 .byte $89,$87,$85,$83,$81,$80,$7f,$7d,$7c,$7b,$7a,$7a,$79,$79,$79,$79
 .byte $79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79
-.byte $79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79,$79
 easetabhi
-.byte $01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01
 .byte $01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01
 .byte $01,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
@@ -6965,8 +6980,9 @@ easetabhi
 .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$00,$00,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01
-.byte $01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01
 .byte $01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01
 .byte $01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01
 .byte $01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01
