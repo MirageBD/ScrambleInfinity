@@ -120,7 +120,7 @@
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
 
-.define firstsolidtile					74
+.define firstsolidtile					74+5
 .define firsttransparenttile			32
 
 .define bank0							$0000
@@ -6080,7 +6080,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+ 4*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $09,$04, $03,$03,$03,$03,$03,$03,$03,$03
+.byte $04,$0e, $03,$03,$03,$03,$03,$03,$03,$03
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; can you
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
@@ -6090,7 +6090,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+5*64+ 3*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $09,$04, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+.byte $06,$04, $0e,$0e,$0e,$0e,$0e,$0e,$0e,$0e
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; invade
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
