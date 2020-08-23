@@ -5450,13 +5450,15 @@ irqtitle
 	lda #$00
 	sta tsanimframe
 
-:	jsr setspritexoffs
+:
+	jsr setspriteanims
+	jsr setspritexoffs
 
 	ldx #0*pointlinespositionsblocksize
 	jsr setpointlinespositions
 
 hatseflatsikweetgeennamenmeer:
-	lda #$00
+	lda #$01
 	beq :+
 	ldy #((1*6+0)*pointlinesdatablocksize)
 	jmp :++
@@ -5606,14 +5608,10 @@ setpointlinespositions
 
 setpointlinesptrcolors
 
-	clc
 	lda pointlinesdata1,y
-	adc tsanimframe
 	sta screenui+$03f8+0
 	iny
-	clc
 	lda pointlinesdata1,y
-	adc tsanimframe
 	sta screenui+$03f8+1
 	iny
 	lda pointlinesdata1,y
@@ -5676,6 +5674,49 @@ waitnextpointline
 
 	rts
 
+setspriteanims
+
+	ldx tsanimframe
+
+	clc
+	txa
+	adc pointlineanims+0
+	sta pointlinesdata1+(0*pointlinesdatablocksize)+1
+	adc #$01
+	sta pointlinesdata1+(0*pointlinesdatablocksize)+0
+
+	txa
+	adc pointlineanims+1
+	sta pointlinesdata1+(1*pointlinesdatablocksize)+1
+	adc #$01
+	sta pointlinesdata1+(1*pointlinesdatablocksize)+0
+
+	txa
+	adc pointlineanims+2
+	sta pointlinesdata1+(2*pointlinesdatablocksize)+1
+	adc #$01
+	sta pointlinesdata1+(2*pointlinesdatablocksize)+0
+
+	txa
+	adc pointlineanims+3
+	sta pointlinesdata1+(3*pointlinesdatablocksize)+1
+	adc #$01
+	sta pointlinesdata1+(3*pointlinesdatablocksize)+0
+
+	txa
+	adc pointlineanims+4
+	sta pointlinesdata1+(4*pointlinesdatablocksize)+1
+	adc #$01
+	sta pointlinesdata1+(4*pointlinesdatablocksize)+0
+
+	txa
+	adc pointlineanims+5
+	sta pointlinesdata1+(5*pointlinesdatablocksize)+1
+	adc #$01
+	sta pointlinesdata1+(5*pointlinesdatablocksize)+0
+
+	rts
+
 setspritexoffs
 
 	inc easetimer
@@ -5724,7 +5765,7 @@ tso11
 	clc
 :	lda spriterowxstartlo,x
 tso0
-	adc spriterowoffs1,y
+	adc spriterowoffs0,y
 tso12
 	sta pointlinespositions+2,y
 	lda spriterowxstarthi,x
@@ -5748,6 +5789,14 @@ spriterowxstartlo									; these values get filled from the easing tables
 spriterowxstarthi									; these values get filled from the easing tables
 .byte >(104),>(104),>(104),>(104),>(104),>(104)
 
+spriterowoffs0
+.byte $00,$00,$00,$00,$00,$00,$00,$00
+.byte $00,$00,$00,$00,$00,$00,$00,$00
+.byte $00,$00,$00,$00,$00,$00,$00,$00
+.byte $00,$00,$00,$00,$00,$00,$00,$00
+.byte $00,$00,$00,$00,$00,$00,$00,$00
+.byte $00,$00,$00,$00,$00,$00,$00,$00
+
 spriterowoffs1
 .byte $00,$00,$18,$30,$48,$60,$68-0*4,$80			; total width 152 - middle start = 24 + (320-152) / 2 = 108 (-4 for some sprite variation on the left) = 104
 .byte $00,$00,$18,$30,$48,$60,$68-0*4,$80			; sin wave needs to go from (344 -> 104 -> -136) = ( $0158 -> $0068 -> $0178)
@@ -5765,9 +5814,9 @@ spriterowoffs2
 .byte $00,$08,$20,$38,$50,$68,$80,$80
 
 tsro1lo
-.byte <(spriterowoffs1+0*8), <(spriterowoffs1+1*8), <(spriterowoffs1+2*8), <(spriterowoffs1+3*8), <(spriterowoffs1+4*8), <(spriterowoffs1+5*8)
+.byte <(spriterowoffs0+0*8), <(spriterowoffs0+1*8), <(spriterowoffs0+2*8), <(spriterowoffs0+3*8), <(spriterowoffs0+4*8), <(spriterowoffs0+5*8)
 tsro1hi
-.byte >(spriterowoffs1+0*8), >(spriterowoffs1+1*8), >(spriterowoffs1+2*8), >(spriterowoffs1+3*8), >(spriterowoffs1+4*8), >(spriterowoffs1+5*8)
+.byte >(spriterowoffs0+0*8), >(spriterowoffs0+1*8), >(spriterowoffs0+2*8), >(spriterowoffs0+3*8), >(spriterowoffs0+4*8), >(spriterowoffs0+5*8)
 
 tsplposlo
 .byte <(pointlinespositions+0*10), <(pointlinespositions+1*10), <(pointlinespositions+2*10), <(pointlinespositions+3*10), <(pointlinespositions+4*10), <(pointlinespositions+5*10)
@@ -5783,6 +5832,14 @@ pointlinespositions
 .byte $64+3*24,$00,$00,$00,$00,$00,$00,$00,$00,$00
 .byte $64+4*24,$00,$00,$00,$00,$00,$00,$00,$00,$00
 .byte $64+5*24,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+pointlineanims
+.byte bytespriteptrforaddress(titlescreenpointsspr+0*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+1*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+3*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+2*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+5*(6*64)+0*64)
 
 pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenpointsspr+0*(6*64)+1*64)
@@ -5856,7 +5913,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+ 4*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+.byte $09,$04, $03,$03,$03,$03,$03,$03,$03,$03
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; can you
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
@@ -5866,7 +5923,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+5*64+ 3*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+.byte $09,$04, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; invade
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
@@ -5886,7 +5943,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+.byte $09,$08, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; scramble
 .byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 0*64)
@@ -5896,7 +5953,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 4*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 5*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+.byte $09,$08, $05,$05,$05,$05,$05,$05,$05,$05
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; system
 .byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 0*64)
@@ -5906,7 +5963,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 4*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 5*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+.byte $09,$05, $0d,$0d,$0d,$0d,$0d,$0d,$0d,$0d
 
 ; ---------------------------------------------------------------
 
@@ -5998,6 +6055,24 @@ irqtitle3
 	sta $d001+7*2
 
 	jsr tuneplay
+
+	; copy x offsets for this page
+	lda hatseflatsikweetgeennamenmeer+1
+	beq :++
+	ldx #$00
+:	lda spriterowoffs2,x
+	sta spriterowoffs0,x
+	inx
+	cpx #6*8
+	bne :-
+	jmp :++
+	ldx #$00
+:	lda spriterowoffs1,x
+	sta spriterowoffs0,x
+	inx
+	cpx #6*8
+	bne :-
+:
 
 	lda #<irqtitle
 	ldx #>irqtitle
