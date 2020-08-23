@@ -193,7 +193,7 @@ screenui2					= $a000		; only used in lower border for sprite ptrs
 fontdigits					= $bf80
 screen2						= $c000
 sprites1					= $4b00
-titlescreenpointsspr		= $4b00
+titlescreenpointsspr		= $4c00
 titlescreenhowfarspr		= $7800
 sprites2					= $cb00
 tslogosprorg				= $3000
@@ -5312,7 +5312,7 @@ titlescreen
 	jsr loadpackd
 
 	ldx #$00
-:	lda #$0e
+:	lda #$08							; black
 	sta colormem+(1*$0100),x
 	sta colormem+(2*$0100),x
 	sta colormem+(3*$0100),x
@@ -5320,6 +5320,22 @@ titlescreen
 	sta bitmap1+7*320,x
 	inx
 	bne :-
+
+	lda #$0f
+	sta colormem+(8*40)+2
+	sta colormem+(8*40)+3
+	sta colormem+(9*40)+2
+	sta colormem+(9*40)+3
+	lda #$0b
+	sta colormem+(14*40)+32
+	sta colormem+(15*40)+31
+	sta colormem+(15*40)+32
+	sta colormem+(16*40)+31
+	sta colormem+(16*40)+32
+	sta colormem+(17*40)+31
+	sta colormem+(17*40)+32
+	lda #$09
+	sta colormem+(22*40)+6
 
 	ldx #$00
 :	lda titlescreen1d800+0*256,x
@@ -5485,10 +5501,12 @@ irqtitle2
 	sta $d018
 	lda #$1b
 	sta $d011
-	lda #$0e
+	lda #$08
 	sta $d022
-	lda #$04
+	lda #$0a
 	sta $d023
+	lda #$09
+	sta $d021
 
 	jsr waitnextpointline
 
@@ -5506,6 +5524,12 @@ irqtitle2
 
 	jsr setpointlinespositions
 	jsr setpointlinesptrcolors
+	lda #$06
+	sta $d021
+	lda #$04
+	sta $d022
+	lda #$0e
+	sta $d023
 	jsr waitnextpointline
 
 	jsr setpointlinespositions
@@ -5518,6 +5542,12 @@ irqtitle2
 
 	jsr setpointlinespositions
 	jsr setpointlinesptrcolors
+	lda #$0b
+	sta $d021
+	lda #$0c
+	sta $d022
+	lda #$0f
+	sta $d023
 	jsr waitnextpointline
 
 	ldx #$00
@@ -5557,10 +5587,116 @@ irqtitle2
 	sta $d000+6*2
 	sta $d000+7*2
 
+	lda #$00000000
+	sta $d010
+
+	lda #$0b
+	sta $d025
+	sta $d026
+	ldx #$00
+:	sta $d027,x
+	inx
+	cpx #$08
+	bne :-
+
 	lda #<irqtitle3
 	ldx #>irqtitle3
 	ldy #$f8
 	jmp endirq
+
+irqtitle3
+	pha
+
+	lda #$12							; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	sta $d011
+
+	lda #$52							; #$4c
+	jsr cycleperfect
+
+	lda #$0b
+	sta $d020
+	sta $d021
+
+	lda bankforaddress(screenui2)
+	sta $dd00
+	lda d018forscreencharset(screenui2,$0000)
+	sta $d018
+
+	ldx #$34							; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	ldy #$18							; no multicolour or bitmap, otherwise ghostbyte move won't work
+	stx $d011
+	sty $d016
+
+	lda #$01
+	sta $d025
+	lda #$00
+	sta $d026
+	lda #$0c
+	sta $d027+0
+	sta $d027+1
+	sta $d027+2
+	sta $d027+3
+	sta $d027+4
+	sta $d027+5
+	sta $d027+6
+	sta $d027+7
+
+	clc
+	lda $d001+0*2
+	adc #21
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+	sta $d001+7*2
+
+	lda #$0b
+:	cmp $d012
+	bne :-
+
+	lda #$48							; #$4c
+	jsr cycleperfect
+
+	ldx spriteptrforaddress(tspressfirespr+6*64)
+	stx screenui2+$03f8+0
+	inx
+	stx screenui2+$03f8+1
+	inx
+	stx screenui2+$03f8+2
+	inx
+	stx screenui2+$03f8+3
+	inx
+	stx screenui2+$03f8+4
+	inx
+	stx screenui2+$03f8+5
+
+	lda #$ff							; put sprites back up so the upper border doesn't draw them again
+	sta $d001+0*2
+	sta $d001+1*2
+	sta $d001+2*2
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+	sta $d001+7*2
+
+	jsr tuneplay
+
+	inc easetimer
+	lda easetimer
+	bne :+
+	jsr flippage
+:
+	lda #<irqtitle
+	ldx #>irqtitle
+	ldy #$14
+	jmp endirq
+
+sprraster
+.byte $00,$00,$00,$00,$00,$00,$00,$06,$0e,$03,$06,$06,$04,$06,$04,$04,$0e,$0e,$03,$03,$0d,$01
 
 setpointlinespositions
 
@@ -5786,6 +5922,35 @@ tso13
 
 	rts
 
+flippage
+	; copy x offsets for this page
+	lda hatseflatsikweetgeennamenmeer+1
+	beq setpage1
+setpage0
+	lda #$00
+	sta hatseflatsikweetgeennamenmeer+1
+	ldx #$00
+:	lda spriterowoffs1,x
+	sta spriterowoffs0,x
+	inx
+	cpx #6*8
+	bne :-
+	jmp setpageend
+setpage1
+	lda #$01
+	sta hatseflatsikweetgeennamenmeer+1
+	ldx #$00
+:	lda spriterowoffs2,x
+	sta spriterowoffs0,x
+	inx
+	cpx #6*8
+	bne :-
+
+setpageend
+	rts
+
+.segment "TITLESCREENTABLES"
+
 spriterowxstartlo									; these values get filled from the easing tables
 .byte <(104),<(104),<(104),<(104),<(104),<(104)
 spriterowxstarthi									; these values get filled from the easing tables
@@ -5973,130 +6138,6 @@ tsanimframe
 .byte $00
 tsanimframedelay
 .byte $00
-
-irqtitle3
-	pha
-
-	lda #$32							; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
-	sta $d011
-
-	lda #$52							; #$4c
-	jsr cycleperfect
-
-	lda #$0b
-	sta $d020
-	sta $d021
-
-	ldx #$34							; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
-	ldy #$18							; no multicolour or bitmap, otherwise ghostbyte move won't work
-	stx $d011
-	sty $d016
-
-	lda bankforaddress(screenui2)
-	sta $dd00
-	lda d018forscreencharset(screenui2,$0000)
-	sta $d018
-
-	lda #$01
-	sta $d025
-	lda #$00
-	sta $d026
-	lda #$0c
-	sta $d027+0
-	sta $d027+1
-	sta $d027+2
-	sta $d027+3
-	sta $d027+4
-	sta $d027+5
-	sta $d027+6
-	sta $d027+7
-
-	lda #%00000000
-	sta $d010
-
-	clc
-	lda $d001+0*2
-	adc #21
-	sta $d001+0*2
-	sta $d001+1*2
-	sta $d001+2*2
-	sta $d001+3*2
-	sta $d001+4*2
-	sta $d001+5*2
-	sta $d001+6*2
-	sta $d001+7*2
-
-	lda #$0b
-:	cmp $d012
-	bne :-
-
-	lda #$48							; #$4c
-	jsr cycleperfect
-
-	ldx spriteptrforaddress(tspressfirespr+6*64)
-	stx screenui2+$03f8+0
-	inx
-	stx screenui2+$03f8+1
-	inx
-	stx screenui2+$03f8+2
-	inx
-	stx screenui2+$03f8+3
-	inx
-	stx screenui2+$03f8+4
-	inx
-	stx screenui2+$03f8+5
-
-	lda #$ff							; put sprites back up so the upper border doesn't draw them again
-	sta $d001+0*2
-	sta $d001+1*2
-	sta $d001+2*2
-	sta $d001+3*2
-	sta $d001+4*2
-	sta $d001+5*2
-	sta $d001+6*2
-	sta $d001+7*2
-
-	jsr tuneplay
-
-	inc easetimer
-	lda easetimer
-	bne :+
-	jsr flippage
-:
-	lda #<irqtitle
-	ldx #>irqtitle
-	ldy #$14
-	jmp endirq
-
-sprraster
-.byte $00,$00,$00,$00,$00,$00,$00,$06,$0e,$03,$06,$06,$04,$06,$04,$04,$0e,$0e,$03,$03,$0d,$01
-
-flippage
-	; copy x offsets for this page
-	lda hatseflatsikweetgeennamenmeer+1
-	beq setpage1
-setpage0
-	lda #$00
-	sta hatseflatsikweetgeennamenmeer+1
-	ldx #$00
-:	lda spriterowoffs1,x
-	sta spriterowoffs0,x
-	inx
-	cpx #6*8
-	bne :-
-	jmp setpageend
-setpage1
-	lda #$01
-	sta hatseflatsikweetgeennamenmeer+1
-	ldx #$00
-:	lda spriterowoffs2,x
-	sta spriterowoffs0,x
-	inx
-	cpx #6*8
-	bne :-
-
-setpageend
-	rts
 
 ; -----------------------------------------------------------------------------------------------
 

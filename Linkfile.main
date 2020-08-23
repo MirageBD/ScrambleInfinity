@@ -14,6 +14,8 @@ SEGMENTS
 	IRQ:					load=RAM, align=256;
 	MUSIC:					load=RAM, start=$1000;
 
+	TITLESCREENTABLES:		load=RAM, start=$2500;
+
 	CYCLEPERFECT:			load=RAM, start=$2740; # $00c0
 
 	GAMEPLAY2:				load=RAM, start=$2800;

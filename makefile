@@ -214,9 +214,9 @@ tsbmp1d800.b2: $(BIN_DIR)/tsbmp1d800.bin
 	$(BB) $(EXE_DIR)/tsbmp1d800.rel.bin
 	$(MV) $(EXE_DIR)/tsbmp1d800.rel.bin.b2 $(EXE_DIR)/tsbmp1d800.b2
 
-# $4b00 - $5700 = $0c00 (REPLACES SPRITES1 SEGMENT)
+# $4c00 - $5700 = $0c00 (REPLACES SPRITES1 SEGMENT)
 tspointspr.b2: $(BIN_DIR)/tspointspr.bin
-	$(ADDADDR) $(BIN_DIR)/tspointspr.bin $(EXE_DIR)/tspointspr.rel.bin 19200
+	$(ADDADDR) $(BIN_DIR)/tspointspr.bin $(EXE_DIR)/tspointspr.rel.bin 19456
 	$(BB) $(EXE_DIR)/tspointspr.rel.bin
 	$(MV) $(EXE_DIR)/tspointspr.rel.bin.b2 $(EXE_DIR)/tspointspr.b2
 
@@ -231,8 +231,6 @@ tsbkg.b2:  $(BIN_DIR)/metabkg.bin
 	$(ADDADDR) $(BIN_DIR)/metabkg.bin $(EXE_DIR)/metabkg.rel.bin 28672
 	$(BB) $(EXE_DIR)/metabkg.rel.bin
 	$(MV) $(EXE_DIR)/metabkg.rel.bin.b2 $(EXE_DIR)/tsbkg.b2
-
-
 
 # -----------------------------------------------------------------------------
 
