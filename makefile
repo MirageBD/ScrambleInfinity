@@ -322,6 +322,7 @@ main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
 	 -f "t5" -w $(EXE_DIR)/tsbkg.b2 \
 	 -f "t6" -w $(EXE_DIR)/tshowfar.b2 \
 	$(EXE_DIR)/$@
+	cat $(EXE_DIR)/loadscreen.map
 	cat $(EXE_DIR)/main.map
 
 # -----------------------------------------------------------------------------
