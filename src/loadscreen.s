@@ -399,21 +399,27 @@ irqlogosprites
 	stx $d016
 	sty $d011
 
-	; set up sprites for fancy effects here
+	; do fancy effects here
+:	;inc $d020
 
-	lda #<irqfancyeffectshere
-	ldx #>irqfancyeffectshere
+	;lda #$94
+	;cmp $d012
+	;bne :-
+
+	;lda #$0c
+	;sta $d020
+
+	lda #<irqleftwing1
+	ldx #>irqleftwing1
 	ldy #$95
 	jmp endirq
 	
 ; -----------------------------------------------------------------------------------------------
 
-irqfancyeffectshere
+irqleftwing1
 
 	pha
 	
-	; do fancy stuff here, but wait until it's safe to set left wing sprite stuff
-
 	; set left wing sprite
 	lda #$0b
 	sta $d025
@@ -431,14 +437,14 @@ irqfancyeffectshere
 	ldx spriteptrforaddress(wingspr)
 	stx titlecol+$03f8+7
 
-	lda #<irqleftwing
-	ldx #>irqleftwing
+	lda #<irqleftwing2
+	ldx #>irqleftwing2
 	ldy #$99							; 2 lines before badline
 	jmp endirq
 
 ; -----------------------------------------------------------------------------------------------
 
-irqleftwing
+irqleftwing2
 
 	pha
 
@@ -523,7 +529,7 @@ irqrightwing
 	lda #$ff
 	sta $d015
 	sta $d01c
-	lda #%11000000
+	lda #%11100000
 	sta $d010
 
 	lda #$01
@@ -536,6 +542,7 @@ irqrightwing
 	sta $d027+2
 	sta $d027+3
 	sta $d027+4
+	lda #$00
 	sta $d027+5
 	sta $d027+6
 	sta $d027+7
@@ -556,16 +563,16 @@ irqrightwing
 	sta $d000+1*2
 	lda #(56+2*24)&255
 	sta $d000+2*2
-	lda #(56+3*24)&255
-	sta $d000+3*2
 	lda #(56+4*24)&255
-	sta $d000+4*2
+	sta $d000+3*2
 	lda #(56+5*24)&255
-	sta $d000+5*2
+	sta $d000+4*2
 
-	lda #(40+0*24)&255
+	lda #(16+0*24)&255
+	sta $d000+5*2
+	lda #(16+1*24)&255
 	sta $d000+6*2
-	lda #(40+1*24)&255
+	lda #(16+2*24)&255
 	sta $d000+7*2
 
 	ldx spriteptrforaddress(exhaustspr)
@@ -578,8 +585,6 @@ irqrightwing
 	stx titlecol+$03f8+3
 	inx
 	stx titlecol+$03f8+4
-	inx
-	stx titlecol+$03f8+5
 
 	lda loading
 	cmp #$01
@@ -587,6 +592,8 @@ irqrightwing
 
 setpressfiresprites
 
+	ldx spriteptrforaddress(emptyspr)
+	stx titlecol+$03f8+5
 	ldx spriteptrforaddress(exhaustspr+8*64)
 	stx titlecol+$03f8+6
 	inx
@@ -603,13 +610,16 @@ setloadingspritesbase
 setloadingspritesempty
 
 	ldx spriteptrforaddress(emptyspr)
+	stx titlecol+$03f8+5
 	stx titlecol+$03f8+6
 	stx titlecol+$03f8+7
 	jmp setloadingspritesend
 
 setloadingsprites
 
-	ldx spriteptrforaddress(exhaustspr+6*64)
+	ldx spriteptrforaddress(exhaustspr+5*64)
+	stx titlecol+$03f8+5
+	inx
 	stx titlecol+$03f8+6
 	inx
 	stx titlecol+$03f8+7
@@ -656,6 +666,9 @@ irqopenborder
 :	cmp $d012
 	bne :-
 
+	lda #$0d
+	sta $d027+5
+
 	lda #$48							; #$4c
 	jsr cycleperfect
 
@@ -671,6 +684,16 @@ irqopenborder
 	stx titlecol+$03f8+4
 	inx
 	stx titlecol+$03f8+5
+
+	lda #(56+3*24)&255
+	sta $d000+3*2
+	lda #(56+4*24)&255
+	sta $d000+4*2
+	lda #(56+5*24)&255
+	sta $d000+5*2
+
+	lda #%11000000
+	sta $d010
 
 	ldx spriteptrforaddress(emptyspr)
 	stx titlecol+$03f8+6
