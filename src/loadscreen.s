@@ -46,7 +46,7 @@ emptyspr		= exhaustspr+16*64
 title			= $e000
 
 creditssprites	= $6000
-creditssize		= $0700
+creditssize		= $09d8
 
 ; $0800 for scrollable sprite area
 
@@ -68,7 +68,12 @@ tuneplay		= $ae20
 .endmacro
 
 .macro scrollspritetop sprite
-	ldx #0*3
+
+	lda scrolling
+	bne :+
+	rts
+
+:	ldx #0*3
 
 :	lda scrollsprites+((sprite+0)*4*64)+(0*64)+(1*3)+0,x
 	sta scrollsprites+((sprite+0)*4*64)+(0*64)+(0*3)+0,x
@@ -107,7 +112,11 @@ tuneplay		= $ae20
 .endmacro
 
 .macro scrollspritebottom sprite
-	ldx #11*3
+	lda scrolling
+	bne :+
+	rts
+
+:	ldx #11*3
 
 :	lda scrollsprites+((sprite+0)*4*64)+(0*64)+(1*3)+0,x
 	sta scrollsprites+((sprite+0)*4*64)+(0*64)+(0*3)+0,x
@@ -279,35 +288,11 @@ scrollspritetop0
 	scrollspritetop 0
 scrollspritetop1
 	scrollspritetop 1
-scrollspritetop2
-	scrollspritetop 2
-scrollspritetop3
-	scrollspritetop 3
-scrollspritetop4
-	scrollspritetop 4
-scrollspritetop5
-	scrollspritetop 5
-scrollspritetop6
-	scrollspritetop 6
-scrollspritetop7
-	scrollspritetop 7
 
 scrollspritebottom0
 	scrollspritebottom 0
 scrollspritebottom1
 	scrollspritebottom 1
-scrollspritebottom2
-	scrollspritebottom 2
-scrollspritebottom3
-	scrollspritebottom 3
-scrollspritebottom4
-	scrollspritebottom 4
-scrollspritebottom5
-	scrollspritebottom 5
-scrollspritebottom6
-	scrollspritebottom 6
-scrollspritebottom7
-	scrollspritebottom 7
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -595,10 +580,10 @@ irqlogosprites
 	ldx spriteptrforaddress(wingspr)
 	stx titlecol+$03f8+7
 
-	; set sprite logo overlay and scrollable sprites
+	; set scrollable sprites
 	lda #%00000000
 	sta $d010
-	lda #$70
+	lda #$68
 	sta $d001+3*2
 	sta $d001+4*2
 	sta $d001+5*2
@@ -632,17 +617,24 @@ irqlogosprites
 	ldx spriteptrforaddress(scrollsprites+3*64)
 	stx titlecol+$03f8+6
 
-	jsr scrollspritebottom0
+	lda scrolling
+	bne :++
+
+	lda #$68
+:	cmp $d012
+	bne :-
+
+:	jsr scrollspritebottom0
 	jsr scrollspritetop1
 	jsr scrollspritebottom1
 
-	lda #$70+21
+	lda #$68+21
 	sta $d001+3*2
 	sta $d001+4*2
 	sta $d001+5*2
 	sta $d001+6*2
 
-	lda #$70+21
+	lda #$68+21
 :	cmp $d012
 	bne :-
 
@@ -885,6 +877,31 @@ irqopenborder
 	sta $d001+6*2
 	sta $d001+7*2
 
+	lda scrolling						; are we scrolling?
+	cmp #$00
+	beq notscrolling
+	dec scrolltimer						; yes, decrease scrolltimer until 0
+	lda scrolltimer
+	cmp #$00
+	bne scrollcheckdone
+	lda #$ff							; scroll timer is up, reset to ff and turn scrolling OFF
+	sta scrolltimer
+	lda #$00
+	sta scrolling
+	jmp scrollcheckdone
+
+notscrolling							; not scrolling, decrease scrolltimer until 0
+	dec scrolltimer
+	lda scrolltimer
+	cmp #$00
+	bne scrollcheckdone
+	lda #42								; scroll timer is up, reset to 42+1 and turn scrolling ON
+	sta scrolltimer
+	lda #$01
+	sta scrolling
+
+scrollcheckdone
+
 	jsr copyspriteline
 
 	lda #$0d
@@ -936,15 +953,11 @@ irqopenborder
 
 	jsr scrollspritetop0
 
-	dec $d020
-
 	lda #$36
 	sta $01
 	jsr tuneplay
 	lda #$37
 	sta $01
-
-	inc $d020
 
 	lda #<irqlogosprites
 	ldx #>irqlogosprites
@@ -1000,11 +1013,20 @@ file01
 flashtimer
 .byte $00
 
+scrolltimer
+.byte $00
+
+scrolling
+.byte $00
+
 ; -----------------------------------------------------------------------------------------------
 
 copyspriteline
+	lda scrolling
+	bne :+
+	rts
 
-	ldy #$ff
+:	ldy #$ff
 	iny
 	lda (zp3),y
 	sta scrollsprites+(2*4*64)+(0*64)+0
@@ -1053,7 +1075,11 @@ copyspriteline
 	adc #$00
 	sta zp4
 
+	lda zp4
 	cmp #>(creditssprites+creditssize)
+	bne :+
+	lda zp3
+	cmp #<(creditssprites+creditssize)
 	bne :+
 
 	lda #<creditssprites
