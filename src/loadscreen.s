@@ -12,14 +12,16 @@
 .incbin "./bin/title.bin"
 .segment "TITLECOL"
 .incbin "./bin/titlecol.bin"
-.segment "TITLESPR"
-.incbin "./bin/titlespr.bin"
+.segment "LOGOOVERLAY"
+.incbin "./bin/logooverlay.bin"
 .segment "LOGOSPR"
 .incbin "./bin/logospr.bin"
 .segment "WINGSPR"
 .incbin "./bin/wingspr.bin"
 .segment "EXHAUSTSPR"
 .incbin "./bin/exhaustspr.bin"
+.segment "SCROLLSPR"
+.incbin "./bin/creditssprites.bin"
 
 .feature pc_assignment
 .feature labels_without_colons
@@ -28,14 +30,25 @@
 .define bankforaddress(addr)			#(3-(addr>>14))
 .define spriteptrforaddress(addr)		#((addr&$3fff)>>6)
 
+zp3							= $fc
+zp4							= $fd
+
 titlecol		= $c000
 titlecold800	= ($5000 + 40*25)
-titlespr		= $cf00
-logospr			= $cf00+$0300
-wingspr			= $cf00+$0500
-exhaustspr		= $cf00+$0580
+
+scrollsprites	= $c400
+
+logooverlay		= $cc00
+logospr			= $cc00+$0100
+wingspr			= $cc00+$0300
+exhaustspr		= $cc00+$0380
 emptyspr		= exhaustspr+16*64
 title			= $e000
+
+creditssprites	= $6000
+creditssize		= $0700
+
+; $0800 for scrollable sprite area
 
 tunestart		= $a000
 tuneinit		= $ae00
@@ -52,6 +65,114 @@ tuneplay		= $ae20
 	lda #>to
 	sta copymemto+2
 	jsr copymem
+.endmacro
+
+.macro scrollspritetop sprite
+	ldx #0*3
+
+:	lda scrollsprites+((sprite+0)*4*64)+(0*64)+(1*3)+0,x
+	sta scrollsprites+((sprite+0)*4*64)+(0*64)+(0*3)+0,x
+	lda scrollsprites+((sprite+0)*4*64)+(0*64)+(1*3)+1,x
+	sta scrollsprites+((sprite+0)*4*64)+(0*64)+(0*3)+1,x
+	lda scrollsprites+((sprite+0)*4*64)+(0*64)+(1*3)+2,x
+	sta scrollsprites+((sprite+0)*4*64)+(0*64)+(0*3)+2,x
+
+	lda scrollsprites+((sprite+0)*4*64)+(1*64)+(1*3)+0,x
+	sta scrollsprites+((sprite+0)*4*64)+(1*64)+(0*3)+0,x
+	lda scrollsprites+((sprite+0)*4*64)+(1*64)+(1*3)+1,x
+	sta scrollsprites+((sprite+0)*4*64)+(1*64)+(0*3)+1,x
+	lda scrollsprites+((sprite+0)*4*64)+(1*64)+(1*3)+2,x
+	sta scrollsprites+((sprite+0)*4*64)+(1*64)+(0*3)+2,x
+
+	lda scrollsprites+((sprite+0)*4*64)+(2*64)+(1*3)+0,x
+	sta scrollsprites+((sprite+0)*4*64)+(2*64)+(0*3)+0,x
+	lda scrollsprites+((sprite+0)*4*64)+(2*64)+(1*3)+1,x
+	sta scrollsprites+((sprite+0)*4*64)+(2*64)+(0*3)+1,x
+	lda scrollsprites+((sprite+0)*4*64)+(2*64)+(1*3)+2,x
+	sta scrollsprites+((sprite+0)*4*64)+(2*64)+(0*3)+2,x
+
+	lda scrollsprites+((sprite+0)*4*64)+(3*64)+(1*3)+0,x
+	sta scrollsprites+((sprite+0)*4*64)+(3*64)+(0*3)+0,x
+	lda scrollsprites+((sprite+0)*4*64)+(3*64)+(1*3)+1,x
+	sta scrollsprites+((sprite+0)*4*64)+(3*64)+(0*3)+1,x
+	lda scrollsprites+((sprite+0)*4*64)+(3*64)+(1*3)+2,x
+	sta scrollsprites+((sprite+0)*4*64)+(3*64)+(0*3)+2,x
+
+	inx
+	inx
+	inx
+	cpx #11*3
+	bne :-
+	rts
+.endmacro
+
+.macro scrollspritebottom sprite
+	ldx #11*3
+
+:	lda scrollsprites+((sprite+0)*4*64)+(0*64)+(1*3)+0,x
+	sta scrollsprites+((sprite+0)*4*64)+(0*64)+(0*3)+0,x
+	lda scrollsprites+((sprite+0)*4*64)+(0*64)+(1*3)+1,x
+	sta scrollsprites+((sprite+0)*4*64)+(0*64)+(0*3)+1,x
+	lda scrollsprites+((sprite+0)*4*64)+(0*64)+(1*3)+2,x
+	sta scrollsprites+((sprite+0)*4*64)+(0*64)+(0*3)+2,x
+
+	lda scrollsprites+((sprite+0)*4*64)+(1*64)+(1*3)+0,x
+	sta scrollsprites+((sprite+0)*4*64)+(1*64)+(0*3)+0,x
+	lda scrollsprites+((sprite+0)*4*64)+(1*64)+(1*3)+1,x
+	sta scrollsprites+((sprite+0)*4*64)+(1*64)+(0*3)+1,x
+	lda scrollsprites+((sprite+0)*4*64)+(1*64)+(1*3)+2,x
+	sta scrollsprites+((sprite+0)*4*64)+(1*64)+(0*3)+2,x
+
+	lda scrollsprites+((sprite+0)*4*64)+(2*64)+(1*3)+0,x
+	sta scrollsprites+((sprite+0)*4*64)+(2*64)+(0*3)+0,x
+	lda scrollsprites+((sprite+0)*4*64)+(2*64)+(1*3)+1,x
+	sta scrollsprites+((sprite+0)*4*64)+(2*64)+(0*3)+1,x
+	lda scrollsprites+((sprite+0)*4*64)+(2*64)+(1*3)+2,x
+	sta scrollsprites+((sprite+0)*4*64)+(2*64)+(0*3)+2,x
+
+	lda scrollsprites+((sprite+0)*4*64)+(3*64)+(1*3)+0,x
+	sta scrollsprites+((sprite+0)*4*64)+(3*64)+(0*3)+0,x
+	lda scrollsprites+((sprite+0)*4*64)+(3*64)+(1*3)+1,x
+	sta scrollsprites+((sprite+0)*4*64)+(3*64)+(0*3)+1,x
+	lda scrollsprites+((sprite+0)*4*64)+(3*64)+(1*3)+2,x
+	sta scrollsprites+((sprite+0)*4*64)+(3*64)+(0*3)+2,x
+
+	inx
+	inx
+	inx
+	cpx #20*3
+	bne :-
+
+	lda scrollsprites+((sprite+1)*4*64)+(0*64)+( 0*3)+0
+	sta scrollsprites+((sprite+0)*4*64)+(0*64)+(20*3)+0
+	lda scrollsprites+((sprite+1)*4*64)+(0*64)+( 0*3)+1
+	sta scrollsprites+((sprite+0)*4*64)+(0*64)+(20*3)+1
+	lda scrollsprites+((sprite+1)*4*64)+(0*64)+( 0*3)+2
+	sta scrollsprites+((sprite+0)*4*64)+(0*64)+(20*3)+2
+
+	lda scrollsprites+((sprite+1)*4*64)+(1*64)+( 0*3)+0
+	sta scrollsprites+((sprite+0)*4*64)+(1*64)+(20*3)+0
+	lda scrollsprites+((sprite+1)*4*64)+(1*64)+( 0*3)+1
+	sta scrollsprites+((sprite+0)*4*64)+(1*64)+(20*3)+1
+	lda scrollsprites+((sprite+1)*4*64)+(1*64)+( 0*3)+2
+	sta scrollsprites+((sprite+0)*4*64)+(1*64)+(20*3)+2
+
+	lda scrollsprites+((sprite+1)*4*64)+(2*64)+( 0*3)+0
+	sta scrollsprites+((sprite+0)*4*64)+(2*64)+(20*3)+0
+	lda scrollsprites+((sprite+1)*4*64)+(2*64)+( 0*3)+1
+	sta scrollsprites+((sprite+0)*4*64)+(2*64)+(20*3)+1
+	lda scrollsprites+((sprite+1)*4*64)+(2*64)+( 0*3)+2
+	sta scrollsprites+((sprite+0)*4*64)+(2*64)+(20*3)+2
+
+	lda scrollsprites+((sprite+1)*4*64)+(3*64)+( 0*3)+0
+	sta scrollsprites+((sprite+0)*4*64)+(3*64)+(20*3)+0
+	lda scrollsprites+((sprite+1)*4*64)+(3*64)+( 0*3)+1
+	sta scrollsprites+((sprite+0)*4*64)+(3*64)+(20*3)+1
+	lda scrollsprites+((sprite+1)*4*64)+(3*64)+( 0*3)+2
+	sta scrollsprites+((sprite+0)*4*64)+(3*64)+(20*3)+2
+
+	rts
+
 .endmacro
 
 ; -----------------------------------------------------------------------------------------------
@@ -154,6 +275,40 @@ copymemsize
 	bne copymemfrom
 	rts
 
+scrollspritetop0
+	scrollspritetop 0
+scrollspritetop1
+	scrollspritetop 1
+scrollspritetop2
+	scrollspritetop 2
+scrollspritetop3
+	scrollspritetop 3
+scrollspritetop4
+	scrollspritetop 4
+scrollspritetop5
+	scrollspritetop 5
+scrollspritetop6
+	scrollspritetop 6
+scrollspritetop7
+	scrollspritetop 7
+
+scrollspritebottom0
+	scrollspritebottom 0
+scrollspritebottom1
+	scrollspritebottom 1
+scrollspritebottom2
+	scrollspritebottom 2
+scrollspritebottom3
+	scrollspritebottom 3
+scrollspritebottom4
+	scrollspritebottom 4
+scrollspritebottom5
+	scrollspritebottom 5
+scrollspritebottom6
+	scrollspritebottom 6
+scrollspritebottom7
+	scrollspritebottom 7
+
 ; -----------------------------------------------------------------------------------------------
 
 mainentry
@@ -163,11 +318,29 @@ mainentry
 	sta $01
 
 	copymemblocks $5000, $c000, $0400	; colors, etc.
-	copymemblocks $5800, $cf00, $0a00	; sprites
+	copymemblocks $5800, $cc00, $0a00	; sprites
 	copymemblocks $7000, $e000, $2000
+
+	ldx #$00
+	lda #%00000000
+:	sta scrollsprites+0*256,x
+	sta scrollsprites+1*256,x
+	sta scrollsprites+2*256,x
+	sta scrollsprites+3*256,x
+	sta scrollsprites+4*256,x
+	sta scrollsprites+5*256,x
+	sta scrollsprites+6*256,x
+	sta scrollsprites+7*256,x
+	inx
+	bne :-
 
 	lda #$37
 	sta $01
+
+	lda #<creditssprites
+	sta zp3
+	lda #>creditssprites
+	sta zp4
 
 	lda #$00
 	sta $d011
@@ -409,23 +582,8 @@ irqlogosprites
 	;lda #$0c
 	;sta $d020
 
-	lda #<irqleftwing1
-	ldx #>irqleftwing1
-	ldy #$95
-	jmp endirq
-	
-; -----------------------------------------------------------------------------------------------
-
-irqleftwing1
-
-	pha
-	
 	; set left wing sprite
 	lda #$0b
-	sta $d025
-	lda #$0f
-	sta $d026
-	lda #$00
 	sta $d027+7
 
 	lda #%00000000
@@ -437,6 +595,77 @@ irqleftwing1
 	ldx spriteptrforaddress(wingspr)
 	stx titlecol+$03f8+7
 
+	; set sprite logo overlay and scrollable sprites
+	lda #%00000000
+	sta $d010
+	lda #$70
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+
+	lda #(136+0*24)&255
+	sta $d000+3*2
+	lda #(136+1*24)&255
+	sta $d000+4*2
+	lda #(136+2*24)&255
+	sta $d000+5*2
+	lda #(136+3*24)&255
+	sta $d000+6*2
+
+	lda #$00
+	sta $d025
+	lda #$0f
+	sta $d026
+	lda #$01
+	sta $d027+3
+	sta $d027+4
+	sta $d027+5
+	sta $d027+6
+
+	ldx spriteptrforaddress(scrollsprites+0*64)
+	stx titlecol+$03f8+3
+	ldx spriteptrforaddress(scrollsprites+1*64)
+	stx titlecol+$03f8+4
+	ldx spriteptrforaddress(scrollsprites+2*64)
+	stx titlecol+$03f8+5
+	ldx spriteptrforaddress(scrollsprites+3*64)
+	stx titlecol+$03f8+6
+
+	jsr scrollspritebottom0
+	jsr scrollspritetop1
+	jsr scrollspritebottom1
+
+	lda #$70+21
+	sta $d001+3*2
+	sta $d001+4*2
+	sta $d001+5*2
+	sta $d001+6*2
+
+	lda #$70+21
+:	cmp $d012
+	bne :-
+
+	ldx spriteptrforaddress(scrollsprites+4*64)
+	stx titlecol+$03f8+3
+	ldx spriteptrforaddress(scrollsprites+5*64)
+	stx titlecol+$03f8+4
+	ldx spriteptrforaddress(scrollsprites+6*64)
+	stx titlecol+$03f8+5
+	ldx spriteptrforaddress(scrollsprites+7*64)
+	stx titlecol+$03f8+6
+
+	lda #<irqleftwing1
+	ldx #>irqleftwing1
+	ldy #$95
+	jmp endirq
+	
+; -----------------------------------------------------------------------------------------------
+
+irqleftwing1
+
+	pha
+	
 	lda #<irqleftwing2
 	ldx #>irqleftwing2
 	ldy #$99							; 2 lines before badline
@@ -497,12 +726,6 @@ irqleftwing2
 	sta $d000+7*2
 	ldx spriteptrforaddress(wingspr+64)
 	stx titlecol+$03f8+7
-	lda #$0b
-	sta $d025
-	lda #$0f
-	sta $d026
-	lda #$00
-	sta $d027+7
 
 	lda #<irqrightwing
 	ldx #>irqrightwing
@@ -662,6 +885,8 @@ irqopenborder
 	sta $d001+6*2
 	sta $d001+7*2
 
+	jsr copyspriteline
+
 	lda #$0d
 :	cmp $d012
 	bne :-
@@ -709,11 +934,17 @@ irqopenborder
 	sta $d001+6*2
 	sta $d001+7*2
 
+	jsr scrollspritetop0
+
+	dec $d020
+
 	lda #$36
 	sta $01
 	jsr tuneplay
 	lda #$37
 	sta $01
+
+	inc $d020
 
 	lda #<irqlogosprites
 	ldx #>irqlogosprites
@@ -768,6 +999,69 @@ file01
 
 flashtimer
 .byte $00
+
+; -----------------------------------------------------------------------------------------------
+
+copyspriteline
+
+	ldy #$ff
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(0*64)+0
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(0*64)+1
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(0*64)+2
+
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(1*64)+0
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(1*64)+1
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(1*64)+2
+
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(2*64)+0
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(2*64)+1
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(2*64)+2
+
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(3*64)+0
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(3*64)+1
+	iny
+	lda (zp3),y
+	sta scrollsprites+(2*4*64)+(3*64)+2
+
+	clc
+	lda zp3
+	adc #$0c
+	sta zp3
+	lda zp4
+	adc #$00
+	sta zp4
+
+	cmp #>(creditssprites+creditssize)
+	bne :+
+
+	lda #<creditssprites
+	sta zp3
+	lda #>creditssprites
+	sta zp4
+
+:	rts
 
 ; -----------------------------------------------------------------------------------------------
 

@@ -13,14 +13,16 @@ SEGMENTS
 	
 	TITLECOL:		load=RAM,	start=$5000;	# gets moved to $c000
 
-	TITLESPR:		load=RAM,	start=$5800;
-	LOGOSPR:		load=RAM,	start=$5b00;
-	WINGSPR:		load=RAM,	start=$5d00;
-	EXHAUSTSPR:		load=RAM,	start=$5d80;
+	LOGOOVERLAY:	load=RAM,	start=$5800;	# gets moved to $cc00
+	LOGOSPR:		load=RAM,	start=$5900;	# gets moved to $cc00+$0100
+	WINGSPR:		load=RAM,	start=$5b00;	# gets moved to $cc00+$0300
+	EXHAUSTSPR:		load=RAM,	start=$5b80;	# get moved to $cc00+$0380
+	
+	SCROLLSPR:		load=RAM,	start=$6000;
 
 	TITLE:			load=RAM,	start=$7000;	# gets moved to $e000
 	
-	MUSIC:			load=RAM,	start=$a000;
+	MAIN:			load=RAM,	start=$9000;
 
-	MAIN:			load=RAM,	start=$c400;
+	MUSIC:			load=RAM,	start=$a000;
 }

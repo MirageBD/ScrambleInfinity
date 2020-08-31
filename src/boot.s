@@ -291,7 +291,7 @@ mainentry
 	
 	lda #$1b
 	sta $d011
-	jmp $c400 ; $080d
+	jmp $9000 ; $c400 ; $080d
 
 error
 	lda #$02
@@ -360,7 +360,7 @@ file01
 ; -----------------------------------------------------------------------------------------------
 
 drawloadbar
-	lda endaddrhi				; don't do anything if too low endaddrhi/endeddrlo loadaddrhi/loadaddrlo
+	lda endaddrhi				; don't do anything if too low endaddrhi/endeddrlo loadaddrhi/loadaddrlo - starts with $84
 	cmp #$00
 	beq :+
 	cmp #$b8
@@ -371,18 +371,29 @@ drawloadbar
 
 dlb2
 :
-	sec
+	lda initialized
+	bne :+
+	ldx endaddrhi				; get first loadaddress and subtract one
+	dex
+	stx sub+1
+	lda #$01
+	sta initialized
+
+:	sec
 	lda endaddrhi
-	sbc #$88
+sub	sbc #$84-1					; starts loading at $8400 for some reason, so extract $84-1
+	inc timer
+	ldx timer
+	sta endtmp+1,x
 	cmp #36
-	bmi :+
+	bmi :+						; not 36 yet, so draw partial bar
 	lda #$02
-	sta screen+12*40+38
+	sta screen+12*40+38			; it is 36, so draw the right parts of the bar
 	lda #36
 :	sta endtmp
 
 	lda #$00
-	sta screen+12*40+1
+	sta screen+12*40+1			; draw left part of bar
 
 	lda #$01
 	ldx #$00
@@ -395,7 +406,13 @@ dlb2
 	
 	.byte $00
 
+timer
+.byte $00
+
 endtmp
+.byte $00
+
+initialized
 .byte $00
 
 ; -----------------------------------------------------------------------------------------------	
