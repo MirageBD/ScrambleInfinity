@@ -46,7 +46,7 @@ emptyspr		= exhaustspr+16*64
 title			= $e000
 
 creditssprites	= $6000
-creditssize		= $09d8
+creditssize		= $0dc8
 
 ; $0800 for scrollable sprite area
 
