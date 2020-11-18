@@ -5442,15 +5442,15 @@ irqtitle
 	cpx #22
 	bne :--
 
+	ldx #$18
+	stx $d016
+	
 	lda d018forscreencharset(screen1, bitmap1)				; start of screen below sprite logo, set right regs for bitmap etc.
 	sta $d018
 
 	lda bankforaddress(bitmap1)
 	sta $dd00
 
-	ldx #$18
-	stx $d016
-	
 	lda #$00
 	sta $d020
 	sta $d021
@@ -5617,15 +5617,23 @@ irqtitle3
 	sta $d020
 	sta $d021
 
-	lda bankforaddress(screenui2)
-	sta $dd00
-	lda d018forscreencharset(screenui2,$0000)
-	sta $d018
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	bit $ea
 
 	ldx #$34							; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
 	ldy #$18							; no multicolour or bitmap, otherwise ghostbyte move won't work
 	stx $d011
 	sty $d016
+
+	lda d018forscreencharset(screenui2,$0000)
+	sta $d018
+	lda bankforaddress(screenui2)
+	sta $dd00
 
 	lda #$01
 	sta $d025

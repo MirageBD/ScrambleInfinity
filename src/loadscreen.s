@@ -6,7 +6,8 @@
 .include "loadersymbols-c64.inc"
 
 .segment "MUSIC"
-.incbin "./bin/sanxiona000.bin"
+;.incbin "./bin/sanxiona000.bin"
+.incbin "./bin/danemusic.bin"
 
 .segment "TITLE"
 .incbin "./bin/title.bin"
@@ -51,8 +52,8 @@ creditssize		= $0dc8
 ; $0800 for scrollable sprite area
 
 tunestart		= $a000
-tuneinit		= $ae00
-tuneplay		= $ae20
+tuneinit		= $a000
+tuneplay		= $a003
 
 ; -----------------------------------------------------------------------------------------------
 
