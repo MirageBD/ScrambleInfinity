@@ -82,9 +82,15 @@ mainentry
 	cmp #$04							; #STATUS::DEVICE_INCOMPATIBLE
 	beq :+
 	ldx #$04
+	stx $d020
+	cli
+	rts
 :	cmp #$05							; #STATUS::TOO_MANY_DEVICES
 	beq :+
 	ldx #$00
+	stx $d020
+	cli
+	rts
 :	cli
 
 	sei

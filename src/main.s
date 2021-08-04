@@ -2,13 +2,13 @@
 
 ; TODO:
 
+; add proper disk fail handling.
 ; highscore + obfuscate (irq loader now loadable after reverting to kernal).
 ; stars at startup-screen (or maybe something more fancy).
 ; new music (give option to play without music?) 2channel prefered.
 ; add sound-fx for fire/bomb/explode.
 ; more obfuscate against hackers? On drive? Probably not worth it.
 ; fix bug where ground targets sometimes get cleaned only half when hit.
-; add proper disk fail handling.
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
