@@ -10,7 +10,7 @@ SEGMENTS
 	#LOADER:					load=RAM, start=$0200, define=yes; # $0300
 
 	# comment
-	MAIN:					load=RAM, start=$0820;
+	CORE:					load=RAM, start=$0820;
 	IRQ:					load=RAM, align=256;
 	MUSIC:					load=RAM, start=$1000;
 

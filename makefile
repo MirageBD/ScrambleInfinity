@@ -4,6 +4,7 @@ MV           = mv
 RM           = rm -f
 
 SRC_DIR      = ./src
+UTIL_SRC_DIR = ./utils
 EXE_DIR      = ./exe
 BIN_DIR      = ./bin
 
@@ -40,14 +41,14 @@ $(LOADER)/loader/build/loader-c64.prg:
 
 # -----------------------------------------------------------------------------
 
-specialtiles.exe: $(SRC_DIR)/specialtiles.c
-	$(GCC) $(SRC_DIR)/specialtiles.c -o $(EXE_DIR)/specialtiles.exe
+specialtiles.exe: $(UTIL_SRC_DIR)/specialtiles.c
+	$(GCC) $(UTIL_SRC_DIR)/specialtiles.c -o $(EXE_DIR)/specialtiles.exe
 
-binsplit.exe: $(SRC_DIR)/binsplit.c
-	$(GCC) $(SRC_DIR)/binsplit.c -o $(EXE_DIR)/binsplit.exe
+binsplit.exe: $(UTIL_SRC_DIR)/binsplit.c
+	$(GCC) $(UTIL_SRC_DIR)/binsplit.c -o $(EXE_DIR)/binsplit.exe
 
-addaddr.exe: $(SRC_DIR)/addaddr.c
-	$(GCC) $(SRC_DIR)/addaddr.c -o $(EXE_DIR)/addaddr.exe
+addaddr.exe: $(UTIL_SRC_DIR)/addaddr.c
+	$(GCC) $(UTIL_SRC_DIR)/addaddr.c -o $(EXE_DIR)/addaddr.exe
 
 loader-c64.prg: $(LOADER)/loader/build/loader-c64.prg
 	$(CP) $(LOADER)/loader/build/loader-c64.prg $(EXE_DIR)/.
