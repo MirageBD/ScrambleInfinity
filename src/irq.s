@@ -23,9 +23,9 @@ page
 
 	ldx #$6b
 
-foo3
-	bne foo4									; do vsp
-foo4
+vspoffset
+	bne :+									; do vsp
+:
 	.repeat 19
 	lda #$a9
 	.endrepeat

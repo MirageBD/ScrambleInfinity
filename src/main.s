@@ -24,6 +24,37 @@
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
+; From Andreas, for cart:
+; i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then timing is equal
+;
+;      pha               ; 3
+;      txa               ; 2
+;      pha               ; 3
+;      tya               ; 2
+;      pha               ; 3
+;      tsx               ; 2
+;      lda $0104,x       ; 4
+;      and #$10          ; 2
+;      beq :+            ; 3
+;      nop               ;
+;   :                 ;
+;      jmp ($0314)       ; 5     jmp (ind)         ; that's a comment... i point 0314/15 to there, the comment is to remind me of that pointer
+;                        ;
+;   * = ($0314)       ;
+;      kernel:
+;      dec $d019
+;      pla
+;      tay
+;      pla
+;      tax
+;      pla
+;      rti
+;             
+; that code “simulates” what the kernel does
+; so with kernel swapped out everything is executed by your own code, swapped in the kernel does its’ thing and jumps to “kernel:”
+
+; ------------------------------------------------------------------------------------------------------------------------
+
 .feature pc_assignment
 .feature labels_without_colons
 
@@ -53,15 +84,6 @@
 .incbin "./bin/comet.bin"						; ""
 .incbin "./bin/mysteryspr.bin"					; ""
 
-;.segment "TSPOINTSPR"							; $0900
-;.incbin "./bin/tspointspr.bin"
-;.incbin "./bin/tsmissilespr.bin"
-;.incbin "./bin/tsmissileflyspr.bin"
-;.incbin "./bin/tsbosspr.bin"
-;.incbin "./bin/tsufospr.bin"
-;.incbin "./bin/tsfluelspr.bin"
-;.incbin "./bin/tsmysspr.bin"
-
 .segment "MAPTILES"
 .incbin "./exe/mt.out"
 
@@ -80,34 +102,20 @@
 .segment "UIFONT"
 .incbin "./bin/ingamemeta.bin"
 
-;.segment "LOADER"
-;.incbin "./exe/loader-c64.prg", $02
-
-;.segment "LOADEDDATA1"
-;	.res 2048
-;.segment "LOADEDDATA2"
-;	.res 2048
 .segment "SCREEN1"
 	.res 1024
 .segment "BITMAP1"
 	.res 8192
-;.segment "SCREEN2"
-;	.res 1024
-;.segment "BITMAP2"
-;	.res 8192
 .segment "SCREENSPECIAL"
 	.res 1024
-;.segment "SCREENUI"
-;	.res 1024
-;.segment "SCREENBORDERSPRITES"
-;	.res 1024
 .segment "SPRITES2"
 	.res 64
 .segment "EMPTYSPRITE"
 	.res 64
 
-.include "globals.s"
+; ------------------------------------------------------------------------------------------------------------------------
 
+.include "globals.s"
 .include "macros.s"
 
 ; MAIN ------------------------------------------------------------------------------------------
@@ -146,8 +154,9 @@
 
 	jmp titlescreen
 
-
 .include "core.s"
+
+; -----------------------------------------------------------------------------------------------
 
 .segment "IRQ"
 .include "irq.s"
@@ -182,7 +191,7 @@
 .segment "CYCLEPERFECT"
 .include "cycleperfect.s"
 
-.include "cart.s"
+; -----------------------------------------------------------------------------------------------
 
 endirq	
 	sta $fffe
@@ -232,7 +241,7 @@ ingameend
 
 ; -----------------------------------------------------------------------------------------------
 
-.segment "EASEFUNC"
-.include "easefunc.s"
+.segment "EASETABLES"
+.include "easetables.s"
 
 ; -----------------------------------------------------------------------------------------------
