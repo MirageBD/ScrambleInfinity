@@ -1,3 +1,5 @@
+.segment "CLEARSCREEN"
+
 clearscreen
 
 	lda #$18

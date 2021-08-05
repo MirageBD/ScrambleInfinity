@@ -1,3 +1,5 @@
+.segment "IRQ"
+
 irq1
 	pha
 	sec

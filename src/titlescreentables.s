@@ -1,3 +1,5 @@
+.segment "TITLESCREENTABLES"
+
 spriterowxstartlo									; these values get filled from the easing tables
 .byte <(104),<(104),<(104),<(104),<(104),<(104)
 spriterowxstarthi									; these values get filled from the easing tables

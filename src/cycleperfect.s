@@ -1,3 +1,5 @@
+.segment "CYCLEPERFECT"
+
 cycleperfect
 
 	sec

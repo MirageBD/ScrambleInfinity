@@ -1,3 +1,5 @@
+.segment "GAMEPLAY2"
+
 launchcomet
 
 	clc

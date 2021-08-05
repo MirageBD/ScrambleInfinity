@@ -1,3 +1,5 @@
+.segment "LIVESLEFTSCREEN"
+
 livesleftscreen
 
 	sei

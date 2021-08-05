@@ -1,3 +1,5 @@
+.segment "SCROLLER"
+
 plottiles
 
 	ldy #$03

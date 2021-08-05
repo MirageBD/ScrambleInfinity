@@ -1,3 +1,5 @@
+.segment "TABLES"
+
 ; put stuff that's indexed a lot first to keep runtime cost low
 
 ;sortorder = ($a0)

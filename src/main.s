@@ -158,37 +158,16 @@
 
 ; -----------------------------------------------------------------------------------------------
 
-.segment "IRQ"
 .include "irq.s"
-
-.segment "GAMEPLAY"
 .include "gameplay.s"
-
-.segment "GAMEPLAY2"
 .include "gameplay2.s"
-
-.segment "SCROLLER"
 .include "scroller.s"
-
-.segment "TITLESCREEN"
 .include "titlescreen.s"
-
-.segment "TITLESCREENTABLES"
 .include "titlescreentables.s"
-
-.segment "LIVESLEFTSCREEN"
 .include "livesleftscreen.s"
-
-.segment "CONGRATULATIONSSCREEN"
 .include "congratulationsscreen.s"
-
-.segment "CLEARSCREEN"
 .include "clearscreen.s"
-
-.segment "TABLES"
 .include "tables.s"
-
-.segment "CYCLEPERFECT"
 .include "cycleperfect.s"
 
 ; -----------------------------------------------------------------------------------------------

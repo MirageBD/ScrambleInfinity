@@ -1,3 +1,5 @@
+.segment "TITLESCREEN"
+
 titlescreen
 
 	sei

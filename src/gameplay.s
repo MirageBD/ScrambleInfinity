@@ -1,3 +1,5 @@
+.segment "GAMEPLAY"
+
 joyrout
 
 	lda hascontrol
