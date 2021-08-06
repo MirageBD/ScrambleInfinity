@@ -1,4 +1,4 @@
-;.segment "ZONES"
+.segment "ZONES"
 
 handlezonecode
 
@@ -146,3 +146,5 @@ handlegamefinished
 handlezone5rest
 	jsr animmissiles
 	jmp handlemissilemovement
+
+; -----------------------------------------------------------------------------------------------

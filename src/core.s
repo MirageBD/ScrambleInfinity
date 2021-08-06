@@ -1,3 +1,5 @@
+.segment "CORE"
+
 initiatebitmapscores
 	sei
 	lda #$35

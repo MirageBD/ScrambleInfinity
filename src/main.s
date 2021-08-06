@@ -115,12 +115,12 @@
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
-.include "globals.s"
 .include "macros.s"
+.include "globals.s"
 
 ; MAIN ------------------------------------------------------------------------------------------
 
-.segment "CORE"
+.segment "MAIN"
 
 	sei
 
@@ -161,6 +161,7 @@
 .include "irq.s"
 .include "gameplay.s"
 .include "scroller.s"
+.include "subzones.s"
 
 .segment "NORMALGAMEPLAY"
 

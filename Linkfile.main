@@ -10,7 +10,9 @@ SEGMENTS
 	#LOADER:					load=RAM, start=$0200, define=yes; # $0300
 
 	# comment
-	CORE:					load=RAM, start=$0820;
+	GLOBALS:				load=RAM, start=$0820;
+	MAIN:					load=RAM;
+	CORE:					load=RAM;
 	IRQ:					load=RAM, align=256;
 	MUSIC:					load=RAM, start=$1000;
 
@@ -38,6 +40,7 @@ SEGMENTS
 	SCREENSPECIAL:			load=OVERLAPPING_RAM, start=$8000, type=BSS;
 
 	SCROLLER:				load=RAM, start=$8400;	# $0d00
+	SUBZONES:				load=RAM;
 	NORMALGAMEPLAY:			load=RAM;
 	PLOT:					load=RAM;
 	COLLISION:				load=RAM;

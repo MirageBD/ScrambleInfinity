@@ -1,3 +1,5 @@
+.segment "SUBZONES"
+
 incsubzone
 
 	inc subzone									; increase screen/subzone

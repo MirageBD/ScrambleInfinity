@@ -305,6 +305,8 @@ handlecollisions
 	lda #$01
 	sta handlezonetested
 
+	; TODO - move handle zone code out of collision code
+
 	jmp handlezonecode
 
 :	jmp handlezonecodeskip
