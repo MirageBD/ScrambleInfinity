@@ -182,7 +182,7 @@ csptsp0	lda $c001
 	lda #$00
 	sta calcspryoffset
 
-	lda calchit										; find top left position of object hit
+	lda calchit									; find top left position of object hit
 	and #%00000001
 	beq :+
 	dec calcxlow
