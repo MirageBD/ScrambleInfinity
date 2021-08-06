@@ -126,7 +126,6 @@
 .include "collision.s"
 .include "zones.s"
 .include "titlescreen.s"
-.include "titlescreentables.s"
 .include "livesleftscreen.s"
 .include "congratulationsscreen.s"
 .include "clearscreen.s"
