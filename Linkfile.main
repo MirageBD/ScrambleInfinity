@@ -19,6 +19,7 @@ SEGMENTS
 	TITLESCREENTABLES:		load=RAM, start=$2500;
 
 	CYCLEPERFECT:			load=RAM, start=$2740; # $00c0
+	ENDIRQ:					load=RAM;
 
 	GAMEPLAY2:				load=RAM, start=$2800;
 

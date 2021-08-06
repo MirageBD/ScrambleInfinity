@@ -117,6 +117,21 @@
 
 .include "macros.s"
 .include "globals.s"
+.include "core.s"
+.include "irq.s"
+.include "gameplay.s"
+.include "scroller.s"
+.include "subzones.s"
+.include "plot.s"
+.include "collision.s"
+.include "zones.s"
+.include "titlescreen.s"
+.include "titlescreentables.s"
+.include "livesleftscreen.s"
+.include "congratulationsscreen.s"
+.include "clearscreen.s"
+.include "tables.s"
+.include "cycleperfect.s"
 
 ; MAIN ------------------------------------------------------------------------------------------
 
@@ -154,14 +169,7 @@
 
 	jmp titlescreen
 
-.include "core.s"
-
 ; -----------------------------------------------------------------------------------------------
-
-.include "irq.s"
-.include "gameplay.s"
-.include "scroller.s"
-.include "subzones.s"
 
 .segment "NORMALGAMEPLAY"
 
@@ -436,20 +444,7 @@ scrlow
 
 ; -----------------------------------------------------------------------------------------------
 
-.include "plot.s"
-
-.include "collision.s"
-.include "zones.s"
-
-.include "titlescreen.s"
-.include "titlescreentables.s"
-.include "livesleftscreen.s"
-.include "congratulationsscreen.s"
-.include "clearscreen.s"
-.include "tables.s"
-.include "cycleperfect.s"
-
-; -----------------------------------------------------------------------------------------------
+.segment "ENDIRQ"
 
 endirq	
 	sta $fffe
