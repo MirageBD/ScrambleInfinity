@@ -1,3 +1,5 @@
+.segment "COLLISION"
+
 calcspritepostospritepos
 
 	lda #$00
@@ -302,5 +304,9 @@ handlecollisions
 	bne :+
 	lda #$01
 	sta handlezonetested
-    
+
+	jmp handlezonecode
+
+:	jmp handlezonecodeskip
+
 ; -----------------------------------------------------------------------------------------------	

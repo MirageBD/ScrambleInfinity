@@ -1,8 +1,12 @@
+;.segment "ZONES"
+
 handlezonecode
+
 	jsr handlezone1								; self modified jsr
 	jmp hcend
 
-:	lda bullet0tested
+handlezonecodeskip
+	lda bullet0tested
 	bne :+
 	lda #$01
 	sta bullet0tested

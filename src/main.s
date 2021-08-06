@@ -162,6 +162,8 @@
 .include "gameplay.s"
 .include "scroller.s"
 
+.segment "NORMALGAMEPLAY"
+
 normalgameplay
 
 	jsr inithandlecollisions
@@ -434,10 +436,8 @@ scrlow
 ; -----------------------------------------------------------------------------------------------
 
 .include "plot.s"
+
 .include "collision.s"
-
-	jmp handlezonecode
-
 .include "zones.s"
 
 .include "titlescreen.s"

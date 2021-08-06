@@ -38,6 +38,10 @@ SEGMENTS
 	SCREENSPECIAL:			load=OVERLAPPING_RAM, start=$8000, type=BSS;
 
 	SCROLLER:				load=RAM, start=$8400;	# $0d00
+	NORMALGAMEPLAY:			load=RAM;
+	PLOT:					load=RAM;
+	COLLISION:				load=RAM;
+	ZONES:					load=RAM;
 
 	GAMEPLAY:				load=RAM, start=$9100;
 

@@ -1,3 +1,5 @@
+.segment "PLOT"
+
 plotfuelplotscoreupdatefuel
 
 	lda $01
