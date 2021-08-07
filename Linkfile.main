@@ -12,19 +12,28 @@ SEGMENTS
 	# comment
 	GLOBALS:					load=RAM, start=$0820;
 	MAIN:						load=RAM;
-	CORE:						load=RAM;
+	INITIATEBITMAPSCORES:		load=RAM;
 	COPYMEM:					load=RAM;
 	INGAMEFRESH:				load=RAM;
+	GAMEFLOW:					load=RAM;
+	LOADINGSUBZONE:				load=RAM;
+	LOADERHELPERS:				load=RAM;
+	SETINGAMEBKGCOLOURS:		load=RAM;
 	SETUPINITIALLEVEL:			load=RAM;
 	SETUPLEVEL:					load=RAM;
+	RESETFIRESTATE:				load=RAM;
+
 	IRQ:						load=RAM, align=256;
 	ANIMATESHIP:				load=RAM;
+
 	MUSIC:						load=RAM, start=$1000;
 
 	TITLESCREENTABLES:			load=RAM, start=$2500;
 
 	CYCLEPERFECT:				load=RAM, start=$2740; # $00c0
 	ENDIRQ:						load=RAM;
+	INGAMESTART:				load=RAM;
+	INGAMEEND:					load=RAM;
 
 	COMETS:						load=RAM, start=$2800;
 	UFOS:						load=RAM;
@@ -50,7 +59,7 @@ SEGMENTS
 
 	SCROLLER:					load=RAM, start=$8400;	# $0d00
 	SUBZONES:					load=RAM;
-	NORMALGAMEPLAY:				load=RAM;
+	INGAME:						load=RAM;
 	PLOT:						load=RAM;
 	COLLISION:					load=RAM;
 	ZONES:						load=RAM;
@@ -92,7 +101,7 @@ SEGMENTS
 	CONGRATULATIONSSCREEN:		load=RAM, align=256;
 	CLEARSCREEN:				load=RAM;
 
-	CONGRATS:					load=RAM, start=$c600;
+	CONGRATULATIONS:			load=RAM, start=$c600;
 
 	TABLES:						load = RAM, start=$c700;
 

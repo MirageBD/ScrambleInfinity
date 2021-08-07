@@ -1,8 +1,10 @@
 .segment "IRQ"
 
-irq1
+irqingame31
+
 	pha
 	sec
+
 vspcor
 	lda #$35
 	sbc $dc04
@@ -49,19 +51,20 @@ ingamebkgcolor
 	lda #$00
 	sta $d01b									; sprite priority
 
-	jsr normalgameplay
+	jsr ingame1
 
 	lda #$40									; #$4c
 	jsr cycleperfect
 	
-	lda #<irq2
-	ldx #>irq2
+	lda #<irqingamef2
+	ldx #>irqingamef2
 	ldy #$f2
 	jmp endirq
 	
 ; -----------------------------------------------------------------------------------------------
 	
-irq2											; start of bottom border irq
+irqingamef2											; start of bottom border irq
+
 	pha
 
 	nop
@@ -122,14 +125,15 @@ irq2											; start of bottom border irq
 	inx
 	stx screenbordersprites+$03f8+7
 
-	lda #<irq3
-	ldx #>irq3
+	lda #<irqingamef8
+	ldx #>irqingamef8
 	ldy #$f8
 	jmp endirq
 	
 ; -----------------------------------------------------------------------------------------------
 
-irq3
+irqingamef8
+
 	pha
 	
  	ldx #$00
@@ -176,12 +180,10 @@ irq3
 	sty $d02d
 	sty $d02e
 
-	jsr normalgameplay2
+	jsr ingame2
 	
-irq3veclo
-	lda #<irq1
-irq3vechi
-	ldx #>irq1
+	lda #<irqingame31
+	ldx #>irqingame31
 	ldy #$31
 
 	jmp endirq
@@ -189,6 +191,7 @@ irq3vechi
 ; -----------------------------------------------------------------------------------------------
 
 irqloadsubzone
+
 	pha
 
 	lda #<irqloadsubzone
@@ -256,5 +259,26 @@ drawbarschar
 	bne :--
 
 	rts
+
+; -----------------------------------------------------------------------------------------------
+
+.segment "ENDIRQ"
+
+endirq	
+	sta $fffe
+	sta $0314
+	stx $ffff
+	stx $0315
+	sty $d012
+	dec $d019
+
+	lda #%00000010
+	and $01
+	beq :+
+	pla
+	jmp $ea81
+:
+	pla
+	rti
 
 ; -----------------------------------------------------------------------------------------------

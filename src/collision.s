@@ -300,15 +300,93 @@ handlerestcollisions
 
 handlecollisions
 
+	; only handle collisions once the zone has been handled	
+
 	lda handlezonetested
 	bne :+
+
+handlezoneptr1
+	jsr handlezone1								; self modified jsr
 	lda #$01
 	sta handlezonetested
+	rts
 
-	; TODO - move handle zone code out of collision code
+:	lda bullet0tested
+	bne :+
+	lda #$01
+	sta bullet0tested
+	inc collisionshandled
+	lda shootingbullet0
+	beq :+
+	lda bull0+sprdata::isexploding
+	cmp #explosiontypes::none
+	bne :+
+	jsr testbullet0bkgcollision
+	jsr testbullet0sprcollision
+	jmp hcend
+	
+:	lda bullet1tested
+	bne :+
+	lda #$01
+	sta bullet1tested
+	inc collisionshandled
+	lda shootingbullet1
+	beq :+
+	lda bull1+sprdata::isexploding
+	cmp #explosiontypes::none
+	bne :+
+	jsr testbullet1bkgcollision
+	jsr testbullet1sprcollision
+	jmp hcend
 
-	jmp handlezonecode1
+:	lda bomb0tested
+	bne :+
+	lda #$01
+	sta bomb0tested
+	inc collisionshandled
+	lda shootingbomb0
+	beq :+
+	lda bomb0+sprdata::isexploding
+	cmp #explosiontypes::none
+	bne :+
+	jsr testbomb0bkgcollision
+	jsr testbomb0sprcollision
+	jmp hcend
 
-:	jmp handlezonecode1end
+:	lda bomb1tested
+	bne :+
+	lda #$01
+	sta bomb1tested
+	inc collisionshandled
+	lda shootingbomb1
+	beq :+
+	lda bomb1+sprdata::isexploding
+	cmp #explosiontypes::none
+	bne :+
+	jsr testbomb1bkgcollision
+	jsr testbomb1sprcollision
+
+:	lda shiptested
+	bne :+
+	lda #$01
+	sta shiptested
+	inc collisionshandled
+	lda hascontrol
+	bne :+
+	lda ship0+sprdata::isexploding
+	cmp #explosiontypes::none
+	bne :+
+.if shipbkgcollision
+	jsr testshipbkgcollision
+.endif
+.if shipsprcollision
+	jsr testshipsprcollision
+.endif
+:
+hcend
+	
+	rts
+
+; -----------------------------------------------------------------------------------------------
 
 ; -----------------------------------------------------------------------------------------------	

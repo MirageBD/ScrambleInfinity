@@ -129,7 +129,7 @@ fuel
 lives
 .byte $03
 
-flags
+timesgamefinished
 .byte $00
 
 timeseconds
@@ -489,7 +489,7 @@ bkgpulsetimer
 .byte $00
 
 bkgpulsecolors
-.byte $00,$09,$08,$0a,$0f,$07d,$01,$07,$0f,$0a,$08,$09,$00,$00,$00,$00
+.byte $00,$09,$08,$0a,$0f,$07,$01,$07,$0f,$0a,$08,$09,$00,$00,$00,$00
 
 .byte $de,$ad,$be,$ef							; DEADBEEF
 

@@ -75,7 +75,7 @@ tuneplay					= $1003
 
 maptiles					= $a900		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
 maptilecolors				= $bd00
-congratsscreen				= $c600
+congratulationsscreen		= $c600
 fontui						= $5800
 
 loadeddata1					= $3000
@@ -176,3 +176,5 @@ titlescreen1d800			= loadeddata1
 	flyingufo				= 2
 	flyingcomet				= 3
 .endenum
+
+; ------------------------------------------------------------------------------------------------------------------------

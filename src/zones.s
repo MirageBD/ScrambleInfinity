@@ -1,90 +1,5 @@
 .segment "ZONES"
 
-handlezonecode1
-
-handlezoneptr1
-	jsr handlezone1								; self modified jsr
-	jmp hcend
-
-handlezonecode1end
-	lda bullet0tested
-	bne :+
-	lda #$01
-	sta bullet0tested
-	inc collisionshandled
-	lda shootingbullet0
-	beq :+
-	lda bull0+sprdata::isexploding
-	cmp #explosiontypes::none
-	bne :+
-	jsr testbullet0bkgcollision
-	jsr testbullet0sprcollision
-	jmp hcend
-	
-:	lda bullet1tested
-	bne :+
-	lda #$01
-	sta bullet1tested
-	inc collisionshandled
-	lda shootingbullet1
-	beq :+
-	lda bull1+sprdata::isexploding
-	cmp #explosiontypes::none
-	bne :+
-	jsr testbullet1bkgcollision
-	jsr testbullet1sprcollision
-	jmp hcend
-
-:	lda bomb0tested
-	bne :+
-	lda #$01
-	sta bomb0tested
-	inc collisionshandled
-	lda shootingbomb0
-	beq :+
-	lda bomb0+sprdata::isexploding
-	cmp #explosiontypes::none
-	bne :+
-	jsr testbomb0bkgcollision
-	jsr testbomb0sprcollision
-	jmp hcend
-
-:	lda bomb1tested
-	bne :+
-	lda #$01
-	sta bomb1tested
-	inc collisionshandled
-	lda shootingbomb1
-	beq :+
-	lda bomb1+sprdata::isexploding
-	cmp #explosiontypes::none
-	bne :+
-	jsr testbomb1bkgcollision
-	jsr testbomb1sprcollision
-
-:	lda shiptested
-	bne :+
-	lda #$01
-	sta shiptested
-	inc collisionshandled
-	lda hascontrol
-	bne :+
-	lda ship0+sprdata::isexploding
-	cmp #explosiontypes::none
-	bne :+
-.if shipbkgcollision
-	jsr testshipbkgcollision
-.endif
-.if shipsprcollision
-	jsr testshipsprcollision
-.endif
-:
-hcend
-	
-	rts
-
-; -----------------------------------------------------------------------------------------------
-
 handlezone1										; missiles	
 	jsr launchmissile
 	jsr animmissiles
@@ -132,20 +47,20 @@ handlezone5										; avoid fuel
 	inc gamefinished
 	lda gamefinished
 	cmp #$30
-	beq handlegamefinished
-	jmp handlezone5rest
+	beq handlenomorezones
+	;jmp handlezone5rest
 	
-handlegamefinished
-	lda flags
-	cmp #$09
-	beq :+
-	inc flags
-:	lda #gameflow::congratulations
-	sta gameflowstate+1
-	rts
-
 handlezone5rest
 	jsr animmissiles
 	jmp handlemissilemovement
+
+handlenomorezones
+	lda timesgamefinished
+	cmp #$09
+	beq :+
+	inc timesgamefinished
+:	lda #gameflow::congratulations
+	sta gameflowstate+1
+	rts
 
 ; -----------------------------------------------------------------------------------------------

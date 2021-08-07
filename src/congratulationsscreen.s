@@ -16,7 +16,7 @@ congratulations
 	sta $d021
 
 	ldx #$00
-:	lda congratsscreen,x
+:	lda congratulationsscreen,x
 	sta screenui+9*40,x
 	inx
 	bne :-
@@ -63,3 +63,4 @@ congratulations
 
 	jmp ingamefromcongratulations
     
+; -----------------------------------------------------------------------------------------------

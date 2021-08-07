@@ -1,4 +1,4 @@
-.segment "CORE"
+.segment "INITIATEBITMAPSCORES"
 
 initiatebitmapscores
 	sei
@@ -11,28 +11,10 @@ initiatebitmapscores
 	plotdigit score+4, scoredigit4
 	plotdigit score+5, scoredigit5
 	plotdigit lives+0, livesdigit0
-	plotdigit flags+0, flagsdigit0
+	plotdigit timesgamefinished+0, flagsdigit0
 	lda #$37
 	sta $01
 	cli
-	rts
-
-.segment "COPYMEM"
-
-copymem
-	ldx #$00
-copymemfrom
-	lda $1000,x
-copymemto
-	sta $2000,x
-	dex
-	bne copymemfrom
-	inc copymemfrom+2
-	inc copymemto+2
-	lda copymemfrom+2
-copymemsize
-	cmp #>($1000+$0d00)
-	bne copymemfrom
 	rts
 
 .segment "INGAMEFRESH"
@@ -80,7 +62,7 @@ ingamefresh
 	lda startlives
 	sta lives
 	lda #$00
-	sta flags
+	sta timesgamefinished
 
 	jsr ingamestart								; sets $01
 	jsr setupinitiallevel
@@ -110,43 +92,10 @@ screensafe
 	sta $d015
 	rts
 
-handlegameflow
+; -----------------------------------------------------------------------------------------------
 
-gameflowstate
-:	lda #gameflow::waiting						; selfmodifying - see states enum
-	beq handlegameflow
+.segment "LOADINGSUBZONE"
 
-	cmp #gameflow::loadingsubzone
-	bne :+
-	jsr loadingsubzone
-	jmp handlegameflow
-
-:	cmp #gameflow::initlevel
-	bne :+
-	jsr screensafe
-	jsr setuplevel
-	jmp handlegameflow
-
-:	cmp #gameflow::titlescreen
-	bne :+
-	jsr screensafe
-	jsr titlescreen
-	jmp handlegameflow
-
-:	cmp #gameflow::livesleftscreen
-	bne :+
-	jsr screensafe
-	jsr livesleftscreen
-	jmp handlegameflow
-	
-:	cmp #gameflow::congratulations
-	bne :+
-	jsr screensafe
-	jsr congratulations
-	jmp handlegameflow
-
-:	jmp handlegameflow
-	
 loadingsubzone
 	lda #gameflow::waiting
 	sta gameflowstate+1
@@ -163,42 +112,8 @@ error
 	inc $d021
 	jmp error
 	
-; -----------------------------------------------------------------------------------------------
-; -----------------------------------------------------------------------------------------------
-; -----------------------------------------------------------------------------------------------
-
-loadpackd
-
-	ldx #<file01
-	ldy #>file01
-	jsr loadcompd
-
-	rts
-
-loadloadinstall
-
-	ldx #<loadinstallfile
-	ldy #>loadinstallfile
-	jsr loadraw
-
-	rts
 
 ; -----------------------------------------------------------------------------------------------
-
-setingamebkgcolours
-	ldx #$00
-:	lda #$0c
-	sta colormem+(0*$0100),x
-	sta colormem+(1*$0100),x
-	sta colormem+(2*$0100),x
-	sta colormem+(3*$0100),x
-	dex
-	bne :-
-
-	lda #$00
-	sta ingamebkgcolor+1
-
-	rts
 
 .segment "SETUPINITIALLEVEL"
 
@@ -430,10 +345,4 @@ setupleveldone
 
 	rts
 	
-
-resetfirestate									; this makes sure there are no leftover bullets on the screen after death
-	jsr bull0explosiondone
-	jsr bull1explosiondone
-	jsr bomb0explosiondone
-	jsr bomb1explosiondone
-	rts
+; -----------------------------------------------------------------------------------------------
