@@ -371,7 +371,8 @@ handlezoneptr1
 	lda #$01
 	sta shiptested
 	inc collisionshandled
-	lda hascontrol
+
+	lda playerstate
 	bne :+
 	lda ship0+sprdata::isexploding
 	cmp #explosiontypes::none
@@ -386,7 +387,5 @@ handlezoneptr1
 hcend
 	
 	rts
-
-; -----------------------------------------------------------------------------------------------
 
 ; -----------------------------------------------------------------------------------------------	

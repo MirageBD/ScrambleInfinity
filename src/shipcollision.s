@@ -24,8 +24,8 @@ testshipbkgcollision
 	sta scrollspeed
 	sta s0counter
 	sta ship0+sprdata::xvel
-	lda #$ff
-	sta hascontrol
+	lda #playerstates::exploding
+	sta playerstate
 	lda #explosiontypes::big
 	sta ship0+sprdata::isexploding
 	rts
@@ -70,8 +70,8 @@ testshipsprcollision
 	sta scrollspeed
 	sta s0counter
 	sta ship0+sprdata::xvel
-	lda #$ff
-	sta hascontrol
+	lda #playerstates::exploding
+	sta playerstate
 	lda #explosiontypes::big
 	sta ship0+sprdata::isexploding
 	rts

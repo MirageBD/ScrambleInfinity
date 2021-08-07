@@ -177,4 +177,10 @@ titlescreen1d800			= loadeddata1
 	flyingcomet				= 3
 .endenum
 
+.enum playerstates
+	incontrol				= $00				; doesn't count down. fuel empty checks are done after joystick readout.
+	flyingintomission		= $30				; counts down to 0, at which time the player has control
+	exploding				= $ff				; doesn't count down.
+.endenum
+
 ; ------------------------------------------------------------------------------------------------------------------------

@@ -24,7 +24,7 @@ handlezoneptr4
 ingame2
 
 	jsr scrollscreen
-	jsr joyrout									; 03
+	jsr handlejoystick							; 03
 	jsr calcvsp
 	jsr animship								; 04
 	jsr animbullet0								; 05

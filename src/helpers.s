@@ -14,6 +14,7 @@ copymemto
 copymemsize
 	cmp #>($1000+$0d00)
 	bne copymemfrom
+	
 	rts
 
 ; -----------------------------------------------------------------------------------------------
@@ -64,6 +65,7 @@ resetfirestate									; this makes sure there are no leftover bullets on the sc
 	jsr bull1explosiondone
 	jsr bomb0explosiondone
 	jsr bomb1explosiondone
+
 	rts
 
 ; -----------------------------------------------------------------------------------------------

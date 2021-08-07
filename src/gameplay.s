@@ -1,20 +1,20 @@
-.segment "JOYROUT"
+.segment "INGAMEJOYSTICK"
 
-joyrout
+handlejoystick
 
-	lda hascontrol
-	beq yescontrol
+	lda playerstate
+	beq yescontrol								; playerstate == 0 = incontrol
 
 	cmp #$ff									; if exploding then no control
 	beq :+
 
-	dec hascontrol
+	dec playerstate								; if playerstate == flyingintomission then decrease playerstate and increase ship position
 	inc ship0+sprdata::xlow
 	lda #$58
 	sta ship0+sprdata::ylow
 
 :	rts
-	
+
 yescontrol
 
 	lda fuel
@@ -59,6 +59,8 @@ fire1
 	jmp no1
 
 :	jmp tryfirebullet
+
+; -----------------------------------------------------------------------------------------------
 
 .segment "FIREBULLET"
 
@@ -140,6 +142,9 @@ firebullet1
 	lda #$02
 	sta bull1counter2
 
+	; fallthrough
+
+; -----------------------------------------------------------------------------------------------
 
 .segment "FIREBOMB"
 
@@ -223,6 +228,8 @@ firebomb1
 
 no1
 
+	; fall through
+
 ; -----------------------------------------------------------------------------------------------
 
 .segment "RESTRICTSHIP"
@@ -254,6 +261,7 @@ restrictship
 	sta ship0+sprdata::ylow
 
 :
+	; fall through
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -275,8 +283,6 @@ handlecooloff
 	; fall through
 
 ; -----------------------------------------------------------------------------------------------
-
-; addpointsbeingalive
 
 .segment "POINTSFORBEINGALIVE"
 

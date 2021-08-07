@@ -199,7 +199,7 @@ bull1: .tag sprdata
 bomb0: .tag sprdata
 bomb1: .tag sprdata
 
-hascontrol
+playerstate
 .byte $30
 
 bulletcooloff									; shooting counters

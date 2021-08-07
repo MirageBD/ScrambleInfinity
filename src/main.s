@@ -2,6 +2,7 @@
 
 ; TODO:
 
+; points for being alive doesn't get called when player is out of fuel and going down?
 ; add proper disk fail handling.
 ; highscore + obfuscate (irq loader now loadable after reverting to kernal).
 ; stars at startup-screen (or maybe something more fancy).

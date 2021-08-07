@@ -281,8 +281,8 @@ setupleveldone
 	;jmp error
 
 ;:
-	lda #$30
-	sta hascontrol
+	lda #playerstates::flyingintomission
+	sta playerstate
 
 	jsr initmultsprites
 

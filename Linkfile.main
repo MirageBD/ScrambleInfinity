@@ -66,7 +66,7 @@ SEGMENTS
 	COLLISION:					load=RAM;
 	ZONES:						load=RAM;
 
-	JOYROUT:					load=RAM, start=$9100;
+	INGAMEJOYSTICK:				load=RAM, start=$9100;
 	FIREBULLET:					load=RAM;
 	FIREBOMB:					load=RAM;
 	RESTRICTSHIP:				load=RAM;
