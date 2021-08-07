@@ -17,6 +17,8 @@ initiatebitmapscores
 	cli
 	rts
 
+.segment "COPYMEM"
+
 copymem
 	ldx #$00
 copymemfrom
@@ -32,6 +34,8 @@ copymemsize
 	cmp #>($1000+$0d00)
 	bne copymemfrom
 	rts
+
+.segment "INGAMEFRESH"
 
 ingamefresh
 
@@ -106,45 +110,46 @@ screensafe
 	sta $d015
 	rts
 
-statecheck
-state
-:	lda #states::waiting						; selfmodifying - see states enum
-	beq :-
+handlegameflow
 
-	cmp #states::loadingsubzone
+gameflowstate
+:	lda #gameflow::waiting						; selfmodifying - see states enum
+	beq handlegameflow
+
+	cmp #gameflow::loadingsubzone
 	bne :+
 	jsr loadingsubzone
-	jmp state
+	jmp handlegameflow
 
-:	cmp #states::initlevel
+:	cmp #gameflow::initlevel
 	bne :+
 	jsr screensafe
 	jsr setuplevel
-	jmp state
+	jmp handlegameflow
 
-:	cmp #states::titlescreen
+:	cmp #gameflow::titlescreen
 	bne :+
 	jsr screensafe
 	jsr titlescreen
-	jmp state
+	jmp handlegameflow
 
-:	cmp #states::livesleftscreen
+:	cmp #gameflow::livesleftscreen
 	bne :+
 	jsr screensafe
 	jsr livesleftscreen
-	jmp state
+	jmp handlegameflow
 	
-:	cmp #states::congratulations
+:	cmp #gameflow::congratulations
 	bne :+
 	jsr screensafe
 	jsr congratulations
-	jmp state
+	jmp handlegameflow
 
-:	jmp state
+:	jmp handlegameflow
 	
 loadingsubzone
-	lda #states::waiting
-	sta state+1
+	lda #gameflow::waiting
+	sta gameflowstate+1
 
 	jsr loadpackd
 
@@ -195,6 +200,8 @@ setingamebkgcolours
 
 	rts
 
+.segment "SETUPINITIALLEVEL"
+
 setupinitiallevel
 	
 	;lda #$00
@@ -236,7 +243,9 @@ setupfilename
 	sta file01+0
 	
 	rts
-	
+
+.segment "SETUPLEVEL"
+
 setuplevel
 
 	sei
@@ -345,8 +354,8 @@ setupleveldone
 	lda #$37
 	sta $01
 
-	lda #states::waiting
-	sta state+1
+	lda #gameflow::waiting
+	sta gameflowstate+1
 
 	jsr setupfilename							; we've loaded and set up 2 subzones, now pre-emptively load subzone 3
 	jsr loadpackd

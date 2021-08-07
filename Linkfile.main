@@ -10,68 +10,93 @@ SEGMENTS
 	#LOADER:					load=RAM, start=$0200, define=yes; # $0300
 
 	# comment
-	GLOBALS:				load=RAM, start=$0820;
-	MAIN:					load=RAM;
-	CORE:					load=RAM;
-	IRQ:					load=RAM, align=256;
-	MUSIC:					load=RAM, start=$1000;
+	GLOBALS:					load=RAM, start=$0820;
+	MAIN:						load=RAM;
+	CORE:						load=RAM;
+	COPYMEM:					load=RAM;
+	INGAMEFRESH:				load=RAM;
+	SETUPINITIALLEVEL:			load=RAM;
+	SETUPLEVEL:					load=RAM;
+	IRQ:						load=RAM, align=256;
+	ANIMATESHIP:				load=RAM;
+	MUSIC:						load=RAM, start=$1000;
 
-	TITLESCREENTABLES:		load=RAM, start=$2500;
+	TITLESCREENTABLES:			load=RAM, start=$2500;
 
-	CYCLEPERFECT:			load=RAM, start=$2740; # $00c0
-	ENDIRQ:					load=RAM;
+	CYCLEPERFECT:				load=RAM, start=$2740; # $00c0
+	ENDIRQ:						load=RAM;
 
-	GAMEPLAY2:				load=RAM, start=$2800;
+	COMETS:						load=RAM, start=$2800;
+	UFOS:						load=RAM;
+	MISSILES:					load=RAM;
+	MULTIPLEX:					load=RAM;
 
-	TSLOGOSPR:				load=RAM, start=$3000; # gets moved to $a000
-	#LOADEDDATA1:			load=RAM, start=$3000;
-	#LOADEDDATA2:			load=RAM, start=$3800;
+	TSLOGOSPR:					load=RAM, start=$3000; # gets moved to $a000
+	#LOADEDDATA1:				load=RAM, start=$3000;
+	#LOADEDDATA2:				load=RAM, start=$3800;
 
-	SCREENUI:				load=OVERLAPPING_RAM, start=$4000;
-	SCREEN1:				load=OVERLAPPING_RAM, start=$4000, type=BSS;
+	SCREENUI:					load=OVERLAPPING_RAM, start=$4000;
+	SCREEN1:					load=OVERLAPPING_RAM, start=$4000, type=BSS;
 
-	TITLESCREEN:			load=RAM, start=$4400; # $0300
+	TITLESCREEN:				load=RAM, start=$4400; # $0300
 
-	SPRITES1:				load=RAM, start=$4b00; # goes until $5700/$d700 (at the moment) # gets loaded, then copied to cb00, then copied back to 4b00 each time we go ingame
+	SPRITES1:					load=RAM, start=$4b00; # goes until $5700/$d700 (at the moment) # gets loaded, then copied to cb00, then copied back to 4b00 each time we go ingame
 
-	UIFONT:					load=RAM, start=$5800;
+	UIFONT:						load=RAM, start=$5800;
 
-	BITMAP1:				load=OVERLAPPING_RAM, start=$6000, type=BSS;
+	BITMAP1:					load=OVERLAPPING_RAM, start=$6000, type=BSS;
 
-	SCREENSPECIAL:			load=OVERLAPPING_RAM, start=$8000, type=BSS;
+	SCREENSPECIAL:				load=OVERLAPPING_RAM, start=$8000, type=BSS;
 
-	SCROLLER:				load=RAM, start=$8400;	# $0d00
-	SUBZONES:				load=RAM;
-	NORMALGAMEPLAY:			load=RAM;
-	PLOT:					load=RAM;
-	COLLISION:				load=RAM;
-	ZONES:					load=RAM;
+	SCROLLER:					load=RAM, start=$8400;	# $0d00
+	SUBZONES:					load=RAM;
+	NORMALGAMEPLAY:				load=RAM;
+	PLOT:						load=RAM;
+	COLLISION:					load=RAM;
+	ZONES:						load=RAM;
 
-	GAMEPLAY:				load=RAM, start=$9100;
+	JOYROUT:					load=RAM, start=$9100;
+	FIREBULLET:					load=RAM;
+	FIREBOMB:					load=RAM;
+	RESTRICTSHIP:				load=RAM;
+	HANDLECOOLOFF:				load=RAM;
+	POINTSFORBEINGALIVE:		load=RAM;
+	INCREASEMYSTERYTIMER:		load=RAM;
+	SHIPCOLLISION:				load=RAM;
+	BULLETCOLLISION:			load=RAM;
+	BOMBCOLLISION:				load=RAM;
+	SCHEDULEREMOVEHITOBJECT:	load=RAM;
+	ANIMATEBULLET0:				load=RAM;
+	ANIMATEBULLET1:				load=RAM;
+	ANIMATEBOMB0:				load=RAM;
+	ANIMATEBOMB1:				load=RAM;
+	ANIMATEMISSILES:			load=RAM;
+	SPRITEPOSITIONS:			load=RAM;
+	UPDATESCOREANDFUEL:			load=RAM;
 
-	EASETABLES:				load=RAM, start=$9e00;
+	EASETABLES:					load=RAM, start=$9e00;
 
-	TSPRESSFIRESPR:			load=RAM, start=$a200;
+	TSPRESSFIRESPR:				load=RAM, start=$a200;
 
-	FUELSPRITES:			load=RAM, start=$a500;
-	ZONESPRITES:			load=RAM, start=$a700;
+	FUELSPRITES:				load=RAM, start=$a500;
+	ZONESPRITES:				load=RAM, start=$a700;
 
-	EMPTYSPRITE:			load=RAM, start=$a8c0;
+	EMPTYSPRITE:				load=RAM, start=$a8c0;
 
-	MAPTILES:				load=RAM, start=$a900;
-	MAPTILECOLORS:			load=RAM, start=$bd00;
+	MAPTILES:					load=RAM, start=$a900;
+	MAPTILECOLORS:				load=RAM, start=$bd00;
 
-	DIGITSPRITEFONT:		load=RAM, start=$bf80; # $0080
+	DIGITSPRITEFONT:			load=RAM, start=$bf80; # $0080
 
-	LIVESLEFTSCREEN:		load=RAM, start=$c400;
-	CONGRATULATIONSSCREEN:	load=RAM, align=256;
-	CLEARSCREEN:			load=RAM;
+	LIVESLEFTSCREEN:			load=RAM, start=$c400;
+	CONGRATULATIONSSCREEN:		load=RAM, align=256;
+	CLEARSCREEN:				load=RAM;
 
-	CONGRATS:				load=RAM, start=$c600;
+	CONGRATS:					load=RAM, start=$c600;
 
-	TABLES:					load = RAM, start=$c700;
+	TABLES:						load = RAM, start=$c700;
 
-	#SCREEN2:				load=RAM, start=$c000;
-	SPRITES2:				load=RAM, start=$cb00;
-	#BITMAP2:				load=RAM, start=$e000, type=BSS;
+	#SCREEN2:					load=RAM, start=$c000;
+	SPRITES2:					load=RAM, start=$cb00;
+	#BITMAP2:					load=RAM, start=$e000, type=BSS;
 }

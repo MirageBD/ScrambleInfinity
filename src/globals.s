@@ -142,7 +142,7 @@ titlescreen1d800			= loadeddata1
 	isexploding				.byte		; upper 4 bits used for mystery points, lower 4 for small, big, mystery explosion
 .endstruct
 
-.enum states
+.enum gameflow
 	waiting					= 0
 	initlevel				= 1
 	loadingsubzone			= 2

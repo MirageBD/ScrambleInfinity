@@ -26,7 +26,7 @@ page
 	ldx #$6b
 
 vspoffset
-	bne :+									; do vsp
+	bne :+										; do vsp
 :
 	.repeat 19
 	lda #$a9
@@ -183,6 +183,7 @@ irq3veclo
 irq3vechi
 	ldx #>irq1
 	ldy #$31
+
 	jmp endirq
 
 ; -----------------------------------------------------------------------------------------------
@@ -193,6 +194,7 @@ irqloadsubzone
 	lda #<irqloadsubzone
 	ldx #>irqloadsubzone
 	ldy #$31
+
 	jmp endirq
 
 ; -----------------------------------------------------------------------------------------------
@@ -226,6 +228,7 @@ timerreacheddone
 	lda #<irqlivesleft
 	ldx #>irqlivesleft
 	ldy #$32+9*8+2
+
 	jmp endirq
 
 timerlow
@@ -251,56 +254,7 @@ drawbarschar
 	inx
 	cpx #$23
 	bne :--
+
 	rts
 
 ; -----------------------------------------------------------------------------------------------
-; - END OF IRQ CODE
-; -----------------------------------------------------------------------------------------------
-
-animship
-
-	inc s0counter2
-	lda s0counter2
-	cmp #$08
-	beq :+
-	
-	rts
-	
-:	lda #$00
-	sta s0counter2
-	lda ship0+sprdata::isexploding
-	cmp #explosiontypes::none
-	beq ship0normalanim
-	ldx s0counter
-	lda bombexplosionanim,x
-	sta ship0+sprdata::pointer
-	lda bombexplosioncolours,x
-	sta ship0+sprdata::colour
-	inc s0counter
-	lda s0counter
-	cmp #$08
-	beq ship0explosiondone
-	rts
-	
-ship0explosiondone
-	lda #$ff
-	sta ship0+sprdata::ylow
-	lda #$00
-	sta ship0+sprdata::xlow
-	sta ship0+sprdata::xhigh
-	sta ship0+sprdata::xvel
-	sta ship0+sprdata::yvel
-	sta ship0+sprdata::isexploding
-	rts
-
-ship0normalanim
-	inc s0counter
-	lda s0counter
-	and #shipanimframes
-	tax
-	lda s0anim,x
-	sta ship0+sprdata::pointer
-	lda #$01
-	sta ship0+sprdata::colour
-	rts
-    

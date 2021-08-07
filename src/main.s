@@ -120,6 +120,17 @@
 .include "core.s"
 .include "irq.s"
 .include "gameplay.s"
+.include "shipcollision.s"
+.include "bulletcollision.s"
+.include "bombcollision.s"
+.include "scheduleremovehitobject.s"
+.include "animate.s"
+.include "spritepositions.s"
+.include "score.s"
+.include "comets.s"
+.include "ufos.s"
+.include "missiles.s"
+.include "multiplex.s"
 .include "scroller.s"
 .include "subzones.s"
 .include "plot.s"
@@ -132,7 +143,7 @@
 .include "tables.s"
 .include "cycleperfect.s"
 
-; MAIN ------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------------------------------------------------
 
 .segment "MAIN"
 
@@ -176,7 +187,7 @@ normalgameplay
 
 	jsr inithandlecollisions
 	
-handlezonecode3
+handlezoneptr3
 	jsr plotdummymultsprites
 
 	ldy sortorder
@@ -186,10 +197,8 @@ handlezonecode3
 	lda sortsprc,y
 	sta $d02e
 
-handlezonecode4
+handlezoneptr4
 	jsr plotrestmissilemultsprites
-
-shiphitdebug
 
 	rts
 
@@ -257,12 +266,12 @@ wedied
 	lda lives
 	bne :+
 
-	lda #states::titlescreen
-	sta state+1
+	lda #gameflow::titlescreen
+	sta gameflowstate+1
 	jmp wediedend
 	
-:	lda #states::livesleftscreen
-	sta state+1
+:	lda #gameflow::livesleftscreen
+	sta gameflowstate+1
 	jmp wediedend
 
 wediedclearframe
@@ -389,10 +398,9 @@ stillalive
 	jsr tuneplay								; 01
 	jsr animbomb1								; 08
 	jsr removescheduledobject					; 02
-
 	jsr sortmultsprites							; 0b
 	
-handlezonecode2
+handlezoneptr2
 	jsr plotfirstmissilemultsprites				; 0c
 
 	lda #$1d									; was 1d
@@ -489,6 +497,7 @@ ingameend
 	sty $d012
 	dec $d019
 	cli
-	jmp statecheck
+	
+	jmp handlegameflow
 
 ; -----------------------------------------------------------------------------------------------

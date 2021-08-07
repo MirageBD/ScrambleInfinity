@@ -58,8 +58,8 @@ congratulations
 	cmp #$01
 	bcc :-
 	
-	lda #states::initlevel
-	sta state+1
+	lda #gameflow::initlevel
+	sta gameflowstate+1
 
 	jmp ingamefromcongratulations
     

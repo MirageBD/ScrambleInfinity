@@ -307,8 +307,8 @@ handlecollisions
 
 	; TODO - move handle zone code out of collision code
 
-	jmp handlezonecode
+	jmp handlezonecode1
 
-:	jmp handlezonecodeskip
+:	jmp handlezonecode1end
 
 ; -----------------------------------------------------------------------------------------------	

@@ -1,11 +1,12 @@
 .segment "ZONES"
 
-handlezonecode
+handlezonecode1
 
+handlezoneptr1
 	jsr handlezone1								; self modified jsr
 	jmp hcend
 
-handlezonecodeskip
+handlezonecode1end
 	lda bullet0tested
 	bne :+
 	lda #$01
@@ -139,8 +140,8 @@ handlegamefinished
 	cmp #$09
 	beq :+
 	inc flags
-:	lda #states::congratulations
-	sta state+1
+:	lda #gameflow::congratulations
+	sta gameflowstate+1
 	rts
 
 handlezone5rest

@@ -83,24 +83,24 @@ loadsubzone
 	jmp :++
 
 :	lda zonecodeptrslow,x
-	sta handlezonecode+1
+	sta handlezoneptr1+1
 	lda zonecodeptrshigh,x
-	sta handlezonecode+2
+	sta handlezoneptr1+2
 
 	lda zonecode2ptrslow,x
-	sta handlezonecode2+1
+	sta handlezoneptr2+1
 	lda zonecode2ptrshigh,x
-	sta handlezonecode2+2
+	sta handlezoneptr2+2
 
 	lda zonecode3ptrslow,x
-	sta handlezonecode3+1
+	sta handlezoneptr3+1
 	lda zonecode3ptrshigh,x
-	sta handlezonecode3+2
+	sta handlezoneptr3+2
 
 	lda zonecode4ptrslow,x
-	sta handlezonecode4+1
+	sta handlezoneptr4+1
 	lda zonecode4ptrshigh,x
-	sta handlezonecode4+2
+	sta handlezoneptr4+2
 
 	jsr initmultsprites
 
@@ -123,8 +123,8 @@ loadsubzone
 	lda filenameconvtab,x
 	sta file01
 
-	lda #states::loadingsubzone
-	sta state+1
+	lda #gameflow::loadingsubzone
+	sta gameflowstate+1
 
 	rts
     
