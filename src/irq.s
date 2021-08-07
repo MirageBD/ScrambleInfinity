@@ -1,4 +1,23 @@
-.segment "IRQ"
+.segment "CYCLEPERFECT"
+
+cycleperfect
+
+	sec
+	sbc $dc04
+	sta bplcode2+1
+bplcode2
+	bpl :+
+:	.repeat 48
+	lda #$a9
+	.endrepeat
+	lda #$a5
+	nop
+		
+	rts
+    
+; -----------------------------------------------------------------------------------------------
+
+.segment "IRQINGAME"
 
 irqingame31
 
@@ -190,6 +209,8 @@ irqingamef8
 
 ; -----------------------------------------------------------------------------------------------
 
+.segment "IRQLOADSUBZONE"
+
 irqloadsubzone
 
 	pha
@@ -199,66 +220,6 @@ irqloadsubzone
 	ldy #$31
 
 	jmp endirq
-
-; -----------------------------------------------------------------------------------------------
-		
-irqlivesleft
-
-	pha
-
-	lda #$42									; #$4c
-	jsr cycleperfect
-
-	jsr drawbarschar
-
-	lda timerreached
-	bne timerreacheddone
-	
-	inc timerlow
-	bne :+
-	inc timerhigh
-	
-:	lda timerhigh
-	cmp timerreachedhigh
-	bne timerreacheddone
-	lda timerlow
-	cmp timerreachedlow
-	bne timerreacheddone
-	lda #$01
-	sta timerreached
-	
-timerreacheddone
-	lda #<irqlivesleft
-	ldx #>irqlivesleft
-	ldy #$32+9*8+2
-
-	jmp endirq
-
-timerlow
-.byte $00
-timerhigh
-.byte $00
-timerreachedlow
-.byte $00
-timerreachedhigh
-.byte $00
-timerreached
-.byte $00
-
-drawbarschar
-	ldx #$00
-:	lda barsd022,x
-	sta $d022
-	lda barsd023,x
-	sta $d023
-	ldy barswait,x
-:	dey
-	bne :-
-	inx
-	cpx #$23
-	bne :--
-
-	rts
 
 ; -----------------------------------------------------------------------------------------------
 

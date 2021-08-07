@@ -67,3 +67,4 @@ resetfirestate									; this makes sure there are no leftover bullets on the sc
 	rts
 
 ; -----------------------------------------------------------------------------------------------
+

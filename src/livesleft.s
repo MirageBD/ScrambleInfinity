@@ -102,3 +102,67 @@ livesleft1
 .byte $13,$14,$15,$16,$17,$18,$19,$0D,$1A,$1B,$1C,$18,$1D,$1E,$1F,$20 
 livesleft2
 .byte $34,$35,$36,$37,$38,$39,$3A,$2B,$3B,$3C,$3D,$39,$3E,$3F,$40,$00 
+
+; -----------------------------------------------------------------------------------------------
+
+.segment "IRQLIVESLEFT"
+
+irqlivesleft
+
+	pha
+
+	lda #$42									; #$4c
+	jsr cycleperfect
+
+	jsr drawbarschar
+
+	lda timerreached
+	bne timerreacheddone
+	
+	inc timerlow
+	bne :+
+	inc timerhigh
+	
+:	lda timerhigh
+	cmp timerreachedhigh
+	bne timerreacheddone
+	lda timerlow
+	cmp timerreachedlow
+	bne timerreacheddone
+	lda #$01
+	sta timerreached
+	
+timerreacheddone
+	lda #<irqlivesleft
+	ldx #>irqlivesleft
+	ldy #$32+9*8+2
+
+	jmp endirq
+
+timerlow
+.byte $00
+timerhigh
+.byte $00
+timerreachedlow
+.byte $00
+timerreachedhigh
+.byte $00
+timerreached
+.byte $00
+
+drawbarschar
+	ldx #$00
+:	lda barsd022,x
+	sta $d022
+	lda barsd023,x
+	sta $d023
+	ldy barswait,x
+:	dey
+	bne :-
+	inx
+	cpx #$23
+	bne :--
+
+	rts
+
+; -----------------------------------------------------------------------------------------------

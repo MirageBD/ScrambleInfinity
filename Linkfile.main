@@ -23,7 +23,9 @@ SEGMENTS
 	SETUPLEVEL:					load=RAM;
 	RESETFIRESTATE:				load=RAM;
 
-	IRQ:						load=RAM, align=256;
+	IRQINGAME:					load=RAM, align=256;
+	IRQLOADSUBZONE:				load=RAM;
+	IRQLIVESLEFT:				load=RAM;
 	ANIMATESHIP:				load=RAM;
 
 	MUSIC:						load=RAM, start=$1000;
