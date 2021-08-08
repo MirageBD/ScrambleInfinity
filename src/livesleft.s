@@ -64,14 +64,9 @@ livesleftscreen
 
 	lda #<irqlivesleft
 	ldx #>irqlivesleft
-	sta $fffe
-	sta $0314
-	stx $ffff
-	stx $0315
+	ldy #$00
+	jsr setirqvectors
 
-	lda $dc0d
-	lda $dd0d
-	dec $d019
 	cli
 
 	lda #$1b
@@ -81,10 +76,7 @@ livesleftscreen
 	cmp #$01
 	bcc :-
 	
-	lda #gameflow::initlevel
-	sta gameflowstate+1
-
-	jmp ingamefromlivesleftscreen
+	rts
 
 digits ; top left, top right, bottom left, bottom right
 .byte $01,$02,$21,$22

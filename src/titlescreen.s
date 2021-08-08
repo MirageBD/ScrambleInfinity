@@ -20,7 +20,6 @@ titlescreen
 	stx $d01b									; sprite priority
 	stx $7fff
 	stx $bfff
-	stx $d012
 	inx
 	stx $d01a
 
@@ -100,19 +99,14 @@ titlescreen
 
 	lda #<irqtitle
 	ldx #>irqtitle
-	sta $fffe
-	sta $0314
-	stx $ffff
-	stx $0315
+	ldy #$00
+	jsr setirqvectors
 
-	lda $dc0d
-	lda $dd0d
-	dec $d019
 	cli
 	
 	jsr waitkey
 
-	jmp ingamefresh
+	rts
 
 ; -----------------------------------------------------------------------------------------------
 

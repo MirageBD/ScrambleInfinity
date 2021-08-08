@@ -157,8 +157,11 @@ incpag
 	lda #$00
 	sta column
 	
-	jsr incsubzone
-	jsr loadsubzone
+	jsr increasesubzone
+	jsr configuresubzoneload
+
+	lda #gameflow::loadsubzone					; flag that the main loop should start the subzone load
+	sta gameflowstate+1
 
 	inc flip
 	lda flip

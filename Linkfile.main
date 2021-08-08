@@ -11,31 +11,28 @@ SEGMENTS
 
 	# comment
 	GLOBALS:					load=RAM, start=$0820;
-	MAIN:						load=RAM;
+	ENTRY:						load=RAM;
+	GAMEFLOW:					load=RAM;
 	INITIATEBITMAPSCORES:		load=RAM;
 	COPYMEM:					load=RAM;
-	INGAMEFRESH:				load=RAM;
-	GAMEFLOW:					load=RAM;
-	LOADINGSUBZONE:				load=RAM;
+	STARTINGAME:				load=RAM;
 	LOADERHELPERS:				load=RAM;
 	SETINGAMEBKGCOLOURS:		load=RAM;
-	SETUPINITIALLEVEL:			load=RAM;
+	SETZONE0:					load=RAM;
 	SETUPLEVEL:					load=RAM;
-	RESETFIRESTATE:				load=RAM;
-
-	IRQINGAME:					load=RAM, align=256;
-	IRQLOADSUBZONE:				load=RAM;
 	IRQLIVESLEFT:				load=RAM;
 	ANIMATESHIP:				load=RAM;
+
+	IRQINGAME:					load=RAM, start=$0e00;
+	ENDIRQ:						load=RAM;
+	RESETFIRESTATE:				load=RAM;
+	LOADSUBZONE:				load=RAM;
 
 	MUSIC:						load=RAM, start=$1000;
 
 	TITLESCREENTABLES:			load=RAM, start=$2500;
 
 	CYCLEPERFECT:				load=RAM, start=$2740; # $00c0
-	ENDIRQ:						load=RAM;
-	INGAMESTART:				load=RAM;
-	INGAMEEND:					load=RAM;
 
 	COMETS:						load=RAM, start=$2800;
 	UFOS:						load=RAM;
@@ -46,7 +43,6 @@ SEGMENTS
 	#LOADEDDATA1:				load=RAM, start=$3000;
 	#LOADEDDATA2:				load=RAM, start=$3800;
 
-	SCREENUI:					load=OVERLAPPING_RAM, start=$4000;
 	SCREEN1:					load=OVERLAPPING_RAM, start=$4000, type=BSS;
 
 	TITLESCREEN:				load=RAM, start=$4400; # $0300
@@ -102,6 +98,8 @@ SEGMENTS
 	LIVESLEFTSCREEN:			load=RAM, start=$c400;
 	CONGRATULATIONSSCREEN:		load=RAM, align=256;
 	CLEARSCREEN:				load=RAM;
+	WAITKEY:					load=RAM;
+	IRQLIMBO:					load=RAM;
 
 	CONGRATULATIONS:			load=RAM, start=$c600;
 

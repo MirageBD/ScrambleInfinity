@@ -1,3 +1,18 @@
+; -----------------------------------------------------------------------------------------------
+
+.macro nextgameflow I
+	lda I
+	sta gameflowstate+1
+	jmp handlegameflow
+.endmacro
+
+.macro comparegameflow I
+:	cmp I
+	bne :+
+.endmacro
+
+; -----------------------------------------------------------------------------------------------
+
 .macro add16bit arg1, arg2						; clear carry before using this
 	lda arg1+1
 	adc #<(arg2)
@@ -23,12 +38,16 @@
 	sta arg1+2
 .endmacro
 
+; -----------------------------------------------------------------------------------------------
+
 .macro addpoints arg1, arg2
 	clc
 	lda score+arg2
 	adc arg1
 	sta score+arg2
 .endmacro
+
+; -----------------------------------------------------------------------------------------------
 
 .macro plotdigit arg1, arg2
 	ldx arg1
@@ -47,9 +66,11 @@
 	sta arg2+5*3
 .endmacro
 
+; -----------------------------------------------------------------------------------------------
+
 .macro copymemblocks from, to, size
 	clc
-	lda #>from								; copy sprites to other bank
+	lda #>from
 	sta copymemfrom+2
 	adc #>size
 	sta copymemsize+1
@@ -57,3 +78,5 @@
 	sta copymemto+2
 	jsr copymem
 .endmacro
+
+; -----------------------------------------------------------------------------------------------

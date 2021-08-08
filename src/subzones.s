@@ -1,6 +1,6 @@
 .segment "SUBZONES"
 
-incsubzone
+increasesubzone
 
 	inc subzone									; increase screen/subzone
 	ldx subzone
@@ -30,6 +30,7 @@ incsubzone
 	rts
 
 calculatezonefromsubzone
+
 	lda subzone									; get subzone (NOT subzones,x) and div by 16 to get zone
 	cmp #$10
 	bmi :+
@@ -60,6 +61,7 @@ findstartofzone
 ; -----------------------------------------------------------------------------------------------
 
 subzones
+
 .byte $00,$01,$02,$03,$04,$05,$06,$07,$08,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $0a,$0b,$0c,$0d,$0e,$0f,$10,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $12,$13,$14,$15,$16,$17,$18,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -68,9 +70,13 @@ subzones
 .byte $2e,$2f,$30,$31,$32,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 
 zonetab
+
 .byte $01,$0d,$15,$1d,$29,$31
 
-loadsubzone
+; -----------------------------------------------------------------------------------------------
+
+configuresubzoneload
+
 	lda file
 
 	ldx #$00
@@ -122,9 +128,6 @@ loadsubzone
 	tax
 	lda filenameconvtab,x
 	sta file01
-
-	lda #gameflow::loadingsubzone
-	sta gameflowstate+1
 
 	rts
     

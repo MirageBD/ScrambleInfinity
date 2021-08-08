@@ -36,19 +36,11 @@ congratulations
 	lda #$01
 	sta $d01a
 
-	lda #$32+9*8+2
-	sta $d012
-
 	lda #<irqlivesleft
 	ldx #>irqlivesleft
-	sta $fffe
-	sta $0314
-	stx $ffff
-	stx $0315
+	ldy #$32+9*8+2
+	jsr setirqvectors
 
-	lda $dc0d
-	lda $dd0d
-	dec $d019
 	cli
 
 	lda #$1b
@@ -58,9 +50,6 @@ congratulations
 	cmp #$01
 	bcc :-
 	
-	lda #gameflow::initlevel
-	sta gameflowstate+1
-
-	jmp ingamefromcongratulations
+	rts
     
 ; -----------------------------------------------------------------------------------------------

@@ -76,7 +76,6 @@ hcaloop
 
 handlecometmovement
 
-
 	ldx #MAXMULTPLEXSPR
 hcmloop
 	lda sortsprylow-1,x
@@ -101,7 +100,6 @@ hcmloop
 	sta sortsprylow-1,x
 :	dex
 	bne hcmloop
-
 
 	rts
 	

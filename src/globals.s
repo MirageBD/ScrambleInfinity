@@ -144,12 +144,13 @@ titlescreen1d800			= loadeddata1
 
 .enum gameflow
 	waiting					= 0
-	initlevel				= 1
-	loadingsubzone			= 2
-	titlescreen				= 3
-	livesleftscreen			= 4
-	gameover				= 5
-	congratulations			= 6
+	startingame				= 1
+	continueingame			= 2
+	loadsubzone				= 3
+	titlescreen				= 4
+	livesleftscreen			= 5
+	gameover				= 6
+	congratulations			= 7
 .endenum
 
 .enum explosiontypes

@@ -17,9 +17,9 @@ initiatebitmapscores
 	cli
 	rts
 
-.segment "INGAMEFRESH"
+.segment "STARTINGAME"
 
-ingamefresh
+startingame
 
 	sei
 
@@ -32,22 +32,24 @@ ingamefresh
 	sta $d021
 	sta $d418
 
-	lda #<irqlimbo								; set limbo irq so it doesn't mess with $d011/$d018/$dd00 causing all kinds of glitches
-	ldx #>irqlimbo
-	sta $fffe
-	sta $0314
-	stx $ffff
-	stx $0315
-
-	lda $dc0d
-	lda $dd0d
-	dec $d019
-
 	lda #$34
 	sta $01
 	copymemblocks sprites2, sprites1, $0d00
 	lda #$37
 	sta $01
+
+	lda #<irqlimbo								; set limbo irq so it doesn't mess with $d011/$d018/$dd00 causing all kinds of glitches
+	ldx #>irqlimbo
+	ldy #$00
+	sta $fffe
+	sta $0314
+	stx $ffff
+	stx $0315
+	sty $d012
+
+	lda $dc0d
+	lda $dd0d
+	dec $d019
 
 	cli
 
@@ -64,42 +66,13 @@ ingamefresh
 	lda #$00
 	sta timesgamefinished
 
-	jsr ingamestart								; sets $01
-	jsr setupinitiallevel
-	jsr setuplevel								; sets $01 to #$37 and returns
-
-	jmp ingamefromui
-
-ingamefromlivesleftscreen
-	jsr ingamestart
-	jmp ingamefromui
-	
-ingamefromcongratulations
-	jsr ingamestart
-	jsr setupinitiallevel
-	jsr setuplevel
-	jmp ingamefromui
-
-ingamefromui
-	jsr setingamebkgcolours
-	jsr initiatebitmapscores
-	jsr resetfirestate
-	jmp ingameend
-
-screensafe
-	lda #$00
-	sta $d418
-	sta $d015
 	rts
 
 ; -----------------------------------------------------------------------------------------------
 
-.segment "LOADINGSUBZONE"
+.segment "LOADSUBZONE"
 
-loadingsubzone
-	lda #gameflow::waiting
-	sta gameflowstate+1
-
+loadsubzone
 	jsr loadpackd
 
 	bcc :+
@@ -115,16 +88,14 @@ error
 
 ; -----------------------------------------------------------------------------------------------
 
-.segment "SETUPINITIALLEVEL"
+.segment "SETZONE0"
 
-setupinitiallevel
+setzone0
 	
 	;lda #$00
 	sta ship0+sprdata::xhigh
 	sta ship0+sprdata::xlow
 		
-	jsr setingamebkgcolours
-	
 	lda #$ff
 	sta $7fff
 	sta $bfff
@@ -269,9 +240,6 @@ setupleveldone
 	lda #$37
 	sta $01
 
-	lda #gameflow::waiting
-	sta gameflowstate+1
-
 	jsr setupfilename							; we've loaded and set up 2 subzones, now pre-emptively load subzone 3
 	jsr loadpackd
 
@@ -340,6 +308,11 @@ setupleveldone
 	
 	ldy #$74
 	sty $d011
+
+	lda #<irqingamef8
+	ldx #>irqingamef8
+	ldy #$f8
+	jsr setirqvectors
 
 	cli
 

@@ -87,14 +87,13 @@
 .include "titlescreen.s"
 .include "livesleft.s"
 .include "congratulations.s"
-.include "clearscreen.s"
 .include "tables.s"
 .include "helpers.s"
 .include "ingame.s"
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
-.segment "MAIN"
+.segment "ENTRY"
 
 	sei
 
@@ -107,24 +106,9 @@
 	lda #$37
 	sta $01
 
-	lda #$01
-	sta $d01a
-
-	lda #$18
-	sta $d012
-
 	lda #gameflow::titlescreen
 	sta gameflowstate+1
 
-	lda #<irqtitle
-	ldx #>irqtitle
-	sta $fffe
-	sta $0314
-	stx $ffff
-	stx $0315
-
-	lda $dc0d
-	lda $dd0d
 	dec $d019
 
 	cli
@@ -137,39 +121,112 @@
 
 handlegameflow
 
+	;tsx
+	;stx $d020									; stack pointer should always be $f6 at this point
+
 gameflowstate
-:	lda #gameflow::waiting						; selfmodifying
+	lda #gameflow::waiting						; selfmodifying
 	beq handlegameflow
 
-	cmp #gameflow::loadingsubzone
-	bne :+
-	jsr loadingsubzone
-	jmp handlegameflow
+	; -----------------------------------------
 
-:	cmp #gameflow::initlevel
-	bne :+
-	jsr screensafe
-	jsr setuplevel
-	jmp handlegameflow
+	comparegameflow #gameflow::loadsubzone
+	jsr loadsubzone
+	nextgameflow #gameflow::waiting
 
-:	cmp #gameflow::titlescreen
-	bne :+
+	; -----------------------------------------
+
+	comparegameflow #gameflow::titlescreen
 	jsr screensafe
 	jsr titlescreen
-	jmp handlegameflow
+	nextgameflow #gameflow::startingame
 
-:	cmp #gameflow::livesleftscreen
-	bne :+
+	; -----------------------------------------
+
+	comparegameflow #gameflow::startingame
+	jsr screensafe
+	jsr startingame
+	jsr setsafemode
+	jsr setzone0
+	jsr ingameatcurrentzone
+	nextgameflow #gameflow::continueingame
+
+	; -----------------------------------------
+
+	comparegameflow #gameflow::continueingame
+	jsr screensafe
+	jsr setuplevel
+	nextgameflow #gameflow::waiting
+
+	; -----------------------------------------
+
+	comparegameflow #gameflow::livesleftscreen
 	jsr screensafe
 	jsr livesleftscreen
-	jmp handlegameflow
+	jsr setsafemode
+	jsr ingameatcurrentzone
+	nextgameflow #gameflow::continueingame
 	
-:	cmp #gameflow::congratulations
-	bne :+
+	; -----------------------------------------
+
+	comparegameflow #gameflow::congratulations
 	jsr screensafe
 	jsr congratulations
-	jmp handlegameflow
+	jsr setsafemode
+	jsr setzone0
+	jsr ingameatcurrentzone
+	nextgameflow #gameflow::continueingame
+
+	; -----------------------------------------
 
 :	jmp handlegameflow
+
+; -----------------------------------------------------------------------------------------------
+
+setsafemode
+
+	sei
+	lda #$35
+	sta $01
+	lda #$7b
+	sta $d011
+	lda #$00
+	sta $d020
+	sta $d021
+	rts
+
+; -----------------------------------------------------------------------------------------------
+
+ingameatcurrentzone
+
+	jsr setingamebkgcolours
+	jsr initiatebitmapscores
+	jsr resetfirestate
+	rts
+
+; -----------------------------------------------------------------------------------------------
+
+screensafe
+
+	lda #$00
+	sta $d418
+	sta $d015
+	rts
+
+; -----------------------------------------------------------------------------------------------
+
+setirqvectors
+
+	sta $fffe
+	sta $0314
+	stx $ffff
+	stx $0315
+	sty $d012
+
+	lda $dc0d
+	lda $dd0d
+	dec $d019
+
+	rts
 
 ; -----------------------------------------------------------------------------------------------
