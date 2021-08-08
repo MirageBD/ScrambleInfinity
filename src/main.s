@@ -63,7 +63,10 @@
 
 .include "binaries.s"
 
-.include "macros.s"
+.include "common/stdmacros.s"
+.include "common/stdirq.s"
+.include "common/stdhelpers.s"
+
 .include "globals.s"
 .include "core.s"
 .include "irq.s"
