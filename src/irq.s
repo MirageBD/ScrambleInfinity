@@ -1,3 +1,6 @@
+.segment "CYCLEPERFECT"
+cycleperfect	cycleperfectmacro
+
 .segment "IRQINGAME"
 
 irqingame31

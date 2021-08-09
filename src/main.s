@@ -61,11 +61,12 @@
 
 .include "loadersymbols-c64.inc"
 
-.include "binaries.s"
-
+.include "common/stddefines.s"
 .include "common/stdmacros.s"
 .include "common/stdirq.s"
 .include "common/stdhelpers.s"
+
+.include "binaries.s"
 
 .include "globals.s"
 .include "core.s"

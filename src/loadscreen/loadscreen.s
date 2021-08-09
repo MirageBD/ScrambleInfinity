@@ -1,3 +1,6 @@
+.feature pc_assignment
+.feature labels_without_colons
+
 ;.segment "LOADERINSTALL"
 ;.incbin "./exe/install-c64.prg", $02
 ;.segment "LOADER"
@@ -24,12 +27,8 @@
 .segment "SCROLLSPR"
 .incbin "./bin/creditssprites.bin"
 
-.feature pc_assignment
-.feature labels_without_colons
-
-.define d018forscreencharset(scr,cst)	#(((scr&$3fff)/$0400) << 4) | (((cst&$3fff)/$0800) << 1)
-.define bankforaddress(addr)			#(3-(addr>>14))
-.define spriteptrforaddress(addr)		#((addr&$3fff)>>6)
+.include "../common/stddefines.s"
+.include "../common/stdmacros.s"
 
 zp3							= $fc
 zp4							= $fd
@@ -56,17 +55,6 @@ tuneinit		= $a000
 tuneplay		= $a003
 
 ; -----------------------------------------------------------------------------------------------
-
-.macro copymemblocks from, to, size
-	clc
-	lda #>from								; copy sprites to other bank
-	sta copymemfrom+2
-	adc #>size
-	sta copymemsize+1
-	lda #>to
-	sta copymemto+2
-	jsr copymem
-.endmacro
 
 .macro scrollspritetop sprite
 
@@ -195,21 +183,12 @@ tuneplay		= $a003
 
 ; time critical code and small tables
 
-cycleperfect
-	sec
-	sbc $dc04
-	sta bplcode2+1
-bplcode2
-	bpl :+
-:	.repeat 48
-	lda #$a9
-	.endrepeat
-	lda #$a5
-	nop		
-	rts
+cycleperfect	cycleperfectmacro
 
 sprraster
 .byte $00,$00,$00,$00,$00,$00,$00,$06,$0e,$03,$06,$06,$04,$06,$04,$04,$0e,$0e,$03,$03,$0d,$01
+
+; -----------------------------------------------------------------------------------------------
 
 opensideborder
 

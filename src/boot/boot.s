@@ -15,9 +15,8 @@
 
 ; -----------------------------------------------------------------------------------------------
 
-.define d018forscreencharset(scr,cst)	#(((scr&$3fff)/$0400) << 4) | (((cst&$3fff)/$0800) << 1)
-.define bankforaddress(addr)			#(3-(addr>>14))
-.define spriteptrforaddress(addr)		#((addr&$3fff)>>6)
+.include "../common/stddefines.s"
+.include "../common/stdmacros.s"
 
 screen = $4400
 loadbarfont = $4800
@@ -31,20 +30,7 @@ loadbarsrc = $4c00
 
 ; -----------------------------------------------------------------------------------------------
 
-cycleperfect
-
-	sec
-	sbc $dc04
-	sta bplcode2+1
-bplcode2
-	bpl :+
-:	.repeat 48
-	lda #$a9
-	.endrepeat
-	lda #$a5
-	nop
-		
-	rts
+cycleperfect	cycleperfectmacro
 
 ; -----------------------------------------------------------------------------------------------	
 
