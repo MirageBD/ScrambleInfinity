@@ -3,10 +3,12 @@ CP           = cp
 MV           = mv
 RM           = rm -f
 
-SRC_DIR      = ./src
-UTIL_SRC_DIR = ./utils
-EXE_DIR      = ./exe
-BIN_DIR      = ./bin
+SRC_DIR				= ./src
+BOOT_SRC_DIR		= ./src/boot
+LOADSCREEN_SRC_DIR	= ./src/loadscreen
+UTIL_SRC_DIR		= ./utils
+EXE_DIR				= ./exe
+BIN_DIR				= ./bin
 
 CPU          = 6502X
 
@@ -72,8 +74,10 @@ main.prg: main_unpacked.prg.addr
 	$(BB) -e 0820 $(EXE_DIR)/$?
 	$(MV) $(EXE_DIR)/$?.b2 $(EXE_DIR)/$@
 
-loadscreen.o: $(SRC_DIR)/loadscreen.s Makefile Linkfile.loadscreen loader-c64.prg install-c64.prg loadersymbols-c64.inc
-	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(SRC_DIR)/$*.s
+# -----------------------------------------------------------------------------
+
+loadscreen.o: $(LOADSCREEN_SRC_DIR)/loadscreen.s Makefile Linkfile.loadscreen loader-c64.prg install-c64.prg loadersymbols-c64.inc
+	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(LOADSCREEN_SRC_DIR)/$*.s
 
 loadscreen_unpacked.prg: loadscreen.o loader-c64.prg install-c64.prg loadersymbols-c64.inc Linkfile.loadscreen
 	$(LD) $(LDFLAGS) -C Linkfile.loadscreen --mapfile $(EXE_DIR)/loadscreen.map -o $(EXE_DIR)/$@ $(EXE_DIR)/loadscreen.o
@@ -85,8 +89,10 @@ loadscreen.prg: loadscreen_unpacked.prg.addr
 	$(BB) $(EXE_DIR)/$?
 	$(MV) $(EXE_DIR)/$?.b2 $(EXE_DIR)/$@
 
-boot.o: $(SRC_DIR)/boot.s Makefile Linkfile.boot loader-c64.prg install-c64.prg loadersymbols-c64.inc
-	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(SRC_DIR)/$*.s
+# -----------------------------------------------------------------------------
+
+boot.o: $(BOOT_SRC_DIR)/boot.s Makefile Linkfile.boot loader-c64.prg install-c64.prg loadersymbols-c64.inc
+	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(BOOT_SRC_DIR)/$*.s
 
 boot_unpacked.prg: boot.o loader-c64.prg install-c64.prg loadersymbols-c64.inc Linkfile.boot
 	$(LD) $(LDFLAGS) -C Linkfile.boot --mapfile $(EXE_DIR)/boot.map -o $(EXE_DIR)/$@ $(EXE_DIR)/boot.o
