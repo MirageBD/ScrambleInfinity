@@ -52,13 +52,13 @@ sortsprlifetime
 .byte $00
 .endrep
 
-fuelticks
-.byte %01010101									; 01 = empty, 10,11 = full
+fuelticks										; ........ XX...... XX||.... XX||XX.. XX||XX1||
+.byte %01010101									; 01 = empty, 10,11 = full, 10 = yellow, 11 = white
 .byte %10010101
-.byte %10110101
-.byte %10111001
+.byte %10100101
+.byte %10101001
 .repeat 64-4
-.byte %10111011
+.byte %10101010
 .endrepeat
 
 timesufotable
@@ -156,6 +156,11 @@ prevscore
 .repeat 6
 .byte $00
 .endrepeat
+
+;hiscore
+;.repeat 6
+;.byte $00
+;.endrepeat
 
 ufotimer
 .byte $00

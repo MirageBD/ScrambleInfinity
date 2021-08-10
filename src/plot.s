@@ -7,41 +7,22 @@ plotfuelplotscoreupdatefuel
 	lda #$35
 	sta $01
 	
-.macro tick arg1, arg2
+.macro tick column
 	sec
 	lda fuel									; load fuel
-	sbc #(arg2)									; deduct arg2
+	sbc #(4*column)								; deduct column
 	bcs :+
 	lda #$00
 :	tax
 	lda fuelticks,x
-	;sta arg1+0*3
-	sta arg1+1*3
-	sta arg1+2*3
-	sta arg1+3*3
-	sta arg1+4*3
-	;sta arg1+5*3
+	.repeat 4, I
+		sta scoreandfuelsprites + $0086 + ((column+1).mod 3) + (((column+1) / 3) * 64) + (I+1)*3
+	.endrepeat
 .endmacro
 
-	;tick scoreandfuelsprites+$0086+(0*64), 0+(0*3*4)		; 3 * 4 expanded pixels in a sprite horizontally
-	tick scoreandfuelsprites+$0087+(0*64), 0+(0*3*4)
-	tick scoreandfuelsprites+$0088+(0*64), 4+(0*3*4)
-
-	tick scoreandfuelsprites+$0086+(1*64), 8+(0*3*4)
-	tick scoreandfuelsprites+$0087+(1*64), 0+(1*3*4)
-	tick scoreandfuelsprites+$0088+(1*64), 4+(1*3*4)
-
-	tick scoreandfuelsprites+$0086+(2*64), 8+(1*3*4)
-	tick scoreandfuelsprites+$0087+(2*64), 0+(2*3*4)
-	tick scoreandfuelsprites+$0088+(2*64), 4+(2*3*4)
-
-	tick scoreandfuelsprites+$0086+(3*64), 8+(2*3*4)
-	tick scoreandfuelsprites+$0087+(3*64), 0+(3*3*4)
-	tick scoreandfuelsprites+$0088+(3*64), 4+(3*3*4)
-
-	tick scoreandfuelsprites+$0086+(4*64), 8+(3*3*4)
-	tick scoreandfuelsprites+$0087+(4*64), 0+(4*3*4)
-	tick scoreandfuelsprites+$0088+(4*64), 4+(4*3*4)
+.repeat 14, I
+	tick I
+.endrepeat
 
 ; plotscore
 
