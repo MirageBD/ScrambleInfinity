@@ -302,17 +302,17 @@ irqtitle2
 	bne :-
 
 	ldx spriteptrforaddress(tspressfirespr)
-	stx screenui2+$03f8+0
+	stx screenspecial+$03f8+0						; this is writing into the sprite data! :(
 	inx
-	stx screenui2+$03f8+1
+	stx screenspecial+$03f8+1
 	inx
-	stx screenui2+$03f8+2
+	stx screenspecial+$03f8+2
 	inx
-	stx screenui2+$03f8+3
+	stx screenspecial+$03f8+3
 	inx
-	stx screenui2+$03f8+4
+	stx screenspecial+$03f8+4
 	inx
-	stx screenui2+$03f8+5
+	stx screenspecial+$03f8+5
 
 	lda #(112+0*24)&255
 	sta $d000+0*2
@@ -373,9 +373,9 @@ irqtitle3
 	stx $d011
 	sty $d016
 
-	lda d018forscreencharset(screenui2,$0000)
+	lda d018forscreencharset(screenspecial,$0000)
 	sta $d018
-	lda bankforaddress(screenui2)
+	lda bankforaddress(screenspecial)
 	sta $dd00
 
 	lda #$01
@@ -412,17 +412,17 @@ irqtitle3
 	jsr cycleperfect
 
 	ldx spriteptrforaddress(tspressfirespr+6*64)
-	stx screenui2+$03f8+0
+	stx screenspecial+$03f8+0
 	inx
-	stx screenui2+$03f8+1
+	stx screenspecial+$03f8+1
 	inx
-	stx screenui2+$03f8+2
+	stx screenspecial+$03f8+2
 	inx
-	stx screenui2+$03f8+3
+	stx screenspecial+$03f8+3
 	inx
-	stx screenui2+$03f8+4
+	stx screenspecial+$03f8+4
 	inx
-	stx screenui2+$03f8+5
+	stx screenspecial+$03f8+5
 
 	lda #$ff									; put sprites back up so the upper border doesn't draw them again
 	sta $d001+0*2

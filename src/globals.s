@@ -78,7 +78,6 @@ loadeddata2					= $3800
 
 screen1						= $4000
 screenui					= $4000
-screenui2					= $a000		; only used in lower border for sprite ptrs
 fontdigits					= $bf80
 screen2						= $c000
 sprites1					= $4b00

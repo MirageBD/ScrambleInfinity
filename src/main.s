@@ -10,7 +10,6 @@
 ; add sound-fx for fire/bomb/explode.
 ; more obfuscate against hackers? On drive? Probably not worth it.
 ; fix bug where ground targets sometimes get cleaned only half when hit.
-; get rid of garbage below 'press fire to start' sprites on main UI (turn debug borders on to see)
 ; multiplexer in cave zone is still going crazy and glitching (don't fire anything, position yourself between two ufos and drop bombs to see)
 
 ; ------------------------------------------------------------------------------------------------------------------------
