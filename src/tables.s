@@ -157,11 +157,6 @@ prevscore
 .byte $00
 .endrepeat
 
-;hiscore
-;.repeat 6
-;.byte $00
-;.endrepeat
-
 ufotimer
 .byte $00
 ufonum
@@ -495,6 +490,15 @@ bkgpulsetimer
 
 bkgpulsecolors
 .byte $00,$09,$08,$0a,$0f,$07,$01,$07,$0f,$0a,$08,$09,$00,$00,$00,$00
+
+.byte $de,$ad,$be,$ef							; DEADBEEF
+
+.segment "TABLES2"
+
+hiscore
+.repeat 6
+.byte $01
+.endrepeat
 
 .byte $de,$ad,$be,$ef							; DEADBEEF
 

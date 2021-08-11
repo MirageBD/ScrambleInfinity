@@ -32,7 +32,9 @@ SEGMENTS
 
 	TITLESCREENTABLES:			load=RAM, start=$2500;
 
-	CYCLEPERFECT:				load=RAM, start=$2740; # $00c0
+	CYCLEPERFECT:				load=RAM, start=$2700; # $006c
+
+	TABLES2:					load=RAM;
 
 	COMETS:						load=RAM, start=$2800;
 	UFOS:						load=RAM;
@@ -106,6 +108,6 @@ SEGMENTS
 	TABLES:						load = RAM, start=$c700;
 
 	#SCREEN2:					load=RAM, start=$c000;
-	SPRITES2:					load=RAM, start=$cb00;
+	SPRITES2:					load=RAM, start=$cd00;
 	#BITMAP2:					load=RAM, start=$e000, type=BSS;
 }

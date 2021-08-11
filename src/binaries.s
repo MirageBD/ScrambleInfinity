@@ -49,7 +49,7 @@
 .segment "SCREENSPECIAL"
 	.res 1024
 .segment "SPRITES2"
-	.res 64
+	.res 24*64
 .segment "EMPTYSPRITE"
 	.res 64
 
