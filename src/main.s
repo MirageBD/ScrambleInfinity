@@ -144,7 +144,7 @@ gameflowstate
 	; -----------------------------------------
 
 	comparegameflow #gameflow::titlescreen
-	jsr setsafemode
+	jsr screensafe
 	lda hiscorebeaten
 	beq hiscorenotbeaten
 	jsr copyscoretohiscore
@@ -156,7 +156,7 @@ hiscorenotbeaten
 	; -----------------------------------------
 
 	comparegameflow #gameflow::startingame
-	jsr setsafemode
+	jsr screensafe
 	jsr startingame
 	jsr setsafemode
 	jsr setzone0
@@ -169,14 +169,14 @@ hiscorenotbeaten
 	; -----------------------------------------
 
 	comparegameflow #gameflow::continueingame
-	jsr setsafemode
+	jsr screensafe
 	jsr setuplevel
 	nextgameflow #gameflow::waiting
 
 	; -----------------------------------------
 
 	comparegameflow #gameflow::livesleftscreen
-	jsr setsafemode
+	jsr screensafe
 	jsr livesleftscreen
 	jsr setsafemode
 	jsr ingameatcurrentzone
@@ -185,7 +185,7 @@ hiscorenotbeaten
 	; -----------------------------------------
 
 	comparegameflow #gameflow::congratulations
-	jsr setsafemode
+	jsr screensafe
 	jsr congratulations
 	jsr setsafemode
 	jsr setzone0
@@ -208,11 +208,19 @@ setsafemode
 	lda #$00
 	sta $d020
 	sta $d021
+	rts
+
+; -----------------------------------------------------------------------------------------------
+
+screensafe
+
+	lda #$00
 	sta $d418
 	sta $d015
 	rts
 
 ; -----------------------------------------------------------------------------------------------
+
 
 ingameatcurrentzone
 
