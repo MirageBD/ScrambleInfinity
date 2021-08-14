@@ -148,14 +148,10 @@ fuelblink
 .byte $07, $02
 
 score
-.repeat 6
-.byte $00
-.endrepeat
+.byte 1,2,3,4,5,6
 
 prevscore
-.repeat 6
-.byte $00
-.endrepeat
+.byte 1,2,3,4,5,6
 
 ufotimer
 .byte $00
@@ -496,9 +492,7 @@ bkgpulsecolors
 .segment "TABLES2"
 
 hiscore
-.repeat 6
-.byte $01
-.endrepeat
+.byte 1,2,3,4,5,6
 
 .byte $de,$ad,$be,$ef							; DEADBEEF
 

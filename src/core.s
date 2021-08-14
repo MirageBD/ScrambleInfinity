@@ -4,17 +4,90 @@ initiatebitmapscores
 	sei
 	lda #$35
 	sta $01
-	plotdigit score+0, scoredigit0
-	plotdigit score+1, scoredigit1
-	plotdigit score+2, scoredigit2
-	plotdigit score+3, scoredigit3
-	plotdigit score+4, scoredigit4
-	plotdigit score+5, scoredigit5
-	plotdigit lives+0, livesdigit0
-	plotdigit timesgamefinished+0, flagsdigit0
+
+	; plot score
+	ldy score+0
+	lda #<scoredigit0
+	ldx #>scoredigit0
+	jsr plotdigitcompact
+	ldy score+1
+	lda #<scoredigit1
+	ldx #>scoredigit1
+	jsr plotdigitcompact
+	ldy score+2
+	lda #<scoredigit2
+	ldx #>scoredigit2
+	jsr plotdigitcompact
+	ldy score+3
+	lda #<scoredigit3
+	ldx #>scoredigit3
+	jsr plotdigitcompact
+	ldy score+4
+	lda #<scoredigit4
+	ldx #>scoredigit4
+	jsr plotdigitcompact
+	ldy score+5
+	lda #<scoredigit5
+	ldx #>scoredigit5
+	jsr plotdigitcompact
+
+	; plot hiscore
+	ldy hiscore+0
+	lda #<hiscoredigit0
+	ldx #>hiscoredigit0
+	jsr plotdigitcompact
+	ldy hiscore+1
+	lda #<hiscoredigit1
+	ldx #>hiscoredigit1
+	jsr plotdigitcompact
+	ldy hiscore+2
+	lda #<hiscoredigit2
+	ldx #>hiscoredigit2
+	jsr plotdigitcompact
+	ldy hiscore+3
+	lda #<hiscoredigit3
+	ldx #>hiscoredigit3
+	jsr plotdigitcompact
+	ldy hiscore+4
+	lda #<hiscoredigit4
+	ldx #>hiscoredigit4
+	jsr plotdigitcompact
+	ldy hiscore+5
+	lda #<hiscoredigit5
+	ldx #>hiscoredigit5
+	jsr plotdigitcompact
+
+	; plot lives left
+	ldy lives
+	lda #<livesdigit0
+	ldx #>livesdigit0
+	jsr plotdigitcompact
+
+	; plot times game finished (flags)
+	ldy timesgamefinished
+	lda #<flagsdigit0
+	ldx #>flagsdigit0
+	jsr plotdigitcompact
+	
 	lda #$37
 	sta $01
 	cli
+	rts
+
+plotdigitcompact
+	sta zp0
+	stx zp1
+	ldx times8lowtable,y
+
+	ldy #$00
+:	lda fontdigits,x
+	sta (zp0),y
+	inx
+	iny
+	iny
+	iny
+	cpy #18
+	bne :-
 	rts
 
 .segment "STARTINGAME"
@@ -57,6 +130,7 @@ startingame
 	lda #$00
 :	sta score,x
 	sta prevscore,x
+	sta hiscore,x
 	inx
 	cpx #$06
 	bne :-

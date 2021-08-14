@@ -10,6 +10,7 @@ SEGMENTS
 	#LOADER:					load=RAM, start=$0200, define=yes; # $0300
 
 	# comment
+
 	GLOBALS:					load=RAM, start=$0820;
 	ENTRY:						load=RAM;
 	GAMEFLOW:					load=RAM;
@@ -23,17 +24,18 @@ SEGMENTS
 	IRQLIVESLEFT:				load=RAM;
 	ANIMATESHIP:				load=RAM;
 
-	IRQINGAME:					load=RAM, start=$0e00;
+	IRQINGAME:					load=RAM, start=$0d00;
 	ENDIRQ:						load=RAM;
 	RESETFIRESTATE:				load=RAM;
 	LOADSUBZONE:				load=RAM;
+
+	# FREE $0f00-$1000
 
 	MUSIC:						load=RAM, start=$1000;
 
 	TITLESCREENTABLES:			load=RAM, start=$2500;
 
 	CYCLEPERFECT:				load=RAM, start=$2700; # $006c
-
 	TABLES2:					load=RAM;
 
 	COMETS:						load=RAM, start=$2800;

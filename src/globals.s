@@ -112,12 +112,19 @@ zptemp						= $ff
 livesdigit0					= livesandzonesprites+1*64+ 2*3+2
 flagsdigit0 				= livesandzonesprites+5*64+ 2*3+2
 
-scoredigit0 				= scoreandfuelsprites+0*64+14*3+0
+scoredigit0 				= scoreandfuelsprites+0*64+14*3+0		; see fuel.pdn
 scoredigit1 				= scoreandfuelsprites+0*64+14*3+1
 scoredigit2 				= scoreandfuelsprites+0*64+14*3+2
 scoredigit3 				= scoreandfuelsprites+1*64+14*3+0
 scoredigit4 				= scoreandfuelsprites+1*64+14*3+1
 scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
+
+hiscoredigit0 				= scoreandfuelsprites+5*64+14*3+2
+hiscoredigit1 				= scoreandfuelsprites+6*64+14*3+0
+hiscoredigit2 				= scoreandfuelsprites+6*64+14*3+1
+hiscoredigit3 				= scoreandfuelsprites+6*64+14*3+2
+hiscoredigit4 				= scoreandfuelsprites+7*64+14*3+0
+hiscoredigit5 				= scoreandfuelsprites+7*64+14*3+1
 
 titlescreen1bmp				= bitmap1
 titlescreen10400			= screenui
