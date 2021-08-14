@@ -96,7 +96,7 @@ tspressfirespr				= $a200
 
 emptysprite					= $a8c0
 
-scoreandfuelsprites			= $a500
+fuelandscoresprites			= $a500
 livesandzonesprites			= $a700
 
 colormem					= $d800
@@ -112,19 +112,19 @@ zptemp						= $ff
 livesdigit0					= livesandzonesprites+1*64+ 2*3+2
 flagsdigit0 				= livesandzonesprites+5*64+ 2*3+2
 
-scoredigit0 				= scoreandfuelsprites+0*64+14*3+0		; see fuel.pdn
-scoredigit1 				= scoreandfuelsprites+0*64+14*3+1
-scoredigit2 				= scoreandfuelsprites+0*64+14*3+2
-scoredigit3 				= scoreandfuelsprites+1*64+14*3+0
-scoredigit4 				= scoreandfuelsprites+1*64+14*3+1
-scoredigit5 				= scoreandfuelsprites+1*64+14*3+2
+scoredigit0 				= fuelandscoresprites+0*64+14*3+0		; see fuel.pdn
+scoredigit1 				= fuelandscoresprites+0*64+14*3+1
+scoredigit2 				= fuelandscoresprites+0*64+14*3+2
+scoredigit3 				= fuelandscoresprites+1*64+14*3+0
+scoredigit4 				= fuelandscoresprites+1*64+14*3+1
+scoredigit5 				= fuelandscoresprites+1*64+14*3+2
 
-hiscoredigit0 				= scoreandfuelsprites+5*64+14*3+2
-hiscoredigit1 				= scoreandfuelsprites+6*64+14*3+0
-hiscoredigit2 				= scoreandfuelsprites+6*64+14*3+1
-hiscoredigit3 				= scoreandfuelsprites+6*64+14*3+2
-hiscoredigit4 				= scoreandfuelsprites+7*64+14*3+0
-hiscoredigit5 				= scoreandfuelsprites+7*64+14*3+1
+hiscoredigit0 				= fuelandscoresprites+5*64+14*3+0
+hiscoredigit1 				= fuelandscoresprites+5*64+14*3+1
+hiscoredigit2 				= fuelandscoresprites+5*64+14*3+2
+hiscoredigit3 				= fuelandscoresprites+6*64+14*3+0
+hiscoredigit4 				= fuelandscoresprites+6*64+14*3+1
+hiscoredigit5 				= fuelandscoresprites+6*64+14*3+2
 
 titlescreen1bmp				= bitmap1
 titlescreen10400			= screenui

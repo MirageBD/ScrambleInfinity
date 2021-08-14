@@ -34,7 +34,7 @@ ingame2
 	lda #$04
 :	cmp $d012
 	bpl :-
-	
+
 	lda #%11110000
 	sta $d010
 	
@@ -47,11 +47,11 @@ ingame2
 	lda #$20+3*24
 	sta $d006
 
-	lda #$07+0*24
+	lda #$07+0*24+16
 	sta $d00a
-	lda #$07+1*24
+	lda #$07+1*24+16
 	sta $d00c
-	lda #$07+2*24
+	lda #$07+2*24+16
 	sta $d00e
 	
 	lda scrollspeed								; we died, scrollspeed is 0

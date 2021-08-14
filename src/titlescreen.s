@@ -293,17 +293,23 @@ irqtitle2
 	sta $d023
 	jsr waitnextpointline
 
+	lda #$00
+	sta $d020
+	sta $d021
+
 	ldx #$00
-	lda #$f8									; prepare lower border sprites
+	lda #$fc									; prepare lower border sprites
 :	sta $d001+0*2,x
 	inx
 	inx
 	cpx #$10
 	bne :-
 
+
+	ldx spriteptrforaddress(fuelandscoresprites+0*64)
+	stx screenspecial+$03f8+0
+
 	ldx spriteptrforaddress(tspressfirespr)
-	stx screenspecial+$03f8+0						; this is writing into the sprite data! :(
-	inx
 	stx screenspecial+$03f8+1
 	inx
 	stx screenspecial+$03f8+2
@@ -313,38 +319,51 @@ irqtitle2
 	stx screenspecial+$03f8+4
 	inx
 	stx screenspecial+$03f8+5
+	inx
+	stx screenspecial+$03f8+6
 
-	lda #(112+0*24)&255
-	sta $d000+0*2
-	lda #(112+1*24)&255
-	sta $d000+1*2
-	lda #(112+2*24)&255
-	sta $d000+2*2
-	lda #(112+3*24)&255
-	sta $d000+3*2
-	lda #(112+4*24)&255
-	sta $d000+4*2
-	lda #(112+5*24)&255
-	sta $d000+5*2
-	lda #$00
-	sta $d000+6*2
-	sta $d000+7*2
+	ldx spriteptrforaddress(fuelandscoresprites+7*64)
+	stx screenspecial+$03f8+7
 
-	lda #$00000000
+	lda #$33
+	sta $d000
+	
+	lda #$72+0*24
+	sta $d002
+	lda #$72+1*24
+	sta $d004
+	lda #$72+2*24
+	sta $d006
+	lda #$72+3*24
+	sta $d008
+	lda #$72+4*24
+	sta $d00a
+	lda #$72+5*24
+	sta $d00c
+	
+	lda #$27
+	sta $d00e
+
+	lda #%10000000
 	sta $d010
 
-	lda #$0b
+	lda #$0c
 	sta $d025
+	lda #$01
 	sta $d026
-	ldx #$00
-:	sta $d027,x
-	inx
-	cpx #$08
-	bne :-
+	lda #$00
+	sta $d027+0
+	sta $d027+1
+	sta $d027+2
+	sta $d027+3
+	sta $d027+4
+	sta $d027+5
+	sta $d027+6
+	sta $d027+7
 
 	lda #<irqtitle3
 	ldx #>irqtitle3
-	ldy #$f8
+	ldy #$fa
 	jmp endirq
 
 irqtitle3
@@ -355,10 +374,6 @@ irqtitle3
 
 	lda #$52									; #$4c
 	jsr cycleperfect
-
-	lda #$0b
-	sta $d020
-	sta $d021
 
 	nop
 	nop
@@ -378,51 +393,38 @@ irqtitle3
 	lda bankforaddress(screenspecial)
 	sta $dd00
 
-	lda #$01
-	sta $d025
-	lda #$00
-	sta $d026
-	lda #$0c
-	sta $d027+0
-	sta $d027+1
-	sta $d027+2
-	sta $d027+3
-	sta $d027+4
-	sta $d027+5
-	sta $d027+6
-	sta $d027+7
-
-	clc
-	lda $d001+0*2
-	adc #21
-	sta $d001+0*2
-	sta $d001+1*2
-	sta $d001+2*2
-	sta $d001+3*2
-	sta $d001+4*2
-	sta $d001+5*2
-	sta $d001+6*2
-	sta $d001+7*2
-
-	lda #$0b
+	lda #$08
 :	cmp $d012
 	bne :-
 
-	lda #$48									; #$4c
-	jsr cycleperfect
+	ldx spriteptrforaddress(fuelandscoresprites+1*64)
+	stx screenbordersprites+$03f8+1
+	inx
+	stx screenbordersprites+$03f8+2
 
-	ldx spriteptrforaddress(tspressfirespr+6*64)
-	stx screenspecial+$03f8+0
+	ldx spriteptrforaddress(fuelandscoresprites+5*64)
+	stx screenbordersprites+$03f8+5
 	inx
-	stx screenspecial+$03f8+1
-	inx
-	stx screenspecial+$03f8+2
-	inx
-	stx screenspecial+$03f8+3
-	inx
-	stx screenspecial+$03f8+4
-	inx
-	stx screenspecial+$03f8+5
+	stx screenbordersprites+$03f8+6
+
+	lda #%11100000
+	sta $d010
+
+	lda #$20+0*24
+	sta $d000
+	lda #$20+1*24
+	sta $d002
+	lda #$20+2*24
+	sta $d004
+
+	lda #$07+0*24+16
+	sta $d00a
+	lda #$07+1*24+16
+	sta $d00c
+	lda #$07+2*24+16
+	sta $d00e
+
+	jsr tuneplay
 
 	lda #$ff									; put sprites back up so the upper border doesn't draw them again
 	sta $d001+0*2
@@ -433,8 +435,6 @@ irqtitle3
 	sta $d001+5*2
 	sta $d001+6*2
 	sta $d001+7*2
-
-	jsr tuneplay
 
 	inc easetimer
 	lda easetimer

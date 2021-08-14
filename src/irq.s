@@ -111,7 +111,7 @@ irqingamef2											; start of bottom border irq
 	lda #%10000000
 	sta $d010
 
-	ldx spriteptrforaddress(scoreandfuelsprites)
+	ldx spriteptrforaddress(fuelandscoresprites)
 	stx screenbordersprites+$03f8+0
 	inx
 	stx screenbordersprites+$03f8+1

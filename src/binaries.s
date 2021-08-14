@@ -4,7 +4,7 @@
 .segment "DIGITSPRITEFONT"						; referenced by code. digits to plot into sprites
 .incbin "./bin/font.bin"
 
-.segment "FUELSPRITES"							; referenced by code. score and highscore are plotted in here
+.segment "FUELANDSCORESPRITES"					; referenced by code. score and highscore are plotted in here
 .incbin "./bin/fuel.bin"
 
 .segment "ZONESPRITES"							; referenced by code. lives and flags are plotted in here

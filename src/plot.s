@@ -16,7 +16,7 @@ plotfuelplotscoreupdatefuel
 :	tax
 	lda fuelticks,x
 	.repeat 4, I
-		sta scoreandfuelsprites + $0086 + ((column+1).mod 3) + (((column+1) / 3) * 64) + (I+1)*3
+		sta fuelandscoresprites + $0086 + ((column+1).mod 3) + (((column+1) / 3) * 64) + (I+1)*3
 	.endrepeat
 .endmacro
 

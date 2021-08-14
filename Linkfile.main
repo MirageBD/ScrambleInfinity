@@ -89,7 +89,9 @@ SEGMENTS
 
 	TSPRESSFIRESPR:				load=RAM, start=$a200;
 
-	FUELSPRITES:				load=RAM, start=$a500;
+	# FREE $a380-$a500
+
+	FUELANDSCORESPRITES:		load=RAM, start=$a500;
 	ZONESPRITES:				load=RAM, start=$a700;
 
 	EMPTYSPRITE:				load=RAM, start=$a8c0;
