@@ -14,7 +14,7 @@ SEGMENTS
 	GLOBALS:					load=RAM, start=$0820;
 	ENTRY:						load=RAM;
 	GAMEFLOW:					load=RAM;
-	INITIATEBITMAPSCORES:		load=RAM;
+	PLOTBITMAPSCORES:			load=RAM;
 	COPYMEM:					load=RAM;
 	STARTINGAME:				load=RAM;
 	LOADERHELPERS:				load=RAM;
@@ -24,7 +24,9 @@ SEGMENTS
 	IRQLIVESLEFT:				load=RAM;
 	ANIMATESHIP:				load=RAM;
 
-	IRQINGAME:					load=RAM, start=$0d00;
+	# FREE $0d00-$0e00
+
+	IRQINGAME:					load=RAM, start=$0e00;
 	ENDIRQ:						load=RAM;
 	RESETFIRESTATE:				load=RAM;
 	LOADSUBZONE:				load=RAM;

@@ -4,7 +4,7 @@
 
 ; points for being alive doesn't get called when player is out of fuel and going down?
 ; add proper disk fail handling.
-; highscore + obfuscate (irq loader now loadable after reverting to kernal).
+; hicore + obfuscate (irq loader now loadable after reverting to kernal).
 ; stars at startup-screen (or maybe something more fancy).
 ; new music (give option to play without music?) 2channel prefered.
 ; add sound-fx for fire/bomb/explode.
@@ -114,6 +114,8 @@
 	lda #gameflow::titlescreen
 	sta gameflowstate+1
 
+	jsr initscore
+
 	dec $d019
 
 	cli
@@ -142,31 +144,39 @@ gameflowstate
 	; -----------------------------------------
 
 	comparegameflow #gameflow::titlescreen
-	jsr screensafe
+	jsr setsafemode
+	lda hiscorebeaten
+	beq hiscorenotbeaten
+	jsr copyscoretohiscore
+hiscorenotbeaten
+	jsr plotbitmapscores
 	jsr titlescreen
 	nextgameflow #gameflow::startingame
 
 	; -----------------------------------------
 
 	comparegameflow #gameflow::startingame
-	jsr screensafe
+	jsr setsafemode
 	jsr startingame
 	jsr setsafemode
 	jsr setzone0
+	jsr initscore
+	jsr initlives
+	jsr plotbitmapscores
 	jsr ingameatcurrentzone
 	nextgameflow #gameflow::continueingame
 
 	; -----------------------------------------
 
 	comparegameflow #gameflow::continueingame
-	jsr screensafe
+	jsr setsafemode
 	jsr setuplevel
 	nextgameflow #gameflow::waiting
 
 	; -----------------------------------------
 
 	comparegameflow #gameflow::livesleftscreen
-	jsr screensafe
+	jsr setsafemode
 	jsr livesleftscreen
 	jsr setsafemode
 	jsr ingameatcurrentzone
@@ -175,7 +185,7 @@ gameflowstate
 	; -----------------------------------------
 
 	comparegameflow #gameflow::congratulations
-	jsr screensafe
+	jsr setsafemode
 	jsr congratulations
 	jsr setsafemode
 	jsr setzone0
@@ -198,6 +208,8 @@ setsafemode
 	lda #$00
 	sta $d020
 	sta $d021
+	sta $d418
+	sta $d015
 	rts
 
 ; -----------------------------------------------------------------------------------------------
@@ -205,17 +217,7 @@ setsafemode
 ingameatcurrentzone
 
 	jsr setingamebkgcolours
-	jsr initiatebitmapscores
 	jsr resetfirestate
-	rts
-
-; -----------------------------------------------------------------------------------------------
-
-screensafe
-
-	lda #$00
-	sta $d418
-	sta $d015
 	rts
 
 ; -----------------------------------------------------------------------------------------------

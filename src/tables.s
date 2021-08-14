@@ -492,7 +492,10 @@ bkgpulsecolors
 .segment "TABLES2"
 
 hiscore
-.byte 1,2,3,4,5,6
+.byte 0,0,0,0,0,0
+
+hiscorebeaten
+.byte 0
 
 .byte $de,$ad,$be,$ef							; DEADBEEF
 

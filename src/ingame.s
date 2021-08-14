@@ -30,6 +30,7 @@ ingame2
 	jsr animbullet0								; 05
 	jsr animbullet1								; 06
 	jsr animbomb0								; 07
+	jsr testhiscorebeaten
 	
 	lda #$04
 :	cmp $d012
@@ -54,6 +55,12 @@ ingame2
 	lda #$07+2*24+16
 	sta $d00e
 	
+scoreishiscoresprptr
+	ldx spriteptrforaddress(fuelandscoresprites+5*64) 				; +0*64 = show score as hiscore, +5*64 = show real hiscore sprites
+	stx screenbordersprites+$03f8+5
+	inx
+	stx screenbordersprites+$03f8+6
+
 	lda scrollspeed								; we died, scrollspeed is 0
 	beq wedied
 
