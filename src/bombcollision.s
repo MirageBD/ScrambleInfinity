@@ -14,23 +14,6 @@ testbomb0bkgcollision
 	sbc #42
 	sta calcylow
 
-	lda bomb0+sprdata::ylow						; check if the bomb has gone too low - nasty, but have to do this
-	cmp #$df
-	bpl :+
-	jmp bombinsidescreenok0
-	
-:	cmp #$00
-	bmi :+
-	jmp bombinsidescreenok0
-	
-:	lda #$df									; clamp bomb position
-	sta bomb0+sprdata::ylow
-	lda #$ff									; and simulate collision with background
-	sta calchit
-	jmp handlebomb0bkgcollision
-	
-bombinsidescreenok0
-
 	jsr calcspritepostoscreenpos
 
 	lda calchit
@@ -137,23 +120,6 @@ testbomb1bkgcollision
 	lda bomb1+sprdata::ylow
 	sbc #42
 	sta calcylow
-
-	lda bomb1+sprdata::ylow						; check if the bomb has gone too low - nasty, but have to do this
-	cmp #$df
-	bpl :+
-	jmp bombinsidescreenok1
-	
-:	cmp #$00
-	bmi :+
-	jmp bombinsidescreenok1
-	
-:	lda #$df									; clamp bomb position
-	sta bomb1+sprdata::ylow
-	lda #$ff									; and simulate collision with background
-	sta calchit
-	jmp handlebomb1bkgcollision
-	
-bombinsidescreenok1
 
 	jsr calcspritepostoscreenpos
 

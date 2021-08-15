@@ -163,6 +163,46 @@ handlebomb0speed
 	sta screen1+$03f8+4
 	sta screen2+$03f8+4
 
+restrictbombpositions
+
+	lda shootingbomb0
+	beq bombinsidescreenok0
+
+	lda bomb0+sprdata::ylow						; check if the bomb has gone too low - nasty, but have to do this
+	cmp #$df
+	bpl :+
+	jmp bombinsidescreenok0
+	
+:	cmp #$00
+	bmi :+
+	jmp bombinsidescreenok0
+	
+:	lda #$df									; clamp bomb position
+	sta bomb0+sprdata::ylow
+	lda #$ff									; and simulate collision with background
+	sta calchit
+	jmp handlebomb0bkgcollision	
+
+bombinsidescreenok0
+	lda shootingbomb1
+	beq bombinsidescreenok1
+
+	lda bomb1+sprdata::ylow						; check if the bomb has gone too low - nasty, but have to do this
+	cmp #$df
+	bpl :+
+	jmp bombinsidescreenok1
+	
+:	cmp #$00
+	bmi :+
+	jmp bombinsidescreenok1
+	
+:	lda #$df									; clamp bomb position
+	sta bomb1+sprdata::ylow
+	lda #$ff									; and simulate collision with background
+	sta calchit
+	jmp handlebomb1bkgcollision
+	
+bombinsidescreenok1
 	rts
 	
 	; ----------------------

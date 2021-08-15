@@ -56,8 +56,8 @@ ingamebkgcolor
 
 	jsr ingame1
 
-	;lda #$40									; #$4c
-	;jsr cycleperfect
+	lda #$40									; #$4c
+	jsr cycleperfect
 	
 	;lda $d012
 	;cmp #$80
