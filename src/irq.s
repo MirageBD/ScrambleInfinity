@@ -56,9 +56,17 @@ ingamebkgcolor
 
 	jsr ingame1
 
-	lda #$40									; #$4c
-	jsr cycleperfect
+	;lda #$40									; #$4c
+	;jsr cycleperfect
 	
+	;lda $d012
+	;cmp #$80
+	;bmi :+
+	;cmp #$f2
+	;bmi :+
+	;lda #$02
+	;sta $d020
+
 	lda #<irqingamef2
 	ldx #>irqingamef2
 	ldy #$f2

@@ -289,10 +289,17 @@ inithandlecollisions
 handlerestcollisions
 
 	lda collisionshandled
-	cmp #$07
+	cmp #$06					; bullet 0,bullet 1,bomb0, bomb1, ship
 	bcs :+
 	
+	;lda collisionshandled
+	;sta $d020
+
 	jsr handlecollisions
+
+	;lda #$00
+	;sta $d020
+
 	inc collisionshandled
 	jmp handlerestcollisions
 

@@ -4,13 +4,16 @@
 
 ; points for being alive doesn't get called when player is out of fuel and going down?
 ; add proper disk fail handling.
-; hicore + obfuscate (irq loader now loadable after reverting to kernal).
+; obfuscate (irq loader now loadable after reverting to kernal).
 ; stars at startup-screen (or maybe something more fancy).
 ; new music (give option to play without music?) 2channel prefered.
 ; add sound-fx for fire/bomb/explode.
 ; more obfuscate against hackers? On drive? Probably not worth it.
 ; fix bug where ground targets sometimes get cleaned only half when hit.
+
+; MOST LIKELY FIXED:
 ; multiplexer in cave zone is still going crazy and glitching (don't fire anything, position yourself between two ufos and drop bombs to see)
+;      (collision code was too big and running past $f2 rasterline, at which point it missed the next irq, causing the vsp to glitch)
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
