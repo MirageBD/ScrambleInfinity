@@ -292,13 +292,7 @@ handlerestcollisions
 	cmp #$06					; bullet 0,bullet 1,bomb0, bomb1, ship
 	bcs :+
 	
-	;lda collisionshandled
-	;sta $d020
-
 	jsr handlecollisions
-
-	;lda #$00
-	;sta $d020
 
 	inc collisionshandled
 	jmp handlerestcollisions
@@ -314,11 +308,14 @@ handlecollisions
 
 handlezoneptr1
 	jsr handlezone1								; self modified jsr
+	debugrasterend
+
 	lda #$01
 	sta handlezonetested
 	rts
 
-:	lda bullet0tested
+:	debugrasterstart collisionshandled
+	lda bullet0tested
 	bne :+
 	lda #$01
 	sta bullet0tested
@@ -393,6 +390,8 @@ handlezoneptr1
 :
 hcend
 	
+	debugrasterend
+
 	rts
 
 ; -----------------------------------------------------------------------------------------------	

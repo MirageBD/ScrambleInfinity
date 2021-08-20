@@ -10,6 +10,7 @@
 ; add sound-fx for fire/bomb/explode.
 ; more obfuscate against hackers? On drive? Probably not worth it.
 ; fix bug where ground targets sometimes get cleaned only half when hit.
+; global search for TODO
 
 ; MOST LIKELY FIXED:
 ; multiplexer in cave zone is still going crazy and glitching (don't fire anything, position yourself between two ufos and drop bombs to see)
@@ -72,6 +73,7 @@
 
 .include "binaries.s"
 
+.include "debug.s"
 .include "globals.s"
 .include "core.s"
 .include "irq.s"

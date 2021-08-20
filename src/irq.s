@@ -182,14 +182,14 @@ irqingamef8
 	tax
 	ldy fuelblink,x
 	
-:	sty $d027
+:	;sty $d027							; TODO - figure out if I need to set colours for sprite 0 and 7
 	sty $d028
 	sty $d029
 	sty $d02a
 	sty $d02b
 	sty $d02c
 	sty $d02d
-	sty $d02e
+	;sty $d02e
 
 	jsr ingame2
 	

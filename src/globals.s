@@ -1,17 +1,5 @@
 .segment "GLOBALS"
 
-; DEBUG DEFINES ----------------------------------------------------------------------------------------------------------
-
-.define fueldecreases					1					; HACKS
-.define pointsforbeingalive				1
-.define shipbkgcollision				1
-.define shipsprcollision				1
-.define livesdecrease					1
-.define firebullets						1
-.define firebombs						1
-.define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
-.define diedfade						1
-
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
 
 .define firstsolidtile					74+5
