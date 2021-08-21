@@ -308,6 +308,7 @@ sortskip10
 	
 sortskip11incsortcounter
 sortskip11
+
 	rts
 
 ;oldsortmultsprites
@@ -433,32 +434,29 @@ plotrestufocometmultsprites
 :	lda #$03
 	sta restmultspritesindex
 
-pruloop
+plotrestufoloop
 	ldx restmultspritesindex					; x = virtual sprite index (1-MAXMULTPLEXSPR)
 	ldy sortorder,x								; y = index to real sprite index
 	lda sortsprylow,y
 	cmp #$ff
-	bne hctst2
+	bne hctestufo
 
-	jmp puend
+	jmp plotrestufoend
 
-hctst2
+hctestufo
 	ldx restmultspritesindex					; see how much time we have before the next sprite
 	ldy sortorder,x
 	lda sortsprylow,y
 	cmp #$ff
-	beq puend
+	beq plotrestufoend
 
 	sec
 	sbc $d012
 	clc
-	cmp #$28
+	cmp #$28									; #$28 rasterlines left? do some stuff
 	bcc :+
-	lda zone									; #$28 rasterlines left? do some stuff, but not in zone 2, because it's heavy on multiplex
-	cmp #$01
-	beq :+
 	jsr handlecollisions
-	jmp hctst2
+	jmp hctestufo
 
 :	lda sortsprylow,y
 	sec
@@ -495,10 +493,10 @@ msbluw4
 	inc restmultspritesindex
 	lda restmultspritesindex
 	cmp #MAXMULTPLEXSPR
-	beq puend
-	jmp pruloop
+	beq plotrestufoend
+	jmp plotrestufoloop
 
-puend
+plotrestufoend
 	jsr handlerestcollisions
 	
 	rts
@@ -559,21 +557,21 @@ plotrestmissilemultsprites
 	lda #$02
 	sta restmultspritesindex
 
-prmloop
+plotrestmissileloop
 	ldx restmultspritesindex					; x = virtual sprite index (1-MAXMULTPLEXSPR)
 	ldy sortorder,x								; y = index to real sprite index
 	lda sortsprylow,y
 	cmp #$ff
-	bne hctest
+	bne hctestmissile
 
-	jmp msend
+	jmp plotrestmissileend
 	
-hctest
+hctestmissile
 	ldx restmultspritesindex					; see how much time we have before the next sprite
 	ldy sortorder,x
 	lda sortsprylow,y
 	cmp #$ff
-	beq msend
+	beq plotrestmissileend
 	
 	sec
 	sbc $d012
@@ -581,7 +579,7 @@ hctest
 	cmp #$28									; #$28 rasterlines left? do some stuff!
 	bcc :+
 	jsr handlecollisions
-	jmp hctest
+	jmp hctestmissile
 
 :	lda sortsprylow,y
 	sec
@@ -619,11 +617,11 @@ msblow3
 	inc restmultspritesindex
 	lda restmultspritesindex
 	cmp #MAXMULTPLEXSPR
-	beq msend
+	beq plotrestmissileend
 	
-	jmp prmloop
+	jmp plotrestmissileloop
 
-msend
+plotrestmissileend
 	jsr handlerestcollisions
 	
 	rts

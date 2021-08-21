@@ -5,7 +5,7 @@
 .define livesdecrease					1
 .define firebullets						1
 .define firebombs						1
-.define startzone						#$01				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
+.define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
 .define diedfade						1
 .define debugrastertime					1
 

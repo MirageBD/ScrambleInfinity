@@ -14,8 +14,10 @@ handlezoneptr3
 	lda sortsprc,y
 	sta $d02e
 
+	debugrasterstart #$06
 handlezoneptr4
 	jsr plotrestmissilemultsprites
+	debugrasterend
 
 	rts
 
@@ -23,14 +25,14 @@ handlezoneptr4
 
 ingame2
 
+	debugrasterstart #$0b
 	jsr scrollscreen
 	jsr handlejoystick							; 03
 	jsr calcvsp
 	jsr animship								; 04
 	jsr animbullet0								; 05
 	jsr animbullet1								; 06
-	jsr animbomb0								; 07
-	jsr testhiscorebeaten
+	debugrasterend
 	
 	lda #$04
 :	cmp $d012
@@ -64,15 +66,19 @@ scoreishiscoresprptr
 	lda scrollspeed								; we died, scrollspeed is 0
 	beq wedied
 
+	debugrasterstart #$0a
+	jsr animbomb0								; 07
+	debugrasterstart #$04
+	jsr testhiscorebeaten
+	debugrasterstart #$02
 	lda $01
 	pha
 	lda #$34
 	sta $01
-	
 	jsr plottiles
-	
 	pla
 	sta $01
+	debugrasterend
 	
 	jmp stillalive
 
@@ -219,17 +225,21 @@ stillalive
 	lda #$01
 	sta $d026
 	
+	debugrasterstart #$07
 	jsr tuneplay								; 01
 	jsr animbomb1								; 08
-	jsr removescheduledobject					; 02
+	jsr removescheduledobject					; 02	; if no object is scheduled for removal then the score is plotted and fuel updated
 	jsr sortmultsprites							; 0b
-	
+
 handlezoneptr2
 	jsr plotfirstmissilemultsprites				; 0c
+	debugrasterend
 
 	lda #$1d									; was 1d
 :	cmp $d012
 	bcs :-
+
+	debugrasterstart #$04
 
 	lda #$48									; #$4c
 	jsr cycleperfect
@@ -245,13 +255,16 @@ handlezoneptr2
 	.endrepeat
 
 	jsr updatespritepositions1					; 0a
+	debugrasterend
 
 	lda #$2a									; was 2a
 :	cmp $d012
 	bcs :-
 		
+	debugrasterstart #$05
 	jsr updatespritepositions2
 	jsr correctvspsprites
+	debugrasterend
 
 	lda #$00
 	sta $d025	

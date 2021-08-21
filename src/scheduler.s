@@ -26,9 +26,9 @@ removescheduledobject
 	lda schedulequeue
 	cmp #$ff									; -1 = nothing in queue
 	bne :+
-	
+
 	jsr plotfuelplotscoreupdatefuel
-	
+
 	rts
 
 :	lda scheduledcalcylow						; get first scheduled position to remove
