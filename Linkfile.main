@@ -24,14 +24,15 @@ SEGMENTS
 	IRQLIVESLEFT:				load=RAM;
 	ANIMATESHIP:				load=RAM;
 
+	INITHANDLECOLLISIONS:		load=RAM;
+	HANDLERESTCOLLISIONS:		load=RAM;
+
 	# FREE $0d00-$0e00
 
 	IRQINGAME:					load=RAM, start=$0e00;
 	ENDIRQ:						load=RAM;
 	RESETFIRESTATE:				load=RAM;
 	LOADSUBZONE:				load=RAM;
-
-	# FREE $0f00-$1000
 
 	MUSIC:						load=RAM, start=$1000;
 

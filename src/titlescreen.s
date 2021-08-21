@@ -220,8 +220,8 @@ irqtitle
 	ldx #0*pointlinespositionsblocksize
 	jsr setpointlinespositions
 
-hatseflatsikweetgeennamenmeer:
-	lda #$01
+titlescreensequence:
+	lda #$01												; 0 = how far can you go, 1 = scores
 	beq :+
 	ldy #((1*6+0)*pointlinesdatablocksize)
 	jmp :++
@@ -255,7 +255,7 @@ irqtitle2
 
 	ldx #1*pointlinespositionsblocksize			; careful! x and y get automatically increased by setpointlinespositions and setpointlinesptrcolors
 
-	lda hatseflatsikweetgeennamenmeer+1
+	lda titlescreensequence+1
 	beq :+
 	ldy #((1*6+1)*pointlinesdatablocksize)
 	jmp :++
@@ -372,7 +372,7 @@ irqtitle3
 	lda #$12									; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
 	sta $d011
 
-	lda #$52									; #$4c
+	lda #$42									; #$4c
 	jsr cycleperfect
 
 	nop
@@ -675,11 +675,12 @@ tso13
 
 flippage
 	; copy x offsets for this page
-	lda hatseflatsikweetgeennamenmeer+1
+	lda titlescreensequence+1
 	beq setpage1
+
 setpage0
 	lda #$00
-	sta hatseflatsikweetgeennamenmeer+1
+	sta titlescreensequence+1
 	ldx #$00
 :	lda spriterowoffs1,x
 	sta spriterowoffs0,x
@@ -687,9 +688,10 @@ setpage0
 	cpx #6*8
 	bne :-
 	jmp setpageend
+
 setpage1
 	lda #$01
-	sta hatseflatsikweetgeennamenmeer+1
+	sta titlescreensequence+1
 	ldx #$00
 :	lda spriterowoffs2,x
 	sta spriterowoffs0,x

@@ -48,6 +48,8 @@
 	.res 8192
 .segment "SCREENSPECIAL"
 	.res 1024
+;.segment "SPRITES1"
+;	.res 24*64
 .segment "SPRITES2"
 	.res 24*64
 .segment "EMPTYSPRITE"

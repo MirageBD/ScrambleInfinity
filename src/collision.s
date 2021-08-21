@@ -273,6 +273,8 @@ csptsp1
 
 ; -----------------------------------------------------------------------------------------------	
 
+.segment "INITHANDLECOLLISIONS"
+
 inithandlecollisions
 
 	lda #$00
@@ -286,10 +288,14 @@ inithandlecollisions
 
 	rts
 
+; -----------------------------------------------------------------------------------------------	
+
+.segment "HANDLERESTCOLLISIONS"
+
 handlerestcollisions
 
 	lda collisionshandled
-	cmp #$06					; bullet 0,bullet 1,bomb0, bomb1, ship
+	cmp #$07					; bullet0, bullet1, bomb0, bomb1, ship + 2
 	bcs :+
 	
 	jsr handlecollisions
@@ -299,7 +305,7 @@ handlerestcollisions
 
 :	rts
 
-handlecollisions
+handlecollisions								; TODO - all the 'jmp handlecollisionsend' calls can be replaced with rts
 
 	; only handle collisions once the zone has been handled	
 
@@ -314,6 +320,11 @@ handlezoneptr1
 	sta handlezonetested
 	rts
 
+:	lda gamefinished							; only handle collisions if the game hasn't finished yet
+	cmp #$01
+	bmi :+
+	jmp handlecollisionsend
+
 :	debugrasterstart collisionshandled
 	lda bullet0tested
 	bne :+
@@ -327,7 +338,7 @@ handlezoneptr1
 	bne :+
 	jsr testbullet0bkgcollision
 	jsr testbullet0sprcollision
-	jmp hcend
+	jmp handlecollisionsend
 	
 :	lda bullet1tested
 	bne :+
@@ -341,7 +352,7 @@ handlezoneptr1
 	bne :+
 	jsr testbullet1bkgcollision
 	jsr testbullet1sprcollision
-	jmp hcend
+	jmp handlecollisionsend
 
 :	lda bomb0tested
 	bne :+
@@ -355,7 +366,7 @@ handlezoneptr1
 	bne :+
 	jsr testbomb0bkgcollision
 	jsr testbomb0sprcollision
-	jmp hcend
+	jmp handlecollisionsend
 
 :	lda bomb1tested
 	bne :+
@@ -387,8 +398,9 @@ handlezoneptr1
 .if shipsprcollision
 	jsr testshipsprcollision
 .endif
+
 :
-hcend
+handlecollisionsend
 	
 	debugrasterend
 

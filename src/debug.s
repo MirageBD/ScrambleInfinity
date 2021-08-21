@@ -7,18 +7,18 @@
 .define firebombs						1
 .define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
 .define diedfade						1
-.define debugrastertime					1
+.define debugrastertime					0
 
 .macro debugrasterstart color
-.if debugrastertime
-    lda color
-    sta $d020
-.endif
+    .if debugrastertime
+        lda color
+        sta $d020
+    .endif
 .endmacro
 
 .macro debugrasterend
-.if debugrastertime
-    lda #$00
-    sta $d020
-.endif
+    .if debugrastertime
+        lda #$00
+        sta $d020
+    .endif
 .endmacro

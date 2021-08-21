@@ -672,7 +672,10 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+ 4*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $04,$0e, $03,$03,$03,$03,$03,$03,$03,$03
+.byte $02, $0a
+.repeat 8
+	.byte $07
+.endrepeat
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; can you
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
@@ -682,7 +685,10 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+5*64+ 3*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $06,$04, $0e,$0e,$0e,$0e,$0e,$0e,$0e,$0e
+.byte $09, $04
+.repeat 8
+	.byte $0a
+.endrepeat
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; invade
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
@@ -692,7 +698,10 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+9*64+ 3*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $09,$02, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+.byte $06, $0e
+.repeat 8
+	.byte $03
+.endrepeat
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; our
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
@@ -702,7 +711,10 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $09,$08, $0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
+.byte $0b, $0c
+.repeat 8
+	.byte $0f
+.endrepeat
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; scramble
 .byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 0*64)
@@ -712,7 +724,10 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 4*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 5*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $09,$08, $05,$05,$05,$05,$05,$05,$05,$05
+.byte $09, $05
+.repeat 8
+	.byte $0d
+.endrepeat
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; system
 .byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 0*64)
@@ -722,7 +737,10 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 4*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 5*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $09,$05, $0d,$0d,$0d,$0d,$0d,$0d,$0d,$0d
+.byte $09, $08
+.repeat 8
+	.byte $05
+.endrepeat
 
 ; ---------------------------------------------------------------
 

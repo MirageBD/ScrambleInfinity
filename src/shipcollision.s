@@ -4,7 +4,8 @@ testshipbkgcollision
 
 	sec
 	lda ship0+sprdata::xlow
-	sbc #$10
+shipbkgcollisionprecision
+	sbc testshipbkgcollisionoffset				; shipbkg collision precision - #$02 is good for end zones?
 	sta calcxlow
 	lda ship0+sprdata::xhigh
 	sbc #$00
@@ -18,8 +19,29 @@ testshipbkgcollision
 
 	lda calchit
 	cmp #$20
-	beq tsbe
+	bne shiphitbkg
 
+	jmp testshipbkgcollisionend
+
+	;sec
+	;lda ship0+sprdata::xlow
+	;sbc #$18									; shipbkg collision precision - #$02 is good for end zones?
+	;sta calcxlow
+	;lda ship0+sprdata::xhigh
+	;sbc #$00
+	;sta calcxhigh
+	;sec
+	;lda ship0+sprdata::ylow
+	;sbc #$2a
+	;sta calcylow
+
+	;jsr calcshippostoscreenpos
+
+	;lda calchit
+	;cmp #$20
+	;beq tsbe
+
+shiphitbkg
 	lda #$00
 	sta scrollspeed
 	sta s0counter
@@ -28,10 +50,14 @@ testshipbkgcollision
 	sta playerstate
 	lda #explosiontypes::big
 	sta ship0+sprdata::isexploding
+	; rts
+	; fall through
+
+testshipbkgcollisionend
 	rts
 
-tsbe
-	rts
+testshipbkgcollisionoffset
+.byte $02
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -64,7 +90,7 @@ testshipsprcollision
 	jsr calcshippostospritepos
 	
 	lda calcsprhit
-	beq tsse
+	beq testshipsprcollisionend
 
 	lda #$00
 	sta scrollspeed
@@ -74,9 +100,10 @@ testshipsprcollision
 	sta playerstate
 	lda #explosiontypes::big
 	sta ship0+sprdata::isexploding
-	rts
+	; rts
+	; fall through
 
-tsse
+testshipsprcollisionend
 	rts
 
 ; -----------------------------------------------------------------------------------------------
