@@ -98,7 +98,7 @@ firebullet0
 	lda ship0+sprdata::ylow
 	adc #$01
 	sta bull0+sprdata::ylow
-	lda #$06
+	lda #bulletspeedx
 	sta bull0+sprdata::xvel
 	lda #$00
 	sta bull0+sprdata::yvel
@@ -132,7 +132,7 @@ firebullet1
 	lda ship0+sprdata::ylow
 	adc #$03
 	sta bull1+sprdata::ylow
-	lda #$06
+	lda #bulletspeedx
 	sta bull1+sprdata::xvel
 	lda #$00
 	sta bull1+sprdata::yvel
@@ -183,8 +183,10 @@ firebomb0
 	lda ship0+sprdata::ylow
 	adc #$02
 	sta bomb0+sprdata::ylow
-	stx bomb0+sprdata::xvel
-	stx bomb0+sprdata::yvel
+	lda #bombstartspeedx
+	sta bomb0+sprdata::xvel
+	lda #bombstartspeedy
+	sta bomb0+sprdata::yvel
 
 	lda #$00
 	sta bomb0counter
@@ -216,8 +218,10 @@ firebomb1
 	lda ship0+sprdata::ylow
 	adc #$02
 	sta bomb1+sprdata::ylow
-	stx bomb1+sprdata::xvel
-	stx bomb1+sprdata::yvel
+	lda #bombstartspeedx
+	sta bomb1+sprdata::xvel
+	lda #bombstartspeedy
+	sta bomb1+sprdata::yvel
 
 	lda #$00
 	sta bomb1counter

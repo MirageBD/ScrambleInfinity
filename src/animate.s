@@ -239,13 +239,21 @@ bomb0normalanim
 
 	inc bomb0counter
 	lda bomb0counter
-	cmp #bombanimframes
+	cmp #bombthrowspeed
 	bne :+
+
+	lda #$01										; after 'bombthrowspeed' frames, make the bomb move slower horizontally
+	sta bomb0+sprdata::xvel
+	jmp bomb0normalanimend
+
+:	cmp #bombanimframes
+	bne bomb0normalanimend
 
 	lda #bombanimloopframe
 	sta bomb0counter
 
-:	rts
+bomb0normalanimend
+	rts
 
 bomb0explosionanim
 	ldx bomb0counter
@@ -337,13 +345,21 @@ bomb1normalanim
 
 	inc bomb1counter
 	lda bomb1counter
-	cmp #bombanimframes
+	cmp #bombthrowspeed
 	bne :+
+
+	lda #$01										; after 'bombthrowspeed' frames, make the bomb move slower horizontally
+	sta bomb1+sprdata::xvel
+	jmp bomb1normalanimend
+
+:	cmp #bombanimframes
+	bne bomb1normalanimend
 
 	lda #bombanimloopframe
 	sta bomb1counter
 
-:	rts
+bomb1normalanimend
+	rts
 
 bomb1explosionanim
 	ldx bomb1counter
