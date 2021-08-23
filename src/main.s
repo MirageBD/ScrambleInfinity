@@ -2,6 +2,10 @@
 
 ; TODO:
 
+; Figure out why the game is randomly freezing after the loadingscreen sometimes. ca65? ld65? byteboozer? krill-loader?
+
+; When you die in the last tunnels the game sometimes skips across to the boss zone.
+
 ; points for being alive doesn't get called when player is out of fuel and going down?
 ; add proper disk fail handling.
 ; obfuscate (irq loader now loadable after reverting to kernal).
