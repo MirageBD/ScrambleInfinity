@@ -9,10 +9,10 @@
 .define diedfade						1
 .define debugrastertime					0
 
-.define bulletspeedx					8				; was 6
-.define bombstartspeedx					6                ; was 1
-.define bombstartspeedy					1                ; was 1
-.define bombthrowspeed                  3                ; number of frames the bomb goes forward a lot faster. has to be smaller than bombanimframes
+.define bulletspeedx					8					; was 6
+.define bombstartspeedx					6					; was 1
+.define bombstartspeedy					1					; was 1
+.define bombthrowspeed                  3					; number of frames the bomb goes forward a lot faster. has to be smaller than bombanimframes
 
 .macro debugrasterstart color
     .if debugrastertime

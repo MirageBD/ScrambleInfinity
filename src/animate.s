@@ -244,6 +244,7 @@ bomb0normalanim
 
 	lda #$01										; after 'bombthrowspeed' frames, make the bomb move slower horizontally
 	sta bomb0+sprdata::xvel
+	nop												; this NOP is only here to make the game run :( if it's not here the game will randomly freeze after the loading screen
 	jmp bomb0normalanimend
 
 :	cmp #bombanimframes

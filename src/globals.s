@@ -10,7 +10,7 @@
 .define bank2							$8000
 .define bank3							$c000
 
-.define fueladd							#$08				; how much to add when you destroy a fuel tanker
+.define fueladd							#$10				; how much to add when you destroy a fuel tanker
 .define fueldecreaseticks				#$20				; frames before fuel decreases by one
 .define fuelfull						#$38				; full tank
 .define startlives						#$03				; initial lives
