@@ -13,7 +13,6 @@ increasesubzone
 	lda subzones,x
 	cmp #$ff
 	beq :-
-	;inc zone									; increase zone
 	inc subzone									; increase subzone one more time to jump over the 'you're dead, start on this empty screen'-subzone
 	jmp :++
 	

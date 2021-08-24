@@ -4,8 +4,6 @@
 
 ; Figure out why the game is randomly freezing after the loadingscreen sometimes. ca65? ld65? byteboozer? krill-loader?
 
-; When you die in the last tunnels the game sometimes skips across to the boss zone.
-
 ; Randomize comets more
 
 ; Figure out why some sprite animations stop playing after player died
