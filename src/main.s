@@ -18,11 +18,11 @@
 ; fix bug where ground targets sometimes get cleaned only half when hit.
 ; global search for TODO
 
-; MOST LIKELY FIXED:
-; multiplexer in cave zone is still going crazy and glitching (don't fire anything, position yourself between two ufos and drop bombs to see)
-;      (collision code was too big and running past $f2 rasterline, at which point it missed the next irq, causing the vsp to glitch)
+; got report from person saying the game 'glitched' at the end of level 1, before the cave. Most likely multiplex issue running out of time to update.
 
 ; ------------------------------------------------------------------------------------------------------------------------
+
+; ALL HITABLE OBJECTS SHOULD BE ALLIGNED BY 2 CHARS!!! Otherwise random memory might get overwritten.
 
 ; char indices should be ordered like this for the $d800 colours to be $0c
 ; 0123456789abcdef

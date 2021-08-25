@@ -96,24 +96,11 @@ removeobject
 	adc hbo1+2
 	sta hbo1+2
 
-	;clc										; moved down to fix HORRIBLE BUG
 	ldx calcylow								; setup clear specialtiles/tilemem tiles
-
-horriblebugcheck								; DO SANITY CHECKING HERE... X SHOULD BE >=$00 and <$18
-	;cpx #$18
-	;bmi horriblebugok1
-	;jam
-horriblebugok1
-	;cpx #$00
-	;bpl horriblebugok2
-	;jam
-
-horriblebugok2
-	clc											; moved from up here to fix HORRIBLE BUG
 	lda times40lowtable,x
 	adc #<screenspecial-1
 	sta hbo8+1
-	lda times40hightable,x						; TODO - HORRIBLE BUG
+	lda times40hightable,x
 	adc #>screenspecial-1
 	sta hbo8+2
 
@@ -190,21 +177,15 @@ cleartiles
 	ldx #$10
 	lda calcbkghit
 hbo0
-	sta bitmap1-1,x									; HORRIBLE BUG VALUES BEING WRITTEN HERE bitmap1 = $6000
+	sta bitmap1-1,x
 hbo1
-	sta bitmap2-1,x									; HORRIBLE BUG VALUES BEING WRITTEN HERE
+	sta bitmap2-1,x
 hbo2
-	sta bitmap1+bitmapwidth-1,x						; HORRIBLE BUG VALUES BEING WRITTEN HERE
+	sta bitmap1+bitmapwidth-1,x
 hbo3
-	sta bitmap2+bitmapwidth-1,x						; HORRIBLE BUG VALUES BEING WRITTEN HERE
+	sta bitmap2+bitmapwidth-1,x
 	dex
 	bne hbo0
-
-	; 968b  9D 58 2E    STA $2E58,X        - A:55 X:02 Y:00 SP:eb   -  I  
-	; 968e  9D 18 AD    STA $AD18,X        - A:55 X:02 Y:00 SP:eb   -  I  
-	; 9691  9D 98 2F    STA $2F98,X        - A:55 X:02 Y:00 SP:eb   -  I  
-	; 9694  9D 58 AE    STA $AE58,X        - A:55 X:02 Y:00 SP:eb   -  I  
-
 
 	ldx #$02
 	lda #$20
