@@ -4,8 +4,6 @@
 
 ; Figure out why the game is randomly freezing after the loadingscreen sometimes. ca65? ld65? byteboozer? krill-loader?
 
-; Randomize comets more
-
 ; Figure out why some sprite animations stop playing after player died
 
 ; points for being alive doesn't get called when player is out of fuel and going down?

@@ -6,7 +6,7 @@
 .define firebullets						1
 .define firebombs						1
 .define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
-.define diedfade						1
+.define diedfade						0
 .define debugrastertime					0
 
 .define bulletspeedx					8					; was 6
