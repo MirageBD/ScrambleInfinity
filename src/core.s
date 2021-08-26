@@ -254,7 +254,7 @@ setupleveldone
 
 	lda #$00
 	sta ufonum
-	sta cometnum
+	; sta cometnum								; dont reset cometnum so the pattern is different after finishing once
 	sta timeseconds
 	lda #$01
 	sta timeseconds

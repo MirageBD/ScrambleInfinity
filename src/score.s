@@ -70,7 +70,8 @@ increasefuel
 
 	clc
 	lda fuel
-	adc fueladd									; add 8 fuel
+fueladdptr
+	adc fueladd									; add fuel
 	sta fuel
 	cmp fuelfull
 	bcc :+

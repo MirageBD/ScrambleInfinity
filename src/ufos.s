@@ -28,7 +28,7 @@ launchufo
 	sta sortsprxlow,y
 	lda #$01
 	sta sortsprxhigh,y
-	lda sinyufo
+	lda ufosiny
 	sta sortsprylow,y
 
 	lda spriteptrforaddress(sprites2+cometanimstart*64)		; comet start
@@ -91,7 +91,7 @@ humloop
 	lda sortsprlifetime-1,x
 	and #%00111111
 	tay
-	lda sinyufo,y
+	lda ufosiny,y
 	sta sortsprylow-1,x
 	sec											; decrease x position
 	lda sortsprxlow-1,x

@@ -4,7 +4,7 @@ launchcomet
 
 	clc
 	lda subzone
-	cmp #$23
+	cmp #$22
 	bpl :+
 	rts
 
@@ -25,11 +25,10 @@ launchcomet
 	sta sortsprxlow,y
 	lda #$01
 	sta sortsprxhigh,y
-	ldx cometnum
-	txa
+	lda cometnum
 	and #$1f
 	tax
-	lda posycomet,x								; between #$38 and #$b4?
+	lda cometposy,x								; between #$38 and #$b4?
 	sta sortsprylow,y
 
 	lda spriteptrforaddress(sprites2+cometanimstart*64)		; comet start
