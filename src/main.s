@@ -34,6 +34,12 @@
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
+; screenspecial:
+
+; the playable area is only 24 chars high, the 25th row contains information about the height of the missile
+
+; ------------------------------------------------------------------------------------------------------------------------
+
 ; From Andreas, for cart:
 ; i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then timing is equal
 ;

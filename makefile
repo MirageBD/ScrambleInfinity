@@ -61,7 +61,7 @@ install-c64.prg: $(LOADER)/loader/build/install-c64.prg
 loadersymbols-c64.inc: $(LOADER)/loader/build/loadersymbols-c64.inc
 	$(CP) $(LOADER)/loader/build/loadersymbols-c64.inc $(EXE_DIR)/.
 
-main.o: $(SRC_DIR)/main.s Makefile Linkfile.main loader-c64.prg install-c64.prg mt.out mtc.out loadersymbols-c64.inc
+main.o: $(SRC_DIR)/main.s Makefile Linkfile.main loader-c64.prg install-c64.prg maptiles.out maptilechars.out loadersymbols-c64.inc
 	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(SRC_DIR)/$*.s
 
 main_unpacked.prg: main.o loader-c64.prg install-c64.prg loadersymbols-c64.inc Linkfile.main
@@ -113,41 +113,33 @@ boot.prg: boot_unpacked.prg.addr
 # endaddress = -1 = end of file
 
 
-# wholemap.bin             -> mth.out, mt.out, mtc.out, mtm.out
-# mtm.out                  -> mtmmis.out
-# mtmmis.out               -> m00.out, m01.out, etc.
-# m00.out, m01.out, etc.   -> ma00.out, ma01.out, etc.
-# ma00.out, ma01.out, etc. -> ma00.bb, ma01.bb, etc.
-# ma00.bb, ma01.bb, etc.   -> ma00.bc, ma01.bc, etc.
-# ma00.bc, ma01.bc, etc.   -> 
+# wholemap.bin               -> mapttilesheader.out, maptiles.out, maptilechars.out, maptilesmap.out
+# maptilesmap.out            -> maptilesmapmissileinfo.out
+# maptilesmapmissileinfo.out -> m00.out,  m01.out,  etc.
+# m00.out,  m01.out,  etc.   -> ma00.out, ma01.out, etc.
+# ma00.out, ma01.out, etc.   -> ma00.bb,  ma01.bb,  etc.
+# ma00.bb,  ma01.bb,  etc.   -> ma00.bc,  ma01.bc,  etc.
+# ma00.bc,  ma01.bc,  etc.   -> 
 
 
 wholemap.bin: $(BIN_DIR)/wholemap.bin
 
+mapttilesheader.out: wholemap.bin
+	$(BINSPLIT) 1 1 16256 $(BIN_DIR)/wholemap.bin $(EXE_DIR)/mapttilesheader.out 0 16
 
-# REAL TILE DATA
-# mth.bin = map tiles header
-mth.out: wholemap.bin
-	$(BINSPLIT) 1 1 16256 $(BIN_DIR)/wholemap.bin $(EXE_DIR)/mth.out 0 16
+maptiles.out: wholemap.bin
+	$(BINSPLIT) 0 0 0 $(BIN_DIR)/wholemap.bin $(EXE_DIR)/maptiles.out 0 2
 
-# mt.out = map tiles
-# $(BINSPLIT) 0 1 57344 wholemap.bin mt.out 0 2
-mt.out: wholemap.bin
-	$(BINSPLIT) 0 0 0 $(BIN_DIR)/wholemap.bin $(EXE_DIR)/mt.out 0 2
+maptilechars.out: wholemap.bin
+	$(BINSPLIT) 0 0 0 $(BIN_DIR)/wholemap.bin $(EXE_DIR)/maptilechars.out 2 4
 
-# mtc.out = map tiles chars
-# $(BINSPLIT) 0 1 64512 wholemap.bin mtc.out 2 4
-mtc.out: wholemap.bin
-	$(BINSPLIT) 0 0 0 $(BIN_DIR)/wholemap.bin $(EXE_DIR)/mtc.out 2 4
+maptilesmap.out: wholemap.bin
+	$(BINSPLIT) 0 0 0 $(BIN_DIR)/wholemap.bin $(EXE_DIR)/maptilesmap.out 6 -1
 
-# mtm.out = map tiles map
-mtm.out: wholemap.bin
-	$(BINSPLIT) 0 0 0 $(BIN_DIR)/wholemap.bin $(EXE_DIR)/mtm.out 6 -1
-
-#mtmmis.out = map tiles map with missile information in 25th rows
-mtmmis.out : mtm.out
-	$(SPECIALTILES) $(EXE_DIR)/mtm.out $(EXE_DIR)/mtmmis.out
-	$(BINSPLIT) 2 0 0 $(EXE_DIR)/mtmmis.out $(EXE_DIR)/m 0 2000
+# maptilesmapmissileinfo.out = map tiles map with missile information in 25th rows
+maptilesmapmissileinfo.out : maptilesmap.out
+	$(SPECIALTILES) $(EXE_DIR)/maptilesmap.out $(EXE_DIR)/maptilesmapmissileinfo.out
+	$(BINSPLIT) 2 0 0 $(EXE_DIR)/maptilesmapmissileinfo.out $(EXE_DIR)/m 0 2000
 	$(ADDADDR) $(EXE_DIR)/m00.out $(EXE_DIR)/ma00.out 12288
 	$(ADDADDR) $(EXE_DIR)/m01.out $(EXE_DIR)/ma01.out 14336
 	$(ADDADDR) $(EXE_DIR)/m02.out $(EXE_DIR)/ma02.out 12288
@@ -204,7 +196,7 @@ mtmmis.out : mtm.out
 ma00.out ma01.out ma02.out ma03.out ma04.out ma05.out ma06.out ma07.out ma08.out ma09.out ma0a.out ma0b.out ma0c.out ma0d.out ma0e.out ma0f.out \
 ma10.out ma11.out ma12.out ma13.out ma14.out ma15.out ma16.out ma17.out ma18.out ma19.out ma1a.out ma1b.out ma1c.out ma1d.out ma1e.out ma1f.out \
 ma20.out ma21.out ma22.out ma23.out ma24.out ma25.out ma26.out ma27.out ma28.out ma29.out ma2a.out ma2b.out ma2c.out ma2d.out ma2e.out ma2f.out \
-ma30.out ma31.out ma32.out ma33.out : mtmmis.out
+ma30.out ma31.out ma32.out ma33.out : maptilesmapmissileinfo.out
 
 tsbmp1.b2: $(BIN_DIR)/tsbmp1.bin
 	$(ADDADDR) $(BIN_DIR)/tsbmp1.bin $(EXE_DIR)/tsbmp1.rel.bin 24576
@@ -250,11 +242,11 @@ tsbkg.b2:  $(BIN_DIR)/metabkg.bin
 
 # -----------------------------------------------------------------------------
 
-	 # -f MH -w mth.bc \
+	 # -f MH -w mapttilesheader.bc \
 	
 
 main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
-          mth.out mth.b2 \
+          mapttilesheader.out mapttilesheader.b2 \
 		  tsbmp1.b2 tsbmp10400.b2 tsbmp1d800.b2 tspointspr.b2 tsbkg.b2 tshowfar.b2 \
           ma00.b2 ma01.b2 ma02.b2 ma03.b2 ma04.b2 ma05.b2 ma06.b2 ma07.b2 ma08.b2 ma09.b2 \
           ma0a.b2 ma0b.b2 ma0c.b2 ma0d.b2 ma0e.b2 ma0f.b2 ma10.b2 ma11.b2 ma12.b2 ma13.b2 \
@@ -347,3 +339,4 @@ clean:
 	$(RM) $(LOADER)/loader/build/*.*
 	$(RM) $(LOADER)/loader/build/intermediate/*.*
 	
+# -----------------------------------------------------------------------------

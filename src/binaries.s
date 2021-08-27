@@ -23,10 +23,10 @@
 .incbin "./bin/mysteryspr.bin"					; ""
 
 .segment "MAPTILES"
-.incbin "./exe/mt.out"
+.incbin "./exe/maptiles.out"
 
 .segment "MAPTILECOLORS"
-.incbin "./exe/mtc.out"
+.incbin "./exe/maptilechars.out"
 
 .segment "TSLOGOSPR"
 .incbin "./bin/tslogospr.bin"

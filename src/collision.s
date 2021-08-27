@@ -185,9 +185,10 @@ csptsp0	lda $c001
 	sta calcspryoffset
 
 	lda calchit									; find top left position of object hit
+	; sta $d020
 	and #%00000001
-	beq :+
-	dec calcxlow
+	beq :+										; is it even?
+	dec calcxlow								; no, decrease 1 to make it even
 
 :	lda calchit
 	and #%00000010

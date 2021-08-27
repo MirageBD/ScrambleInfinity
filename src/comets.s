@@ -4,7 +4,7 @@ launchcomet
 
 	clc
 	lda subzone
-	cmp #$22
+	cmp #$23
 	bpl :+
 	rts
 
