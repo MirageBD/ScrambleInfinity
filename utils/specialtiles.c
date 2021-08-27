@@ -5,7 +5,9 @@
 int main(int argc, char* argv[])
 {
 	FILE *infile, *outfile;
-	unsigned char in1, in2, row, missilefound, missileposition;
+	unsigned char tileByteHi, tileByteLo;
+	unsigned char row;
+	unsigned char missilefound, missileposition;
 
 	if(argc < 3)
 	{
@@ -13,29 +15,46 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	infile = fopen(argv[1], "rb");
+	infile  = fopen(argv[1], "rb");
 	outfile = fopen(argv[2], "wb");
 
-	while(!feof(infile))
+	while(!feof(infile)) // Go through all the columns in the giant map file
 	{
-		missilefound = 0;
+		missilefound    = 0;
 		missileposition = 0;
+
 		for(row = 0; row < 24; row++)
 		{
-			fread(&in1,sizeof(unsigned char),1,infile);
-			fread(&in2,sizeof(unsigned char),1,infile);
-			fwrite((const void *) &in1, sizeof(unsigned char), 1, outfile);
-			fwrite((const void *) &in2, sizeof(unsigned char), 1, outfile);
-			if(in1 == 0 && (in2 == 0 || in2 == 16))
+			// Each char contains high and low bytes of the map tile (Currently there are 618 tiles, so that won't fit into 1 byte)
+
+			// Read high and low byte of tile number
+			fread(&tileByteHi, sizeof(unsigned char), 1, infile);
+			fread(&tileByteLo, sizeof(unsigned char), 1, infile);
+
+			// Write the exact same values
+			fwrite((const void *)&tileByteHi, sizeof(unsigned char), 1, outfile);
+			fwrite((const void *)&tileByteLo, sizeof(unsigned char), 1, outfile);
+
+			// If a missile is found (tile $0000 (non-cave missile) or $0010 (cave missile) set missile found to true and record the row height
+			// Cave missiles don't lift off, so commented that bit out for now.
+			if(
+				(tileByteHi == 0 && tileByteLo ==  0) /* ||
+				(tileByteHi == 0 && tileByteLo == 16) */
+			)
 			{
-				missilefound = (unsigned char)1;
+				missilefound    = (unsigned char)1;
 				missileposition = (unsigned char)row;
 			}
 		}
-		fread(&in1,sizeof(unsigned char),1,infile);
-		fread(&in2,sizeof(unsigned char),1,infile);
-		fwrite((const void *) &missilefound, sizeof(unsigned char), 1, outfile);
-		fwrite((const void *) &missileposition, sizeof(unsigned char), 1, outfile);
+
+		// Dummy read - There is nothing in row 25
+		fread(&tileByteHi, sizeof(unsigned char), 1, infile);
+		fread(&tileByteLo, sizeof(unsigned char), 1, infile);
+
+		// Write a 0 or 1 depending on if a missile was found to row 25
+		fwrite((const void *)&missilefound,    sizeof(unsigned char), 1, outfile);
+		// Write the missile row height to row 25
+		fwrite((const void *)&missileposition, sizeof(unsigned char), 1, outfile);
 	}
 
 	fclose(outfile);
