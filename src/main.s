@@ -88,11 +88,14 @@
 .include "common/stdhelpers.s"
 
 .include "binaries.s"
-
 .include "debug.s"
+
+.include "recordedsession.s"
+
 .include "globals.s"
 .include "core.s"
 .include "irq.s"
+.include "joystick.s"
 .include "gameplay.s"
 .include "shipcollision.s"
 .include "bulletcollision.s"
