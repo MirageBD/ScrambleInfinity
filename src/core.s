@@ -205,33 +205,7 @@ plotinitialscreendone
 
 	inc file
 	inc subzone
-	lda file
-	cmp #$02
-	beq :+
-	jmp setupleveldone
 
-:	ldx #$00									; clear temporary tiles from screen - only need to do this for first subzone?
-	lda clearbmptile
-:	sta bitmap1,x
-	sta bitmap1+64,x
-	inx
-	bne :-
-	
-	ldx #$00
-:	lda #$66
-	sta screen1,x
-	lda #$20
-	sta screenspecial,x
-	inx
-	cpx #$28
-	bne :-
-
-	lda #$20									; empty tiles used for index ordering
-	.repeat 34, i
-	sta loadeddata2+i*50+0
-	.endrepeat
-
-setupleveldone
 	lda #$37
 	sta $01
 
