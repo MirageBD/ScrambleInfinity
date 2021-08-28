@@ -242,7 +242,7 @@ tsbkg.b2:  $(BIN_DIR)/metabkg.bin
 
 # -----------------------------------------------------------------------------
 
-	 # -f MH -w mapttilesheader.bc \
+# -f MH -w mapttilesheader.bc \
 	
 
 main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \

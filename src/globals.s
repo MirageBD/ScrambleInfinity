@@ -2,7 +2,7 @@
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
 
-.define firstsolidtile					74+5
+.define firstsolidtile					75
 .define firsttransparenttile			32
 
 .define bank0							$0000
