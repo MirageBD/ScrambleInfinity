@@ -33,8 +33,11 @@ recordedsession
 .byte  $6f, $08, $8a, $6b,  $08, $94, $6f, $08,  $ac, $6d, $08, $b8,  $69, $08, $c7, $6b
 .byte  $08, $d2, $6f, $08,  $db, $6b, $08, $e0,  $6f, $08, $e9, $6e,  $08, $f6, $6f, $09
 .byte  $01, $6e, $09, $24,  $6f, $09, $4d, $6b,  $09, $7b, $6a, $09,  $7d, $6e, $09, $81
-.byte  $66, $09, $83, $67,  $09, $c9, $6f, $09,  $cf, $6b, $09, $dc,  $6f, $09, $e4, $67
-.byte  $09, $f4, $6f, $09,  $f8, $7f, $0a, $01,  $7e, $0a, $02, $7a,  $0a, $03, $7b, $0a
-.byte  $07, $7a, $0a, $1c,  $7b, $0a, $1d, $7f,  $00, $00, $00, $00,  $00, $00, $00, $00
+.byte  $66
+
+; this is where the clear-bug happens:
+.byte $09, $83, $67
+; insert code to move the ship up:
+.byte $09, $c8, $7f
 
 .endif
