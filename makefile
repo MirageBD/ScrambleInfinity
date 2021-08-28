@@ -245,6 +245,7 @@ tsbkg.b2:  $(BIN_DIR)/metabkg.bin
 # -f MH -w mapttilesheader.bc \
 	
 
+
 main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
           mapttilesheader.out mapttilesheader.b2 \
 		  tsbmp1.b2 tsbmp10400.b2 tsbmp1d800.b2 tspointspr.b2 tsbkg.b2 tshowfar.b2 \
@@ -255,9 +256,9 @@ main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
           ma28.b2 ma29.b2 ma2a.b2 ma2b.b2 ma2c.b2 ma2d.b2 ma2e.b2 ma2f.b2 ma30.b2 ma31.b2 \
           ma32.b2 ma33.b2 
 	$(RM) $(EXE_DIR)/$@
-	$(CC1541) -n "    scramble    " -i " 2020" -S 8 -d 19 -v\
+	$(CC1541) -n "    scramble    " -i "     " -S 8 -d 19 -v\
 	 \
-	 -f "scramble 2020" -w $(EXE_DIR)/boot.prg \
+	 -f "infinity" -w $(EXE_DIR)/boot.prg \
 	 -f "ls" -w $(EXE_DIR)/loadscreen.prg \
 	 -f "ff" -w $(EXE_DIR)/main.prg \
 	 -f "li" -w $(EXE_DIR)/install-c64.prg \
@@ -331,7 +332,7 @@ tools: specialtiles.exe binsplit.exe addaddr.exe
 all: tools main.d64
 
 run: specialtiles.exe binsplit.exe addaddr.exe main.d64
-	$(VICE) $(VICEFLAGS) "$(EXE_DIR)/main.d64:scramble 2020"
+	$(VICE) $(VICEFLAGS) "$(EXE_DIR)/main.d64:infinity"
 
 clean:
 	$(RM) $(EXE_DIR)/*.*
