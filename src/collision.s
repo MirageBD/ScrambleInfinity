@@ -176,9 +176,9 @@ calcspritepostoscreenpos
 	adc #>screenspecial
 	sta csptsp0+2
 
-csptsp0	lda $c001
+csptsp0	lda screenspecial+1
 	sta calchit
-	cmp #$ff
+	cmp #specialtilesolid
 	beq csend
 
 	lda #$00

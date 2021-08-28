@@ -18,7 +18,7 @@ shipbkgcollisionprecision
 	jsr calcshippostoscreenpos
 
 	lda calchit
-	cmp #$20
+	cmp #firsttransparenttile
 	bne shiphitbkg
 
 	jmp testshipbkgcollisionend

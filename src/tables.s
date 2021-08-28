@@ -254,7 +254,7 @@ calcylowmax
 calcylowvsped
 .byte $00
 
-calchit
+calchit											; should always contain 32 (empty), 255 (solid) or 0-31 (missile, fuel, special, boss (4x4x2 tiles))
 .byte $00
 flipflop
 .byte $00

@@ -179,7 +179,7 @@ restrictbombpositions
 	
 :	lda #$df									; clamp bomb position
 	sta bomb0+sprdata::ylow
-	lda #$ff									; and simulate collision with background
+	lda #specialtilesolid						; and simulate collision with background
 	sta calchit
 	jmp handlebomb0bkgcollision	
 
@@ -198,7 +198,7 @@ bombinsidescreenok0
 	
 :	lda #$df									; clamp bomb position
 	sta bomb1+sprdata::ylow
-	lda #$ff									; and simulate collision with background
+	lda #specialtilesolid						; and simulate collision with background
 	sta calchit
 	jmp handlebomb1bkgcollision
 	

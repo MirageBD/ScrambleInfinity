@@ -19,6 +19,11 @@ gett2
 	adc #>maptilecolors
 	sta plotc1+2
 	
+												; get low and high byte of tile number and convert it to:
+												; -   32 = empty
+												; -  255 = solid
+												; - 0-31 = missile, fuel, special, boss (4x4x2)
+
 	lda currenttile+1							; > 256 = always solid tile
 	;cmp #$00
 	bne solidtile
@@ -40,12 +45,12 @@ missilefuelspecialtile
 	jmp skipspecialtiles
 	
 transtile
-	lda #$20
+	lda #firsttransparenttile
 	sta currenttile+0
 	jmp skipspecialtiles
 
 solidtile
-	lda #$ff
+	lda #specialtilesolid
 	sta currenttile+0
 	jmp skipspecialtiles
 
