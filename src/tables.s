@@ -496,9 +496,6 @@ bkgpulsecolors
 	recordplaybacktimerlo:
 	.byte $00
 
-	recordplaybacktimerhi:
-	.byte $00
-
 	prevjoystate:
 	.byte $00
 

@@ -51,16 +51,14 @@ initscore
 .if record | playback
 	lda #$00
 	sta recordplaybacktimerlo
-	sta recordplaybacktimerhi
-	sta recordplaybacktimerhiequal
 	lda #$7f
 	sta prevjoystate
 	lda #<recordmem
-	sta recordstateptr+1
-	sta playbackstateptr+1
+	sta writerecordedvalue+1
+	sta readrecordedvalue+1
 	lda #>recordmem
-	sta recordstateptr+2
-	sta playbackstateptr+2
+	sta writerecordedvalue+2
+	sta readrecordedvalue+2
 .endif
 
 	rts

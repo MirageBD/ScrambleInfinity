@@ -32,22 +32,9 @@ readjoy
 	ldx $dc00                                       ; #$7f when nothing is pressed
 
 .if record
-    jsr increaserecordplaybacktimer
-
-    cpx prevjoystate                                ; if the joystick state hasn't changed then don't do anything
-    beq :+
-
-    stx prevjoystate
-    lda recordplaybacktimerhi
-    jsr recordstate
-    lda recordplaybacktimerlo
-    jsr recordstate
-    txa
-    jsr recordstate
-:
+    jsr dorecord
 .elseif playback
-    jsr increaserecordplaybacktimer
-    jsr doplayback                              ; doplayback compares the time. if it's the same then X will be the recorded joystick value
+    jsr doplayback
 .endif
 
 	lda fuel
@@ -85,85 +72,65 @@ fire1
 
 .if record | playback
 
-increaserecordplaybacktimer
-
-    inc recordplaybacktimerlo
-    bne :+
-    inc recordplaybacktimerhi
-:
-    rts
-
-; -----------------------------------------------------------------------------------------------
-
-recordstate
-
-recordstateptr
+writerecordedvalue
     sta recordmem
-    inc recordstateptr+1
+    inc writerecordedvalue+1
     bne :+
-    inc recordstateptr+2
-
-: rts
+    inc writerecordedvalue+2
+:   rts
 
 ; ----------------------------------------------------------------------------------------------- PLAYBACK
 
 readrecordedvalue
-
-playbackstateptr
     lda recordmem
+    rts
+
+increaseplaybackstate
+    inc readrecordedvalue+1
+    bne :+
+    inc readrecordedvalue+2
+:   rts
+
+; -----------------------------------------------------------------------------------------------
+
+dorecord
+    inc recordplaybacktimerlo
+    beq :+                                      ; always write state when timer is 0
+
+    cpx prevjoystate                            ; if the joystick state hasn't changed then don't do anything
+    beq dorecordend
+
+:   lda recordplaybacktimerlo
+    jsr writerecordedvalue
+    txa
+    sta prevjoystate
+    jsr writerecordedvalue
+
+dorecordend
     rts
 
 ; -----------------------------------------------------------------------------------------------
 
-increaseplaybackstate
-
-    inc playbackstateptr+1
-    bne :+
-    inc playbackstateptr+2
-
-: rts
-
-; -----------------------------------------------------------------------------------------------
-
 doplayback
-    ldx prevjoystate
+    inc recordplaybacktimerlo
 
-    lda recordplaybacktimerhiequal              ; was the hi timer equal?
-    beq doplaybacktimerhiequal                  ; no, so check again if it's equal
+    ldx prevjoystate                            ; always fetch the last joystick state
 
-    jmp doplaybacktimerloequal                  ; yes, so check if timer lo is the same
-
-doplaybacktimerhiequal
-    jsr readrecordedvalue                       ; read recorded timer hi value
-    cmp recordplaybacktimerhi                   ; is it equal to the current timer hi?
-    bne doplaybackend                           ; nope, bail out
-
-    jsr increaseplaybackstate                   ; yes, timer hi is equal. increase ptr to the recorded low value
-    lda #$01
-    sta recordplaybacktimerhiequal              ; signal that timer hi was equal
-
-doplaybacktimerloequal
     jsr readrecordedvalue                       ; read recorded timer lo
+    beq :+                                      ; if it's 0 then always fetch joystick state
 
     cmp recordplaybacktimerlo                   ; is it the same as the current timer lo?
     bne doplaybackend                           ; nope, bail out
 
-    jsr increaseplaybackstate                   ; yes, timer hi and lo are equal. increase ptr to the recorded joystick value
-    jsr readrecordedvalue                       ; read recorded joystick value and put it in X
+:   jsr increaseplaybackstate
+    jsr readrecordedvalue
     tax
     stx prevjoystate
-    lda #$00                                    ; signal that we have to compare timer hi again
-    sta recordplaybacktimerhiequal
-    jsr increaseplaybackstate                   ; and increase ptr so we're reading a timer hi value the next time
+    jsr increaseplaybackstate
 
 doplaybackend
     rts
 
 ; -----------------------------------------------------------------------------------------------
 
-recordplaybacktimerhiequal
-.byte 00
-
 .endif
-
-; -----------------------------------------------------------------------------------------------
