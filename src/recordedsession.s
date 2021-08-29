@@ -37,7 +37,7 @@ recordedsession
 
 ; this is where the clear-bug happens:
 .byte $09, $83, $67
-; insert code to move the ship up:
-.byte $09, $c8, $7f
+; insert code to tell me that the bug has happened ($ff)
+.byte $09, $c8, $ff
 
 .endif

@@ -211,6 +211,18 @@ csbkghit
 :	jsr updategroundscore
 
 csend
+
+;.if playback
+;	lda prevjoystate
+;	cmp #$ff
+;	bne :+
+;	lda calchit									; DEBUG - has the top left of the missile been hit? calcxlow = #$11, calcylow = #$0f, calcylowvsped = #$0f
+;	cmp #$00
+;	bne :+
+;	jam
+;:
+;.endif
+
 	rts
 
 ; -----------------------------------------------------------------------------------------------	
@@ -287,6 +299,9 @@ inithandlecollisions
 	sta handlezonetested
 	sta collisionshandled
 
+	lda flip									; store off the value of 'flip' at the top of the frame,
+	sta flipstored								; so the correct value is used when calculating tiles to clear.
+
 	rts
 
 ; -----------------------------------------------------------------------------------------------	
@@ -296,7 +311,7 @@ inithandlecollisions
 handlerestcollisions
 
 	lda collisionshandled
-	cmp #$07					; bullet0, bullet1, bomb0, bomb1, ship + 2
+	cmp #$07									; bullet0, bullet1, bomb0, bomb1, ship + 2
 	bcs :+
 	
 	jsr handlecollisions

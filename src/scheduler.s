@@ -125,12 +125,24 @@ removeobject
 	adc hbo10+2
 	sta hbo10+2
 
-	lda flip									; compensate for bank switch
+;.if playback
+;	lda prevjoystate
+;	cmp #$ff
+;	bne :+
+	;lda calchit								; DEBUG - has the top left of the missile been hit? calcxlow = #$11, calcylow = #$0f, calcylowvsped = #$0f, flip = 1
+	;cmp #$00
+	;bne :+
+;	jam
+;:
+;.endif
+
+	lda flipstored								; compensate for bank switch
 	bne flipped
 	
 	jmp notflipped
 	
-flipped	clc
+flipped											; flipped - add 320 to bitmap 1 plot
+	clc
 	lda hbo0+1
 	adc #$40
 	sta hbo0+1
@@ -140,7 +152,7 @@ flipped	clc
 	
 	jmp cleartiles
 	
-notflipped	
+notflipped										; not flipped - add 320 to bitmap 2 plot
 	clc
 	lda hbo1+1
 	adc #$40
@@ -150,7 +162,7 @@ notflipped
 	sta hbo1+2
 
 cleartiles
-	clc
+	clc											; add 320 to top two tiles to get bottom two tiles
 	lda hbo0+1
 	adc #$40
 	sta hbo2+1
@@ -177,13 +189,13 @@ cleartiles
 	ldx #$10
 	lda calcbkghit
 hbo0
-	sta bitmap1-1,x
+	sta bitmap1-1,x								; top two tiles
 hbo1
-	sta bitmap2-1,x
+	sta bitmap2-1,x								; top two tiles
 hbo2
-	sta bitmap1+bitmapwidth-1,x
+	sta bitmap1+bitmapwidth-1,x					; bottom two tiles
 hbo3
-	sta bitmap2+bitmapwidth-1,x
+	sta bitmap2+bitmapwidth-1,x					; bottom two tiles
 	dex
 	bne hbo0
 

@@ -182,6 +182,9 @@ row
 .byte $00
 flip
 .byte $00
+flipstored										; store off the value of 'flip' at the top of the frame,
+.byte $00										; so the correct value is used when calculating tiles to clear.
+
 
 diedclearline
 .byte $00
