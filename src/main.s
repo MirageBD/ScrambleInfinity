@@ -25,6 +25,8 @@
 ; timanthes file needs 1 layer set to bitmap multicolor and tilemap ticked. DON'T use the 'characters multicolor' mode!
 ; on save leave all checkboxes as is, but untick 'Add loadaddress' and tick 'Add tiledata info'
 
+; ------------------------------------------------------------------------------------------------------------------------
+
 ; box-box-intersection-test
 ; if(Axmin < Bxmax && Bxmin < Axmax && Aymin < Bymax && Bymin < Aymax) intersect = true
 
