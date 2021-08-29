@@ -160,7 +160,7 @@ setuplevel
 	lda #$17
 	sta $d016
 	
-	lda d018forscreencharset(screen2,bitmap2)
+	lda d018forscreencharset(screen2, bitmap2)
 	sta $d018
 	
 	ldy bankforaddress(bitmap2)
@@ -178,18 +178,10 @@ setuplevel
 	jsr setupfilename							; stores 0 in x, 0 in y
 	jsr loadpackd
 
-	;bcc :+
-	;jmp error
-
-;:
 	inc file									; file = 1
 	jsr setupfilename
 	jsr loadpackd
 
-	;bcc :+
-	;jmp error
-
-;:
 	jsr incpag2									; set up pointers for initial tile plot
 	inc file									; file = 2
 	lda #$00
@@ -219,11 +211,11 @@ ps2	lda #$00
 
 plotinitialscreendone
 
-	inc file
-	inc subzone
-
 	lda #$37
 	sta $01
+
+	inc file
+	inc subzone
 
 	jsr setupfilename							; we've loaded and set up 2 subzones, now pre-emptively load subzone 3
 	jsr loadpackd

@@ -10,7 +10,7 @@
 .define debugrastertime					0
 
 .define record                          0                   ; 0 or 1
-.define playback                        2                   ; 0 or 2
+.define playback                        0                   ; 0 or 2
 
 .define bulletspeedx					8					; was 6
 .define bombstartspeedx					5

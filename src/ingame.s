@@ -63,14 +63,15 @@ scoreishiscoresprptr
 	inx
 	stx screenbordersprites+$03f8+6
 
-	lda scrollspeed								; we died, scrollspeed is 0
-	beq wedied
-
 	debugrasterstart #$0a
 	jsr animbomb0								; 07
 	debugrasterstart #$04
 	jsr testhiscorebeaten
 	debugrasterstart #$02
+
+	lda scrollspeed								; we died, scrollspeed is 0
+	beq wedied
+
 	lda $01
 	pha
 	lda #$34

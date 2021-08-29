@@ -2,9 +2,9 @@
 
 ; TODO:
 
-; Figure out why the game is randomly freezing after the loadingscreen sometimes. ca65? ld65? byteboozer? krill-loader?
+; load data / init level when the 'lives left' or 'congratulations' screen is on screen, instead of afterwards.
 
-; Figure out why some sprite animations stop playing after player died
+; Figure out why the game is randomly freezing after the loadingscreen sometimes. ca65? ld65? byteboozer? krill-loader?
 
 ; add proper disk fail handling.
 ; obfuscate (irq loader now loadable after reverting to kernal).
@@ -184,13 +184,14 @@ hiscorenotbeaten
 	jsr initlives
 	jsr plotbitmapscores
 	jsr ingameatcurrentzone
+	jsr setuplevel
 	nextgameflow #gameflow::continueingame
 
 	; -----------------------------------------
 
 	comparegameflow #gameflow::continueingame
 	jsr screensafe
-	jsr setuplevel
+	;jsr setuplevel
 	nextgameflow #gameflow::waiting
 
 	; -----------------------------------------
@@ -200,6 +201,7 @@ hiscorenotbeaten
 	jsr livesleftscreen
 	jsr setsafemode
 	jsr ingameatcurrentzone
+	jsr setuplevel
 	nextgameflow #gameflow::continueingame
 	
 	; -----------------------------------------
@@ -210,6 +212,7 @@ hiscorenotbeaten
 	jsr setsafemode
 	jsr setzone0
 	jsr ingameatcurrentzone
+	jsr setuplevel
 	nextgameflow #gameflow::continueingame
 
 	; -----------------------------------------
