@@ -1,4 +1,4 @@
-.segment "INGAMEJOYSTICK"
+.segment "JOYSTICKINGAME"
 
 handlejoystick
 

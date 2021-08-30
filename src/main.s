@@ -82,6 +82,9 @@
 .include "common/stdmacros.s"
 .include "common/stdirq.s"
 .include "common/stdhelpers.s"
+.include "common/stdkeyboard.s"
+.include "common/stdjoystick.s"
+.include "common/stdinput.s"
 
 .include "binaries.s"
 .include "debug.s"
@@ -91,7 +94,7 @@
 .include "globals.s"
 .include "core.s"
 .include "irq.s"
-.include "joystick.s"
+.include "joystickingame.s"
 .include "recordplayback.s"
 .include "gameplay.s"
 .include "shipcollision.s"

@@ -47,7 +47,9 @@ SEGMENTS
 	UFOS:						load=RAM;
 	MISSILES:					load=RAM;
 	MULTIPLEX:					load=RAM;
-	WAITINPUT:					load=RAM;
+	STDINPUT:					load=RAM;
+	STDKEYBOARD:				load=RAM;
+	STDJOYSTICK:				load=RAM;
 
 	TSLOGOSPR:					load=RAM, start=$3000; # gets moved to $a000
 	#LOADEDDATA1:				load=RAM, start=$3000;
@@ -72,7 +74,7 @@ SEGMENTS
 	COLLISION:					load=RAM;
 	ZONES:						load=RAM;
 
-	INGAMEJOYSTICK:				load=RAM; # , start=$9100;
+	JOYSTICKINGAME:				load=RAM; # , start=$9100;
 	RECORDPLAYBACK:				load=RAM;
 	FIREBULLET:					load=RAM;
 	FIREBOMB:					load=RAM;
