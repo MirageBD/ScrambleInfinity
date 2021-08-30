@@ -29,7 +29,7 @@ yescontrol
 	inc ship0+sprdata::ylow
 
 readjoy
-	ldx $dc00                                       ; #$7f when nothing is pressed
+	ldx $dc00                                   ; #$7f when nothing is pressed
 
 .if record
     jsr dorecord
@@ -81,18 +81,6 @@ writerecordedvalue
 
 ; ----------------------------------------------------------------------------------------------- PLAYBACK
 
-readrecordedvalue
-    lda recordmem
-    rts
-
-increaseplaybackstate
-    inc readrecordedvalue+1
-    bne :+
-    inc readrecordedvalue+2
-:   rts
-
-; -----------------------------------------------------------------------------------------------
-
 dorecord
     inc recordplaybacktimerlo
     beq :+                                      ; always write state when timer is 0
@@ -108,6 +96,18 @@ dorecord
 
 dorecordend
     rts
+
+; -----------------------------------------------------------------------------------------------
+
+readrecordedvalue
+    lda recordmem
+    rts
+
+increaseplaybackstate
+    inc readrecordedvalue+1
+    bne :+
+    inc readrecordedvalue+2
+:   rts
 
 ; -----------------------------------------------------------------------------------------------
 

@@ -2,9 +2,7 @@
 
 ; TODO:
 
-; load data / init level when the 'lives left' or 'congratulations' screen is on screen, instead of afterwards.
-
-; Figure out why the game is randomly freezing after the loadingscreen sometimes. ca65? ld65? byteboozer? krill-loader?
+; load data / init level when the 'lives left' or 'congratulations' screen is on screen, instead of afterwards?
 
 ; add proper disk fail handling.
 ; obfuscate (irq loader now loadable after reverting to kernal).
@@ -138,6 +136,17 @@
 
 	jsr initscore
 
+	lda #<irqlimbo								; set limbo irq we don't end up in the loading screen irq which might not be there any more after unpacking
+	ldx #>irqlimbo
+	ldy #$00
+	sta $fffe
+	sta $0314
+	stx $ffff
+	stx $0315
+	sty $d012
+
+	lda $dc0d
+	lda $dd0d
 	dec $d019
 
 	cli
