@@ -1,80 +1,81 @@
-; ------------------------------------------------------------------------------------------------------------------------
-
-; TODO:
-
-; load data / init level when the 'lives left' or 'congratulations' screen is on screen, instead of afterwards?
-
-; add proper disk fail handling.
-; obfuscate (irq loader now loadable after reverting to kernal).
-; new music (give option to play without music?) 2channel prefered.
-; add sound-fx for fire/bomb/explode.
-; global search for TODO
-
-; got report from person saying the game 'glitched' at the end of level 1, before the cave. Most likely multiplex issue running out of time to update.
-
-; ------------------------------------------------------------------------------------------------------------------------
-
-; ALL HITABLE OBJECTS SHOULD BE ALLIGNED BY 2 CHARS!!! Otherwise random memory might get overwritten.
-
-; char indices should be ordered like this for the $d800 colours to be $0c
-; 0123456789abcdef
-; 1222221222223222		; black, blue = 1, midgray = 3, others = 2
-
-; timanthes file needs 1 layer set to bitmap multicolor and tilemap ticked. DON'T use the 'characters multicolor' mode!
-; on save leave all checkboxes as is, but untick 'Add loadaddress' and tick 'Add tiledata info'
-
-; ------------------------------------------------------------------------------------------------------------------------
-
-; box-box-intersection-test
-; if(Axmin < Bxmax && Bxmin < Axmax && Aymin < Bymax && Bymin < Aymax) intersect = true
-
-; ------------------------------------------------------------------------------------------------------------------------
-
-; screenspecial:
-
-; the playable area is only 24 chars high, the 25th row contains information about the height of the missile
-
-; when the next column is plotted, the tile is read and the following is output to the screenspecial:
-
-; - 0-31 for missiles, mystery, fuel and the boss (4 x 4 tiles x 2 for cave = 32) 
-; - 32 for empty space (air, stars, cave holes, etc.) basically anything below the first solid tile (75 at the moment)
-; - ff for the rest (solid)
-
-; ------------------------------------------------------------------------------------------------------------------------
-
-; From Andreas, for cart:
-; i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then timing is equal
-;
-;      pha               ; 3
-;      txa               ; 2
-;      pha               ; 3
-;      tya               ; 2
-;      pha               ; 3
-;      tsx               ; 2
-;      lda $0104,x       ; 4
-;      and #$10          ; 2
-;      beq :+            ; 3
-;      nop               ;
-;   :                 ;
-;      jmp ($0314)       ; 5     jmp (ind)         ; that's a comment... i point 0314/15 to there, the comment is to remind me of that pointer
-;                        ;
-;   * = ($0314)       ;
-;      kernel:
-;      dec $d019
-;      pla
-;      tay
-;      pla
-;      tax
-;      pla
-;      rti
-;             
-; that code “simulates” what the kernel does
-; so with kernel swapped out everything is executed by your own code, swapped in the kernel does its’ thing and jumps to “kernel:”
-
-; ------------------------------------------------------------------------------------------------------------------------
-
 .feature pc_assignment
 .feature labels_without_colons
+.feature c_comments
+
+/*
+
+TODO:
+
+load data / init level when the 'lives left' or 'congratulations' screen is on screen, instead of afterwards?
+
+add proper disk fail handling.
+obfuscate (irq loader now loadable after reverting to kernal).
+new music (give option to play without music?) 2channel prefered.
+add sound-fx for fire/bomb/explode.
+global search for TODO
+
+got report from person saying the game 'glitched' at the end of level 1, before the cave. Most likely multiplex issue running out of time to update.
+
+------------------------------------------------------------------------------------------------------------------------
+
+ALL HITABLE OBJECTS SHOULD BE ALLIGNED BY 2 CHARS!!! Otherwise random memory might get overwritten.
+
+char indices should be ordered like this for the $d800 colours to be $0c
+0123456789abcdef
+1222221222223222		; black, blue = 1, midgray = 3, others = 2
+
+timanthes file needs 1 layer set to bitmap multicolor and tilemap ticked. DON'T use the 'characters multicolor' mode!
+on save leave all checkboxes as is, but untick 'Add loadaddress' and tick 'Add tiledata info'
+
+------------------------------------------------------------------------------------------------------------------------
+
+box-box-intersection-test
+if(Axmin < Bxmax && Bxmin < Axmax && Aymin < Bymax && Bymin < Aymax) intersect = true
+
+------------------------------------------------------------------------------------------------------------------------
+
+screenspecial:
+
+the playable area is only 24 chars high, the 25th row contains information about the height of the missile
+
+when the next column is plotted, the tile is read and the following is output to the screenspecial:
+
+- 0-31 for missiles, mystery, fuel and the boss (4 x 4 tiles x 2 for cave = 32) 
+- 32 for empty space (air, stars, cave holes, etc.) basically anything below the first solid tile (75 at the moment)
+- ff for the rest (solid)
+
+------------------------------------------------------------------------------------------------------------------------
+
+From Andreas, for cart:
+i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then timing is equal
+
+      pha               ; 3
+      txa               ; 2
+      pha               ; 3
+      tya               ; 2
+      pha               ; 3
+      tsx               ; 2
+      lda $0104,x       ; 4
+      and #$10          ; 2
+      beq :+            ; 3
+      nop               ;
+   :                 ;
+      jmp ($0314)       ; 5     jmp (ind)         ; that's a comment... i point 0314/15 to there, the comment is to remind me of that pointer
+                        ;
+   * = ($0314)       ;
+      kernel:
+      dec $d019
+      pla
+      tay
+      pla
+      tax
+      pla
+      rti
+             
+ that code “simulates” what the kernel does
+ so with kernel swapped out everything is executed by your own code, swapped in the kernel does its’ thing and jumps to “kernel:”
+
+*/
 
 .include "loadersymbols-c64.inc"
 

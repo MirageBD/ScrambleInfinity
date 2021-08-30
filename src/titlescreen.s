@@ -126,7 +126,7 @@ titlescreen
 	jsr setirqvectors
 
 	cli
-	
+
 waitspacefireloop
 	jsr waitinput
 
@@ -145,6 +145,7 @@ waitspacefireloop
 	bne waitspacefireloop
 
 waitspacefireloopend
+
 	rts
 
 ; -----------------------------------------------------------------------------------------------

@@ -1,3 +1,7 @@
+.feature pc_assignment
+.feature labels_without_colons
+.feature c_comments
+
 .segment "LOADERINSTALL"
 .incbin "./exe/install-c64.prg", $02
 .segment "LOADER"
@@ -9,9 +13,6 @@
 .incbin "./bin/loaderbarscr.bin"
 
 .include "loadersymbols-c64.inc"
-
-.feature pc_assignment
-.feature labels_without_colons
 
 ; -----------------------------------------------------------------------------------------------
 
