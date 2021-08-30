@@ -72,6 +72,7 @@ SEGMENTS
 	ZONES:						load=RAM;
 
 	INGAMEJOYSTICK:				load=RAM; # , start=$9100;
+	RECORDPLAYBACK:				load=RAM;
 	FIREBULLET:					load=RAM;
 	FIREBOMB:					load=RAM;
 	RESTRICTSHIP:				load=RAM;

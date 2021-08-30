@@ -92,6 +92,7 @@
 .include "core.s"
 .include "irq.s"
 .include "joystick.s"
+.include "recordplayback.s"
 .include "gameplay.s"
 .include "shipcollision.s"
 .include "bulletcollision.s"
