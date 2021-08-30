@@ -47,6 +47,7 @@ SEGMENTS
 	UFOS:						load=RAM;
 	MISSILES:					load=RAM;
 	MULTIPLEX:					load=RAM;
+	WAITINPUT:					load=RAM;
 
 	TSLOGOSPR:					load=RAM, start=$3000; # gets moved to $a000
 	#LOADEDDATA1:				load=RAM, start=$3000;
@@ -110,7 +111,6 @@ SEGMENTS
 	LIVESLEFTSCREEN:			load=RAM, start=$c400;
 	CONGRATULATIONSSCREEN:		load=RAM, align=256;
 	CLEARSCREEN:				load=RAM;
-	WAITKEY:					load=RAM;
 	IRQLIMBO:					load=RAM;
 
 	CONGRATULATIONS:			load=RAM, start=$c600;

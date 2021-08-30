@@ -18,17 +18,17 @@ handlejoystick
 yescontrol
 
 	lda fuel
-	bne readjoy
+	bne readjoyingame
 	
 	inc nofuelcounter
 	lda nofuelcounter
 	cmp #$02
-	bne readjoy
+	bne readjoyingame
 	lda #$00
 	sta nofuelcounter
 	inc ship0+sprdata::ylow
 
-readjoy
+readjoyingame
 	ldx $dc00                                   ; #$7f when nothing is pressed
 
 .if record
