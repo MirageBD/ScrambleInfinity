@@ -4,9 +4,56 @@
 
 ; when dorecord or doplayback are called register X should contain the joystick register value ($dc00)
 
+recordmemend                                     = $2500
+
+; -----------------------------------------------------------------------------------------------
+
+clearrecordmem
+
+	lda #<recordmem
+	sta crm+1
+	lda #>recordmem
+	sta crm+2
+
+crmloop
+    ldx #$00
+    lda #$00
+crm
+    sta recordmem,x
+    inx
+    bne crm
+
+    inc crm+2
+    lda crm+2
+    cmp #>recordmemend                         ; clear till recordmemend
+    bne crmloop
+
+    rts
+
+; -----------------------------------------------------------------------------------------------
+
+initrecordplayback
+
+    lda #$00
+	sta recordplaybacktimerlo
+	
+    lda #$7f
+	sta prevjoystate
+	
+    lda #<recordmem
+	sta writerecordedvalue+1
+	sta readrecordedvalue+1
+	
+    lda #>recordmem
+	sta writerecordedvalue+2
+	sta readrecordedvalue+2
+    
+    rts
+
 ; -----------------------------------------------------------------------------------------------
 
 writerecordedvalue
+
     sta recordmem
     inc writerecordedvalue+1
     bne :+
@@ -16,6 +63,11 @@ writerecordedvalue
 ; -----------------------------------------------------------------------------------------------
 
 dorecord
+
+    lda writerecordedvalue+2                    ; don't record if we've past the end of the recording memory
+    cmp #>recordmemend
+    beq dorecordend
+
     inc recordplaybacktimerlo
     beq :+                                      ; always write state when timer is 0
 
@@ -34,6 +86,7 @@ dorecordend
 ; -----------------------------------------------------------------------------------------------
 
 readrecordedvalue
+
     lda recordmem
     rts
 
@@ -46,6 +99,7 @@ increaseplaybackstate
 ; -----------------------------------------------------------------------------------------------
 
 doplayback
+
     inc recordplaybacktimerlo
 
     ldx prevjoystate                            ; always fetch the last joystick state

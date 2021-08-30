@@ -49,16 +49,11 @@ initscore
 	bne :-
 
 .if record | playback
-	lda #$00
-	sta recordplaybacktimerlo
-	lda #$7f
-	sta prevjoystate
-	lda #<recordmem
-	sta writerecordedvalue+1
-	sta readrecordedvalue+1
-	lda #>recordmem
-	sta writerecordedvalue+2
-	sta readrecordedvalue+2
+	jsr initrecordplayback
+.endif
+
+.if record
+	jsr clearrecordmem
 .endif
 
 	rts
