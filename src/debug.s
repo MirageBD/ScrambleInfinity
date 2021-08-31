@@ -9,6 +9,8 @@
 .define diedfade						0
 .define debugrastertime					0
 
+.define enabledebugkeys					1                   ; press 'q' to quickly end current game end return to title screen
+
 .define recordplayback                  1                   ; 0 or 1
 
 .define bulletspeedx					8					; was 6

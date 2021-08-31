@@ -79,6 +79,8 @@ i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then ti
 
 .include "loadersymbols-c64.inc"
 
+.include "debug.s"
+
 .include "common/stddefines.s"
 .include "common/stdmacros.s"
 .include "common/stdirq.s"
@@ -88,7 +90,6 @@ i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then ti
 .include "common/stdinput.s"
 
 .include "binaries.s"
-.include "debug.s"
 
 .include "recordedsession.s"
 

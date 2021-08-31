@@ -27,6 +27,15 @@ ingame2
 
 	debugrasterstart #$0b
 	jsr scrollscreen
+
+.if enabledebugkeys
+	lda #keyQ
+	jsr checkdebugkey
+	bne :+
+	jmp quickdie
+:
+.endif
+
 	jsr handlejoystick							; 03
 	jsr calcvsp
 	jsr animship								; 04
@@ -97,6 +106,7 @@ wedied
 	lda lives
 	bne :+
 
+quickdie
 	lda #gameflow::titlescreen
 	sta gameflowstate+1
 	jmp wediedend

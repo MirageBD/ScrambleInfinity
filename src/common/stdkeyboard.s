@@ -113,6 +113,34 @@ keyboardmatrixcolumn
 
 ; -----------------------------------------------------------------------------------------------
 
+.if enabledebugkeys
+
+checkdebugkey
+
+	; A contains key code
+
+	tax
+	lsr											; get row of matrix
+	lsr
+	lsr
+	tay
+	lda #%11111111
+	eor bitshifted,y
+	sta $dc00
+
+	txa
+	and #%00000111								; get column of matrix
+	tay
+	lda #%11111111
+	eor bitshifted,y
+	cmp $dc01
+
+	rts
+
+.endif
+
+; -----------------------------------------------------------------------------------------------
+
 readkey
 
 	ldx #$00									; go through all the rows
