@@ -111,6 +111,16 @@ keyboardmatrixrow
 keyboardmatrixcolumn
 	.byte $ff
 
+.macro getkeyboardmatrixrow
+	lsr
+	lsr
+	lsr
+.endmacro
+
+.macro getkeyboardmatrixcolumn
+	and #%00000111
+.endmacro
+
 ; -----------------------------------------------------------------------------------------------
 
 .if enabledebugkeys
@@ -120,16 +130,14 @@ checkdebugkey
 	; A contains key code
 
 	tax
-	lsr											; get row of matrix
-	lsr
-	lsr
+	getkeyboardmatrixrow
 	tay
 	lda #%11111111
 	eor bitshifted,y
 	sta $dc00
 
 	txa
-	and #%00000111								; get column of matrix
+	getkeyboardmatrixcolumn
 	tay
 	lda #%11111111
 	eor bitshifted,y
