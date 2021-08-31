@@ -125,17 +125,6 @@ removeobject
 	adc hbo10+2
 	sta hbo10+2
 
-;.if playback
-;	lda prevjoystate
-;	cmp #$ff
-;	bne :+
-	;lda calchit								; DEBUG - has the top left of the missile been hit? calcxlow = #$11, calcylow = #$0f, calcylowvsped = #$0f, flip = 1
-	;cmp #$00
-	;bne :+
-;	jam
-;:
-;.endif
-
 	lda flipstored								; compensate for bank switch
 	bne flipped
 	

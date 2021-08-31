@@ -491,16 +491,6 @@ bkgpulsetimer
 bkgpulsecolors
 .byte $00,$09,$08,$0a,$0f,$07,$01,$07,$0f,$0a,$08,$09,$00,$00,$00,$00
 
-.if record | playback
-
-	recordplaybacktimerlo:
-	.byte $00
-
-	prevjoystate:
-	.byte $00
-
-.endif
-
 .byte $de,$ad,$be,$ef							; DEADBEEF
 
 .segment "TABLES2"
@@ -510,6 +500,19 @@ hiscore
 
 hiscorebeaten
 .byte 0
+
+.if recordplayback
+
+	playingback:
+	.byte $00
+
+	recordplaybacktimerlo:
+	.byte $00
+
+	prevjoystate:
+	.byte $00
+
+.endif
 
 .byte $de,$ad,$be,$ef							; DEADBEEF
 

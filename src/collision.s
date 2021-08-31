@@ -212,17 +212,6 @@ csbkghit
 
 csend
 
-;.if playback
-;	lda prevjoystate
-;	cmp #$ff
-;	bne :+
-;	lda calchit									; DEBUG - has the top left of the missile been hit? calcxlow = #$11, calcylow = #$0f, calcylowvsped = #$0f
-;	cmp #$00
-;	bne :+
-;	jam
-;:
-;.endif
-
 	rts
 
 ; -----------------------------------------------------------------------------------------------	

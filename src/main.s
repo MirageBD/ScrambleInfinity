@@ -197,6 +197,9 @@ hiscorenotbeaten
 	jsr setsafemode
 	jsr setzone0
 	jsr initscore
+	.if recordplayback
+		jsr initrecordplayback
+	.endif
 	jsr initlives
 	jsr plotbitmapscores
 	jsr ingameatcurrentzone

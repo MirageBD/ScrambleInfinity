@@ -1,6 +1,6 @@
 .SEGMENT "RECORDPLAYBACK"
 
-.if record | playback
+.if recordplayback
 
 ; when dorecord or doplayback are called register X should contain the joystick register value ($dc00)
 
@@ -48,7 +48,12 @@ initrecordplayback
 	sta writerecordedvalue+2
 	sta readrecordedvalue+2
     
-    rts
+    lda playingback
+	bne :+
+	
+    jsr clearrecordmem
+
+:   rts
 
 ; -----------------------------------------------------------------------------------------------
 

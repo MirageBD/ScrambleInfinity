@@ -9,8 +9,7 @@
 .define diedfade						0
 .define debugrastertime					0
 
-.define record                          1                   ; 0 or 1
-.define playback                        0                   ; 0 or 2
+.define recordplayback                  1                   ; 0 or 1
 
 .define bulletspeedx					8					; was 6
 .define bombstartspeedx					5

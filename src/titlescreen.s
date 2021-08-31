@@ -117,10 +117,10 @@ waitspacefireloop
 
 	txa											; no, it was keyboard input
 	cmp #keySpace								; check if it was space
-	beq waitspacefireloopend					; yes, end loop
+	beq startwithoutplayback					; yes, end loop
 
-	cmp #keyR									; check if it was 'r'
-	beq waitspacefireloopend					; yes, end loop
+	cmp #keyP									; check if it was 'r'
+	beq startwithplayback					; yes, end loop
 
 	jmp waitspacefireloop
 
@@ -128,6 +128,17 @@ checkfire
 	txa
 	cmp #joyFire								; yes, it was joy input, check if it was fire
 	bne waitspacefireloop
+	jmp startwithoutplayback
+
+startwithplayback
+	lda #$01
+	sta playingback
+	jmp waitspacefireloopend
+
+startwithoutplayback
+	lda #$00
+	sta playingback
+	; fallthrough
 
 waitspacefireloopend
 	rts

@@ -1,6 +1,6 @@
 .SEGMENT "RECORDEDSESSION"
 
-.if playback
+.if recordplayback
 
 recordedsession
 

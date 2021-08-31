@@ -31,10 +31,13 @@ yescontrol
 readjoyingame
 	ldx $dc00                                   ; #$7f when nothing is pressed
 
-.if record
-    jsr dorecord
-.elseif playback
-    jsr doplayback
+.if recordplayback
+	lda playingback
+	beq :+
+	jsr doplayback
+	jmp :++
+:	jsr dorecord
+:
 .endif
 
 	lda fuel

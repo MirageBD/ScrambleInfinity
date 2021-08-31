@@ -48,14 +48,6 @@ initscore
 	cpx #$06
 	bne :-
 
-.if record | playback
-	jsr initrecordplayback
-.endif
-
-.if record
-	jsr clearrecordmem
-.endif
-
 	rts
 
 initlives
