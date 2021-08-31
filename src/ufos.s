@@ -33,7 +33,7 @@ launchufo
 
 	lda spriteptrforaddress(sprites2+cometanimstart*64)		; comet start
 	sta sortsprp,y
-	lda #$03
+	lda #$0e
 	sta sortsprc,y
 	lda #$10
 	sta sortsprwidth,y
