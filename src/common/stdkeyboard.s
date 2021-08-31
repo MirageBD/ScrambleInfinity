@@ -135,6 +135,9 @@ readkey
 :	sty keyboardmatrixrow
 	sta keyboardmatrixcolumn
 
+	ldx #%01111111								; restore matrix column mask values to default
+	stx $dc00
+
 	rts
 
 ; -----------------------------------------------------------------------------------------------
@@ -160,6 +163,9 @@ keypressed
 	asl
 	ora keyboardmatrixcolumn					; Accumulator now contains a key that I have lots of defines for
 
+	ldy #%01111111								; restore matrix column mask values to default
+	sty $dc00
+	
 	rts
 
 ; -----------------------------------------------------------------------------------------------
