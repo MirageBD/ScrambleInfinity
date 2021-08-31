@@ -119,8 +119,10 @@ waitspacefireloop
 	cmp #keySpace								; check if it was space
 	beq startwithoutplayback					; yes, end loop
 
-	cmp #keyP									; check if it was 'r'
-	beq startwithplayback					; yes, end loop
+.if recordplayback
+	cmp #keyP									; check if it was 'p'
+	beq startwithplayback						; yes, end loop
+.endif
 
 	jmp waitspacefireloop
 
@@ -130,14 +132,18 @@ checkfire
 	bne waitspacefireloop
 	jmp startwithoutplayback
 
+.if recordplayback
 startwithplayback
 	lda #$01
 	sta playingback
 	jmp waitspacefireloopend
+.endif
 
 startwithoutplayback
+.if recordplayback
 	lda #$00
 	sta playingback
+.endif
 	; fallthrough
 
 waitspacefireloopend
