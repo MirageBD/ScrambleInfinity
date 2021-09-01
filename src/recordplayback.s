@@ -72,7 +72,7 @@ dorecord
     lda writerecordedvalue+2                    ; don't record if we've past the end of the recording memory
     cmp #>recordmemend
     beq dorecordend
-
+ 
     inc recordplaybacktimerlo
     beq :+                                      ; always write state when timer is 0
 
@@ -105,13 +105,11 @@ increaseplaybackstate
 
 doplayback
 
-    inc recordplaybacktimerlo
-
     ldx prevjoystate                            ; always fetch the last joystick state
 
-    jsr readrecordedvalue                       ; read recorded timer lo
-    beq :+                                      ; if it's 0 then always fetch joystick state
+    inc recordplaybacktimerlo
 
+    jsr readrecordedvalue                       ; read recorded timer lo
     cmp recordplaybacktimerlo                   ; is it the same as the current timer lo?
     bne doplaybackend                           ; nope, bail out
 
