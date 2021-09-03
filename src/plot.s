@@ -56,19 +56,32 @@ plotbitmapscores
 	lda #<hiscoredigit5
 	ldx #>hiscoredigit5
 	jsr plotdigitcompact
+	lda #$37
+	sta $01
+	cli
+	rts
 
-	; plot lives left
+plotlivesleft
+	sei
+	lda #$35
+	sta $01
 	ldy lives
 	lda #<livesdigit0
 	ldx #>livesdigit0
 	jsr plotdigitcompact
+	lda #$37
+	sta $01
+	cli
+	rts
 
-	; plot times game finished (flags)
+plottimesgamefinished
+	sei
+	lda #$35
+	sta $01
 	ldy timesgamefinished
 	lda #<flagsdigit0
 	ldx #>flagsdigit0
 	jsr plotdigitcompact
-	
 	lda #$37
 	sta $01
 	cli

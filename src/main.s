@@ -8,6 +8,9 @@ TODO:
 
 load data / init level when the 'lives left' or 'congratulations' screen is on screen, instead of afterwards?
 
+instead of having two seperate routines (slow and small, and fast and big) for plotting scores, just use the fast and big one
+update timesgamefinished when the boss is killed instead of on the congratulations screen
+
 add proper disk fail handling.
 obfuscate (irq loader now loadable after reverting to kernal).
 new music (give option to play without music?) 2channel prefered.
@@ -187,6 +190,8 @@ gameflowstate
 	jsr copyscoretohiscore
 hiscorenotbeaten
 	jsr plotbitmapscores
+	jsr plotlivesleft
+	jsr plottimesgamefinished
 	jsr titlescreen
 	nextgameflow #gameflow::startingame
 
@@ -194,15 +199,16 @@ hiscorenotbeaten
 
 	comparegameflow #gameflow::startingame
 	jsr screensafe
+	.if recordplayback
+		jsr initrecordplayback
+	.endif
 	jsr startingame
 	jsr setsafemode
 	jsr setzone0
 	jsr initscore
-	.if recordplayback
-		jsr initrecordplayback
-	.endif
+	jsr plottimesgamefinished
 	jsr initlives
-	jsr plotbitmapscores
+	jsr plotlivesleft
 	jsr ingameatcurrentzone
 	jsr setuplevel
 	nextgameflow #gameflow::continueingame
@@ -211,13 +217,13 @@ hiscorenotbeaten
 
 	comparegameflow #gameflow::continueingame
 	jsr screensafe
-	;jsr setuplevel
 	nextgameflow #gameflow::waiting
 
 	; -----------------------------------------
 
 	comparegameflow #gameflow::livesleftscreen
 	jsr screensafe
+	jsr plotlivesleft
 	jsr livesleftscreen
 	jsr setsafemode
 	jsr ingameatcurrentzone
@@ -228,6 +234,7 @@ hiscorenotbeaten
 
 	comparegameflow #gameflow::congratulations
 	jsr screensafe
+	jsr plottimesgamefinished
 	jsr congratulations
 	jsr setsafemode
 	jsr setzone0
