@@ -147,13 +147,6 @@ mainentry
 	lda #$37
 	sta $01
 
-	lda #$1b
-	sta $d011
-
-	lda #$0c
-	sta $d020
-	sta $d021
-
 	ldx #$00
 :	lda #$08
 	sta $d800+0*256,x
@@ -216,17 +209,6 @@ mainentry
 	lda #$0f
 	sta screen+13*40+39
 
-	lda d018forscreencharset(screen,loadbarfont)
-	sta $d018
-	lda bankforaddress(screen)
-	sta $dd00
-	lda #$18
-	sta $d016
-	lda #$01
-	sta $d022
-	lda #$0b
-	sta $d023
-
 	; copy loader to $0400
 	ldx #$00
 :	lda $5800+0*256,x
@@ -282,7 +264,7 @@ mainentry
 	inx
 	bne :-
 	
-	lda #$1b
+	lda #$6b
 	sta $d011
 	jmp $9000 ; $c400 ; $080d
 
@@ -303,6 +285,17 @@ irq0
 
  	lda #$1b
 	sta $d011
+
+	lda d018forscreencharset(screen,loadbarfont)
+	sta $d018
+	lda bankforaddress(screen)
+	sta $dd00
+	lda #$18
+	sta $d016
+	lda #$01
+	sta $d022
+	lda #$0b
+	sta $d023
 
 	lda #$40							; #$4c
 	jsr cycleperfect

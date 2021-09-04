@@ -414,14 +414,16 @@ startgame
 
 	lda #$00
 	sta $d418
-	lda #$7b
-	sta $d011
-	lda #$00
-	sta $d020
-	sta $d021
 	sta $d015
+	lda #$6b
+	sta $d011
+	lda #$03
+	sta $dd00
+	lda #$08
+	sta $d016
+	sta $d018
 
-	jmp $080d
+	jmp $080d+1	; add 1 to jump over the sei that the decruncher starts with
 
 error
 	lda #$02

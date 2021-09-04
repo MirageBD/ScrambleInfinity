@@ -17,13 +17,20 @@
 
 	sei
 
-	;lda #$09
-	;sta $d020
-	;sta $d021
+:	bit $d011
+	bpl :-
+:	bit $d011
+	bmi :-
+
+	lda #$0c
+	sta $d020
+	sta $d021
+	lda #$6b
+	sta $d011
 
 	lda #$34
 	sta $01
-decruncherlength	
+decruncherlength
 	ldx #$b7
 :	lda decruncher-1,x
 	sta $10-1,x

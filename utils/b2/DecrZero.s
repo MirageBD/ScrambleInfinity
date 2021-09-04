@@ -10,10 +10,6 @@
 
 ; -----------------------------------------------------------------------------------------------
 
-zp_base	= $02
-
-; -----------------------------------------------------------------------------------------------
-
 .segment "ZEROPAGE" : zeropage
 
 transferfrom
@@ -79,7 +75,7 @@ m8
 		eor #$ff											; .C:005f  49 FF       EOR #$FF
 		tay													; .C:0061  A8          TAY
 		jsr getnextbyte										; .C:0062  20 AD 00    JSR $00AD
-		
+
 		.byte $ae ; = jmp mdone								; .C:0065  AE A0 FF    LDX $FFA0
 mshort
 		ldy #$ff											;
@@ -149,7 +145,7 @@ getnextbyte
 
 end
 		lda #$37											; .C:00b7  A9 37       LDA #$37
-		sta 1												; .C:00b9  85 01       STA $01
+		sta $01												; .C:00b9  85 01       STA $01
 jumpto
 		jmp $c0de											; .C:00bb  4C 00 40    JMP $4000
 

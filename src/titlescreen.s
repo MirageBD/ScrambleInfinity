@@ -4,7 +4,12 @@ titlescreen
 
 	sei
 
-	lda #$7b
+:	bit $d011
+	bpl :-
+:	bit $d011
+	bmi :-
+	
+	lda #$6b
 	sta $d011
 
 	lda #$37
