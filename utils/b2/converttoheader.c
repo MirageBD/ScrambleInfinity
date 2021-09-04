@@ -1,71 +1,98 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 int main(int argc, char* argv[])
 {
-	FILE *infile, *outfile, *symbolsfile;
+	FILE *decrunchprg, *decrunchinitprg, *headerfile, *decrunchsymbols, *decrunchinitsymbols;
 	unsigned char in;
 	int address;
 	char buf[100];
+	int decruncherlength = 0;
+	int decrunchinitlength = 0;
+	int decrunchinitlooplength = 0;
 
-	if(argc < 4)
+	if(argc < 6)
 	{
-		printf("\nUsage: converttoheader [infile.prg] [symbols] [outfile]\n");
+		printf("\nUsage: converttoheader [decruncher.prg] [decrunchinit.prg] [decruncher.symbols] [decrunchinit.symbols] [output header file]\n");
 		exit(1);
 	}
 
-	symbolsfile = fopen(argv[2], "r");
-	infile      = fopen(argv[1], "rb");
-	outfile     = fopen(argv[3], "wb");
+	// open all files for reading/writing
+	decrunchprg         = fopen(argv[1], "rb");
+	decrunchinitprg     = fopen(argv[2], "rb");
+	decrunchsymbols     = fopen(argv[3], "r");
+	decrunchinitsymbols = fopen(argv[4], "r");
+	headerfile          = fopen(argv[5], "wb");
 
-	int decrunchmoverlength = 30;
+	// get length of decrunch init prg
+	fseek(decrunchinitprg, 0L, SEEK_END);
+	decrunchinitlength = ftell(decrunchinitprg);
+	fprintf(headerfile, "#define decrunchinitlength %d\n\n", decrunchinitlength);
+	rewind(decrunchinitprg);
 
-	while(fscanf(symbolsfile, "%s %06x %s\n", buf, &address, buf) == 3)
+	// get length of decrunch prg, and add the size of the init
+	fseek(decrunchprg, 0L, SEEK_END);
+	decruncherlength = ftell(decrunchprg);
+	fprintf(headerfile, "#define decruncherlength %d\n", decruncherlength + decrunchinitlength);
+	rewind(decrunchprg);
+
+	// read all the symbols for the decrunch prg and create defines for them
+	while(fscanf(decrunchsymbols, "%s %06x %s\n", buf, &address, buf) == 3)
 	{
-		char* str = &(buf[1]);
-		fprintf(outfile, "#define asm_%s %d\n", str, address-16);
+		fprintf(headerfile, "#define asm_%s %d\n", &(buf[1]), address-16); // 16 is start address of decruncher (0x0010)
 	}
 
-	fprintf(outfile, "\n#define decrunchmoverlength %d\n", decrunchmoverlength);
+	fprintf(headerfile, "\n");
 
-	fseek(infile, 0L, SEEK_END);
-	int decruncherlength = ftell(infile);
-	rewind(infile);
-
-	fprintf(outfile, "\n");
-	fprintf(outfile, "#define DECRUNCHER_LENGTH %d\n", decruncherlength + 30);
-	fprintf(outfile, "byte decrCode[DECRUNCHER_LENGTH] = {\n");
-
-	fprintf(outfile, "0x0b, 0x08, 0x00, 0x00, ");							// start address
-	fprintf(outfile, "0x9e, 0x32, 0x30, 0x36, 0x31, 0x00, 0x00, 0x00, ");	// SYS 2061
-	fprintf(outfile, "0x78, ");												// SEI
-	fprintf(outfile, "0xa9, 0x34, ");										// LDA #$34
-	fprintf(outfile, "0x85,\n0x01, ");										// STA $01
-	fprintf(outfile, "0xa2, ");												// LDX #$B7
-	fprintf(outfile, "0x%02x, ", decruncherlength);												
-	fprintf(outfile, "0xbd, 0x1e, 0x08, ");									// LDA $081E,X
-	fprintf(outfile, "0x95, 0x0f, ");										// STA $0F,X
-	fprintf(outfile, "0xca, ");												// DEX
-	fprintf(outfile, "0xd0, 0xf8, ");										// BNE $0814
-	fprintf(outfile, "0x4c, 0x10, 0x00, ");									// JMP $0010
-
-	int i = decrunchmoverlength;
-
-	while(fread(&in, sizeof(unsigned char), 1, infile))
+	// read all the symbols for the decrunchinit prg and create defines for them
+	int decrunchinitlooplengthfound = 0;
+	while(fscanf(decrunchinitsymbols, "%s %06x %s\n", buf, &address, buf) == 3)
 	{
-		fprintf(outfile, "0x%02x, ", in);
+		fprintf(headerfile, "#define asm_%s %d\n", &(buf[1]), address-2049); // 2049 is start address of decrunchinit (0x0801)
+		if(strcmp(&buf[1], "decruncherlength") == 0)
+		{
+			decrunchinitlooplength = address-2049+1;	// +1 for ldx #$xx
+			decrunchinitlooplengthfound = 1;
+		}
+	}
+
+	if(decrunchinitlooplengthfound < 1)
+		printf("NO DECRUNCHLENGTH SYMBOL FOUND");
+
+	// write decrCode array
+	fprintf(headerfile, "\nbyte decrCode[decruncherlength] = {\n");
+
+	// write all bytes for the decrunch init/mover
+	int i=0;
+	while(fread(&in, sizeof(unsigned char), 1, decrunchinitprg))
+	{
+		if(i == decrunchinitlooplength)
+		fprintf(headerfile, "0x%02x, ", decruncherlength);
+			else
+		fprintf(headerfile, "0x%02x, ", in);
 
 		i++;
-		if(i%16 == 0)
-			fprintf(outfile, "\n");
+		if(i%16 == 0) fprintf(headerfile, "\n");
 	}
 
-	fprintf(outfile, "\n};");
+	// write all bytes for the decruncher
+	i = decrunchinitlength;
+	while(fread(&in, sizeof(unsigned char), 1, decrunchprg))
+	{
+		fprintf(headerfile, "0x%02x, ", in);
+		i++;
+		if(i%16 == 0) fprintf(headerfile, "\n");
+	}
 
-	fclose(outfile);
-	fclose(infile);
+	// close all files
+	fprintf(headerfile, "\n};");
+	fclose(decrunchprg);
+	fclose(decrunchinitprg);
+	fclose(decrunchsymbols);
+	fclose(decrunchinitsymbols);
+	fclose(headerfile);
 
 	return 0;
 }
-
