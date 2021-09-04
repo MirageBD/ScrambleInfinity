@@ -8,29 +8,25 @@
 .feature labels_without_colons
 .feature c_comments
 
-
 ; -----------------------------------------------------------------------------------------------
 
-;Variables..        #Bytes
-zp_base	= $02       ; -
-;put	= zp_base+2 ; 2
-;get	= zp_base+4 ; 2
-;cps	= zp_base+6 ; 2
+zp_base	= $02
 
 ; -----------------------------------------------------------------------------------------------
 
 .segment "ZEROPAGE" : zeropage
 
-e2
-		lda $4000-$100,x ;PackEnd-$100,x					; .C:0010  BD ED 24    LDA $24ED,X
+transferfrom
+		lda $4000-$100,x ; PackEnd-$100,x					; .C:0010  BD ED 24    LDA $24ED,X
+transferto
 		sta $ff00,x											; .C:0013  9D 00 FF    STA $FF00,X
 		inx													; .C:0016  E8          INX
-		bne e2												; .C:0017  D0 F7       BNE $0010
-		dec z:e2+2											; .C:0019  C6 12       DEC $12
-		dec z:e2+5											; .C:001b  C6 15       DEC $15
-		lda z:e2+2											; .C:001d  A5 12       LDA $12
+		bne transferfrom									; .C:0017  D0 F7       BNE $0010
+		dec z:transferfrom+2								; .C:0019  C6 12       DEC $12
+		dec z:transferto+2									; .C:001b  C6 15       DEC $15
+		lda z:transferfrom+2								; .C:001d  A5 12       LDA $12
 		cmp #7												; .C:001f  C9 07       CMP #$07
-		bcs e2												; .C:0021  B0 ED       BCS $0010
+		bcs transferfrom									; .C:0021  B0 ED       BCS $0010
 
 decrunch
 dloop
@@ -39,7 +35,7 @@ dloop
 
 		; Literal run.. get length.
 		jsr getlen											; .C:0028  20 8E 00    JSR $008E
-		sta z:llen+1; sta llen+1							; .C:002b  85 36       STA $36
+		sta z:llen+1										; .C:002b  85 36       STA $36
 
 		ldy #0												; .C:002d  A0 00       LDY #$00
 :		jsr getnextbyte										; .C:002f  20 AD 00    JSR $00AD
@@ -62,7 +58,7 @@ match	; match.. get length.
 		tax													; .C:0042  AA          TAX
 		inx													; .C:0043  E8          INX
 		beq end												; .C:0044  F0 71       BEQ $00B7
-		stx z:mlen+1 ; stx mlen+1							; .C:0046  86 7B       STX $7B
+		stx z:mlen+1										; .C:0046  86 7B       STX $7B
 
 		; Get num bits
 		lda #0												; .C:0048  A9 00       LDA #$00
@@ -83,6 +79,7 @@ m8
 		eor #$ff											; .C:005f  49 FF       EOR #$FF
 		tay													; .C:0061  A8          TAY
 		jsr getnextbyte										; .C:0062  20 AD 00    JSR $00AD
+		
 		.byte $ae ; = jmp mdone								; .C:0065  AE A0 FF    LDX $FFA0
 mshort
 		ldy #$ff											;
@@ -97,6 +94,7 @@ mdone
 
 		ldy #0												; .C:0071  A0 00       LDY #$00
 mlda	lda $b00b,y											; .C:0073  B9 AD DE    LDA $DEAD,Y
+depackto
 msta	sta $babe,y											; .C:0076  99 00 40    STA $4000,Y
 		iny													; .C:0079  C8          INY
 mlen	cpy #0												; .C:007a  C0 00       CPY #$00
@@ -141,6 +139,7 @@ getnextbit
 dgend
 		rts													; .C:00ac  60          RTS
 
+depackfrom
 getnextbyte
 		lda $feed											; .C:00ad  AD E9 E2    LDA $E2E9
 		inc getnextbyte+1									; .C:00b0  E6 AE       INC $AE
@@ -151,6 +150,7 @@ getnextbyte
 end
 		lda #$37											; .C:00b7  A9 37       LDA #$37
 		sta 1												; .C:00b9  85 01       STA $01
+jumpto
 		jmp $c0de											; .C:00bb  4C 00 40    JMP $4000
 
 bits	.byte $80

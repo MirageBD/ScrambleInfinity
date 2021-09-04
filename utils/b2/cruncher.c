@@ -747,14 +747,14 @@ bool crunch(File *aSource, File *aTarget, uint address, bool isExecutable, bool 
 		uint startAddress = 0x10000 - packLen;
 		uint transfAddress = fileLen + 0x6ff;
 
-		decrCode[0x1f] = transfAddress &  0xff;   // Transfer from..
-		decrCode[0x20] = transfAddress >> 8;      //
-		decrCode[0xbc] = startAddress  &  0xff;   // Depack from..
-		decrCode[0xbd] = startAddress  >> 8;      //
-		decrCode[0x85] = aSource->data[0];        // Depack to..
-		decrCode[0x86] = aSource->data[1];        //
-		decrCode[0xca] = address       &  0xff;   // Jump to..
-		decrCode[0xcb] = address       >> 8;      //
+		decrCode[decrunchmoverlength + asm_transferfrom + 1]	= transfAddress &  0xff;
+		decrCode[decrunchmoverlength + asm_transferfrom + 2]	= transfAddress >> 8;
+		decrCode[decrunchmoverlength + asm_depackfrom   + 1]	= startAddress  &  0xff;
+		decrCode[decrunchmoverlength + asm_depackfrom   + 2]	= startAddress  >> 8;
+		decrCode[decrunchmoverlength + asm_depackto     + 1]	= aSource->data[0];
+		decrCode[decrunchmoverlength + asm_depackto     + 2]	= aSource->data[1];
+		decrCode[decrunchmoverlength + asm_jumpto       + 1]	= address	&  0xff;
+		decrCode[decrunchmoverlength + asm_jumpto       + 2]	= address	>> 8;
 
 		target[0] = 0x01;
 		target[1] = 0x08;
