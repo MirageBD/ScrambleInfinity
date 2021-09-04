@@ -1,0 +1,9 @@
+MEMORY
+{
+	ZPRAM:			start=$10, size=$fe, type = rw;
+}
+
+SEGMENTS
+{
+	ZEROPAGE:		load=ZPRAM, start=$0010;
+}

@@ -25,11 +25,11 @@ LOADER       = ./loader
 CC1541       = cc1541
 
 PU           = pucrunch
-BB           = B2
 LC           = crush 6
 BINSPLIT     = $(EXE_DIR)/binsplit.exe
 SPECIALTILES = $(EXE_DIR)/specialtiles.exe
 ADDADDR      = $(EXE_DIR)/addaddr.exe
+BB           = $(EXE_DIR)/b2.exe
 GCC          = gcc
 
 .SUFFIXES: .o .s .out .bin .pu .b2 .a
@@ -51,6 +51,10 @@ binsplit.exe: $(UTIL_SRC_DIR)/binsplit.c
 
 addaddr.exe: $(UTIL_SRC_DIR)/addaddr.c
 	$(GCC) $(UTIL_SRC_DIR)/addaddr.c -o $(EXE_DIR)/addaddr.exe
+
+b2.exe:
+	$(MAKE) -C $(UTIL_SRC_DIR)/b2
+	$(CP) $(UTIL_SRC_DIR)/b2/b2.exe $(EXE_DIR)/.
 
 loader-c64.prg: $(LOADER)/loader/build/loader-c64.prg
 	$(CP) $(LOADER)/loader/build/loader-c64.prg $(EXE_DIR)/.
@@ -327,11 +331,11 @@ main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
 
 # -----------------------------------------------------------------------------
 
-tools: specialtiles.exe binsplit.exe addaddr.exe
+tools: b2.exe specialtiles.exe binsplit.exe addaddr.exe
 
 all: tools main.d64
 
-run: specialtiles.exe binsplit.exe addaddr.exe main.d64
+run: b2.exe specialtiles.exe binsplit.exe addaddr.exe main.d64
 	$(VICE) $(VICEFLAGS) "$(EXE_DIR)/main.d64:infinity"
 
 clean:
