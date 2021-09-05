@@ -7,6 +7,14 @@ titlescreen
 	lda #$37
 	sta $01
 
+:	bit $d011
+	bpl :-
+:	bit $d011
+	bmi :-
+	
+	lda #$6b
+	sta $d011
+	
 	lda #$00
 	sta $d015
 
