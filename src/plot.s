@@ -198,7 +198,7 @@ updatefuel
 
 .if fueldecreases
 	lda scrollspeed
-	cmp #$00
+	;cmp #$00
 	beq :+
 
 	dec fuel

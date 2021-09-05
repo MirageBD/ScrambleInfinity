@@ -189,7 +189,7 @@ ps2	lda #$00
 :	jsr plottiles
 	inc ps2+1
 	lda ps2+1
-	cmp #$00
+	;cmp #$00
 	bne ps1
 	inc ps1+1
 	jmp ps1

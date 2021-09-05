@@ -371,7 +371,7 @@ file01
 
 drawloadbar
 	lda endaddrhi				; don't do anything if too low endaddrhi/endeddrlo loadaddrhi/loadaddrlo - starts with $84
-	cmp #$00
+	;cmp #$00
 	beq :+
 	cmp #$b8
 	bpl :+

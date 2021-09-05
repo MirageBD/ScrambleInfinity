@@ -6,7 +6,7 @@ updatespritepositions1
 	sta highbit+1
 
 	lda bull0+sprdata::xvel
-	cmp #$00
+	;cmp #$00
 	bpl :+
 
 	jmp negativebullet0speed
@@ -52,7 +52,7 @@ negativebullet0speed
 handlebullet1speed
 
 	lda bull1+sprdata::xvel
-	cmp #$00
+	;cmp #$00
 	bpl :+
 
 	jmp negativebullet1speed
@@ -173,7 +173,7 @@ restrictbombpositions
 	bpl :+
 	jmp bombinsidescreenok0
 	
-:	cmp #$00
+:	;cmp #$00
 	bmi :+
 	jmp bombinsidescreenok0
 	
@@ -192,7 +192,7 @@ bombinsidescreenok0
 	bpl :+
 	jmp bombinsidescreenok1
 	
-:	cmp #$00
+:	;cmp #$00
 	bmi :+
 	jmp bombinsidescreenok1
 	

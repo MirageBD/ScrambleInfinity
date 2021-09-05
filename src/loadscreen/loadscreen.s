@@ -854,11 +854,11 @@ irqopenborder
 	sta $d001+7*2
 
 	lda scrolling						; are we scrolling?
-	cmp #$00
+	;cmp #$00
 	beq notscrolling
 	dec scrolltimer						; yes, decrease scrolltimer until 0
 	lda scrolltimer
-	cmp #$00
+	;cmp #$00
 	bne scrollcheckdone
 	lda #$ff							; scroll timer is up, reset to ff and turn scrolling OFF
 	sta scrolltimer
@@ -869,7 +869,7 @@ irqopenborder
 notscrolling							; not scrolling, decrease scrolltimer until 0
 	dec scrolltimer
 	lda scrolltimer
-	cmp #$00
+	;cmp #$00
 	bne scrollcheckdone
 	lda #42								; scroll timer is up, reset to 42+1 and turn scrolling ON
 	sta scrolltimer
