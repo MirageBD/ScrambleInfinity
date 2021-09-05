@@ -341,7 +341,7 @@ mainentry
 	sta $d023
 	sta $d024
 
-	lda #$5b
+	lda #$6b
 	sta $d011
 
 	lda #$36
@@ -350,9 +350,6 @@ mainentry
 	jsr tuneinit
 	lda #$37
 	sta $01
-
-	lda #$01
-	sta $d01a
 
 	lda #$f8
 	sta $d012
@@ -410,20 +407,7 @@ waitreleasespace
 
 startgame
 
-	sei
-
-	lda #$00
-	sta $d418
-	sta $d015
-	lda #$6b
-	sta $d011
-	lda #$03
-	sta $dd00
-	lda #$08
-	sta $d016
-	sta $d018
-
-	jmp $080d+1	; add 1 to jump over the sei that the decruncher starts with
+	jmp $080d
 
 error
 	lda #$02

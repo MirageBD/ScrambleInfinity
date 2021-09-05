@@ -28,8 +28,6 @@ titlescreen
 	stx $d01b									; sprite priority
 	stx $7fff
 	stx $bfff
-	inx
-	stx $d01a
 
 	lda titlescreen1bmpfile
 	sta file01+0

@@ -223,8 +223,8 @@ hiscorenotbeaten
 
 	comparegameflow #gameflow::livesleftscreen
 	jsr screensafe
-	jsr plotlivesleft
 	jsr livesleftscreen
+	jsr plotlivesleft
 	jsr setsafemode
 	jsr ingameatcurrentzone
 	jsr setuplevel
@@ -266,7 +266,7 @@ screensafe
 
 	lda #$00
 	sta $d418
-	sta $d015
+	;sta $d015
 	rts
 
 ; -----------------------------------------------------------------------------------------------

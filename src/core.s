@@ -13,12 +13,6 @@ startingame
 	sta $d021
 	sta $d418
 
-	lda #$34
-	sta $01
-	copymemblocks sprites2, sprites1, $0d00
-	lda #$37
-	sta $01
-
 	lda #<irqlimbo								; set limbo irq so it doesn't mess with $d011/$d018/$dd00 causing all kinds of glitches
 	ldx #>irqlimbo
 	ldy #$00
@@ -31,6 +25,12 @@ startingame
 	lda $dc0d
 	lda $dd0d
 	dec $d019
+
+	lda #$34
+	sta $01
+	copymemblocks sprites2, sprites1, $0d00
+	lda #$37
+	sta $01
 
 	cli
 

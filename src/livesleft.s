@@ -56,9 +56,6 @@ livesleftscreen
 	lda #$00
 	sta timerreached
 	
-	lda #$01
-	sta $d01a
-
 	lda #$32+9*8+2
 	sta $d012
 
