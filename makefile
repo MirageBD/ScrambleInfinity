@@ -13,7 +13,7 @@ BIN_DIR				= ./bin
 CPU          = 6502X
 
 AS           = ca65
-ASFLAGS      = -g --cpu $(CPU) -U --feature force_range -I ./exe
+ASFLAGS      = -g --cpu $(CPU) -U --feature force_range -t c64 -I ./exe
 LD           = ld65
 LDFLAGS      = -Ln $(EXE_DIR)/symbols --dbgfile $(EXE_DIR)/main.dbg
 VICE         = "..\..\..\winvice\x64sc.exe"

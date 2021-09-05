@@ -308,9 +308,6 @@ mainentry
 	lda #>creditssprites
 	sta zp4
 
-	lda #$00
-	sta $d011
-
 	ldx #$00
 :	lda titlecold800+0*$0100,x
 	sta $d800+0*$0100,x
@@ -340,9 +337,6 @@ mainentry
 	sta $d022
 	sta $d023
 	sta $d024
-
-	lda #$6b
-	sta $d011
 
 	lda #$36
 	sta $01
@@ -406,6 +400,20 @@ waitreleasespace
 	beq waitreleasespace
 
 startgame
+
+	sei
+
+:	bit $d011
+	bpl :-
+:	bit $d011
+	bmi :-
+	
+	lda #$6b
+	sta $d011
+	lda #$00
+	sta $d015
+	sta $d020
+	sta $d021
 
 	jmp $080d
 
@@ -940,7 +948,7 @@ initialirqopenborder
 	nop
 	nop
 
-	ldy #$1f
+	ldy #$6f
 	sty $d011
 
 	lda #$32				; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
@@ -975,7 +983,7 @@ initialirqlowerborder
 ; -----------------------------------------------------------------------------------------------
 
 file01
-.asciiz "FF"
+.asciiz "ff"
 
 flashtimer
 .byte $00

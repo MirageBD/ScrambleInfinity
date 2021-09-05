@@ -11,7 +11,6 @@ load data / init level when the 'lives left' or 'congratulations' screen is on s
 instead of having two seperate routines (slow and small, and fast and big) for plotting scores, just use the fast and big one
 update timesgamefinished when the boss is killed instead of on the congratulations screen
 
-add proper disk fail handling.
 obfuscate (irq loader now loadable after reverting to kernal).
 new music (give option to play without music?) 2channel prefered.
 add sound-fx for fire/bomb/explode.
@@ -198,7 +197,10 @@ hiscorenotbeaten
 	; -----------------------------------------
 
 	comparegameflow #gameflow::startingame
-	jsr screensafe
+	;jsr screensafe
+	lda #$00					; don't call screensafe, as that will make sprites flicker on the title screen
+	sta $d418
+
 	.if recordplayback
 		jsr initrecordplayback
 	.endif
@@ -266,7 +268,7 @@ screensafe
 
 	lda #$00
 	sta $d418
-	;sta $d015
+	sta $d015
 	rts
 
 ; -----------------------------------------------------------------------------------------------

@@ -446,20 +446,20 @@ file01
 .asciiz "00"
 
 loadinstallfile
-.asciiz "LI"
+.asciiz "li"
 
 titlescreen1bmpfile
-.asciiz "T1"
+.asciiz "t1"
 titlescreen10400file
-.asciiz "T2"
+.asciiz "t2"
 titlescreen1d800file
-.asciiz "T3"
+.asciiz "t3"
 titlescreenpointsprfile
-.asciiz "T4"
+.asciiz "t4"
 titlescreenbkgfile
-.asciiz "T5"
+.asciiz "t5"
 titlescreenhowfar
-.asciiz "T6"
+.asciiz "t6"
 
 barsd022
 .byte $07,$0a,$0a,$0a,$08,$08,$02,$02,$02,$02,$02,  $00,  $03,$0e,$04,$0e,$04,$0e,$04,$04,$04,$04,$04,  $00,  $0d,$03,$05,$03,$05,$05,$08,$05,$08,$08,$08

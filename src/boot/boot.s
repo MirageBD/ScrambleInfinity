@@ -68,19 +68,36 @@ mainentry
 	bcc :++
 	cmp #$04							; #STATUS::DEVICE_INCOMPATIBLE
 	beq :+
-	ldx #$04
-	stx $d020
+	jsr restorezeropage
+	lda #<txtdeviceincompatible
+    ldy #>txtdeviceincompatible
+    jmp $ab1e
 	cli
 	rts
 :	cmp #$05							; #STATUS::TOO_MANY_DEVICES
 	beq :+
-	ldx #$00
-	stx $d020
+	jsr restorezeropage
+	lda #<txttoomanydevices
+    ldy #>txttoomanydevices
+    jmp $ab1e
 	cli
 	rts
+
 :	cli
 
 	sei
+
+:	bit $d011
+	bpl :-
+:	bit $d011
+	bmi :-
+
+	lda #$0c
+	sta $d020
+	sta $d021
+
+	lda #$6b
+	sta $d011
 
 	lda #$00							; Disable all interferences
 	sta $d015							; for a stable timer
@@ -258,14 +275,21 @@ mainentry
 	lda #$00
 	sta loading
 
+	sei
+
 	ldx #$00
 	lda #$10
 :	sta screen+9*40,x
 	inx
 	bne :-
-	
+
+:	bit $d011
+	bpl :-
+:	bit $d011
+	bmi :-
 	lda #$6b
 	sta $d011
+
 	jmp $9000 ; $c400 ; $080d
 
 error
@@ -341,7 +365,7 @@ irq1
 ; -----------------------------------------------------------------------------------------------
 
 file01
-.asciiz "LS"
+.asciiz "ls"
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -400,5 +424,27 @@ endtmp
 
 initialized
 .byte $00
+
+restorezeropage
+
+	sei
+	lda #$34
+	sta $01
+decruncherlength
+	ldx #$b7
+:	lda $c000-1,x
+	sta $10-1,x
+	dex
+	bne :-
+	lda #$37
+	sta $01
+	cli
+	rts
+
+txtdeviceincompatible
+.byte 17, "device incompatible", 17, 0
+
+txttoomanydevices
+.byte 17, "too many devices", 17, 0
 
 ; -----------------------------------------------------------------------------------------------	

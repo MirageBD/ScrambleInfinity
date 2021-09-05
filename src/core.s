@@ -4,7 +4,7 @@ startingame
 
 	sei
 
-	lda #$7b
+	lda #$6b
 	sta $d011
 
 	lda #$00

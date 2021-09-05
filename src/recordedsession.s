@@ -6,6 +6,8 @@ recordedsession
 
 ; small playthrough that shows some multiplex bugs
 
+/*
+
 .byte  $01, $77, $0b, $67,  $24, $6f, $28, $6e,  $37, $66, $46, $6e,  $47, $6a, $c4, $6b
 .byte  $c5, $6f, $d6, $67,  $e4, $6f, $f4, $67,  $f8, $6f, $00, $6f,  $34, $6b, $3d, $6f
 .byte  $52, $6d, $5c, $6f,  $6a, $6d, $71, $6f,  $c3, $67, $00, $67,  $06, $66, $25, $67
@@ -19,8 +21,8 @@ recordedsession
 .byte  $52, $67, $83, $6f,  $84, $6b, $b3, $6f,  $bd, $67, $00, $67,  $04, $6f, $28, $6b
 .byte  $4f, $6f, $61, $67,  $84, $6f, $8e, $7f,  $00, $00, $00, $00,  $00, $00, $00, $00
 
+*/
 
-/*
 
  ; full playthrough - tiny glitch in lower border somewhere in the ufo caves
 
@@ -109,6 +111,6 @@ recordedsession
 .byte  $c1, $77, $00, $77,  $08, $76, $0d, $7e,  $32, $7a, $98, $76,  $9a, $77, $00, $77
 .byte  $61, $7f, $cb, $7d,  $00, $7d, $17, $79,  $4d, $69, $51, $79,  $53, $7b, $5f, $7a
 .byte  $6a, $7e, $00, $00,  $00, $00, $00, $00,  $00, $00, $00, $00,  $00, $00, $00, $00
-*/
+
 
 .endif
