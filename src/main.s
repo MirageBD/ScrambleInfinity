@@ -6,8 +6,6 @@
 
 TODO:
 
-load data / init level when the 'lives left' or 'congratulations' screen is on screen, instead of afterwards?
-
 instead of having two seperate routines (slow and small, and fast and big) for plotting scores, just use the fast and big one
 update timesgamefinished when the boss is killed instead of on the congratulations screen
 

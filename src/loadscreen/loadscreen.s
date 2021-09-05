@@ -412,6 +412,7 @@ startgame
 	sta $d011
 	lda #$00
 	sta $d015
+	sta $d418
 	sta $d020
 	sta $d021
 
