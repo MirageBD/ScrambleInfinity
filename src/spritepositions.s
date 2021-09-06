@@ -173,7 +173,7 @@ restrictbombpositions
 	bpl :+
 	jmp bombinsidescreenok0
 	
-:	;cmp #$00
+:	cmp #$00
 	bmi :+
 	jmp bombinsidescreenok0
 	
@@ -192,7 +192,7 @@ bombinsidescreenok0
 	bpl :+
 	jmp bombinsidescreenok1
 	
-:	;cmp #$00
+:	cmp #$00
 	bmi :+
 	jmp bombinsidescreenok1
 	
