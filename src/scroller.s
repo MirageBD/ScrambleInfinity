@@ -213,7 +213,7 @@ diedframeclearframes
 scrollscreen
 
 	sec
-	lda screenposlow
+	lda screenposlow							; screenposhigh, screenposlow start at bitmapwidth-1, end at 0
 	sbc scrollspeed
 	sta screenposlow
 	lda screenposhigh

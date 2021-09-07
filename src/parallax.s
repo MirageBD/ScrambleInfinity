@@ -1,0 +1,4 @@
+.segment "PARALLAX"
+
+drawstars
+    rts

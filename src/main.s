@@ -114,6 +114,7 @@ i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then ti
 .include "subzones.s"
 .include "plot.s"
 .include "collision.s"
+.include "parallax.s"
 .include "zones.s"
 .include "titlescreen.s"
 .include "livesleft.s"

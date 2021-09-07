@@ -58,6 +58,7 @@ SEGMENTS
 	SCREEN1:					load=OVERLAPPING_RAM, start=$4000, type=BSS;
 
 	TITLESCREEN:				load=RAM, start=$4400; # $0300
+	PARALLAX:					load=RAM;
 
 	SPRITES1:					load=RAM, start=$4b00; # goes until $5700/$d700 (at the moment) # gets loaded, then copied to cb00, then copied back to 4b00 each time we go ingame
 
