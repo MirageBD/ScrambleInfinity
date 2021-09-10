@@ -86,6 +86,7 @@ scoreishiscoresprptr
 	lda #$34
 	sta $01
 	jsr plottiles								; !!!!!!!!!!!!!!!!!!!!!!!! MIGHT INCREASE 'FLIP' HERE!!!
+	jsr drawstars
 	pla
 	sta $01
 	debugrasterend

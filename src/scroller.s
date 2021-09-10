@@ -245,6 +245,7 @@ calcvsp
 	lda invscreenposlow
 	and #$07
 	eor #$07
+	sta drawstarsoffsetlo+1
 	adc #$10
 	sta scrlow+1
 
