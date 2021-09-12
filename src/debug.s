@@ -7,8 +7,9 @@
 .define firebombs						1
 .define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
 .define diedfade						0
-.define debugrastertime					0
 
+.define debugrastertime					0
+.define enablebreakpoints               0
 .define enabledebugkeys					1                   ; press 'q' to quickly end current game end return to title screen
 
 .define recordplayback                  1                   ; 0 or 1
@@ -18,16 +19,3 @@
 .define bombstartspeedy					1
 .define bombthrowspeed                  3					; number of frames the bomb goes forward a lot faster. has to be smaller than bombanimframes
 
-.macro debugrasterstart color
-    .if debugrastertime
-        lda color
-        sta $d020
-    .endif
-.endmacro
-
-.macro debugrasterend
-    .if debugrastertime
-        lda #$00
-        sta $d020
-    .endif
-.endmacro

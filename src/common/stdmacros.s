@@ -29,14 +29,36 @@ bplcode2
 ; -----------------------------------------------------------------------------------------------
 
 .macro breakpoint name
-    .ident (.concat("br_", .string(name))):
-    .export .ident(.concat("br_", .string(name)))
+	.if enablebreakpoints
+    	.ident (.concat("br_", .string(name))):
+    	.export .ident(.concat("br_", .string(name)))
+	.endif
 .endmacro
 
 .macro watch name
-    .ident (.concat("wh_", .string(name))):
-    .export .ident(.concat("wh_", .string(name)))
+	.if enablebreakpoints
+	    .ident (.concat("wh_", .string(name))):
+    	.export .ident(.concat("wh_", .string(name)))
+	.endif
 .endmacro
+
+; -----------------------------------------------------------------------------------------------
+
+.macro debugrasterstart color
+    .if debugrastertime
+        lda color
+        sta $d020
+    .endif
+.endmacro
+
+.macro debugrasterend
+    .if debugrastertime
+        lda #$00
+        sta $d020
+    .endif
+.endmacro
+
+; -----------------------------------------------------------------------------------------------
 
 .macro add16bit arg1, arg2						; clear carry before using this
 	lda arg1+1

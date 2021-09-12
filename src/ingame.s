@@ -85,7 +85,7 @@ scoreishiscoresprptr
 	pha
 	lda #$34
 	sta $01
-	;breakpoint breakhere
+	breakpoint breakhere
 	jsr plottiles
 	jsr plottiles
 	jsr plottiles
