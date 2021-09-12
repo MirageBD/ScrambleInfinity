@@ -180,6 +180,8 @@ column
 .byte $00
 row
 .byte $00
+
+;watch watchhere
 flip
 .byte $00
 flipstored										; store off the value of 'flip' at the top of the frame,

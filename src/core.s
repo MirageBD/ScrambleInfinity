@@ -187,6 +187,10 @@ ps2	lda #$00
 	bne :+
 	jmp plotinitialscreendone
 :	jsr plottiles
+	jsr plottiles
+	jsr plottiles
+	jsr plotdone
+	jsr checkflip
 	inc ps2+1
 	lda ps2+1
 	;cmp #$00

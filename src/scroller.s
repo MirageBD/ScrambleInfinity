@@ -2,7 +2,7 @@
 
 plottiles
 
-	ldy #$03
+	;ldy #$03
 
 plotloop
 	clc
@@ -101,10 +101,12 @@ plott1
 	add16bit plott1, 40
 	inc row
 	
-	dey
-	beq plotdone
+	rts
+
+	;dey
+	;beq plotdone
 	
-	jmp plotloop
+	;jmp plotloop
 
 plotdone
 	lda row
@@ -119,7 +121,18 @@ incrow2
 ;-------------------------------------
 
 inccol
+	lda #$01
+	sta signalflip
+	rts
+
+checkflip
+	lda signalflip
+	bne :+
+	rts
+
+:
 	lda #$00
+	sta signalflip
 	sta row
 
 	inc column
@@ -130,7 +143,7 @@ inccol
 	jmp incpag
 
 inccol2
-	lda gett2+1									; do missile stuff
+	lda gett2+1									; plot special missile tiles
 	sta plott2+1
 	lda gett2+2
 	sta plott2+2
@@ -145,7 +158,7 @@ plott3	sta screenspecial+$03c0
 
 	clc
 	add16bit gett1, 2
-	add16bit gett2, 2							; end of do missile stuff
+	add16bit gett2, 2							; end plot special missile tiles
 
 	sec
 	sub16bit ploth2, 24*320-8
@@ -159,6 +172,7 @@ plott3	sta screenspecial+$03c0
 ;-------------------------------------
 
 incpag
+
 	lda #$00
 	sta column
 	
@@ -203,6 +217,8 @@ incpag3
 
 ; -----------------------------------------------------------------------------------------------
 
+signalflip
+.byte $00
 scrollspeed
 .byte $01
 diedframes

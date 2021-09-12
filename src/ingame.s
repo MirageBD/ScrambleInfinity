@@ -85,12 +85,18 @@ scoreishiscoresprptr
 	pha
 	lda #$34
 	sta $01
-	jsr plottiles								; !!!!!!!!!!!!!!!!!!!!!!!! MIGHT INCREASE 'FLIP' HERE!!!
-	jsr drawstars
+	;breakpoint breakhere
+	jsr plottiles
+	jsr plottiles
+	jsr plottiles
+	jsr plotdone
+	jsr checkflip
 	pla
 	sta $01
 	debugrasterend
 	
+	jsr drawstars
+
 	jmp stillalive
 
 wedied

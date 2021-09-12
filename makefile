@@ -1,7 +1,7 @@
-MAKE         = make
-CP           = cp
-MV           = mv
-RM           = rm -f
+MAKE                = make
+CP                  = cp
+MV                  = mv
+RM                  = rm -f
 
 SRC_DIR				= ./src
 BOOT_SRC_DIR		= ./src/boot
@@ -10,27 +10,32 @@ UTIL_SRC_DIR		= ./utils
 EXE_DIR				= ./exe
 BIN_DIR				= ./bin
 
-CPU          = 6502X
+CPU                 = 6502X
 
-AS           = ca65
-ASFLAGS      = -g --cpu $(CPU) -U --feature force_range -t c64 -I ./exe
-LD           = ld65
-LDFLAGS      = -Ln $(EXE_DIR)/symbols --dbgfile $(EXE_DIR)/main.dbg
-VICE         = "..\..\..\winvice\x64sc.exe"
-#VICEFLAGS    = -truedrive -autostart-warp -moncommands $(EXE_DIR)/symbols
-VICEFLAGS    = -truedrive -moncommands $(EXE_DIR)/symbols
-C1541        = c1541
+AS                  = ca65
+ASFLAGS             = -g --cpu $(CPU) -U --feature force_range -t c64 -I ./exe
+LD                  = ld65
+SED                 = sed
+CONVERTBREAK        = 's/al [0-9A-F]* \.br_\([a-z]*\)/\0\nbreak \.br_\1/'
+CONVERTWATCH        = 's/al [0-9A-F]* \.wh_\([a-z]*\)/\0\nwatch store \.wh_\1/'
+SYMBOLS             = $(EXE_DIR)/symbols
+SYMBOLSBREAK        = $(EXE_DIR)/symbolsbreak
+LDFLAGS             = -Ln $(SYMBOLS) --dbgfile $(EXE_DIR)/main.dbg
+VICE                = "..\..\..\winvice\x64sc.exe"
+#VICEFLAGS          = -truedrive -autostart-warp -moncommands $(EXE_DIR)/symbols
+VICEFLAGS           = -truedrive -moncommands $(SYMBOLSBREAK)
+C1541               = c1541
 
-LOADER       = ./loader
-CC1541       = cc1541
+LOADER              = ./loader
+CC1541              = cc1541
 
-PU           = pucrunch
-LC           = crush 6
-BINSPLIT     = $(EXE_DIR)/binsplit.exe
-SPECIALTILES = $(EXE_DIR)/specialtiles.exe
-ADDADDR      = $(EXE_DIR)/addaddr.exe
-BB           = $(EXE_DIR)/b2.exe
-GCC          = gcc
+PU                  = pucrunch
+LC                  = crush 6
+BINSPLIT            = $(EXE_DIR)/binsplit.exe
+SPECIALTILES        = $(EXE_DIR)/specialtiles.exe
+ADDADDR             = $(EXE_DIR)/addaddr.exe
+BB                  = $(EXE_DIR)/b2.exe
+GCC                 = gcc
 
 .SUFFIXES: .o .s .out .bin .pu .b2 .a
 
@@ -70,6 +75,7 @@ main.o: $(SRC_DIR)/main.s Makefile Linkfile.main loader-c64.prg install-c64.prg 
 
 main_unpacked.prg: main.o loader-c64.prg install-c64.prg loadersymbols-c64.inc Linkfile.main
 	$(LD) $(LDFLAGS) -C Linkfile.main --mapfile $(EXE_DIR)/main.map -o $(EXE_DIR)/$@ $(EXE_DIR)/main.o
+	$(SED) $(CONVERTBREAK) < $(SYMBOLS) | $(SED) $(CONVERTWATCH) > $(SYMBOLSBREAK)
 
 main_unpacked.prg.addr: main_unpacked.prg
 	$(ADDADDR) $(EXE_DIR)/$? $(EXE_DIR)/$@ 2080
