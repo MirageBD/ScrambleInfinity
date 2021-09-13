@@ -200,6 +200,10 @@ ps2	lda #$00
 
 plotinitialscreendone
 
+	jsr plottiles								; draw one more tile, because the ingame irq will start at $d012=$f8 at which time
+												; two more tiles are drawn before the vsp, but we should be drawing 3 tiles per frame
+												; (which we do in the visible screen area during the frames after the first)
+
 	lda #$37
 	sta $01
 

@@ -19,6 +19,16 @@ handlezoneptr4
 	jsr plotrestmissilemultsprites
 	debugrasterend
 
+	debugrasterstart #$07
+	lda $01
+	pha
+	lda #$34
+	sta $01
+	jsr plottiles
+	pla
+	sta $01
+	debugrasterend
+
 	rts
 
 ; -----------------------------------------------------------------------------------------------
@@ -86,7 +96,6 @@ scoreishiscoresprptr
 	lda #$34
 	sta $01
 	breakpoint breakhere
-	jsr plottiles
 	jsr plottiles
 	jsr plottiles
 	jsr plotdone

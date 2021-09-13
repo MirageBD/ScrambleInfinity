@@ -8,7 +8,7 @@
 .define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
 .define diedfade						0
 
-.define debugrastertime					0
+.define debugrastertime					1
 .define enablebreakpoints               0
 .define enabledebugkeys					1                   ; press 'q' to quickly end current game end return to title screen
 
