@@ -19,6 +19,9 @@ handlezoneptr4
 	jsr plotrestmissilemultsprites
 	debugrasterend
 
+	lda scrollspeed								; we died, scrollspeed is 0, stop plotting tiles
+	beq :+
+
 	debugrasterstart #$07
 	lda $01
 	pha
@@ -29,6 +32,7 @@ handlezoneptr4
 	sta $01
 	debugrasterend
 
+:
 	rts
 
 ; -----------------------------------------------------------------------------------------------
