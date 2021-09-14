@@ -6,15 +6,21 @@
 
 TODO:
 
+make bombs explode with a small explosion when they don't hit anything? (might help multiplexing issues as well)
+
+game still glitching some time because of multiplexer running out of time. fly in top left for a while while firing.
+
+make it harder each time you finish a base
+
 instead of having two seperate routines (slow and small, and fast and big) for plotting scores, just use the fast and big one
 update timesgamefinished when the boss is killed instead of on the congratulations screen
+
+fix that vertical black line on the left planet on the titlescreen
 
 obfuscate (irq loader now loadable after reverting to kernal).
 new music (give option to play without music?) 2channel prefered.
 add sound-fx for fire/bomb/explode.
 global search for TODO
-
-got report from person saying the game 'glitched' at the end of level 1, before the cave. Most likely multiplex issue running out of time to update.
 
 ------------------------------------------------------------------------------------------------------------------------
 

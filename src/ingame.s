@@ -104,12 +104,11 @@ scoreishiscoresprptr
 	jsr plottiles
 	jsr plotdone
 	jsr checkflip
+	jsr drawstars
 	pla
 	sta $01
 	debugrasterend
 	
-	jsr drawstars
-
 	jmp stillalive
 
 wedied
