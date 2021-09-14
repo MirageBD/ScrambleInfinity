@@ -39,7 +39,7 @@ GCC                 = gcc
 
 .SUFFIXES: .o .s .out .bin .pu .b2 .a
 
-default: all
+default: $(EXE_DIR) all
 
 # -----------------------------------------------------------------------------
 
@@ -47,6 +47,9 @@ $(LOADER)/loader/build/loader-c64.prg:
 	$(MAKE) -C $(LOADER)/loader
 
 # -----------------------------------------------------------------------------
+
+$(EXE_DIR):
+	mkdir $@
 
 specialtiles.exe: $(UTIL_SRC_DIR)/specialtiles.c
 	$(GCC) $(UTIL_SRC_DIR)/specialtiles.c -o $(EXE_DIR)/specialtiles.exe
