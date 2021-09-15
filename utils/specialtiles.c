@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 	unsigned char missileFound, missilePosition;
 	unsigned int column;
 
-	unsigned int firstSolidTileColumn = 75;
+	unsigned int firstSolidTileColumn = 72;
 	unsigned char clearTileHi = 0;
 	unsigned char clearTileLo = 32;
 

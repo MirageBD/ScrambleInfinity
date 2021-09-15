@@ -47,7 +47,7 @@ the playable area is only 24 chars high, the 25th row contains information about
 when the next column is plotted, the tile is read and the following is output to the screenspecial:
 
 - 0-31 for missiles, mystery, fuel and the boss (4 x 4 tiles x 2 for cave = 32) 
-- 32 for empty space (air, stars, cave holes, etc.) basically anything below the first solid tile (75 at the moment)
+- 32 for empty space (air, stars, cave holes, etc.) basically anything below the first solid tile (72 at the moment)
 - ff for the rest (solid)
 
 ------------------------------------------------------------------------------------------------------------------------
