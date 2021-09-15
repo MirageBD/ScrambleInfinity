@@ -211,7 +211,7 @@ stillalive
 	;lda #$00
 	;sta $d020
 	; we are below the bottom border sprites - set up the top border sprites now
-	
+
 	.repeat 6,i
 	lda #$16									; was 16
 	sta $d001+i*2
@@ -254,7 +254,7 @@ stillalive
 	sta $d025
 	lda #$01
 	sta $d026
-	
+
 	debugrasterstart #$07
 	jsr tuneplay								; 01
 	jsr animbomb1								; 08
@@ -264,6 +264,9 @@ stillalive
 handlezoneptr2
 	jsr plotfirstmissilemultsprites				; 0c
 	debugrasterend
+
+:	bit $d011
+	bmi :-
 
 	lda #$1d									; was 1d
 :	cmp $d012
