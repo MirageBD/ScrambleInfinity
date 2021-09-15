@@ -102,8 +102,7 @@ scoreishiscoresprptr
 	breakpoint breakhere
 	jsr plottiles
 	jsr plottiles
-	jsr plotdone
-	jsr checkflip
+	jsr plottilesdone
 	jsr drawstars
 	pla
 	sta $01

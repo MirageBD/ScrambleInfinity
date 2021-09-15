@@ -13,7 +13,7 @@ gett1
 	;adc #$00
 	sta plotc1+1
 gett2
-	lda loadeddata1+1+0*2
+	lda loadeddata1+0*2+1
 	sta currenttile+1
 	sta currenttiletimes8+1
 	adc #>maptilecolors
@@ -25,11 +25,9 @@ gett2
 												; - 0-31 = missile, fuel, special, boss (4x4x2)
 
 	lda currenttile+1							; > 256 = always solid tile
-	;cmp #$00
 	bne solidtile
 	
 	lda currenttile+0
-	;cmp #$00
 	bmi solidtile								; < 0 = solid tile
 	cmp #firstsolidtile
 	bpl solidtile								; > 67 = solid tile
@@ -52,7 +50,8 @@ transtile
 solidtile
 	lda #specialtilesolid
 	sta currenttile+0
-	jmp skipspecialtiles
+	;jmp skipspecialtiles
+	; fall through
 
 skipspecialtiles
 	asl currenttiletimes8+0
@@ -103,36 +102,18 @@ plott1
 	
 	rts
 
-	;dey
-	;beq plotdone
-	
-	;jmp plotloop
-
-plotdone
+plottilesdone
 	lda row
 	cmp #$18
-	bne incrow2
+	beq inccol
 	
-	jmp inccol
-
-incrow2
 	rts
 
 ;-------------------------------------
 
 inccol
-	lda #$01
-	sta signalflip
-	rts
 
-checkflip
-	lda signalflip
-	bne :+
-	rts
-
-:
 	lda #$00
-	sta signalflip
 	sta row
 
 	inc column
@@ -217,8 +198,6 @@ incpag3
 
 ; -----------------------------------------------------------------------------------------------
 
-signalflip
-.byte $00
 scrollspeed
 .byte $01
 diedframes

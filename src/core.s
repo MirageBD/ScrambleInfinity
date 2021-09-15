@@ -192,8 +192,7 @@ ps2	lda #$00
 :	jsr plottiles
 	jsr plottiles
 	jsr plottiles
-	jsr plotdone
-	jsr checkflip
+	jsr plottilesdone
 	inc ps2+1
 	lda ps2+1
 	;cmp #$00
