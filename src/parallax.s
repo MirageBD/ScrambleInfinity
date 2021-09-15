@@ -185,14 +185,14 @@ starsoffset0or100
     .byte $00
 
 starsoffset
-    .byte %01010111
-    .byte %01010111
-    .byte %01011101
-    .byte %01011101
-    .byte %01110101
-    .byte %01110101
-    .byte %11010101
-    .byte %11010101
+    .byte %01010110
+    .byte %01010110
+    .byte %01011001
+    .byte %01011001
+    .byte %01100101
+    .byte %01100101
+    .byte %10010101
+    .byte %10010101
 
     ;.byte %01010101 ; empty
 

@@ -179,6 +179,9 @@ setuplevel
 	lda #$34
 	sta $01
 
+	lda #$61									; set secondary colour to white for parallax stars
+	sta maptilecolors+firsttransparenttile
+
 ps1	lda #$00									; plot initial screens
 	cmp #$01
 	bne :+
