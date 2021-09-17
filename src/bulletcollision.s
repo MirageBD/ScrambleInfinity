@@ -17,7 +17,7 @@ testbullet0bkgcollision
 	jsr calcspritepostoscreenpos
 
 	lda calchit
-	cmp #firsttransparenttile
+	cmp #specialtiletransparent
 	beq :+
 
 	jmp handlebullet0bkgcollision
@@ -136,7 +136,7 @@ testbullet1bkgcollision
 	jsr calcspritepostoscreenpos
 
 	lda calchit
-	cmp #firsttransparenttile
+	cmp #specialtiletransparent
 	beq :+
 
 	jmp handlebullet1bkgcollision

@@ -4,6 +4,8 @@
 
 .define firstsolidtile					72
 .define firsttransparenttile			32
+
+.define specialtiletransparent			32
 .define specialtilesolid				255
 
 .define bank0							$0000

@@ -20,9 +20,9 @@ gett2
 	sta plotc1+2
 	
 												; get low and high byte of tile number and convert it to:
-												; -   32 = empty
-												; -  255 = solid
 												; - 0-31 = missile, fuel, special, boss (4x4x2)
+												; -   32 = empty
+												; -  255 (specialtilesolid)= solid
 
 	lda currenttile+1							; > 256 = always solid tile
 	bne solidtile
@@ -34,7 +34,7 @@ gett2
 	
 	lda currenttile+0
 	cmp #firsttransparenttile
-	bpl transtile								; > 32 && < 68 = transparent tile
+	bpl transtile								; > firsttransparenttile (32) && < firstsolidtile (72) = transparent tile
 
 missilefuelspecialtile
 	lda currenttile+0
@@ -43,7 +43,7 @@ missilefuelspecialtile
 	jmp skipspecialtiles
 	
 transtile
-	lda #firsttransparenttile
+	lda #specialtiletransparent
 	sta currenttile+0
 	jmp skipspecialtiles
 
