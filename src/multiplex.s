@@ -592,9 +592,6 @@ hctestmissile
 :	cmp $d012
 	bcs :-										; wait until rasterline reached
 	
-	lda #$00
-	sta $d020
-
 	txa
 	and #$01
 	tax

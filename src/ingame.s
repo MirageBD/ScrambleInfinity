@@ -207,8 +207,6 @@ wediedend
 	bne :-
 
 stillalive	
-	;lda #$00
-	;sta $d020
 	; we are below the bottom border sprites - set up the top border sprites now
 
 	.repeat 6,i
