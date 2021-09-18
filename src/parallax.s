@@ -26,13 +26,14 @@ startstarcleardraw
 
 starsplothiadd256
     adc #$00							; add 0 or $0100
-    sta starsoffset0or100
+    sta starsoffset0or100+1
 
     lda #%01010101                      ; clear previous stars
     jsr dostarplot
 
     clc
-    lda starsoffset0or100               ; set up high byte of check/plot addresses
+starsoffset0or100
+    lda #$00                            ; set up high byte of check/plot addresses
     sta ds1+2
     sta cs1+2
 	adc #$02
@@ -66,34 +67,80 @@ starsplothiadd256
     sta ds6+1
     sta cs6+1
 
-    cpy #$07                            ; if it's 7 check if the bitmap to plot to is clear
-    beq setupcheckplotptrs
+    cpy #$07                            ; if it's 7 check if the bitmap to plot to is clear and do the plot
+    beq checkstarocclusion
+    jmp doactualstarplot                ; otherwise just do the plot
+
+; -----------------------------------------------------------------------------------------------
+
+checkstarocclusion
+
+    lda #$01
+    sta starnotoccluded+0
+    sta starnotoccluded+1
+    sta starnotoccluded+2
+    sta starnotoccluded+3
+    sta starnotoccluded+4
+    sta starnotoccluded+5
+
+    ldx #$00
+
+cs1 lda bitmap1
+    cmp #%01010101
+    beq :+
+    stx starnotoccluded+0
+:
+cs2 lda bitmap1
+    cmp #%01010101
+    beq :+
+    stx starnotoccluded+1
+:
+cs3 lda bitmap1
+    cmp #%01010101
+    beq :+
+    stx starnotoccluded+2
+:
+cs4 lda bitmap1
+    cmp #%01010101
+    beq :+
+    stx starnotoccluded+3
+:
+cs5 lda bitmap1
+    cmp #%01010101
+    beq :+
+    stx starnotoccluded+4
+:
+cs6 lda bitmap1
+    cmp #%01010101
+    beq :+
+    stx starnotoccluded+5
+:
 
 doactualstarplot
     lda starsoffset,y
 
 dostarplot
-    ldx starsallowedtodraw+0
+    ldx starnotoccluded+0
     beq :+
 ds1 sta bitmap1							; bitmap 1 or 2 (+$0100)
 :
-    ldx starsallowedtodraw+1
+    ldx starnotoccluded+1
     beq :+
 ds2 sta bitmap1
 :
-    ldx starsallowedtodraw+2
+    ldx starnotoccluded+2
     beq :+
 ds3 sta bitmap1
 :
-    ldx starsallowedtodraw+3
+    ldx starnotoccluded+3
     beq :+
 ds4 sta bitmap1
 :
-    ldx starsallowedtodraw+4
+    ldx starnotoccluded+4
     beq :+
 ds5 sta bitmap1
 :
-    ldx starsallowedtodraw+5
+    ldx starnotoccluded+5
     beq :+
 ds6 sta bitmap1
 :
@@ -101,57 +148,8 @@ ds6 sta bitmap1
 
 ; -----------------------------------------------------------------------------------------------
 
-setupcheckplotptrs
-
-    lda #$00
-    sta starsallowedtodraw+0
-    sta starsallowedtodraw+1
-    sta starsallowedtodraw+2
-    sta starsallowedtodraw+3
-    sta starsallowedtodraw+4
-    sta starsallowedtodraw+5
-
-    ldx #$01
-
-cs1 lda bitmap1
-    cmp #%01010101
-    bne :+
-    stx starsallowedtodraw+0
-:
-cs2 lda bitmap1
-    cmp #%01010101
-    bne :+
-    stx starsallowedtodraw+1
-:
-cs3 lda bitmap1
-    cmp #%01010101
-    bne :+
-    stx starsallowedtodraw+2
-:
-cs4 lda bitmap1
-    cmp #%01010101
-    bne :+
-    stx starsallowedtodraw+3
-:
-cs5 lda bitmap1
-    cmp #%01010101
-    bne :+
-    stx starsallowedtodraw+4
-:
-cs6 lda bitmap1
-    cmp #%01010101
-    bne :+
-    stx starsallowedtodraw+5
-:
-    jmp doactualstarplot
-
-; -----------------------------------------------------------------------------------------------
-
-starsallowedtodraw
+starnotoccluded
     .byte $01, $01, $01, $01, $01, $01
-
-starsoffset0or100
-    .byte $00
 
 starsoffset
     .byte %01010110
