@@ -257,14 +257,14 @@ plotinitialscreendone
 	; ---------------------------------------------------------
 
 	lda zonecolour1								; SET ZONE COLOURS!!! THIS GETS CALLED ONLY WHEN WE ENTER THE GAME OR HAVE DIED
-	ldx #$ff
-:	sta zonecolours+1,x
+	ldx #$00
+:	sta zonecolours+1,x							; WHOOPS!!!
 	inx
 	cpx zone									; zone = $00,$01,$02,$03,$04,$05
-	bne :-
+	bmi :-
 
 	lda zonecolour0
-:	sta zonecolours+1,x
+:	sta zonecolours,x
 	inx
 	cpx #$06
 	bne :-

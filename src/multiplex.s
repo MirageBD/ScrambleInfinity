@@ -453,9 +453,9 @@ hctestufo
 	sec
 	sbc $d012
 	clc
-	cmp #$28									; #$28 rasterlines left? do some stuff
+	cmp #$20									; #$28 rasterlines left? do some stuff!
 	bcc :+
-	jsr handlecollisions
+	jsr handletask
 	jmp hctestufo
 
 :	lda sortsprylow,y
@@ -497,7 +497,12 @@ msbluw4
 	jmp plotrestufoloop
 
 plotrestufoend
-	jsr handlerestcollisions
+	jsr handletask
+	jsr handletask
+	jsr handletask
+	jsr handletask
+	jsr handletask
+	jsr handletask
 	
 	rts
 
@@ -576,9 +581,9 @@ hctestmissile
 	sec
 	sbc $d012
 	clc
-	cmp #$28									; #$28 rasterlines left? do some stuff!
+	cmp #$20									; #$20 rasterlines left? do some stuff!
 	bcc :+
-	jsr handlecollisions
+	jsr handletask
 	jmp hctestmissile
 
 :	lda sortsprylow,y
@@ -587,6 +592,9 @@ hctestmissile
 :	cmp $d012
 	bcs :-										; wait until rasterline reached
 	
+	lda #$00
+	sta $d020
+
 	txa
 	and #$01
 	tax
@@ -622,7 +630,12 @@ msblow3
 	jmp plotrestmissileloop
 
 plotrestmissileend
-	jsr handlerestcollisions
+	jsr handletask
+	jsr handletask
+	jsr handletask
+	jsr handletask
+	jsr handletask
+	jsr handletask
 	
 	rts
 

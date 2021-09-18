@@ -341,20 +341,20 @@ bulletsmallexplosionanim
 bulletsmallexplosioncolours
 .byte $01,$0f,$0c,$09
 
-collisionshandled
+taskshandled
 .byte $00
-shiptested
-.byte $00
-bullet0tested
-.byte $00
-bullet1tested
-.byte $00
-bomb0tested
-.byte $00
-bomb1tested
-.byte $00
-handlezonetested
-.byte $00
+;shiptested
+;.byte $00
+;bullet0tested
+;.byte $00
+;bullet1tested
+;.byte $00
+;bomb0tested
+;.byte $00
+;bomb1tested
+;.byte $00
+;handlezonetested
+;.byte $00
 
 gamefinished
 .byte $00

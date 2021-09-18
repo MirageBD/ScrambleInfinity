@@ -6,9 +6,7 @@
 
 TODO:
 
-make bombs explode with a small explosion when they don't hit anything? (might help multiplexing issues as well)
-
-game still glitching some time because of multiplexer running out of time. fly in top left for a while while firing.
+fix zone bars filling up wrong initially after dying
 
 make it harder each time you finish a base
 

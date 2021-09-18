@@ -280,13 +280,7 @@ csptsp1
 inithandlecollisions
 
 	lda #$00
-	sta shiptested
-	sta bullet0tested
-	sta bullet1tested
-	sta bomb0tested
-	sta bomb1tested
-	sta handlezonetested
-	sta collisionshandled
+	sta taskshandled
 
 	lda flip									; store off the value of 'flip' at the top of the frame,
 	sta flipstored								; so the correct value is used when calculating tiles to clear.
@@ -297,45 +291,53 @@ inithandlecollisions
 
 .segment "HANDLERESTCOLLISIONS"
 
-handlerestcollisions
+handletask
 
-	lda collisionshandled
-	cmp #$07									; bullet0, bullet1, bomb0, bomb1, ship + 2
-	bcs :+
-	
-	jsr handlecollisions
+	ldx taskshandled
+	cpx #$06
+	bmi :+
+	inc taskshandled
+	rts
 
-	inc collisionshandled
-	jmp handlerestcollisions
+:	cpx #$00									; test if the game finished for any of the collision tasks, not the zone task
+	beq :+
 
-:	rts
+	lda gamefinished							; only handle collisions if the game hasn't finished yet
+	cmp #$01
+	bmi :+
+	inc taskshandled
+	rts
 
-handlecollisions								; TODO - all the 'jmp handlecollisionsend' calls can be replaced with rts
+:	lda taskcodeptrslow,x
+	sta handlecollisionptr+1
+	lda taskcodeptrshigh,x
+	sta handlecollisionptr+2
+	inc taskshandled
 
-	; only handle collisions once the zone has been handled	
-
-	lda handlezonetested
-	bne :+
+handlecollisionptr
+	jmp $0000
 
 handlezoneptr1
 	jsr handlezone1								; self modified jsr
-	debugrasterend
-
-	lda #$01
-	sta handlezonetested
 	rts
 
-:	lda gamefinished							; only handle collisions if the game hasn't finished yet
-	cmp #$01
-	bmi :+
-	jmp handlecollisionsend
+taskcodeptrslow
+.byte <handlezoneptr1
+.byte <testbullet0collisions
+.byte <testbullet1collisions
+.byte <testbomb0collisions
+.byte <testbomb1collisions
+.byte <testshipcollisions
+taskcodeptrshigh
+.byte >handlezoneptr1
+.byte >testbullet0collisions
+.byte >testbullet1collisions
+.byte >testbomb0collisions
+.byte >testbomb1collisions
+.byte >testshipcollisions
 
-:	debugrasterstart collisionshandled
-	lda bullet0tested
-	bne :+
-	lda #$01
-	sta bullet0tested
-	inc collisionshandled
+testbullet0collisions
+	debugrasterstart #$01
 	lda shootingbullet0
 	beq :+
 	lda bull0+sprdata::isexploding
@@ -343,13 +345,11 @@ handlezoneptr1
 	bne :+
 	jsr testbullet0bkgcollision
 	jsr testbullet0sprcollision
-	jmp handlecollisionsend
+:	debugrasterend
+	rts
 	
-:	lda bullet1tested
-	bne :+
-	lda #$01
-	sta bullet1tested
-	inc collisionshandled
+testbullet1collisions
+	debugrasterstart #$02
 	lda shootingbullet1
 	beq :+
 	lda bull1+sprdata::isexploding
@@ -357,13 +357,11 @@ handlezoneptr1
 	bne :+
 	jsr testbullet1bkgcollision
 	jsr testbullet1sprcollision
-	jmp handlecollisionsend
+:	debugrasterend
+	rts
 
-:	lda bomb0tested
-	bne :+
-	lda #$01
-	sta bomb0tested
-	inc collisionshandled
+testbomb0collisions
+	debugrasterstart #$03
 	lda shootingbomb0
 	beq :+
 	lda bomb0+sprdata::isexploding
@@ -371,13 +369,11 @@ handlezoneptr1
 	bne :+
 	jsr testbomb0bkgcollision
 	jsr testbomb0sprcollision
-	jmp handlecollisionsend
+:	debugrasterend
+	rts
 
-:	lda bomb1tested
-	bne :+
-	lda #$01
-	sta bomb1tested
-	inc collisionshandled
+testbomb1collisions
+	debugrasterstart #$04
 	lda shootingbomb1
 	beq :+
 	lda bomb1+sprdata::isexploding
@@ -385,13 +381,11 @@ handlezoneptr1
 	bne :+
 	jsr testbomb1bkgcollision
 	jsr testbomb1sprcollision
+:	debugrasterend
+	rts
 
-:	lda shiptested
-	bne :+
-	lda #$01
-	sta shiptested
-	inc collisionshandled
-
+testshipcollisions
+	debugrasterstart #$05
 	lda playerstate
 	bne :+
 	lda ship0+sprdata::isexploding
@@ -404,11 +398,7 @@ handlezoneptr1
 	jsr testshipsprcollision
 .endif
 
-:
-handlecollisionsend
-	
-	debugrasterend
-
+:	debugrasterend
 	rts
 
 ; -----------------------------------------------------------------------------------------------	
