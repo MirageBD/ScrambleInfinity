@@ -20,7 +20,7 @@ startstarcleardraw
 
     clc
     lda #>(bitmap1+$0200)				; check if we need to draw on bitmap 1 or 2
-    ldx flipstored
+    ldx flip ; flipstored
 	bne starsplothiadd256
 	lda #>(bitmap2+$0200)
 
