@@ -135,7 +135,7 @@ setuplevel
 	lda #$37
 	sta $01
 
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_init
 	lda #$ff
 	sta sfx_zp0

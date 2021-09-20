@@ -19,6 +19,6 @@
 .define bombstartspeedy					1
 .define bombthrowspeed                  3					; number of frames the bomb goes forward a lot faster. has to be smaller than bombanimframes
 
-.define ingame_sfx                      1                   ; sfx or music
+.define ingamesfx                       1                   ; sfx or music
 
-.define continuousshooting              1
+.define continuousshooting              1                   ; pressing down button fires continuously

@@ -20,7 +20,7 @@ firebullet0
 	jmp tryfirebomb
 
 :
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_initfirebulletsoundvoice2
 .endif
 
@@ -59,7 +59,7 @@ firebullet1
 	jmp tryfirebomb
 
 :
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_initfirebulletsoundvoice2
 .endif
 
@@ -114,7 +114,7 @@ firebomb0
 	jmp no1
 
 :
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_initfirebombsoundvoice3
 .endif
 
@@ -154,7 +154,7 @@ firebomb1
 	jmp no1
 
 :
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_initfirebombsoundvoice3
 .endif
 

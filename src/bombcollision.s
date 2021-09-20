@@ -76,7 +76,7 @@ handlebomb0bkgcollision
 
 bomb0explode
 
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_initbombexplosionsoundvoice3
 .endif
 
@@ -187,7 +187,7 @@ handlebomb1bkgcollision
 
 bomb1explode
 
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_initbombexplosionsoundvoice3
 .endif
 

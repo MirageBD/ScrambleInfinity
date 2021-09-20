@@ -161,7 +161,7 @@ irqingamef8
 	cmp #$10
 	bcs :++
 
-.if ingame_sfx
+.if ingamesfx
 	lda sfx_fuelorwoop					; if we're playing the woop sound, then start playing the low fuel sound now
 	beq flashfuel
 	lda #$00
@@ -186,7 +186,7 @@ flashfuel
 	jmp setfuelcolours
 
 :
-.if ingame_sfx
+.if ingamesfx
 	lda sfx_fuelorwoop					; if we're playing the woop sound, then start playing the low fuel sound now
 	bne setfuelcolours
 	lda #$02

@@ -254,12 +254,14 @@ stillalive
 
 	debugrasterstart #$07
 	
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_update
 	jsr sfx_skipjsrptr
 .else
 	jsr tuneplay								; 01
 .endif
+
+	debugrasterstart #$08
 
 	jsr animbomb1								; 08
 	jsr removescheduledobject					; 02	; if no object is scheduled for removal then the score is plotted and fuel updated

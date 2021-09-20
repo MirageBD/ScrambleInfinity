@@ -75,7 +75,7 @@ handlebullet0bkgcollision
 
 bullet0bkgbigexplosion
 
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_initbulletexplosionsoundvoice2
 .endif
 

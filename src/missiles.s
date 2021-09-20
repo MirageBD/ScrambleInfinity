@@ -155,7 +155,7 @@ oktoremove
 	
 	jsr addmulsprite
 
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_initcometsoundvoice2
 .endif
 

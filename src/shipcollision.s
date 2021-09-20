@@ -51,7 +51,7 @@ shiphitbkg
 	lda #explosiontypes::big
 	sta ship0+sprdata::isexploding
 
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_initshipexplodessoundvoice1
 .endif
 
@@ -106,7 +106,7 @@ testshipsprcollision
 	lda #explosiontypes::big
 	sta ship0+sprdata::isexploding
 
-.if ingame_sfx
+.if ingamesfx
 	jsr sfx_initshipexplodessoundvoice1
 .endif
 
