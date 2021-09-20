@@ -50,6 +50,11 @@ shiphitbkg
 	sta playerstate
 	lda #explosiontypes::big
 	sta ship0+sprdata::isexploding
+
+.if ingame_sfx
+	jsr sfx_initshipexplodessoundvoice1
+.endif
+
 	; rts
 	; fall through
 
@@ -100,6 +105,11 @@ testshipsprcollision
 	sta playerstate
 	lda #explosiontypes::big
 	sta ship0+sprdata::isexploding
+
+.if ingame_sfx
+	jsr sfx_initshipexplodessoundvoice1
+.endif
+
 	; rts
 	; fall through
 

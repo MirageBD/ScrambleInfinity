@@ -19,7 +19,12 @@ firebullet0
 	
 	jmp tryfirebomb
 
-:	lda bulletcooldown
+:
+.if ingame_sfx
+	jsr sfx_initfirebulletsoundvoice2
+.endif
+
+	lda bulletcooldown
 	sta bulletcooloff
 
 	lda #$01
@@ -53,7 +58,12 @@ firebullet1
 	
 	jmp tryfirebomb
 
-:	lda bulletcooldown
+:
+.if ingame_sfx
+	jsr sfx_initfirebulletsoundvoice2
+.endif
+
+	lda bulletcooldown
 	sta bulletcooloff
 
 	lda #$01
@@ -103,7 +113,12 @@ firebomb0
 	
 	jmp no1
 
-:	lda #$0f
+:
+.if ingame_sfx
+	jsr sfx_initfirebombsoundvoice3
+.endif
+
+	lda #$0f
 	sta bombcooloff
 
 	ldx #$01
@@ -138,7 +153,12 @@ firebomb1
 	
 	jmp no1
 
-:	lda #$0f
+:
+.if ingame_sfx
+	jsr sfx_initfirebombsoundvoice3
+.endif
+
+	lda #$0f
 	sta bombcooloff
 
 	ldx #$01

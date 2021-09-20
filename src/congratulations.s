@@ -7,6 +7,10 @@ congratulations
 	lda #$37
 	sta $01
 
+	lda #$00										; no sprites on congratulations screen
+	sta $d015
+	sta $d418
+
 	lda #$7f
 	sta $d011
 	

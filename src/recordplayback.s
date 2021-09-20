@@ -4,7 +4,7 @@
 
 ; when dorecord or doplayback are called register X should contain the joystick register value ($dc00)
 
-recordmemend                                     = $2500
+recordmemend                                     = $2200
 
 ; -----------------------------------------------------------------------------------------------
 

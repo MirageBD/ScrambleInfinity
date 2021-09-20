@@ -38,6 +38,7 @@ SEGMENTS
 
 	RECORDEDSESSION:			load=RAM, start=$1c00;
 
+	SFX:						load=RAM, start=$2200;
 	TITLESCREENTABLES:			load=RAM, start=$2500;
 
 	CYCLEPERFECT:				load=RAM, start=$2700; # $006c

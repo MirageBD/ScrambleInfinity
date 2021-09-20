@@ -11,7 +11,7 @@ startingame
 	sta $d015
 	sta $d020
 	sta $d021
-	sta $d418
+	;sta $d418
 
 	lda #<irqlimbo								; set limbo irq so it doesn't mess with $d011/$d018/$dd00 causing all kinds of glitches
 	ldx #>irqlimbo
@@ -135,9 +135,21 @@ setuplevel
 	lda #$37
 	sta $01
 
+.if ingame_sfx
+	jsr sfx_init
+	lda #$ff
+	sta sfx_zp0
+	lda #$01
+	sta $1b
+	jsr sfx_silencevoice1
+	lda #$02
+	sta sfx_fuelorwoop
+	jsr sfx_initwoopsound		; woop,woop,woop
+.else
 	ldx #$00
 	ldy #$00
 	jsr tuneinit
+.endif
 
 	lda #$74
 	sta $d011

@@ -155,6 +155,10 @@ oktoremove
 	
 	jsr addmulsprite
 
+.if ingame_sfx
+	jsr sfx_initcometsoundvoice2
+.endif
+
 	rts
 
 ; -----------------------------------------------------------------------------------------------

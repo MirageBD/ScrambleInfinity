@@ -75,6 +75,10 @@ handlebullet0bkgcollision
 
 bullet0bkgbigexplosion
 
+.if ingame_sfx
+	jsr sfx_initbulletexplosionsoundvoice2
+.endif
+
 	lda calchit
 	and #%11111100
 	cmp #bkgcollision::mysterynoncave

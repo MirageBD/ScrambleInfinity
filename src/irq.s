@@ -161,6 +161,16 @@ irqingamef8
 	cmp #$10
 	bcs :++
 
+.if ingame_sfx
+	lda sfx_fuelorwoop					; if we're playing the woop sound, then start playing the low fuel sound now
+	beq flashfuel
+	lda #$00
+	sta sfx_fuelorwoop
+	;jsr sfx_initwoopsound
+setlowfuelsoundend
+.endif
+
+flashfuel
 	inc fuellowtimer
 	lda fuellowtimer
 	cmp #$10
@@ -173,8 +183,20 @@ irqingamef8
 	lsr
 	tax
 	ldy fuelblink,x
-	
-:	;sty $d027							; TODO - figure out if I need to set colours for sprite 0 and 7
+	jmp setfuelcolours
+
+:
+.if ingame_sfx
+	lda sfx_fuelorwoop					; if we're playing the woop sound, then start playing the low fuel sound now
+	bne setfuelcolours
+	lda #$02
+	sta sfx_fuelorwoop
+	;jsr sfx_initwoopsound
+setwoopsoundend
+.endif
+
+setfuelcolours
+	;sty $d027							; TODO - figure out if I need to set colours for sprite 0 and 7
 	sty $d028
 	sty $d029
 	sty $d02a

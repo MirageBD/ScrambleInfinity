@@ -86,6 +86,7 @@ i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then ti
 .include "debug.s"
 
 .include "common/stddefines.s"
+.include "common/stdsid.s"
 .include "common/stdmacros.s"
 .include "common/stdirq.s"
 .include "common/stdhelpers.s"
@@ -98,6 +99,7 @@ i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then ti
 .include "recordedsession.s"
 
 .include "globals.s"
+.include "sfx.s"
 .include "core.s"
 .include "irq.s"
 .include "joystickingame.s"
@@ -270,7 +272,7 @@ setsafemode
 screensafe
 
 	lda #$00
-	sta $d418
+	;sta $d418
 	sta $d015
 	rts
 

@@ -76,6 +76,10 @@ handlebomb0bkgcollision
 
 bomb0explode
 
+.if ingame_sfx
+	jsr sfx_initbombexplosionsoundvoice3
+.endif
+
 	lda calchit
 	and #%11111100
 	cmp #bkgcollision::mysterynoncave
@@ -182,6 +186,10 @@ handlebomb1bkgcollision
 	jsr scheduleremovehitobject
 
 bomb1explode
+
+.if ingame_sfx
+	jsr sfx_initbombexplosionsoundvoice3
+.endif
 
 	lda calchit
 	and #%11111100

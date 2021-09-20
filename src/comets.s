@@ -18,7 +18,12 @@ launchcomet
 	beq :+
 	rts
 	
-:	lda #$00
+:
+.if ingame_sfx
+	jsr sfx_initcometsoundvoice2
+.endif
+
+	lda #$00
 	sta comettimer
 
 	lda #$50

@@ -152,6 +152,7 @@ updatedigit2
 	cmp #$09
 	beq :+
 	inc lives									; award extra life at every 10000 points
+	jsr sfx_initextralifesoundvoice1
 :	plotdigit lives, livesdigit0
 
 updatedigit3

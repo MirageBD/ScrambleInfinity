@@ -12,10 +12,11 @@
 .define enablebreakpoints               0
 .define enabledebugkeys					0                   ; press 'q' to quickly end current game end return to title screen
 
-.define recordplayback                  1                   ; 0 or 1
+.define recordplayback                  0                   ; 0 or 1
 
 .define bulletspeedx					8					; was 6
 .define bombstartspeedx					5
 .define bombstartspeedy					1
 .define bombthrowspeed                  3					; number of frames the bomb goes forward a lot faster. has to be smaller than bombanimframes
 
+.define ingame_sfx                      1                   ; sfx or music

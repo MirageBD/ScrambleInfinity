@@ -9,6 +9,7 @@ livesleftscreen
 
 	lda #$00										; no sprites on lives left screen
 	sta $d015
+	sta $d418
 
 	lda #$7f
 	sta $d011
