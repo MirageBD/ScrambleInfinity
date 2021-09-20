@@ -66,10 +66,13 @@ right1
 fire1
 	txa
 	and #%00010000								; fire
-	bne :+										; fire is not pressed, check if it was pressed the previous frame
-	sta firestate
+
+.if continuousshooting
+	beq :+
 	jmp no1
 
+:	jmp tryfirebullet
+.else
 :	cmp firestate
 	bne :+
 	sta firestate
@@ -81,5 +84,6 @@ fire1
 firestate
 .byte $00
 
+.endif
 ; ----------------------------------------------------------------------------------------------- RECORDING
 
