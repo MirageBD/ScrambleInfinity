@@ -6,19 +6,14 @@
 
 TODO:
 
-fix zone bars filling up wrong initially after dying
+final tests:
+- check lives overflow
+- check score overflow
 
-make it harder each time you finish a base
+make it harder each time you finish a base (change fuel parameters, change missile random seed(?))
+remove some fuel at final level?
 
-instead of having two seperate routines (slow and small, and fast and big) for plotting scores, just use the fast and big one
-update timesgamefinished when the boss is killed instead of on the congratulations screen
-
-fix that vertical black line on the left planet on the titlescreen
-
-obfuscate (irq loader now loadable after reverting to kernal).
-new music (give option to play without music?) 2channel prefered.
-add sound-fx for fire/bomb/explode.
-global search for TODO
+do something to make hacker's life more difficult?
 
 ------------------------------------------------------------------------------------------------------------------------
 
