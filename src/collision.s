@@ -293,10 +293,13 @@ inithandlecollisions
 
 handletask
 
+	debugrasterstart taskshandled
+
 	ldx taskshandled
 	cpx #$06
 	bmi :+
-	inc taskshandled
+	debugrasterend
+	;inc taskshandled
 	rts
 
 :	cpx #$00									; test if the game finished for any of the collision tasks, not the zone task
@@ -305,7 +308,8 @@ handletask
 	lda gamefinished							; only handle collisions if the game hasn't finished yet
 	cmp #$01
 	bmi :+
-	inc taskshandled
+	;inc taskshandled
+	debugrasterend
 	rts
 
 :	lda taskcodeptrslow,x
@@ -315,7 +319,9 @@ handletask
 	inc taskshandled
 
 handlecollisionptr
-	jmp $0000
+	jsr $0000
+	debugrasterend
+	rts
 
 handlezoneptr1
 	jsr handlezone1								; self modified jsr

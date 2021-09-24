@@ -8,7 +8,7 @@
 .define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
 .define diedfade						0
 
-.define debugrastertime					1
+.define debugrastertime					0
 .define enablebreakpoints               0
 .define enabledebugkeys					0                   ; press 'q' to quickly end current game end return to title screen
 
@@ -21,4 +21,4 @@
 
 .define ingamesfx                       1                   ; sfx or music
 
-.define continuousshooting              1                   ; pressing down button fires continuously
+.define continuousshooting              0                   ; pressing down button fires continuously

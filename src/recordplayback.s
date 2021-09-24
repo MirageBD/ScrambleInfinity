@@ -36,6 +36,8 @@ initrecordplayback
 
     lda #$00
 	sta recordplaybacktimerlo
+    sta recordtimerlo
+    sta recordtimerhi
 	
     lda #$7f
 	sta prevjoystate
@@ -105,7 +107,11 @@ increaseplaybackstate
 
 doplayback
 
-    ldx prevjoystate                            ; always fetch the last joystick state
+    inc recordtimerlo
+    bne :+
+    inc recordtimerhi
+
+:    ldx prevjoystate                            ; always fetch the last joystick state
 
     inc recordplaybacktimerlo
 
@@ -121,6 +127,27 @@ doplayback
 
 doplaybackend
     rts
+
+; -----------------------------------------------------------------------------------------------
+
+checkplayback
+    lda recordtimerlo
+    cmp #$9b
+    bne :+
+    lda recordtimerhi
+    cmp #$03
+    bne :+
+    breakpoint breakhere
+    nop
+:   rts
+
+; -----------------------------------------------------------------------------------------------
+
+recordtimerlo
+.byte $00
+
+recordtimerhi
+.byte $00
 
 ; -----------------------------------------------------------------------------------------------
 

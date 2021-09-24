@@ -207,6 +207,8 @@ setfuelcolours
 
 	jsr ingame2
 	
+	;jsr checkplayback
+
 	lda #<irqingame31
 	ldx #>irqingame31
 	ldy #$31

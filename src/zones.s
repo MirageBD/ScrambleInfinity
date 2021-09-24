@@ -6,11 +6,9 @@ handlezone1										; missiles
 	jmp handlemissilemovement
 
 handlezone2										; ufos
-	debugrasterstart #$02
 	jsr launchufo
 	jsr animufos
 	jsr handleufomovement
-	debugrasterend
 	rts
 
 handlezone3										; comets

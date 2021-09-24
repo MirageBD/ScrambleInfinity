@@ -14,10 +14,8 @@ handlezoneptr3
 	lda sortsprc,y
 	sta $d02e
 
-	debugrasterstart #$06
 handlezoneptr4
 	jsr plotrestmissilemultsprites
-	debugrasterend
 
 	lda scrollspeed								; we died, scrollspeed is 0, stop plotting tiles
 	beq :+
@@ -99,7 +97,7 @@ scoreishiscoresprptr
 	pha
 	lda #$34
 	sta $01
-	breakpoint breakhere
+	;breakpoint breakhere
 	jsr plottiles
 	jsr plottiles
 	jsr plottilesdone

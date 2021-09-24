@@ -453,7 +453,7 @@ hctestufo
 	sec
 	sbc $d012
 	clc
-	cmp #$20									; #$28 rasterlines left? do some stuff!
+	cmp #$20									; #$20 rasterlines left? do some stuff!
 	bcc :+
 	jsr handletask
 	jmp hctestufo
