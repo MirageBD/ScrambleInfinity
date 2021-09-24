@@ -9,7 +9,7 @@ sfx_init
 		inx
 		cpx #$19
 		bne :-
-		lda #$1f
+		lda #%00011111								; % 0001 1111
 		sta sidvolumefilter
 		lda #$60
 		sta sidfilter+fcutoff2
@@ -435,11 +435,11 @@ sfx_tablevoice1
 											; 4 (ptrjsr1)
 											; 6 (ptrjsr2)
 											; 8 (ptrrts)
-.byte $00, $00
-.byte $00, $00
-.byte $00									; voice1 freqlo
-.byte $00									; voice1 freqhi
+.byte $00, $00								; duration
+.byte $00, $00								; voice1 freqlo, freqhi
+.byte $00, $00								; voice1 freqlo, freqhi
 .byte $00									; voice1 freqlo-increase-add
+
 .byte $00									; not used
 
 ; -------------------------------------------

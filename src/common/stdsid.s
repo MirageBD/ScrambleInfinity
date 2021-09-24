@@ -37,6 +37,11 @@
 ; $D417					Filter control.
 
 ; $D418					Volume and filter modes.
+;Bits #0-#3: Volume.
+;Bit #4: 1 = Low pass filter enabled.
+;Bit #5: 1 = Band pass filter enabled.
+;Bit #6: 1 = High pass filter enabled.
+;Bit #7: 1 = Voice #3 disabled.
 
 ; -----------------------------------------------------------------------------------------------
 
