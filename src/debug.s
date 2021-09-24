@@ -7,6 +7,14 @@
 .define firebombs						1
 .define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
 .define diedfade						0
+.define startlivesleft					#$03				; initial lives left
+
+.define startscore0						#$00
+.define startscore1						#$00
+.define startscore2						#$00
+.define startscore3						#$00
+.define startscore4						#$00
+.define startscore5						#$00
 
 .define debugrastertime					0
 .define enablebreakpoints               0

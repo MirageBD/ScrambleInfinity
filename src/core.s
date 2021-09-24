@@ -40,13 +40,24 @@ startingame
 
 initscore
 
-	ldx #$00									; set score to zero
-	lda #$00
-:	sta score,x
-	sta prevscore,x
-	inx
-	cpx #$06
-	bne :-
+	lda startscore0
+	sta score+0
+	sta prevscore+0
+	lda startscore1
+	sta score+1
+	sta prevscore+1
+	lda startscore2
+	sta score+2
+	sta prevscore+2
+	lda startscore3
+	sta score+3
+	sta prevscore+3
+	lda startscore4
+	sta score+4
+	sta prevscore+4
+	lda startscore5
+	sta score+5
+	sta prevscore+5
 
 	rts
 
