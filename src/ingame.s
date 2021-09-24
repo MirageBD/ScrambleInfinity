@@ -51,13 +51,12 @@ ingame2
 	jsr handlejoystick							; 03
 	jsr calcvsp
 	jsr animship								; 04
-	jsr animbullet0								; 05
-	jsr animbullet1								; 06
-	debugrasterend
 	
 	lda #$04
 :	cmp $d012
 	bpl :-
+
+	debugrasterend
 
 	lda #%11110000
 	sta $d010
@@ -85,6 +84,8 @@ scoreishiscoresprptr
 	stx screenbordersprites+$03f8+6
 
 	debugrasterstart #$0a
+	jsr animbullet0								; 05
+	jsr animbullet1								; 06
 	jsr animbomb0								; 07
 	debugrasterstart #$04
 	jsr testhiscorebeaten
