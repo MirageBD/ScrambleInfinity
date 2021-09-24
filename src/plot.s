@@ -65,7 +65,7 @@ plotlivesleft
 	sei
 	lda #$35
 	sta $01
-	ldy lives
+	ldy livesleft
 	lda #<livesdigit0
 	ldx #>livesdigit0
 	jsr plotdigitcompact
@@ -148,12 +148,12 @@ updatedigit2
 	cmp prevscore+2
 	beq updatedigit3
 	plotdigit score+2, scoredigit2
-	lda lives
+	lda livesleft
 	cmp #$09
 	beq :+
-	inc lives									; award extra life at every 10000 points
+	inc livesleft									; award extra life at every 10000 points, but not if at 9 already
 	jsr sfx_initextralifesoundvoice1
-:	plotdigit lives, livesdigit0
+:	plotdigit livesleft, livesdigit0
 
 updatedigit3
 	lda score+3

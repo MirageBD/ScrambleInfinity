@@ -127,7 +127,7 @@ zonecolours
 fuel
 .byte $20
 
-lives
+livesleft
 .byte $03
 
 timesgamefinished

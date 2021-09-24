@@ -7,7 +7,6 @@
 TODO:
 
 final tests:
-- check lives overflow
 - check score overflow
 
 make it harder each time you finish a base (change fuel parameters, change missile random seed(?))

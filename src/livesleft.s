@@ -19,7 +19,7 @@ livesleftscreen
 	lda #$09
 	sta $d021
 
-	lda lives
+	lda livesleft
 	asl
 	asl
 	tax

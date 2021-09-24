@@ -16,7 +16,7 @@
 .define fueladd							#$0a				; how much to add when you destroy a fuel tanker
 .define fueldecreaseticks				#$28				; frames before fuel decreases by one
 .define fuelfull						#$38				; full tank
-.define startlives						#$03				; initial lives
+.define startlivesleft					#$03				; initial lives left
 .define ufospawntime					#$50				; time before new ufo spawns - can be more, not less
 .define bulletcooldown					#$18
 .define zonecolour0						#$0b

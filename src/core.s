@@ -52,8 +52,8 @@ initscore
 
 initlives
 
-	lda startlives
-	sta lives
+	lda startlivesleft
+	sta livesleft
 
 	lda #$00
 	sta timesgamefinished

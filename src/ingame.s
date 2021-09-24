@@ -118,9 +118,9 @@ wedied
 	bne wediedclearframe
 
 .if livesdecrease
-	dec lives
+	dec livesleft
 .endif
-	lda lives
+	lda livesleft
 	bne :+
 
 quickdie
