@@ -95,7 +95,8 @@ humloop
 	sta sortsprylow-1,x
 	sec											; decrease x position
 	lda sortsprxlow-1,x
-	sbc scrollspeed
+	;sbc scrollspeed
+	sbc ufosinx,y
 	sta sortsprxlow-1,x
 	lda sortsprxhigh-1,x
 	sbc #$00
