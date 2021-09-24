@@ -13,8 +13,8 @@
 .define bank2							$8000
 .define bank3							$c000
 
-.define fueladd							#$0c				; how much to add when you destroy a fuel tanker
-.define fueldecreaseticks				#$20				; frames before fuel decreases by one
+.define fueladd							#$0a				; how much to add when you destroy a fuel tanker
+.define fueldecreaseticks				#$28				; frames before fuel decreases by one
 .define fuelfull						#$38				; full tank
 .define startlives						#$03				; initial lives
 .define ufospawntime					#$50				; time before new ufo spawns - can be more, not less

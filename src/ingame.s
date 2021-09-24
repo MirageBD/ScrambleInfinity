@@ -49,8 +49,6 @@ ingame2
 .endif
 
 	jsr handlejoystick							; 03
-	jsr calcvsp
-	jsr animship								; 04
 	
 	lda #$04
 :	cmp $d012
@@ -84,6 +82,8 @@ scoreishiscoresprptr
 	stx screenbordersprites+$03f8+6
 
 	debugrasterstart #$0a
+	jsr calcvsp
+	jsr animship								; 04
 	jsr animbullet0								; 05
 	jsr animbullet1								; 06
 	jsr animbomb0								; 07
