@@ -202,8 +202,12 @@ setuplevel
 	lda #$34
 	sta $01
 
-	lda #$61									; set secondary colour to white for parallax stars
+	lda #$63									; set secondary colour to cyan for low parallax stars
 	sta maptilecolors+firsttransparenttile
+	lda #$61									; set secondary colour to white for high parallax stars
+	sta maptilecolors+72
+	sta maptilecolors+73
+	sta maptilecolors+74
 
 ps1	lda #$00									; plot initial screens
 	cmp #$01

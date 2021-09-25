@@ -10,9 +10,9 @@ int main(int argc, char* argv[])
 	unsigned char missileFound, missilePosition;
 	unsigned int column;
 
-	unsigned int firstSolidTileColumn = 72;
+	unsigned int firstSolidTileColumn = 75;
 	unsigned char clearTileHi = 0;
-	unsigned char clearTileLo = 32;
+	unsigned char clearTileLo = 33;		// 33 is transparent/black, 32 is blue
 
 	if(argc < 3)
 	{
@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 
 			if(row == 0 && column < firstSolidTileColumn)
 			{
-				// Clear tiles used for index reordering
+				// While we're at it, clear tiles used for index reordering
 				fwrite((const void *)&clearTileLo, sizeof(unsigned char), 1, outfile);
 				fwrite((const void *)&clearTileHi, sizeof(unsigned char), 1, outfile);
 			}

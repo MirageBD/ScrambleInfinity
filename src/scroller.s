@@ -34,7 +34,7 @@ gett2
 	
 	lda currenttile+0
 	cmp #firsttransparenttile
-	bpl transtile								; > firsttransparenttile (32) && < firstsolidtile (72) = transparent tile
+	bpl transtile								; > firsttransparenttile (32) && < firstsolidtile (75) = transparent tile
 
 missilefuelspecialtile
 	lda currenttile+0

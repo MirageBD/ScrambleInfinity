@@ -2,7 +2,7 @@
 
 ; DEFINES ----------------------------------------------------------------------------------------------------------------
 
-.define firstsolidtile					72
+.define firstsolidtile					75
 .define firsttransparenttile			32
 
 .define specialtiletransparent			32
