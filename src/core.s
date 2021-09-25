@@ -62,15 +62,17 @@ initscore
 	sta score+6
 	sta prevscore+6
 
+	lda timesgamefinishedstart
+	sta timesgamefinished
+
+	jsr setfueladdfromtimesgamefinished
+
 	rts
 
 initlives
 
 	lda startlivesleft
 	sta livesleft
-
-	lda #$00
-	sta timesgamefinished
 
 	sta hiscorebeaten
 	lda spriteptrforaddress(fuelandscoresprites+5*64) 				; +0*64 = show score as hiscore, +5*64 = show real hiscore sprites

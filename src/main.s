@@ -6,9 +6,6 @@
 
 TODO:
 
-make it harder each time you finish a base (change fuel parameters, change missile random seed(?))
-remove some fuel at final level?
-
 do something to make hacker's life more difficult?
 
 ------------------------------------------------------------------------------------------------------------------------

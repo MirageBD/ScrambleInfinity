@@ -9,6 +9,9 @@
 .define diedfade						0
 .define startlivesleft					#$03				; initial lives left
 
+.define fueladdstart                    #$0a
+.define timesgamefinishedstart          #$00
+
 .define startscore0						#$00                ; x123456
 .define startscore1						#$00
 .define startscore2						#$00

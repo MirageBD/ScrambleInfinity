@@ -60,8 +60,27 @@ handlenomorezones
 	cmp #$09
 	beq :+
 	inc timesgamefinished
-:	lda #gameflow::congratulations
+
+:
+	jsr setfueladdfromtimesgamefinished
+
+	lda #gameflow::congratulations
 	sta gameflowstate+1
+
+	rts
+
+; -----------------------------------------------------------------------------------------------
+
+setfueladdfromtimesgamefinished
+
+	sec
+	lda fueladdstart
+	sbc timesgamefinished
+	cmp #$04
+	bpl :+
+	lda #$04
+:	sta fueladdptr+1
+
 	rts
 
 ; -----------------------------------------------------------------------------------------------

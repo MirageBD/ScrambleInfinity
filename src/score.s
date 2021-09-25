@@ -71,7 +71,7 @@ increasefuel
 	clc
 	lda fuel
 fueladdptr
-	adc fueladd									; add fuel
+	adc fueladdstart							; add fuel
 	sta fuel
 	cmp fuelfull
 	bcc :+
