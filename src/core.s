@@ -58,6 +58,9 @@ initscore
 	lda startscore5
 	sta score+5
 	sta prevscore+5
+	lda startscore6
+	sta score+6
+	sta prevscore+6
 
 	rts
 

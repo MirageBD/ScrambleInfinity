@@ -6,9 +6,6 @@
 
 TODO:
 
-final tests:
-- check score overflow
-
 make it harder each time you finish a base (change fuel parameters, change missile random seed(?))
 remove some fuel at final level?
 

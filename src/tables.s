@@ -149,10 +149,10 @@ fuelblink
 .byte $07, $02
 
 score
-.byte 1,2,3,4,5,6
+.byte 1,  2,3,4,5,6,7
 
 prevscore
-.byte 1,2,3,4,5,6
+.byte 1,  2,3,4,5,6,7
 
 ufotimer
 .byte $00
@@ -498,7 +498,7 @@ bkgpulsecolors
 .segment "TABLES2"
 
 hiscore
-.byte 0,0,0,0,0,0
+.byte 0,0,0,0,0,0,0
 
 hiscorebeaten
 .byte 0
@@ -620,8 +620,8 @@ pointlinespositions
 pointlineanims
 .byte bytespriteptrforaddress(titlescreenpointsspr+0*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+1*(6*64)+0*64)
-.byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+3*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+2*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+5*(6*64)+0*64)
 
@@ -646,16 +646,6 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+2*64)	; 80
 .byte $09,$02, $07,$0a,$01,$01,$01,$01,$01,$01
 
-.byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+1*64)					; this will bite me in the ass later... fuel = 2, boss = 4
-.byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+0*64)
-.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+3*64)	; 100
-.byte $09,$08, $01,$05,$01,$01,$01,$01,$01,$01
-
 .byte bytespriteptrforaddress(titlescreenpointsspr+3*(6*64)+1*64)					; ufo
 .byte bytespriteptrforaddress(titlescreenpointsspr+3*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
@@ -663,10 +653,20 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
-.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+4*64)	; 150
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+3*64)	; 100
 .byte $06,$04, $01,$0e,$01,$01,$01,$01,$01,$01
 
-.byte bytespriteptrforaddress(titlescreenpointsspr+2*(6*64)+1*64)					; this will bite me in the ass later... fuel = 2, boss = 4
+.byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+1*64)					; fuel
+.byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+4*64)	; 150
+.byte $09,$08, $01,$05,$01,$01,$01,$01,$01,$01
+
+.byte bytespriteptrforaddress(titlescreenpointsspr+2*(6*64)+1*64)					; boss
 .byte bytespriteptrforaddress(titlescreenpointsspr+2*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)

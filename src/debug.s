@@ -9,12 +9,13 @@
 .define diedfade						0
 .define startlivesleft					#$03				; initial lives left
 
-.define startscore0						#$00
+.define startscore0						#$00                ; x123456
 .define startscore1						#$00
 .define startscore2						#$00
 .define startscore3						#$00
 .define startscore4						#$00
 .define startscore5						#$00
+.define startscore6						#$00
 
 .define debugrastertime					0
 .define enablebreakpoints               0

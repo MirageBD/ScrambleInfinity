@@ -254,7 +254,7 @@ handlecooloff
 	
 	lda #$00
 	sta timeseconds
-	addpoints #1, 5								; add 10 points every second
+	addpoints #1, 6								; add 10 points every second
 	jsr updatescore
 .endif
 

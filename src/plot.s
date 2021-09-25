@@ -6,53 +6,53 @@ plotbitmapscores
 	sta $01
 
 	; plot score
-	ldy score+0
+	ldy score+1
 	lda #<scoredigit0
 	ldx #>scoredigit0
 	jsr plotdigitcompact
-	ldy score+1
+	ldy score+2
 	lda #<scoredigit1
 	ldx #>scoredigit1
 	jsr plotdigitcompact
-	ldy score+2
+	ldy score+3
 	lda #<scoredigit2
 	ldx #>scoredigit2
 	jsr plotdigitcompact
-	ldy score+3
+	ldy score+4
 	lda #<scoredigit3
 	ldx #>scoredigit3
 	jsr plotdigitcompact
-	ldy score+4
+	ldy score+5
 	lda #<scoredigit4
 	ldx #>scoredigit4
 	jsr plotdigitcompact
-	ldy score+5
+	ldy score+6
 	lda #<scoredigit5
 	ldx #>scoredigit5
 	jsr plotdigitcompact
 
 	; plot hiscore
-	ldy hiscore+0
+	ldy hiscore+1
 	lda #<hiscoredigit0
 	ldx #>hiscoredigit0
 	jsr plotdigitcompact
-	ldy hiscore+1
+	ldy hiscore+2
 	lda #<hiscoredigit1
 	ldx #>hiscoredigit1
 	jsr plotdigitcompact
-	ldy hiscore+2
+	ldy hiscore+3
 	lda #<hiscoredigit2
 	ldx #>hiscoredigit2
 	jsr plotdigitcompact
-	ldy hiscore+3
+	ldy hiscore+4
 	lda #<hiscoredigit3
 	ldx #>hiscoredigit3
 	jsr plotdigitcompact
-	ldy hiscore+4
+	ldy hiscore+5
 	lda #<hiscoredigit4
 	ldx #>hiscoredigit4
 	jsr plotdigitcompact
-	ldy hiscore+5
+	ldy hiscore+6
 	lda #<hiscoredigit5
 	ldx #>hiscoredigit5
 	jsr plotdigitcompact
@@ -132,22 +132,22 @@ plotfuelplotscoreupdatefuel
 ; plotscore
 
 updatedigit0
-	lda score+0
-	cmp prevscore+0
-	beq updatedigit1
-	plotdigit score+0, scoredigit0
-
-updatedigit1
 	lda score+1
 	cmp prevscore+1
-	beq updatedigit2
-	plotdigit score+1, scoredigit1
+	beq updatedigit1
+	plotdigit score+1, scoredigit0
 
-updatedigit2
+updatedigit1
 	lda score+2
 	cmp prevscore+2
+	beq updatedigit2
+	plotdigit score+2, scoredigit1
+
+updatedigit2
+	lda score+3
+	cmp prevscore+3
 	beq updatedigit3
-	plotdigit score+2, scoredigit2
+	plotdigit score+3, scoredigit2
 	lda livesleft
 	cmp #$09
 	beq :+
@@ -156,22 +156,22 @@ updatedigit2
 :	plotdigit livesleft, livesdigit0
 
 updatedigit3
-	lda score+3
-	cmp prevscore+3
-	beq updatedigit4
-	plotdigit score+3, scoredigit3
-
-updatedigit4
 	lda score+4
 	cmp prevscore+4
-	beq updatedigit5
-	plotdigit score+4, scoredigit4
+	beq updatedigit4
+	plotdigit score+4, scoredigit3
 
-updatedigit5
+updatedigit4
 	lda score+5
 	cmp prevscore+5
+	beq updatedigit5
+	plotdigit score+5, scoredigit4
+
+updatedigit5
+	lda score+6
+	cmp prevscore+6
 	beq updateprevscore
-	plotdigit score+5, scoredigit5
+	plotdigit score+6, scoredigit5
 
 updateprevscore
 	lda score+0
@@ -186,6 +186,8 @@ updateprevscore
 	sta prevscore+4
 	lda score+5
 	sta prevscore+5
+	lda score+6
+	sta prevscore+6
 	
 updatefuel
 
