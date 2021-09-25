@@ -196,7 +196,7 @@ sfx_initcometsoundvoice2
 
 ; ------------------------------------------- init voices with compare
 
-sfx_initfirebombsoundvoice3						; dropping bomb?
+sfx_initfirebombsoundvoice3
 		lda sfx_zp0
 		bpl :+
 		lda #$78							; sfx_tablevoice3 = 78 58 73
@@ -207,7 +207,7 @@ sfx_initfirebombsoundvoice3						; dropping bomb?
 		sta sidvoice3+susvr
 		lda #$58
 		sta sfx_tablevoice3+1
-		lda #$73
+		lda #$33
 		sta sfx_tablevoice3+2
 		lda #ctriangle+cvoiceoff
 		sta sidvoice3+ctrl
