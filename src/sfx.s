@@ -140,7 +140,7 @@ sfx_initfirebulletsoundvoice2
 		sta sfx_tablevoice2+0
 		lda #$00
 		sta sfx_tablevoice2+1
-		lda #$40
+		lda #$20
 		sta sfx_tablevoice2+2
 
 		lda #$09
