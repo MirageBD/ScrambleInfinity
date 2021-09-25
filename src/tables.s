@@ -309,7 +309,7 @@ bombanim
 .byte bytespriteptrforaddress(sprites2+(bombanimstart+5)*64)
 .byte bytespriteptrforaddress(sprites2+(bombanimstart+6)*64)
 bombcolours
-.byte $01,$01,$07,$07,$0f,$0c,$0c
+.byte $01,$01,$07,$07,$07,$0f,$0f
 bombexplosionanim
 .byte bytespriteptrforaddress(sprites2+11*64)
 .byte bytespriteptrforaddress(sprites2+12*64)
