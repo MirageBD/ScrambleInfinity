@@ -20,6 +20,11 @@
 .define zonecolour0						#$0b
 .define zonecolour1						#$07
 
+.define bulletspeedx					8					; was 6
+.define bombstartspeedx					5
+.define bombstartspeedy					1
+.define bombthrowspeed                  3					; number of frames the bomb goes forward a lot faster. has to be smaller than bombanimframes
+
 .define clearbmptile					#$55				; calcbkghit = #$55 = clear blue, #$aa = clear blue, #$ff = clear d800 / $0c
 
 .define MAXMULTPLEXSPR					12

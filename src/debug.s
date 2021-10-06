@@ -26,11 +26,6 @@
 
 .define recordplayback                  1                   ; 0 or 1
 
-.define bulletspeedx					8					; was 6
-.define bombstartspeedx					5
-.define bombstartspeedy					1
-.define bombthrowspeed                  3					; number of frames the bomb goes forward a lot faster. has to be smaller than bombanimframes
-
 .define ingamesfx                       1                   ; sfx or music
 
 .define continuousshooting              0                   ; pressing down button fires continuously
