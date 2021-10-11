@@ -76,6 +76,8 @@ F0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
          C0-D3: SPEED DOS track 36-40 BAM entries (only for 40 track)
 */
 
+#define BAM_DISK_NAME_START 0x90
+
 /*
 Directory entry:
 
@@ -130,7 +132,17 @@ Directory entry:
 
 */
 
-static const int TrackOffsets[] =
+static const int sectorsPerTrack[] = {
+	21, 21, 21, 21, 21, 21, 21, 21,
+	21, 21, 21, 21, 21, 21, 21, 21,
+	21,
+	19, 19, 19, 19, 19, 19, 19,
+	18, 18, 18, 18, 18, 18,
+	17, 17,	17, 17, 17,
+	17, 17,	17, 17, 17
+};
+
+static const int trackOffsets[] =
 {
 	0x00000, 0x01500, 0x02A00, 0x03F00, 0x05400, 0x06900, 0x07E00, 0x09300,						// $1500 / 256 = 21 sectors per track
 	0x0A800, 0x0BD00, 0x0D200, 0x0E700, 0x0FC00, 0x11100, 0x12600, 0x13B00,						// 17 tracks * 21 = 357
@@ -240,7 +252,7 @@ static const char* filetypes[] =
 
 int d64sector(u8 track, u8 sector)
 {
-	return TrackOffsets[track-1] + 256 * (int)sector;
+	return trackOffsets[track-1] + 256 * (int)sector;
 }
 
 void printfile(u8* file)
@@ -295,17 +307,17 @@ u8* dirmerge(u8* data, u8* artdir, int skip, int list, int append, int firstinde
 
 	if(list)
 	{
-		printf("\nFILES IN DIR:\n");
+		printf("\nFILES IN ART DIR:\n");
 	}
 
 	int artdirfilecount = filecount(artdir, list);
 
-	printf("Number of files in data d64   : %d\n", datafilecount);
-	printf("Number of files in art dir d64: %d\n", artdirfilecount);
+	printf("\nNumber of files in data d64    : %d\n", datafilecount);
+	printf("Number of files in art dir d64 : %d\n", artdirfilecount);
 
-	if((datafilecount + skip) > artdirfilecount)
+	if(shadowdirtrack == 18 && (datafilecount + skip) > artdirfilecount)
 	{
-		printf("Error: files in data d64 plus files to skip exceeds the number of files in the art dir d64.\n");
+		printf("\nError: files in data d64 plus files to skip exceeds the number of files in the art dir d64.\n\n");
 		return 0;
 	}
 
@@ -339,13 +351,30 @@ u8* dirmerge(u8* data, u8* artdir, int skip, int list, int append, int firstinde
 	u8* artdir_curr  = artdir + d64sector(18, 0);
 
 	int data_files_left = datafilecount;
-	(void)firstindex;
+	// (void)firstindex;
 
 	if(list)
 	{
 		printf("\nFILES IN OUTPUT D64:\n");
 	}
 
+	printf("track of first directory entry: %d\n", data_curr[0]);
+	printf("sector of first directory entry: %d\n", data_curr[1]);
+
+	artdir_curr = artdir + d64sector(artdir_curr[0], artdir_curr[1]);
+	artdir_file = artdir_curr;
+	data_curr = data + d64sector(data_curr[0], data_curr[1]);
+	data_file = data_curr;
+
+	u8* out_file = out + (artdir_file - artdir);
+
+	printf("\nFILES IN OUTPUT D64:\n");
+
+	printf("out_file: %x\n", out_file[0]);
+
+	memcpy(out_file+3, data_file+3, 2);
+
+	/*
 	// only update files from the data directory
 	int first = firstindex + 1;
 	while(currfile < artdirfilecount)
@@ -399,8 +428,6 @@ u8* dirmerge(u8* data, u8* artdir, int skip, int list, int append, int firstinde
 		}
 
 		// the out file is relative to the art dir d64
-		u8* out_file = out + (artdir_file - artdir);
-
 		if(data_file && (!skip || first==1))
 		{
 			if(append)
@@ -461,6 +488,7 @@ u8* dirmerge(u8* data, u8* artdir, int skip, int list, int append, int firstinde
 			--first;
 		}
 	}
+	*/
 
 	return out;
 }
@@ -541,7 +569,7 @@ int main(int argc, char* argv[])
 			{
 				append = eq ? atoi(eq+1) : 1;
 			}
-			else if(strncmp("shadowdir", cmd, len) == 0)
+			else if(strncmp("shadowdirtrack", cmd, len) == 0)
 			{
 				shadowdirtrack = eq ? atoi(eq+1) : 18;
 			}
