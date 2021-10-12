@@ -52,8 +52,7 @@ $(EXE_DIR):
 	mkdir $@
 
 d64tool.exe:
-	$(MAKE) -C $(UTIL_SRC_DIR)/d64tool
-	$(CP) $(UTIL_SRC_DIR)/d64tool/d64tool.exe $(EXE_DIR)/.
+	$(GCC) $(UTIL_SRC_DIR)/d64tool/d64tool.c -o $(EXE_DIR)/d64tool.exe
 
 specialtiles.exe: $(UTIL_SRC_DIR)/specialtiles.c
 	$(GCC) $(UTIL_SRC_DIR)/specialtiles.c -o $(EXE_DIR)/specialtiles.exe
@@ -263,7 +262,7 @@ tsbkg.b2:  $(BIN_DIR)/metabkg.bin
 	
 
 
-infinity.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
+main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
           mapttilesheader.out mapttilesheader.b2 \
 		  tsbmp1.b2 tsbmp10400.b2 tsbmp1d800.b2 tspointspr.b2 tsbkg.b2 tshowfar.b2 \
           ma00.b2 ma01.b2 ma02.b2 ma03.b2 ma04.b2 ma05.b2 ma06.b2 ma07.b2 ma08.b2 ma09.b2 \
@@ -342,14 +341,17 @@ infinity.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
 	cat $(EXE_DIR)/loadscreen.map
 	cat $(EXE_DIR)/main.map
 
+infinity.d64: main.d64
+	$(EXE_DIR)/d64tool.exe -shadowdirtrack=19 -list -chain -append=0 $(EXE_DIR)/main.d64 ./bin/art.d64 $(EXE_DIR)/infinity.d64
+
 # -----------------------------------------------------------------------------
 
 tools: b2.exe specialtiles.exe binsplit.exe addaddr.exe d64tool.exe
 
-all: tools main.d64
+all: tools infinity.d64
 
 run: b2.exe specialtiles.exe binsplit.exe addaddr.exe d64tool.exe infinity.d64
-	$(VICE) $(VICEFLAGS) "$(EXE_DIR)/infinity.d64:infinity"
+	$(VICE) $(VICEFLAGS) "$(EXE_DIR)/infinity.d64:*"
 
 clean:
 	$(RM) $(EXE_DIR)/*.*
