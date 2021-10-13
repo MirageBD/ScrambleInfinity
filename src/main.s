@@ -203,6 +203,7 @@ hiscorenotbeaten
 	jsr setsafemode
 	jsr setzone0
 	jsr initscore
+	jsr plotbitmapscores
 	jsr plottimesgamefinished
 	jsr initlives
 	jsr plotlivesleft

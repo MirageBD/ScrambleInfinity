@@ -74,6 +74,7 @@ initlives
 	lda startlivesleft
 	sta livesleft
 
+	lda #$00
 	sta hiscorebeaten
 	lda spriteptrforaddress(fuelandscoresprites+5*64) 				; +0*64 = show score as hiscore, +5*64 = show real hiscore sprites
 	sta scoreishiscoresprptr+1

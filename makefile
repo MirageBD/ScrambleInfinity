@@ -22,7 +22,6 @@ SYMBOLS             = $(EXE_DIR)/symbols
 SYMBOLSBREAK        = $(EXE_DIR)/symbolsbreak
 LDFLAGS             = -Ln $(SYMBOLS) --dbgfile $(EXE_DIR)/main.dbg
 VICE                = "..\..\..\winvice\x64sc.exe"
-#VICEFLAGS          = -truedrive -autostart-warp -moncommands $(EXE_DIR)/symbols
 VICEFLAGS           = -truedrive -moncommands $(SYMBOLSBREAK)
 C1541               = c1541
 
@@ -128,7 +127,6 @@ boot.prg: boot_unpacked.prg.addr
 # new startaddress: 0-65535
 # endaddress = -1 = end of file
 
-
 # wholemap.bin               -> mapttilesheader.out, maptiles.out, maptilechars.out, maptilesmap.out
 # maptilesmap.out            -> maptilesmapmissileinfo.out
 # maptilesmapmissileinfo.out -> m00.out,  m01.out,  etc.
@@ -136,7 +134,6 @@ boot.prg: boot_unpacked.prg.addr
 # ma00.out, ma01.out, etc.   -> ma00.bb,  ma01.bb,  etc.
 # ma00.bb,  ma01.bb,  etc.   -> ma00.bc,  ma01.bc,  etc.
 # ma00.bc,  ma01.bc,  etc.   -> 
-
 
 wholemap.bin: $(BIN_DIR)/wholemap.bin
 
@@ -229,19 +226,16 @@ tsbmp1d800.b2: $(BIN_DIR)/tsbmp1d800.bin
 	$(BB) $(EXE_DIR)/tsbmp1d800.rel.bin
 	$(MV) $(EXE_DIR)/tsbmp1d800.rel.bin.b2 $(EXE_DIR)/tsbmp1d800.b2
 
-# $4c00 - $5700 = $0c00 (REPLACES SPRITES1 SEGMENT)
 tspointspr.b2: $(BIN_DIR)/tspointspr.bin
 	$(ADDADDR) $(BIN_DIR)/tspointspr.bin $(EXE_DIR)/tspointspr.rel.bin 19456
 	$(BB) $(EXE_DIR)/tspointspr.rel.bin
 	$(MV) $(EXE_DIR)/tspointspr.rel.bin.b2 $(EXE_DIR)/tspointspr.b2
 
-# more room for sprites from $7400-$8000 = $0c00... at $7800 for now
 tshowfar.b2: $(BIN_DIR)/tshowfar.bin
 	$(ADDADDR) $(BIN_DIR)/tshowfar.bin $(EXE_DIR)/tshowfar.rel.bin 30720
 	$(BB) $(EXE_DIR)/tshowfar.rel.bin
 	$(MV) $(EXE_DIR)/tshowfar.rel.bin.b2 $(EXE_DIR)/tshowfar.b2
 
-# $7000 - $7400
 tsbkg.b2:  $(BIN_DIR)/metabkg.bin
 	$(ADDADDR) $(BIN_DIR)/metabkg.bin $(EXE_DIR)/metabkg.rel.bin 28672
 	$(BB) $(EXE_DIR)/metabkg.rel.bin
@@ -257,10 +251,6 @@ tsbkg.b2:  $(BIN_DIR)/metabkg.bin
 	$(PU) -c0 $(EXE_DIR)/$*.out $(EXE_DIR)/$*.pu
 
 # -----------------------------------------------------------------------------
-
-# -f MH -w mapttilesheader.bc \
-	
-
 
 main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
           mapttilesheader.out mapttilesheader.b2 \
