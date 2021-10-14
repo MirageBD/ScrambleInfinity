@@ -24,7 +24,7 @@
 .segment "WINGSPR"
 .incbin "./bin/wingspr.bin"
 .segment "EXHAUSTSPR"
-.incbin "./bin/exhaustspr.bin"
+.incbin "./bin/exhaustloadingreadyspr.bin"
 .segment "SCROLLSPR"
 .incbin "./bin/creditssprites.bin"
 
