@@ -522,7 +522,7 @@ ufosinx
 .byte $01, $00, $00, $00, $00, $00, $00, $01, $00, $01, $01, $01, $01, $01, $01, $02
 .byte $01, $02, $02, $02, $02, $02, $02, $01, $02, $01, $01, $01, $01, $01, $01, $00
 
-.byte $01										; JAZZCAT watermark
+.byte $02										; next person watermark
 
 .byte $de,$ad,$be,$ef							; DEADBEEF
 
