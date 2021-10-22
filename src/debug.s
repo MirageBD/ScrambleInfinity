@@ -8,6 +8,7 @@
 .define startzone						#$00				; #$00 - #$04 (STARTING BEFORE BOSS WON'T WORK)
 .define diedfade						0
 .define startlivesleft					#$03				; initial lives left
+.define launchmissiles                  1
 
 .define fueladdstart                    #$0a
 .define timesgamefinishedstart          #$00

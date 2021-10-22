@@ -1,7 +1,9 @@
 .segment "ZONES"
 
-handlezone1										; missiles	
+handlezone1										; missiles
+.if launchmissiles
 	jsr launchmissile
+.endif
 	jsr animmissiles
 	jmp handlemissilemovement
 
@@ -17,7 +19,9 @@ handlezone3										; comets
 	jmp handlecometmovement
 
 handlezone4										; missiles
+.if launchmissiles
 	jsr launchmissile
+.endif
 	jsr animmissiles
 	jmp handlemissilemovement
 
