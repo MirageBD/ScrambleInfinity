@@ -62,7 +62,7 @@
 tuneinit					= $1000
 tuneplay					= $1003
 
-recordmem					= $1c00
+recordmem					= $1f00
 
 maptiles					= $a900		; currently still 36 free chars if I want to use them for zone 6/boss zone. make it blink?
 maptilecolors				= $bd00

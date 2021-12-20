@@ -21,7 +21,7 @@ CONVERTWATCH        = 's/al [0-9A-F]* \.wh_\([a-z]*\)/\0\nwatch store \.wh_\1/'
 SYMBOLS             = $(EXE_DIR)/symbols
 SYMBOLSBREAK        = $(EXE_DIR)/symbolsbreak
 LDFLAGS             = -Ln $(SYMBOLS) --dbgfile $(EXE_DIR)/main.dbg
-VICE                = "..\..\..\winvice\x64sc.exe"
+VICE                = "..\..\..\winvice\bin\x64sc.exe"
 VICEFLAGS           = -truedrive -moncommands $(SYMBOLSBREAK)
 C1541               = c1541
 
