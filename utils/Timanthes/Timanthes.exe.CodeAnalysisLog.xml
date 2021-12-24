@@ -1,0 +1,1669 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="c:\program files (x86)\microsoft visual studio\2019\community\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
+<FxCopReport Version="16.0">
+ <Targets>
+  <Target Name="D:\Source\timanthes_src_3_0\src\bin\x64\Debug\Timanthes.exe">
+   <Modules>
+    <Module Name="timanthes.exe">
+     <Messages>
+      <Message Id="Timanthes" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+       <Issue Name="Assembly" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Timanthes' in assembly name 'Timanthes.exe'.</Issue>
+      </Message>
+     </Messages>
+     <Namespaces>
+      <Namespace Name="PaintDotNet">
+       <Types>
+        <Type Name="AboutDialog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#richCreditsBox_LinkClicked(System.Object,System.Windows.Forms.LinkClickedEventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.String.StartsWith(System.String)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="AboutDialog.cs" Line="167">Because the behavior of 'string.StartsWith(string)' could vary based on the current user's locale settings, replace this call in 'AboutDialog.richCreditsBox_LinkClicked(object, LinkClickedEventArgs)' with a call to 'string.StartsWith(string, StringComparison)'. If the result of 'string.StartsWith(string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="AppEnvironment" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#AntiAliasing" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="AntiAliasing" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="AppEnvironment.cs" Line="909">The compound word 'AntiAliasing' in member name 'AppEnvironment.AntiAliasing' exists as a discrete term. If your usage is intended to be single word, case it as 'Antialiasing' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#AntiAliasingChanged" Kind="Event" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="AntiAliasing" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'AntiAliasing' in member name 'AppEnvironment.AntiAliasingChanged' exists as a discrete term. If your usage is intended to be single word, case it as 'Antialiasing' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#AntiAliasingChanging" Kind="Event" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="AntiAliasing" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'AntiAliasing' in member name 'AppEnvironment.AntiAliasingChanging' exists as a discrete term. If your usage is intended to be single word, case it as 'Antialiasing' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="AppWorkspace" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="AvoidExcessiveClassCoupling" Category="Microsoft.Maintainability" CheckId="CA1506" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="UIType" Certainty="90" Level="Error">'AppWorkspace' is coupled with 127 different (non-IComponent) types from 15 different namespaces. Rewrite or refactor this class's methods to decrease its class coupling, or consider moving some of the class's methods to some of the other types it is tightly coupled with. A class coupling above 95 indicates poor maintainability, a class coupling between 95 and 80 indicates moderate maintainability, and a class coupling below 80 indicates good maintainability.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#CreateBlankDocumentInNewWorkspace(System.Drawing.Size,PaintDotNet.MeasurementUnit,System.Double,System.Boolean)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="dpu" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="AppWorkspace.cs" Line="2272">In method 'AppWorkspace.CreateBlankDocumentInNewWorkspace(Size, MeasurementUnit, double, bool)', correct the spelling of 'dpu' in parameter name 'dpu' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="AppWorkspace.cs" Line="2272">In method 'AppWorkspace.CreateBlankDocumentInNewWorkspace(Size, MeasurementUnit, double, bool)', correct the spelling of 'dpu' in parameter name 'dpuUnit' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#DocumentStrip_DocumentTabClicked(System.Object,PaintDotNet.EventArgs`1&lt;PaintDotNet.Pair`2&lt;PaintDotNet.DocumentWorkspace,PaintDotNet.DocumentClickAction&gt;&gt;)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="DocumentClickAction" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="AppWorkspace.cs" Line="1468">Correct the spelling of the unrecognized token 'DocumentClickAction' in the literal '"Code for DocumentClickAction."'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#GetDocumentWorkspaceThumbnail(PaintDotNet.DocumentWorkspace)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="dw" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="AppWorkspace.cs" Line="651">In method 'AppWorkspace.GetDocumentWorkspaceThumbnail(DocumentWorkspace)', correct the spelling of 'dw' in parameter name 'dw' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#LoadDefaultToolType()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.String.Compare(System.String,System.String,System.StringComparison)" TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="StringComparison" Certainty="75" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="AppWorkspace.cs" Line="1113">'AppWorkspace.LoadDefaultToolType()' passes 'StringComparison.InvariantCultureIgnoreCase' as the 'StringComparison' parameter to 'string.Compare(string, string, StringComparison)'. To perform a non-linguistic comparison, specify 'StringComparison.Ordinal' or 'StringComparison.OrdinalIgnoreCase' instead.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="BrushInfo" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#CreateBrush(System.Drawing.Color,System.Drawing.Color)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="BrushType" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="BrushInfo.cs" Line="81">Correct the spelling of the unrecognized token 'BrushType' in the literal '"BrushType is invalid"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="CallbackWithProgressDialog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#StartPos" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Pos" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="CallbackWithProgressDialog.cs" Line="39">Correct the spelling of 'Pos' in member name 'CallbackWithProgressDialog.StartPos' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="CanvasControl" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#CanvasPointToControlPoint(System.Drawing.PointF)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Pt" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="CanvasControl.cs" Line="165">In method 'CanvasControl.CanvasPointToControlPoint(PointF)', correct the spelling of 'Pt' in parameter name 'canvasPtF' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ControlPointToCanvasPoint(System.Drawing.PointF)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Pt" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="CanvasControl.cs" Line="170">In method 'CanvasControl.ControlPointToCanvasPoint(PointF)', correct the spelling of 'Pt' in parameter name 'controlPtF' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#OnRender(System.Drawing.Graphics,System.Drawing.Point)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="g" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterMoreMeaningfulName" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="CanvasControl.cs" Line="260">In method 'CanvasControl.OnRender(Graphics, Point)', consider providing a more meaningful name than parameter name 'g'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="CmdKeysEventHandler" Kind="Delegate" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="msg" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="DelegateParameter" Certainty="75" Level="CriticalWarning">In delegate 'CmdKeysEventHandler', correct the spelling of 'msg' in parameter name 'msg' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="ColorEventHandler" Kind="Delegate" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="ce" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="DelegateParameter" Certainty="75" Level="CriticalWarning">In delegate 'ColorEventHandler', correct the spelling of 'ce' in parameter name 'ce' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="ColorPickDialog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#.ctor()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="ColorPick" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorPickDialog.cs" Line="42">Correct the spelling of the unrecognized token 'ColorPick' in the literal '"ColorPick"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#InitializeComponent()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="swatchControlPick" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorPickDialog.cs" Line="116">Correct the spelling of the unrecognized token 'swatchControlPick' in the literal '"swatchControlPick"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ColorsForm" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#IncPrimaryIndex()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Inc" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="1504">Correct the spelling of 'Inc' in member name 'ColorsForm.IncPrimaryIndex()' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#InitializeComponent()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="Charmem" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="883">Correct the spelling of the unrecognized token 'Charmem' in the literal '"Charmem High Nybble / $D027+ // 01"'.</Issue>
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="913">Correct the spelling of the unrecognized token 'Charmem' in the literal '"Charmem High Nybble 2 / $D027+ // 01"'.</Issue>
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="873">Correct the spelling of the unrecognized token 'Charmem' in the literal '"Charmem Low Nybble / $D025 // 10"'.</Issue>
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="903">Correct the spelling of the unrecognized token 'Charmem' in the literal '"Charmem Low Nybble 2 / $D025 // 10"'.</Issue>
+            </Message>
+            <Message Id="Colormem" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="893">Correct the spelling of the unrecognized token 'Colormem' in the literal '"Colormem ($D800) / $D026 // 11"'.</Issue>
+            </Message>
+            <Message Id="Nybble" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="883">Correct the spelling of the unrecognized token 'Nybble' in the literal '"Charmem High Nybble / $D027+ // 01"'.</Issue>
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="913">Correct the spelling of the unrecognized token 'Nybble' in the literal '"Charmem High Nybble 2 / $D027+ // 01"'.</Issue>
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="873">Correct the spelling of the unrecognized token 'Nybble' in the literal '"Charmem Low Nybble / $D025 // 10"'.</Issue>
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="903">Correct the spelling of the unrecognized token 'Nybble' in the literal '"Charmem Low Nybble 2 / $D025 // 10"'.</Issue>
+            </Message>
+            <Message Id="colorAddButton" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="1336">Correct the spelling of the unrecognized token 'colorAddButton' in the literal '"colorAddButton"'.</Issue>
+            </Message>
+            <Message Id="toolStrip" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ColorsForm.cs" Line="1328">Correct the spelling of the unrecognized token 'toolStrip' in the literal '"toolStrip"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ColorWheel" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#HsvColor" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Hsv" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="ColorWheel.cs" Line="40">Correct the spelling of 'Hsv' in member name 'ColorWheel.HsvColor' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="DocumentStrip" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#OnDocumentClicked(PaintDotNet.DocumentWorkspace,PaintDotNet.DocumentClickAction)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="dw" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentStrip.cs" Line="380">In method 'DocumentStrip.OnDocumentClicked(DocumentWorkspace, DocumentClickAction)', correct the spelling of 'dw' in parameter name 'dw' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#QueueThumbnailUpdate(PaintDotNet.DocumentWorkspace)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="dw" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentStrip.cs" Line="520">In method 'DocumentStrip.QueueThumbnailUpdate(DocumentWorkspace)', correct the spelling of 'dw' in parameter name 'dw' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#RefreshThumbnail(PaintDotNet.DocumentWorkspace)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="dw" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentStrip.cs" Line="491">In method 'DocumentStrip.RefreshThumbnail(DocumentWorkspace)', correct the spelling of 'dw' in parameter name 'dw' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="DocumentWorkspace" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="AvoidExcessiveClassCoupling" Category="Microsoft.Maintainability" CheckId="CA1506" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="UIType" Certainty="90" Level="Error">'DocumentWorkspace' is coupled with 133 different (non-IComponent) types from 16 different namespaces. Rewrite or refactor this class's methods to decrease its class coupling, or consider moving some of the class's methods to some of the other types it is tightly coupled with. A class coupling above 95 indicates poor maintainability, a class coupling between 95 and 80 indicates moderate maintainability, and a class coupling below 80 indicates good maintainability.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#ActiveFrame" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#set_ActiveFrame(PaintDotNet.Frame)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+             <Messages>
+              <Message Id="ActiveFrame" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+               <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1110">Correct the spelling of the unrecognized token 'ActiveFrame' in the literal '"ActiveFrame was changed to a frame that is not contained within the Document"'.</Issue>
+               <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1118">Correct the spelling of the unrecognized token 'ActiveFrame' in the literal '"ActiveFrame was set to non-null while Document was null"'.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+          <Member Name="#ActiveLayer" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#set_ActiveLayer(PaintDotNet.Layer)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+             <Messages>
+              <Message Id="ActiveLayer" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+               <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1041">Correct the spelling of the unrecognized token 'ActiveLayer' in the literal '"ActiveLayer was changed to a layer that is not contained within the Document"'.</Issue>
+               <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1049">Correct the spelling of the unrecognized token 'ActiveLayer' in the literal '"ActiveLayer was set to non-null while Document was null"'.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+          <Member Name="#AddToMruList()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Mru" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1852">Correct the spelling of 'Mru' in member name 'DocumentWorkspace.AddToMruList()' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#BorrowScratchSurface(System.String)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="ScratchSurface" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1636">Correct the spelling of the unrecognized token 'ScratchSurface' in the literal '"ScratchSurface already borrowed: \'"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ChooseFile(System.Windows.Forms.Control,System.String&amp;,System.String)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Dir" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1950">In method 'DocumentWorkspace.ChooseFile(Control, out string, string)', correct the spelling of 'Dir' in parameter name 'startingDir' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ChooseFiles(System.Windows.Forms.Control,System.String[]&amp;,System.Boolean)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="multiselect" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1967">In method 'DocumentWorkspace.ChooseFiles(Control, out string[], bool)', correct the spelling of 'multiselect' in parameter name 'multiselect' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ChooseFiles(System.Windows.Forms.Control,System.String[]&amp;,System.Boolean,System.String)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Dir" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1972">In method 'DocumentWorkspace.ChooseFiles(Control, out string[], bool, string)', correct the spelling of 'Dir' in parameter name 'startingDir' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+            <Message Id="multiselect" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1972">In method 'DocumentWorkspace.ChooseFiles(Control, out string[], bool, string)', correct the spelling of 'multiselect' in parameter name 'multiselect' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#OnDocumentChanged()" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="scratchSurface" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1765">Correct the spelling of the unrecognized token 'scratchSurface' in the literal '"scratchSurface is currently borrowed: "'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#OnDocumentChanging(PaintDotNet.Document)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="scratchSurface" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1727">Correct the spelling of the unrecognized token 'scratchSurface' in the literal '"scratchSurface is currently borrowed: "'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#PopNullTool()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="PopNullTool" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1289">Correct the spelling of the unrecognized token 'PopNullTool' in the literal '"PopNullTool() call was not matched with PushNullTool()"'.</Issue>
+            </Message>
+            <Message Id="PushNullTool" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1289">Correct the spelling of the unrecognized token 'PushNullTool' in the literal '"PopNullTool() call was not matched with PushNullTool()"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ReturnScratchSurface(PaintDotNet.Surface)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="ScratchSurface" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1652">Correct the spelling of the unrecognized token 'ScratchSurface' in the literal '"ScratchSurface wasn\'t borrowed"'.</Issue>
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1657">Correct the spelling of the unrecognized token 'ScratchSurface' in the literal '"returned ScratchSurface doesn\'t match the real one"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ShowFileDialog(System.Windows.Forms.Control,System.Windows.Forms.FileDialog)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="fd" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1907">In method 'DocumentWorkspace.ShowFileDialog(Control, FileDialog)', correct the spelling of 'fd' in parameter name 'fd' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ToolInfos" Kind="Property" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Infos" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="DocumentWorkspace.cs" Line="1407">Correct the spelling of 'Infos' in member name 'DocumentWorkspace.ToolInfos' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ExecutingHistoryMementoEventArgs" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#SuspendTool" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#set_SuspendTool(System.Boolean)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+             <Messages>
+              <Message Id="MayAlterSuspendToolProperty" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+               <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ExecutingHistoryMementoEventArgs.cs" Line="48">Correct the spelling of the unrecognized token 'MayAlterSuspendToolProperty' in the literal '"May not alter the SuspendTool property when MayAlterSuspendToolProperty is false..."'.</Issue>
+              </Message>
+              <Message Id="SuspendTool" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+               <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ExecutingHistoryMementoEventArgs.cs" Line="48">Correct the spelling of the unrecognized token 'SuspendTool' in the literal '"May not alter the SuspendTool property when MayAlterSuspendToolProperty is false..."'.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="FileTypes" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#LoadFileTypes()" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Reflection.Assembly.LoadFrom" TypeName="AvoidCallingProblematicMethods" Category="Microsoft.Reliability" CheckId="CA2001" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="System.Reflection.Assembly.LoadFrom" Certainty="75" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="FileTypes.cs" Line="124">Remove the call to Assembly.LoadFrom from 'FileTypes.LoadFileTypes()'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="FontInfo" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#op_Equality(PaintDotNet.FontInfo,PaintDotNet.FontInfo)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="rhs" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="FontInfo.cs" Line="68">In method 'FontInfo.operator ==(FontInfo, FontInfo)', correct the spelling of 'rhs' in parameter name 'rhs' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#op_Inequality(PaintDotNet.FontInfo,PaintDotNet.FontInfo)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="rhs" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="FontInfo.cs" Line="80">In method 'FontInfo.operator !=(FontInfo, FontInfo)', correct the spelling of 'rhs' in parameter name 'rhs' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="FrameElement" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#QueueThumbnailUpdate(PaintDotNet.DocumentWorkspace)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="dw" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="FrameElement.cs" Line="479">In method 'FrameElement.QueueThumbnailUpdate(DocumentWorkspace)', correct the spelling of 'dw' in parameter name 'dw' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+            <Message Id="dw" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="Parameter" Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="FrameElement.cs" Line="479">'dw', a parameter declared in 'FrameElement.QueueThumbnailUpdate(DocumentWorkspace)', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="FrameEventHandler" Kind="Delegate" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="ce" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="DelegateParameter" Certainty="75" Level="CriticalWarning">In delegate 'FrameEventHandler', correct the spelling of 'ce' in parameter name 'ce' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="HistoryFunction" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#EventSink" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#get_EventSink()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+             <Messages>
+              <Message Id="EventSink" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+               <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="HistoryFunction.cs" Line="37">Correct the spelling of the unrecognized token 'EventSink' in the literal '"EventSink property is only accessible when IsAsync is true"'.</Issue>
+              </Message>
+              <Message Id="IsAsync" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+               <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="HistoryFunction.cs" Line="37">Correct the spelling of the unrecognized token 'IsAsync' in the literal '"EventSink property is only accessible when IsAsync is true"'.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+          <Member Name="#Execute(PaintDotNet.IHistoryWorkspace)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="HistoryFunction" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="HistoryFunction.cs" Line="98">Correct the spelling of the unrecognized token 'HistoryFunction' in the literal '"Already executed this HistoryFunction"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#OnCancelRequested()" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="OnCancelRequested" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="HistoryFunction.cs" Line="282">Correct the spelling of the unrecognized token 'OnCancelRequested' in the literal '"OnCancelRequested() was called when pleaseCancel equaled false"'.</Issue>
+            </Message>
+            <Message Id="pleaseCancel" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="HistoryFunction.cs" Line="282">Correct the spelling of the unrecognized token 'pleaseCancel' in the literal '"OnCancelRequested() was called when pleaseCancel equaled false"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#OnProgress(System.Double)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="HistoryFunction" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="HistoryFunction.cs" Line="224">Correct the spelling of the unrecognized token 'HistoryFunction' in the literal '"This HistoryFunction does not support reporting progress, yet it called OnProgre..."'.</Issue>
+            </Message>
+            <Message Id="OnProgress" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="HistoryFunction.cs" Line="224">Correct the spelling of the unrecognized token 'OnProgress' in the literal '"This HistoryFunction does not support reporting progress, yet it called OnProgre..."'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#RequestCancel()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="HistoryFunction" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="HistoryFunction.cs" Line="265">Correct the spelling of the unrecognized token 'HistoryFunction' in the literal '"This HistoryFunction is not cancellable"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="HistoryFunctionNonFatalException" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="NonFatal" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="TypeShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'NonFatal' in type name 'HistoryFunctionNonFatalException' exists as a discrete term. If your usage is intended to be single word, case it as 'Nonfatal'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="HistoryFunctionResult" Kind="Enum" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#NonFatalError" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="NonFatal" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'NonFatal' in member name 'HistoryFunctionResult.NonFatalError' exists as a discrete term. If your usage is intended to be single word, case it as 'Nonfatal' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="IAntiAliasingConfig" Kind="Interface" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="AntiAliasing" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="TypeShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'AntiAliasing' in type name 'IAntiAliasingConfig' exists as a discrete term. If your usage is intended to be single word, case it as 'Antialiasing'.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#AntiAliasing" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="AntiAliasing" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'AntiAliasing' in member name 'IAntiAliasingConfig.AntiAliasing' exists as a discrete term. If your usage is intended to be single word, case it as 'Antialiasing' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#PerformAntiAliasingChanged()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="AntiAliasing" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'AntiAliasing' in member name 'IAntiAliasingConfig.PerformAntiAliasingChanged()' exists as a discrete term. If your usage is intended to be single word, case it as 'Antialiasing' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#AntiAliasingChanged" Kind="Event" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="AntiAliasing" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'AntiAliasing' in member name 'IAntiAliasingConfig.AntiAliasingChanged' exists as a discrete term. If your usage is intended to be single word, case it as 'Antialiasing' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="IToolChooser" Kind="Interface" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#SetTools(PaintDotNet.ToolInfo[])" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Infos" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning">In method 'IToolChooser.SetTools(ToolInfo[])', correct the spelling of 'Infos' in parameter name 'toolInfos' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="LayerControl" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#RefreshVisibilies()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Visibilies" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="LayerControl.cs" Line="372">Correct the spelling of 'Visibilies' in member name 'LayerControl.RefreshVisibilies()' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="LayerElement" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#LayerPropertyChangedHandler(System.Object,PaintDotNet.PropertyEventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="Colour" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="LayerElement.cs" Line="209">Correct the spelling of the unrecognized token 'Colour' in the literal '" (True Colour)"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="LayerEventHandler" Kind="Delegate" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="ce" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="DelegateParameter" Certainty="75" Level="CriticalWarning">In delegate 'LayerEventHandler', correct the spelling of 'ce' in parameter name 'ce' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="MainForm" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#.ctor(System.String[])" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="MainForm.cs" Line="245">Because the behavior of 'string.Compare(string, string, bool)' could vary based on the current user's locale settings, replace this call in 'MainForm.MainForm(string[])' with a call to 'string.Compare(string, string, StringComparison)'. If the result of 'string.Compare(string, string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="MainForm.cs" Line="249">Because the behavior of 'string.Compare(string, string, bool)' could vary based on the current user's locale settings, replace this call in 'MainForm.MainForm(string[])' with a call to 'string.Compare(string, string, StringComparison)'. If the result of 'string.Compare(string, string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="MainForm.cs" Line="255">Because the behavior of 'string.Compare(string, string, bool)' could vary based on the current user's locale settings, replace this call in 'MainForm.MainForm(string[])' with a call to 'string.Compare(string, string, StringComparison)'. If the result of 'string.Compare(string, string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="MainForm.cs" Line="261">Because the behavior of 'string.Compare(string, string, bool)' could vary based on the current user's locale settings, replace this call in 'MainForm.MainForm(string[])' with a call to 'string.Compare(string, string, StringComparison)'. If the result of 'string.Compare(string, string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#SplitMessage(System.String,PaintDotNet.MainForm+ArgumentAction&amp;,System.String&amp;)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.String.IndexOf(System.String)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="MainForm.cs" Line="115">Because the behavior of 'string.IndexOf(string)' could vary based on the current user's locale settings, replace this call in 'MainForm.SplitMessage(string, out MainForm.ArgumentAction, out string)' with a call to 'string.IndexOf(string, StringComparison)'. If the result of 'string.IndexOf(string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MostRecentFiles" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Add(PaintDotNet.MostRecentFile)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="mrf" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="MostRecentFiles.cs" Line="106">In method 'MostRecentFiles.Add(MostRecentFile)', correct the spelling of 'mrf' in parameter name 'mrf' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#Contains(System.String)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="System.String.Compare(System.String,System.String)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="MostRecentFiles.cs" Line="96">Because the behavior of 'string.Compare(string, string)' could vary based on the current user's locale settings, replace this call in 'MostRecentFiles.Contains(string)' with a call to 'string.Compare(string, string, StringComparison)'. If the result of 'string.Compare(string, string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#LoadMruList()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Mru" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="MostRecentFiles.cs" Line="162">Correct the spelling of 'Mru' in member name 'MostRecentFiles.LoadMruList()' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#Remove(System.String)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="MostRecentFiles.cs" Line="139">Because the behavior of 'string.Compare(string, string, bool)' could vary based on the current user's locale settings, replace this call in 'MostRecentFiles.Remove(string)' with a call to 'string.Compare(string, string, StringComparison)'. If the result of 'string.Compare(string, string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#SaveMruList()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Mru" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="MostRecentFiles.cs" Line="202">Correct the spelling of 'Mru' in member name 'MostRecentFiles.SaveMruList()' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MoveNubRenderer" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#IsPointTouching(System.Drawing.Point,System.Boolean)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="pt" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="MoveNubRenderer.cs" Line="166">In method 'MoveNubRenderer.IsPointTouching(Point, bool)', correct the spelling of 'pt' in parameter name 'pt' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#IsPointTouching(System.Drawing.PointF,System.Boolean)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="pt" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="MoveNubRenderer.cs" Line="153">In method 'MoveNubRenderer.IsPointTouching(PointF, bool)', correct the spelling of 'pt' in parameter name 'ptF' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="PaletteCollection" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Contains(System.String,System.String&amp;)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="System.String.Compare(System.String,System.String,System.StringComparison)" TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="StringComparison" Certainty="75" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="PaletteCollection.cs" Line="699">'PaletteCollection.Contains(string, out string)' passes 'StringComparison.InvariantCultureIgnoreCase' as the 'StringComparison' parameter to 'string.Compare(string, string, StringComparison)'. To perform a non-linguistic comparison, specify 'StringComparison.Ordinal' or 'StringComparison.OrdinalIgnoreCase' instead.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="PdnMenuItem" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="Pdn" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="Type" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Pdn' in type name 'PdnMenuItem'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="PdnSettings" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="Pdn" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="Type" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Pdn' in type name 'PdnSettings'.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#MruMax" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Mru" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Mru' in member name 'PdnSettings.MruMax' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#UpdateMsiFileName" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Msi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Msi' in member name 'PdnSettings.UpdateMsiFileName' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="PdnStatusBar" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="Pdn" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="Type" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Pdn' in type name 'PdnStatusBar'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="PdnToolBar" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="Pdn" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="Type" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Pdn' in type name 'PdnToolBar'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="PdnVersionInfo" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="Pdn" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="Type" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Pdn' in type name 'PdnVersionInfo'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="PdnVersionManifest" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="Pdn" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="Type" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Pdn' in type name 'PdnVersionManifest'.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#.ctor(System.String,PaintDotNet.PdnVersionInfo[])" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Infos" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="PdnVersionManifest.cs" Line="91">In method 'PdnVersionManifest.PdnVersionManifest(string, PdnVersionInfo[])', correct the spelling of 'Infos' in parameter name 'versionInfos' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#VersionInfos" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Infos" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="PdnVersionManifest.cs" Line="31">Correct the spelling of 'Infos' in member name 'PdnVersionManifest.VersionInfos' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="PenInfo" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#op_Equality(PaintDotNet.PenInfo,PaintDotNet.PenInfo)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="rhs" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="PenInfo.cs" Line="54">In method 'PenInfo.operator ==(PenInfo, PenInfo)', correct the spelling of 'rhs' in parameter name 'rhs' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#op_Inequality(PaintDotNet.PenInfo,PaintDotNet.PenInfo)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="rhs" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="PenInfo.cs" Line="59">In method 'PenInfo.operator !=(PenInfo, PenInfo)', correct the spelling of 'rhs' in parameter name 'rhs' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="PreviewElement" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#QueueThumbnailUpdate(PaintDotNet.DocumentWorkspace)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="dw" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="PreviewElement.cs" Line="362">In method 'PreviewElement.QueueThumbnailUpdate(DocumentWorkspace)', correct the spelling of 'dw' in parameter name 'dw' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+            <Message Id="dw" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="Parameter" Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="PreviewElement.cs" Line="362">'dw', a parameter declared in 'PreviewElement.QueueThumbnailUpdate(DocumentWorkspace)', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ReindexDialog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="Reindex" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="Type" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Reindex' in type name 'ReindexDialog'.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#.ctor()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Reindex" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ReindexDialog.cs" Line="49">Correct the spelling of the unrecognized token 'Reindex' in the literal '"Reindex"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#InitializeComponent()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="Charmem" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ReindexDialog.cs" Line="405">Correct the spelling of the unrecognized token 'Charmem' in the literal '"1 = 10 ( Charmem Low Nybble / $D025 )"'.</Issue>
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ReindexDialog.cs" Line="414">Correct the spelling of the unrecognized token 'Charmem' in the literal '"2 = 01 ( Charmem High Nybble / $D027+ )"'.</Issue>
+            </Message>
+            <Message Id="Colormem" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ReindexDialog.cs" Line="423">Correct the spelling of the unrecognized token 'Colormem' in the literal '"3 = 11 ( Colormem ($D800) / $D026 )"'.</Issue>
+            </Message>
+            <Message Id="Nybble" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ReindexDialog.cs" Line="405">Correct the spelling of the unrecognized token 'Nybble' in the literal '"1 = 10 ( Charmem Low Nybble / $D025 )"'.</Issue>
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ReindexDialog.cs" Line="414">Correct the spelling of the unrecognized token 'Nybble' in the literal '"2 = 01 ( Charmem High Nybble / $D027+ )"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ReindexTool" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="Reindex" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="Type" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Reindex' in type name 'ReindexTool'.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#OnDeactivate()" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="lastPoint" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Tools" File="ReindexTool.cs" Line="60">'lastPoint', a variable declared in 'ReindexTool.OnDeactivate()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ResizeDialog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#OriginalDpu" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Dpu" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="ResizeDialog.cs" Line="492">Correct the spelling of 'Dpu' in member name 'ResizeDialog.OriginalDpu' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#OriginalDpuUnit" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Dpu" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="ResizeDialog.cs" Line="506">Correct the spelling of 'Dpu' in member name 'ResizeDialog.OriginalDpuUnit' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="RotateNubRenderer" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#IsPointTouching(System.Drawing.Point)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="pt" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="RotateNubRenderer.cs" Line="72">In method 'RotateNubRenderer.IsPointTouching(Point)', correct the spelling of 'pt' in parameter name 'pt' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="RotateType" Kind="Enum" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#CounterClockwise180" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="CounterClockwise" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'CounterClockwise' in member name 'RotateType.CounterClockwise180' exists as a discrete term. If your usage is intended to be single word, case it as 'Counterclockwise' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#CounterClockwise270" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="CounterClockwise" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'CounterClockwise' in member name 'RotateType.CounterClockwise270' exists as a discrete term. If your usage is intended to be single word, case it as 'Counterclockwise' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#CounterClockwise90" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="CounterClockwise" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'CounterClockwise' in member name 'RotateType.CounterClockwise90' exists as a discrete term. If your usage is intended to be single word, case it as 'Counterclockwise' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="SaveConfigDialog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#OnShown(System.EventArgs)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="ScratchSurface" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="SaveConfigDialog.cs" Line="154">Correct the spelling of the unrecognized token 'ScratchSurface' in the literal '"ScratchSurface was never set: it is null"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ScratchSurface" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#set_ScratchSurface(PaintDotNet.Surface)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+             <Messages>
+              <Message Id="ScratchSurface" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+               <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="SaveConfigDialog.cs" Line="52">Correct the spelling of the unrecognized token 'ScratchSurface' in the literal '"May only set ScratchSurface once, and only before the dialog is shown"'.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="SavePaletteDialog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#InitializeComponent()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="SavePaletteDialog" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="SavePaletteDialog.cs" Line="174">Correct the spelling of the unrecognized token 'SavePaletteDialog' in the literal '"SavePaletteDialog"'.</Issue>
+            </Message>
+            <Message Id="infoLabel" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="SavePaletteDialog.cs" Line="100">Correct the spelling of the unrecognized token 'infoLabel' in the literal '"infoLabel"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="SaveProgressDialog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Save(System.IO.Stream,PaintDotNet.Document,PaintDotNet.FileType,PaintDotNet.SaveConfigToken,PaintDotNet.Surface)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="dst" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="SaveProgressDialog.cs" Line="47">In method 'SaveProgressDialog.Save(Stream, Document, FileType, SaveConfigToken, Surface)', correct the spelling of 'dst' in parameter name 'dstFileType' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="SaveProgressDialog.cs" Line="47">In method 'SaveProgressDialog.Save(Stream, Document, FileType, SaveConfigToken, Surface)', correct the spelling of 'dst' in parameter name 'dstStream' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+            <Message Id="src" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="SaveProgressDialog.cs" Line="47">In method 'SaveProgressDialog.Save(Stream, Document, FileType, SaveConfigToken, Surface)', correct the spelling of 'src' in parameter name 'srcDocument' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ShapeDrawType" Kind="Enum" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="FlagsEnumsShouldHavePluralNames" Category="Microsoft.Naming" CheckId="CA1714" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Certainty="75" Level="Error">If enumeration name 'ShapeDrawType' is singular, change it to a plural form.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="SliderControl" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#UpdateBitmap()" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="text" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="SliderControl.cs" Line="67">'text', a variable declared in 'SliderControl.UpdateBitmap()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="Startup" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Start()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="System.String.Compare(System.String,System.String,System.StringComparison)" TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="StringComparison" Certainty="75" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="Startup.cs" Line="242">'Startup.Start()' passes 'StringComparison.InvariantCultureIgnoreCase' as the 'StringComparison' parameter to 'string.Compare(string, string, StringComparison)'. To perform a non-linguistic comparison, specify 'StringComparison.Ordinal' or 'StringComparison.OrdinalIgnoreCase' instead.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="TileArgEventArgs" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#.ctor(System.Int32)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="tilearg" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="TileArgEventArgs.cs" Line="28">In method 'TileArgEventArgs.TileArgEventArgs(int)', correct the spelling of 'tilearg' in parameter name 'tilearg' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#Tilearg" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Tilearg" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="TileArgEventArgs.cs" Line="23">Correct the spelling of 'Tilearg' in member name 'TileArgEventArgs.Tilearg' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="TileForm" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#SetStatusText()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Hashcode" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="TileForm.cs" Line="216">Correct the spelling of the unrecognized token 'Hashcode' in the literal '" Hashcode: "'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="Tool" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#.ctor(PaintDotNet.DocumentWorkspace,PaintDotNet.ImageResource,System.String,System.String,System.Char,System.Boolean,PaintDotNet.ToolBarConfigItems)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="HotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="Tool.cs" Line="49">In member 'Tool.Tool(DocumentWorkspace, ImageResource, string, string, char, bool, ToolBarConfigItems)', the compound word 'HotKey' in parameter name 'skipIfActiveOnHotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'Hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+            <Message Id="hotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="Tool.cs" Line="49">In member 'Tool.Tool(DocumentWorkspace, ImageResource, string, string, char, bool, ToolBarConfigItems)', the compound word 'hotKey' in parameter name 'hotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#HotKey" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="HotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="Tool.cs" Line="505">The compound word 'HotKey' in member name 'Tool.HotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'Hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ToolConfigStrip" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="AvoidExcessiveClassCoupling" Category="Microsoft.Maintainability" CheckId="CA1506" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="UIType" Certainty="75" Level="Warning">'ToolConfigStrip' is coupled with 81 different (non-IComponent) types from 12 different namespaces. Rewrite or refactor this class's methods to decrease its class coupling, or consider moving some of the class's methods to some of the other types it is tightly coupled with. A class coupling above 95 indicates poor maintainability, a class coupling between 95 and 80 indicates moderate maintainability, and a class coupling below 80 indicates good maintainability.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#FontFamily" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#set_FontFamily(System.Drawing.FontFamily)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+             <Messages>
+              <Message Id="FontFamily" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+               <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src" File="ToolConfigStrip.cs" Line="2272">Correct the spelling of the unrecognized token 'FontFamily' in the literal '"FontFamily is not valid"'.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+          <Member Name="#OnAntiAliasingChanged()" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="AntiAliasing" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="ToolConfigStrip.cs" Line="1701">The compound word 'AntiAliasing' in member name 'ToolConfigStrip.OnAntiAliasingChanged()' exists as a discrete term. If your usage is intended to be single word, case it as 'Antialiasing' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ToolInfo" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#.ctor(System.String,System.String,PaintDotNet.ImageResource,System.Char,System.Boolean,PaintDotNet.ToolBarConfigItems,System.Type)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="HotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="ToolInfo.cs" Line="102">In member 'ToolInfo.ToolInfo(string, string, ImageResource, char, bool, ToolBarConfigItems, Type)', the compound word 'HotKey' in parameter name 'skipIfActiveOnHotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'Hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+            <Message Id="hotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="ToolInfo.cs" Line="102">In member 'ToolInfo.ToolInfo(string, string, ImageResource, char, bool, ToolBarConfigItems, Type)', the compound word 'hotKey' in parameter name 'hotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#HotKey" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="HotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="ToolInfo.cs" Line="60">The compound word 'HotKey' in member name 'ToolInfo.HotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'Hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#SkipIfActiveOnHotKey" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="HotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src" File="ToolInfo.cs" Line="52">The compound word 'HotKey' in member name 'ToolInfo.SkipIfActiveOnHotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'Hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="UnsavedChangesDialog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#OnDocumentClicked(PaintDotNet.DocumentWorkspace)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="dw" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src" File="UnsavedChangesDialog.cs" Line="286">In method 'UnsavedChangesDialog.OnDocumentClicked(DocumentWorkspace)', correct the spelling of 'dw' in parameter name 'dw' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="PaintDotNet.Actions">
+       <Types>
+        <Type Name="CanvasSizeAction" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#ResizeDocument(PaintDotNet.Document,System.Drawing.Size,PaintDotNet.AnchorEdge,PaintDotNet.ColorBgra)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="BitmapLayers" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Actions" File="CanvasSizeAction.cs" Line="151">Correct the spelling of the unrecognized token 'BitmapLayers' in the literal '"Canvas Size does not support Layers that are not BitmapLayers"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ClearMruListAction" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="Mru" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="Type" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Mru' in type name 'ClearMruListAction'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="PasteAction" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#PerformAction()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="AvoidExcessiveClassCoupling" Category="Microsoft.Maintainability" CheckId="CA1506" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Method" Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Actions" File="PasteAction.cs" Line="30">'PasteAction.PerformAction()' is coupled with 35 different types from 9 different namespaces. Rewrite or refactor the method to decrease its class coupling, or consider moving the method to one of the other types it is tightly coupled with. A class coupling above 40 indicates poor maintainability, a class coupling between 40 and 30 indicates moderate maintainability, and a class coupling below 30 indicates good maintainability.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="PasteInToNewImageAction" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="InTo" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="TypeShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'InTo' in type name 'PasteInToNewImageAction' exists as a discrete term. If your usage is intended to be single word, case it as 'Into'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="PasteInToNewLayerAction" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="InTo" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="TypeShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'InTo' in type name 'PasteInToNewLayerAction' exists as a discrete term. If your usage is intended to be single word, case it as 'Into'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="PickBackgroundColorAction+PickBackgroundColorProgressDialog" Kind="Class" Accessibility="Private" ExternallyVisible="False">
+         <Members>
+          <Member Name="#PickBackgroundColorLayer()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="BitmapLayers" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Actions" File="PickBackgroundColorAction.cs" Line="97">Correct the spelling of the unrecognized token 'BitmapLayers' in the literal '"Resize does not support Layers that are not BitmapLayers"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ReindexAction" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="Reindex" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="Type" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Reindex' in type name 'ReindexAction'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="ReindexAction+ReindexProgressDialog" Kind="Class" Accessibility="Private" ExternallyVisible="False">
+         <Members>
+          <Member Name="#ReindexAllLayers()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="BitmapLayers" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Actions" File="ReindexAction.cs" Line="150">Correct the spelling of the unrecognized token 'BitmapLayers' in the literal '"Reindex does not support Layers that are not BitmapLayers"'.</Issue>
+            </Message>
+            <Message Id="Reindex" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Actions" File="ReindexAction.cs" Line="150">Correct the spelling of the unrecognized token 'Reindex' in the literal '"Reindex does not support Layers that are not BitmapLayers"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ReindexLayer()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="BitmapLayers" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Actions" File="ReindexAction.cs" Line="124">Correct the spelling of the unrecognized token 'BitmapLayers' in the literal '"Reindex does not support Layers that are not BitmapLayers"'.</Issue>
+            </Message>
+            <Message Id="Reindex" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Actions" File="ReindexAction.cs" Line="124">Correct the spelling of the unrecognized token 'Reindex' in the literal '"Reindex does not support Layers that are not BitmapLayers"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ResizeAction+ResizeProgressDialog" Kind="Class" Accessibility="Private" ExternallyVisible="False">
+         <Members>
+          <Member Name="#ResizeDocument()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="BitmapLayers" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Actions" File="ResizeAction.cs" Line="287">Correct the spelling of the unrecognized token 'BitmapLayers' in the literal '"Resize does not support Layers that are not BitmapLayers"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ZoomInAction" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="InAction" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="TypeShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'InAction' in type name 'ZoomInAction' exists as a discrete term. If your usage is intended to be single word, case it as 'Inaction'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="PaintDotNet.HistoryFunctions">
+       <Types>
+        <Type Name="CropToSelectionFunction" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#OnExecute(PaintDotNet.IHistoryWorkspace)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="BitmapLayers" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\HistoryFunctions" File="CropToSelectionFunction.cs" Line="99">Correct the spelling of the unrecognized token 'BitmapLayers' in the literal '"Crop does not support Layers that are not BitmapLayers"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="RotateDocumentFunction" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#OnExecute(PaintDotNet.IHistoryWorkspace)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="non-BitmapLayers" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\HistoryFunctions" File="RotateDocumentFunction.cs" Line="138">Correct the spelling of the unrecognized token 'non-BitmapLayers' in the literal '"Cannot Rotate non-BitmapLayers"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="PaintDotNet.HistoryMementos">
+       <Types>
+        <Type Name="FlipLayerHistoryMemento" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Flip(PaintDotNet.Surface)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="FlipType" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\HistoryMementos" File="FlipLayerHistoryMemento.cs" Line="53">Correct the spelling of the unrecognized token 'FlipType' in the literal '"FlipType was invalid"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MetaDataHistoryMemento" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="MetaData" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="TypeShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'MetaData' in type name 'MetaDataHistoryMemento' exists as a discrete term. If your usage is intended to be single word, case it as 'Metadata'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="NullHistoryMemento" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#OnUndo()" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="NullHistoryMementos" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\HistoryMementos" File="NullHistoryMemento.cs" Line="26">Correct the spelling of the unrecognized token 'NullHistoryMementos' in the literal '"NullHistoryMementos are not undoable"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="PaintDotNet.Menus">
+       <Types>
+        <Type Name="EffectMenuBase" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#AddEffectsToMenu()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Menus" File="EffectMenuBase.cs" Line="260">Because the behavior of 'string.Compare(string, string, bool)' could vary based on the current user's locale settings, replace this call in 'EffectMenuBase.AddEffectsToMenu()' with a call to 'string.Compare(string, string, StringComparison)'. If the result of 'string.Compare(string, string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Menus" File="EffectMenuBase.cs" Line="276">Because the behavior of 'string.Compare(string, string, bool)' could vary based on the current user's locale settings, replace this call in 'EffectMenuBase.AddEffectsToMenu()' with a call to 'string.Compare(string, string, StringComparison)'. If the result of 'string.Compare(string, string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#GatherEffects()" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Reflection.Assembly.LoadFrom" TypeName="AvoidCallingProblematicMethods" Category="Microsoft.Reliability" CheckId="CA2001" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="System.Reflection.Assembly.LoadFrom" Certainty="75" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Menus" File="EffectMenuBase.cs" Line="335">Remove the call to Assembly.LoadFrom from 'EffectMenuBase.GatherEffects()'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="FileMenu" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#MenuFileOpenRecentFile_Click(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.String.IndexOf(System.String)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Menus" File="FileMenu.cs" Line="373">Because the behavior of 'string.IndexOf(string)' could vary based on the current user's locale settings, replace this call in 'FileMenu.MenuFileOpenRecentFile_Click(object, EventArgs)' with a call to 'string.IndexOf(string, StringComparison)'. If the result of 'string.IndexOf(string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="HelpMenu" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#MenuHelpLanguage_DropDownOpening(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.String.Compare(System.String,System.String,System.StringComparison)" TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="StringComparison" Certainty="75" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Menus" File="HelpMenu.cs" Line="243">'HelpMenu.MenuHelpLanguage_DropDownOpening(object, EventArgs)' passes 'StringComparison.InvariantCultureIgnoreCase' as the 'StringComparison' parameter to 'string.Compare(string, string, StringComparison)'. To perform a non-linguistic comparison, specify 'StringComparison.Ordinal' or 'StringComparison.OrdinalIgnoreCase' instead.</Issue>
+             <Issue Name="StringComparison" Certainty="75" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Menus" File="HelpMenu.cs" Line="253">'HelpMenu.MenuHelpLanguage_DropDownOpening(object, EventArgs)' passes 'StringComparison.InvariantCultureIgnoreCase' as the 'StringComparison' parameter to 'string.Compare(string, string, StringComparison)'. To perform a non-linguistic comparison, specify 'StringComparison.Ordinal' or 'StringComparison.OrdinalIgnoreCase' instead.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="LayersMenu" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#InitializeComponent()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="Colours" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Menus" File="LayersMenu.cs" Line="161">Correct the spelling of the unrecognized token 'Colours' in the literal '"Reduce Colours..."'.</Issue>
+            </Message>
+            <Message Id="Reindex" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Menus" File="LayersMenu.cs" Line="174">Correct the spelling of the unrecognized token 'Reindex' in the literal '"C64 Reindex..."'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="PdnMainMenu" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="Pdn" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="Type" Certainty="75" Level="CriticalWarning">Correct the spelling of 'Pdn' in type name 'PdnMainMenu'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="PaintDotNet.Tools">
+       <Types>
+        <Type Name="CloneStampTool" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#DrawCloneLine(System.Drawing.Point,System.Drawing.Point,System.Drawing.Point,PaintDotNet.Surface,PaintDotNet.Surface)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="ceilingPenWidth" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Tools" File="CloneStampTool.cs" Line="414">'ceilingPenWidth', a variable declared in 'CloneStampTool.DrawCloneLine(Point, Point, Point, Surface, Surface)', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            </Message>
+            <Message Id="penWidth" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Tools" File="CloneStampTool.cs" Line="414">'penWidth', a variable declared in 'CloneStampTool.DrawCloneLine(Point, Point, Point, Surface, Surface)', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#OnMouseMove(System.Windows.Forms.MouseEventArgs)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="penWidth" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Tools" File="CloneStampTool.cs" Line="499">'penWidth', a variable declared in 'CloneStampTool.OnMouseMove(MouseEventArgs)', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="FloodToolBase" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#.ctor(PaintDotNet.DocumentWorkspace,PaintDotNet.ImageResource,System.String,System.String,System.Char,System.Boolean,PaintDotNet.ToolBarConfigItems)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="HotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Tools" File="FloodToolBase.cs" Line="26">In member 'FloodToolBase.FloodToolBase(DocumentWorkspace, ImageResource, string, string, char, bool, ToolBarConfigItems)', the compound word 'HotKey' in parameter name 'skipIfActiveOnHotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'Hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+            <Message Id="hotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Tools" File="FloodToolBase.cs" Line="26">In member 'FloodToolBase.FloodToolBase(DocumentWorkspace, ImageResource, string, string, char, bool, ToolBarConfigItems)', the compound word 'hotKey' in parameter name 'hotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#FillStencilByColor(PaintDotNet.Surface,PaintDotNet.IBitVector2D,PaintDotNet.ColorBgra,System.Int32,System.Drawing.Rectangle&amp;,PaintDotNet.PdnRegion,System.Boolean)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="cmp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src\Tools" File="FloodToolBase.cs" Line="69">In method 'FloodToolBase.FillStencilByColor(Surface, IBitVector2D, ColorBgra, int, out Rectangle, PdnRegion, bool)', correct the spelling of 'cmp' in parameter name 'cmp' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="GradientTool" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#CommitGradient()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="CommitGradient" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Tools" File="GradientTool.cs" Line="581">Correct the spelling of the unrecognized token 'CommitGradient' in the literal '"CommitGradient() called when a gradient was not active"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MoveSelectionTool+ContextHistoryMemento" Kind="Class" Accessibility="Private" ExternallyVisible="False">
+         <Members>
+          <Member Name="#OnToolUndo()" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="False">
+           <Messages>
+            <Message Id="MoveSelectionTool" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Tools" File="MoveSelectionTool.cs" Line="55">Correct the spelling of the unrecognized token 'MoveSelectionTool' in the literal '"Current Tool is not the MoveSelectionTool"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MoveTool" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#PasteMouseDown(PaintDotNet.SurfaceForClipboard,System.Drawing.Point)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="sfc" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameter" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src\Tools" File="MoveTool.cs" Line="393">In method 'MoveTool.PasteMouseDown(SurfaceForClipboard, Point)', correct the spelling of 'sfc' in parameter name 'sfc' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MoveTool+ContextHistoryMemento" Kind="Class" Accessibility="Private" ExternallyVisible="False">
+         <Members>
+          <Member Name="#OnToolUndo()" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="False">
+           <Messages>
+            <Message Id="MoveTool" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Tools" File="MoveTool.cs" Line="161">Correct the spelling of the unrecognized token 'MoveTool' in the literal '"Current Tool is not the MoveTool"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MoveToolBase" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#.ctor(PaintDotNet.DocumentWorkspace,PaintDotNet.ImageResource,System.String,System.String,System.Char,System.Boolean,PaintDotNet.ToolBarConfigItems)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="HotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Tools" File="MoveToolBase.cs" Line="27">In member 'MoveToolBase.MoveToolBase(DocumentWorkspace, ImageResource, string, string, char, bool, ToolBarConfigItems)', the compound word 'HotKey' in parameter name 'skipIfActiveOnHotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'Hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+            <Message Id="hotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Tools" File="MoveToolBase.cs" Line="27">In member 'MoveToolBase.MoveToolBase(DocumentWorkspace, ImageResource, string, string, char, bool, ToolBarConfigItems)', the compound word 'hotKey' in parameter name 'hotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="PaintBrushTool" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message Id="PaintBrush" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+           <Issue Name="TypeShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'PaintBrush' in type name 'PaintBrushTool' exists as a discrete term. If your usage is intended to be single word, case it as 'Paintbrush'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="RecolorTool" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#AAPoints(System.Int32,System.Int32)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterMoreMeaningfulName" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src\Tools" File="RecoloringTool.cs" Line="54">In method 'RecolorTool.AAPoints(int, int)', consider providing a more meaningful name than parameter name 'x'.</Issue>
+            </Message>
+            <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterMoreMeaningfulName" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src\Tools" File="RecoloringTool.cs" Line="54">In method 'RecolorTool.AAPoints(int, int)', consider providing a more meaningful name than parameter name 'y'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#AAPointsAdd(System.Int32,System.Int32,PaintDotNet.ColorBgra)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterMoreMeaningfulName" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src\Tools" File="RecoloringTool.cs" Line="59">In method 'RecolorTool.AAPointsAdd(int, int, ColorBgra)', consider providing a more meaningful name than parameter name 'x'.</Issue>
+            </Message>
+            <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterMoreMeaningfulName" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src\Tools" File="RecoloringTool.cs" Line="59">In method 'RecolorTool.AAPointsAdd(int, int, ColorBgra)', consider providing a more meaningful name than parameter name 'y'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#AAPointsRemove(System.Int32,System.Int32)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="x" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterMoreMeaningfulName" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src\Tools" File="RecoloringTool.cs" Line="65">In method 'RecolorTool.AAPointsRemove(int, int)', consider providing a more meaningful name than parameter name 'x'.</Issue>
+            </Message>
+            <Message Id="y" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterMoreMeaningfulName" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src\Tools" File="RecoloringTool.cs" Line="65">In method 'RecolorTool.AAPointsRemove(int, int)', consider providing a more meaningful name than parameter name 'y'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="SelectionTool" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#.ctor(PaintDotNet.DocumentWorkspace,PaintDotNet.ImageResource,System.String,System.String,System.Char,PaintDotNet.ToolBarConfigItems)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="hotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Tools" File="SelectionTool.cs" Line="25">In member 'SelectionTool.SelectionTool(DocumentWorkspace, ImageResource, string, string, char, ToolBarConfigItems)', the compound word 'hotKey' in parameter name 'hotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ShapeTool" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#.ctor(PaintDotNet.DocumentWorkspace,PaintDotNet.ImageResource,System.String,System.String,System.Char,PaintDotNet.ToolBarConfigItems,PaintDotNet.ToolBarConfigItems)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="hotKey" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="MemberParameterShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Tools" File="ShapeTool.cs" Line="41">In member 'ShapeTool.ShapeTool(DocumentWorkspace, ImageResource, string, string, char, ToolBarConfigItems, ToolBarConfigItems)', the compound word 'hotKey' in parameter name 'hotKey' exists as a discrete term. If your usage is intended to be single word, case it as 'hotkey' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="PaintDotNet.Updates">
+       <Types>
+        <Type Name="ExtractingState" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#OnEnteredStateImpl()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="Impl" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning" Path="D:\Source\timanthes_src_3_0\src\Updates" File="ExtractingState.cs" Line="70">Correct the spelling of 'Impl' in member name 'ExtractingState.OnEnteredStateImpl()' or remove it entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+            <Message Id="System.String.Compare(System.String,System.String,System.Boolean,System.Globalization.CultureInfo)" TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="StringComparison" Certainty="75" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Updates" File="ExtractingState.cs" Line="92">'ExtractingState.OnEnteredStateImpl()' passes 'CultureInfo.InvariantCulture' as the 'StringComparison' parameter to 'string.Compare(string, string, bool, CultureInfo)'. To perform a non-linguistic comparison, specify 'StringComparison.Ordinal' or 'StringComparison.OrdinalIgnoreCase' instead.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="InstallingState" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Finish(PaintDotNet.AppWorkspace)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Updates" File="InstallingState.cs" Line="87">Because the behavior of 'string.Compare(string, string, bool)' could vary based on the current user's locale settings, replace this call in 'InstallingState.Finish(AppWorkspace)' with a call to 'string.Compare(string, string, StringComparison)'. If the result of 'string.Compare(string, string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#OnEnteredStateImpl()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="installerPath" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Updates" File="InstallingState.cs" Line="50">Correct the spelling of the unrecognized token 'installerPath' in the literal '"installerPath does not end in .exe: "'.</Issue>
+            </Message>
+            <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Updates" File="InstallingState.cs" Line="46">Because the behavior of 'string.Compare(string, string, bool)' could vary based on the current user's locale settings, replace this call in 'InstallingState.OnEnteredStateImpl()' with a call to 'string.Compare(string, string, StringComparison)'. If the result of 'string.Compare(string, string, StringComparison)' will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="StartupState" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#DeleteUpdateMsi()" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.String.Compare(System.String,System.String,System.Boolean,System.Globalization.CultureInfo)" TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="NonBreaking">
+             <Issue Name="StringComparison" Certainty="75" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Updates" File="StartupState.cs" Line="88">'StartupState.DeleteUpdateMsi()' passes 'CultureInfo.InvariantCulture' as the 'StringComparison' parameter to 'string.Compare(string, string, bool, CultureInfo)'. To perform a non-linguistic comparison, specify 'StringComparison.Ordinal' or 'StringComparison.OrdinalIgnoreCase' instead.</Issue>
+             <Issue Name="StringComparison" Certainty="75" Level="Error" Path="D:\Source\timanthes_src_3_0\src\Updates" File="StartupState.cs" Line="88">'StartupState.DeleteUpdateMsi()' passes 'CultureInfo.InvariantCulture' as the 'StringComparison' parameter to 'string.Compare(string, string, bool, CultureInfo)'. To perform a non-linguistic comparison, specify 'StringComparison.Ordinal' or 'StringComparison.OrdinalIgnoreCase' instead.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="UpdatesDialog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#InitializeComponent()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="blahblahblah" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Updates" File="UpdatesDialog.cs" Line="319">Correct the spelling of the unrecognized token 'blahblahblah' in the literal '".blahblahblah"'.</Issue>
+            </Message>
+            <Message Id="vX" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Updates" File="UpdatesDialog.cs" Line="339">Correct the spelling of the unrecognized token 'vX' in the literal '".paint.net vX.YZ"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="UpdatesOptionsDialog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#InitializeComponent()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="UpdatesOptionsDialog" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Updates" File="UpdatesOptionsDialog.cs" Line="226">Correct the spelling of the unrecognized token 'UpdatesOptionsDialog' in the literal '"UpdatesOptionsDialog"'.</Issue>
+            </Message>
+            <Message Id="allUsersNotice" TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204" Status="Active" Created="2021-09-21 19:13:59Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Source\timanthes_src_3_0\src\Updates" File="UpdatesOptionsDialog.cs" Line="183">Correct the spelling of the unrecognized token 'allUsersNotice' in the literal '".allUsersNotice"'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="AvoidCallingProblematicMethods" Category="Microsoft.Reliability" CheckId="CA2001">
+   <Name>Avoid calling problematic methods</Name>
+   <Description>Avoid making unnecessary and potentially dangerous method calls.</Description>
+   <Resolution Name="System.Reflection.Assembly.LoadFrom">Remove the call to Assembly.LoadFrom from {0}.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/bb385973.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="75">Error</MessageLevel>
+   <File Name="reliabilityrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="AvoidExcessiveClassCoupling" Category="Microsoft.Maintainability" CheckId="CA1506">
+   <Name>Avoid excessive class coupling</Name>
+   <Description>Types and methods with a high degree of class coupling can be difficult to maintain.</Description>
+   <Resolution Name="Method">{0} is coupled with {1} different types from {2} different namespaces. Rewrite or refactor the method to decrease its class coupling, or consider moving the method to one of the other types it is tightly coupled with. A class coupling above {3} indicates poor maintainability, a class coupling between {3} and {4} indicates moderate maintainability, and a class coupling below {4} indicates good maintainability.</Resolution>
+   <Resolution Name="UIType">{0} is coupled with {1} different (non-IComponent) types from {2} different namespaces. Rewrite or refactor this class's methods to decrease its class coupling, or consider moving some of the class's methods to some of the other types it is tightly coupled with. A class coupling above {3} indicates poor maintainability, a class coupling between {3} and {4} indicates moderate maintainability, and a class coupling below {4} indicates good maintainability.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/bb397994.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="90">Warning</MessageLevel>
+   <File Name="maintainabilityrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+   <Name>Compound words should be cased correctly</Name>
+   <Description>Avoid creating compound words from terms which exist in the dictionary as discrete terms. Do not create a compound word such as 'StopWatch' or 'PopUp'. These terms are recognized in the dictionary and should be cased as 'Stopwatch' and 'Popup'.</Description>
+   <Resolution Name="MemberParameterShouldBeDiscreteTerm">In member {0}, the compound word '{1}' in parameter name {2} exists as a discrete term. If your usage is intended to be single word, case it as '{3}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
+   <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
+   <Resolution Name="TypeShouldBeDiscreteTerm">The compound word '{0}' in type name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}'.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/bb264474.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="80">Error</MessageLevel>
+   <File Name="namingrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="FlagsEnumsShouldHavePluralNames" Category="Microsoft.Naming" CheckId="CA1714">
+   <Name>Flags enums should have plural names</Name>
+   <Description>An enumeration marked with FlagsAttribute should have a plural name.</Description>
+   <Resolution Name="Default">If enumeration name {0} is singular, change it to a plural form.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/bb264486.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="75">Error</MessageLevel>
+   <File Name="namingrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+   <Name>Identifiers should be spelled correctly</Name>
+   <Description>The individual words that make up an identifier should not be abbreviated and should be spelled correctly. If this rule generates a false positive on a term that should be recognized, add the word to the FxCop custom dictionary.</Description>
+   <Resolution Name="Assembly">Correct the spelling of '{0}' in assembly name {1}.</Resolution>
+   <Resolution Name="DelegateParameter">In delegate {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+   <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+   <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+   <Resolution Name="MemberParameterMoreMeaningfulName">In method {0}, consider providing a more meaningful name than parameter name {1}.</Resolution>
+   <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/bb264492.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="75">CriticalWarning</MessageLevel>
+   <File Name="namingrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="Literals should be spelled correctly" Category="Microsoft.Naming" CheckId="CA2204">
+   <Name>Literals should be spelled correctly</Name>
+   <Description>This rule parses the literal string into words, tokenizing compound words, and checks the spelling of each word/token.</Description>
+   <Resolution Name="Default">Correct the spelling of the unrecognized token '{0}' in the literal '{1}'.</Resolution>
+   <Owner>RuleOwner</Owner>
+   <Url>http://msdn.microsoft.com/library/bb264488.aspx</Url>
+   <Email />
+   <MessageLevel Certainty="75">Warning</MessageLevel>
+   <File Name="dataflowrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307">
+   <Name>Specify StringComparison</Name>
+   <Description>If an overload exists that takes a StringComparison argument, it should always be called in favor of an overload that does not.</Description>
+   <Resolution Name="Default">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/bb386080.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="globalizationrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309">
+   <Name>Use ordinal StringComparison</Name>
+   <Description>For non-linguistic comparisons, StringComparison.Ordinal or StringComparison.OrdinalIgnoreCase should be used instead of the linguistically-sensitive StringComparison.InvariantCulture.</Description>
+   <Resolution Name="StringComparison">{0} passes '{1}' as the 'StringComparison' parameter to {2}. To perform a non-linguistic comparison, specify 'StringComparison.Ordinal' or 'StringComparison.OrdinalIgnoreCase' instead.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/bb385972.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="75">Error</MessageLevel>
+   <File Name="globalizationrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500">
+   <Name>Variable names should not match field names</Name>
+   <Description>Instance field and variable names should not be identical within the same scope.</Description>
+   <Resolution Name="Local">{0}, a variable declared in {1}, has the same name as an instance field on the type. Change the name of one of these items.</Resolution>
+   <Resolution Name="Parameter">{0}, a parameter declared in {1}, has the same name as an instance field on the type. Change the name of one of these items.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182216.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="maintainabilityrules.dll" Version="16.0.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">Category</String>
+  <String Key="Certainty">Certainty</String>
+  <String Key="CollapseAll">Collapse All</String>
+  <String Key="CheckId">Check Id</String>
+  <String Key="Error">Error</String>
+  <String Key="Errors">error(s)</String>
+  <String Key="ExpandAll">Expand All</String>
+  <String Key="Help">Help</String>
+  <String Key="Line">Line</String>
+  <String Key="Messages">message(s)</String>
+  <String Key="LocationNotStoredInPdb">[Location not stored in Pdb]</String>
+  <String Key="Project">Project</String>
+  <String Key="Resolution">Resolution</String>
+  <String Key="Rule">Rule</String>
+  <String Key="RuleFile">Rule File</String>
+  <String Key="RuleDescription">Rule Description</String>
+  <String Key="Source">Source</String>
+  <String Key="Status">Status</String>
+  <String Key="Target">Target</String>
+  <String Key="Warning">Warning</String>
+  <String Key="Warnings">warning(s)</String>
+  <String Key="ReportTitle">Code Analysis Report</String>
+ </Localized>
+</FxCopReport>
