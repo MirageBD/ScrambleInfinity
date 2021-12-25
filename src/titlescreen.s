@@ -65,6 +65,28 @@ titlescreen
 	sta file01+1
 	jsr loadpackd
 
+	lda titlescreenfont
+	sta file01+0
+	lda titlescreenfont+1
+	sta file01+1
+	jsr loadpackd
+
+	ldx #$00
+:	sta titlescreenhiscorelinesspr+$0000,x
+	sta titlescreenhiscorelinesspr+$0100,x
+	sta titlescreenhiscorelinesspr+$0200,x
+	sta titlescreenhiscorelinesspr+$0300,x
+	sta titlescreenhiscorelinesspr+$0400,x
+	sta titlescreenhiscorelinesspr+$0500,x
+	inx
+	bne :-
+
+	lda titlescreenhiscore
+	sta file01+0
+	lda titlescreenhiscore+1
+	sta file01+1
+	jsr loadpackd
+
 	ldx #$00
 :	lda #$08									; black
 	sta colormem+(1*$0100),x
@@ -98,6 +120,12 @@ titlescreen
 	sta colormem+0*256+24,x
 	inx
 	bne :-
+
+	lda #$34
+	sta $01
+	jsr titlescreenplothiscores
+	lda #$37
+	sta $01
 
 	lda #$00
 	sta easetimer
@@ -264,13 +292,27 @@ irqtitle
 	ldx #0*pointlinespositionsblocksize
 	jsr setpointlinespositions
 
+															; prepare first line of sprites
 titlescreensequence:
-	lda #$01												; 0 = how far can you go, 1 = scores
-	beq :+
-	ldy #((1*6+0)*pointlinesdatablocksize)
-	jmp :++
-:	ldy #((0*6+0)*pointlinesdatablocksize)
-:	jsr setpointlinesptrcolors
+	lda #$00												; 1 = how far can you go, 2 = scores, 0 = hiscores
+	beq tspage0
+	cmp #$01
+	beq tspage1
+
+tspage2
+	ldy #((0*6+0)*pointlinesdatablocksize)					; *0 = scores
+	jmp tspagecheckend
+
+tspage1
+	ldy #((1*6+0)*pointlinesdatablocksize)					; *1 = how far
+	jmp tspagecheckend
+
+tspage0
+	ldy #((2*6+0)*pointlinesdatablocksize)					; *2 = hiscores
+	;jmp tspagecheckend
+
+tspagecheckend
+	jsr setpointlinesptrcolors
 
 	lda #<irqtitle2
 	ldx #>irqtitle2
@@ -297,15 +339,32 @@ irqtitle2
 
 	jsr waitnextpointline
 
+												; prepare second and rest of sprite lines
+
 	ldx #1*pointlinespositionsblocksize			; careful! x and y get automatically increased by setpointlinespositions and setpointlinesptrcolors
 
 	lda titlescreensequence+1
-	beq :+
-	ldy #((1*6+1)*pointlinesdatablocksize)
-	jmp :++
-:	ldy #((0*6+1)*pointlinesdatablocksize)
+	beq tspage0_1
+	cmp #$01
+	beq tspage1_1
+	;cmp #$02
+	;beq tspage2_1
 
-:	jsr setpointlinespositions
+tspage2_1
+	ldy #((0*6+1)*pointlinesdatablocksize)		; *0 = scores
+	jmp tspageend_1
+
+tspage1_1
+	ldy #((1*6+1)*pointlinesdatablocksize)		; *1 = how far
+	jmp tspageend_1
+
+tspage0_1
+	ldy #((2*6+1)*pointlinesdatablocksize)		; *2 = hiscores
+	;jmp tspageend_1
+
+tspageend_1
+
+	jsr setpointlinespositions
 	jsr setpointlinesptrcolors
 	jsr waitnextpointline
 
@@ -483,7 +542,7 @@ irqtitle3
 	inc easetimer
 	lda easetimer
 	bne :+
-	jsr flippage
+	jsr increasepage
 :
 	lda #<irqtitle
 	ldx #>irqtitle
@@ -582,20 +641,10 @@ setpointlinesptrcolors
 	iny
 	lda pointlinesdata1,y
 	sta $d027+2
-	iny
-	lda pointlinesdata1,y
 	sta $d027+3
-	iny
-	lda pointlinesdata1,y
 	sta $d027+4
-	iny
-	lda pointlinesdata1,y
 	sta $d027+5
-	iny
-	lda pointlinesdata1,y
 	sta $d027+6
-	iny
-	lda pointlinesdata1,y
 	sta $d027+7
 	iny
 
@@ -717,27 +766,42 @@ tso13
 
 	rts
 
-flippage
+increasepage
 	; copy x offsets for this page
 	lda titlescreensequence+1
+	cmp #$00
 	beq setpage1
+	cmp #$01
+	beq setpage2
+	; if 2 fall through, so we're back at 0
 
-setpage0
+setpage0								; hiscores
 	lda #$00
 	sta titlescreensequence+1
 	ldx #$00
-:	lda spriterowoffs1,x
+:	lda spriterowoffs3,x
 	sta spriterowoffs0,x
 	inx
 	cpx #6*8
 	bne :-
 	jmp setpageend
 
-setpage1
+setpage1								; how far can you
 	lda #$01
 	sta titlescreensequence+1
 	ldx #$00
 :	lda spriterowoffs2,x
+	sta spriterowoffs0,x
+	inx
+	cpx #6*8
+	bne :-
+	jmp setpageend
+
+setpage2								; scores
+	lda #$02
+	sta titlescreensequence+1
+	ldx #$00
+:	lda spriterowoffs1,x
 	sta spriterowoffs0,x
 	inx
 	cpx #6*8

@@ -462,6 +462,10 @@ titlescreenbkgfile
 .asciiz "t5"
 titlescreenhowfar
 .asciiz "t6"
+titlescreenfont
+.asciiz "t7"
+titlescreenhiscore
+.asciiz "t8"
 
 barsd022
 .byte $07,$0a,$0a,$0a,$08,$08,$02,$02,$02,$02,$02,  $00,  $03,$0e,$04,$0e,$04,$0e,$04,$04,$04,$04,$04,  $00,  $0d,$03,$05,$03,$05,$05,$08,$05,$08,$08,$08
@@ -583,7 +587,7 @@ spriterowoffs0
 .byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$00,$00,$00,$00,$00,$00,$00
 
-spriterowoffs1
+spriterowoffs1 ; x offsets for scores
 .byte $00,$00,$18,$30,$48,$60,$68-0*4,$80			; total width 152 - middle start = 24 + (320-152) / 2 = 108 (-4 for some sprite variation on the left) = 104
 .byte $00,$00,$18,$30,$48,$60,$68-0*4,$80			; sin wave needs to go from (344 -> 104 -> -136) = ( $0158 -> $0068 -> $0178)
 .byte $00,$00,$18,$30,$48,$60,$68-1*4,$80			; ./easefunc 344 104 64 0
@@ -591,13 +595,21 @@ spriterowoffs1
 .byte $00,$00,$18,$30,$48,$60-0*4,$68,$80
 .byte $00,$00,$18,$30,$48-3*4,$50,$68,$80
 
-spriterowoffs2
+spriterowoffs2 ; x offsets for 'how far can you'
 .byte $00,$08,$20,$38,$50,$68,$80,$80
 .byte $00,$08,$20,$38,$50,$68,$80,$80
 .byte $00,$08,$20,$38,$50,$68,$80,$80
 .byte $00,$08,$20,$38,$50,$68,$80,$80
 .byte $00,$08,$20,$38,$50,$68,$80,$80
 .byte $00,$08,$20,$38,$50,$68,$80,$80
+
+spriterowoffs3 ; x offsets for 'hi-scores'
+.byte $00,$16,$2e,$46,$5e,$76,$80,$80
+.byte $00,$08,$20, $44, $60,$78,$90,$90
+.byte $00,$08,$20, $44, $60,$78,$90,$90
+.byte $00,$08,$20, $44, $60,$78,$90,$90
+.byte $00,$08,$20, $44, $60,$78,$90,$90
+.byte $00,$08,$20, $44, $60,$78,$90,$90
 
 tsro1lo
 .byte <(spriterowoffs0+0*8), <(spriterowoffs0+1*8), <(spriterowoffs0+2*8), <(spriterowoffs0+3*8), <(spriterowoffs0+4*8), <(spriterowoffs0+5*8)
@@ -636,7 +648,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+1*64)	; 50
-.byte $09,$02, $01,$0a,$01,$01,$01,$01,$01,$01
+.byte $09,$02, $01,$0a,$01
 
 .byte bytespriteptrforaddress(titlescreenpointsspr+1*(6*64)+1*64)					; flying missile
 .byte bytespriteptrforaddress(titlescreenpointsspr+1*(6*64)+0*64)
@@ -646,7 +658,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+2*64)	; 80
-.byte $09,$02, $07,$0a,$01,$01,$01,$01,$01,$01
+.byte $09,$02, $07,$0a,$01
 
 .byte bytespriteptrforaddress(titlescreenpointsspr+3*(6*64)+1*64)					; ufo
 .byte bytespriteptrforaddress(titlescreenpointsspr+3*(6*64)+0*64)
@@ -656,7 +668,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+3*64)	; 100
-.byte $06,$04, $01,$0e,$01,$01,$01,$01,$01,$01
+.byte $06,$04, $01,$0e,$01
 
 .byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+1*64)					; fuel
 .byte bytespriteptrforaddress(titlescreenpointsspr+4*(6*64)+0*64)
@@ -666,7 +678,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+4*64)	; 150
-.byte $09,$08, $01,$05,$01,$01,$01,$01,$01,$01
+.byte $09,$08, $01,$05,$01
 
 .byte bytespriteptrforaddress(titlescreenpointsspr+2*(6*64)+1*64)					; boss
 .byte bytespriteptrforaddress(titlescreenpointsspr+2*(6*64)+0*64)
@@ -676,7 +688,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+5*64)	; 800
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+6*64)
-.byte $09,$02, $01,$0a,$01,$01,$01,$01,$01,$01
+.byte $09,$02, $01,$0a,$01
 
 .byte bytespriteptrforaddress(titlescreenpointsspr+5*(6*64)+1*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+5*(6*64)+0*64)
@@ -686,7 +698,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+7*64)					; mystery
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+8*64)
 .byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+9*64)
-.byte $09,$08, $07,$0a,$01,$01,$01,$01,$01,$01
+.byte $09,$08, $07,$0a,$01
 
 ; ---------------------------------------------------------------
 
@@ -700,7 +712,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte $02, $0a
-.repeat 8
+.repeat 3
 	.byte $07
 .endrepeat
 
@@ -713,7 +725,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte $09, $04
-.repeat 8
+.repeat 3
 	.byte $0a
 .endrepeat
 
@@ -726,7 +738,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte $06, $0e
-.repeat 8
+.repeat 3
 	.byte $03
 .endrepeat
 
@@ -739,7 +751,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte $0b, $0c
-.repeat 8
+.repeat 3
 	.byte $0f
 .endrepeat
 
@@ -752,7 +764,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+15*64+ 5*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte $09, $05
-.repeat 8
+.repeat 3
 	.byte $0d
 .endrepeat
 
@@ -765,9 +777,76 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhowfarspr+21*64+ 5*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte $09, $08
-.repeat 8
+.repeat 3
 	.byte $05
 .endrepeat
+
+; ---------------------------------------------------------------
+
+; hiscore data
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; hi scores
+.byte bytespriteptrforaddress(titlescreenhiscorespr+0*64+ 0*64)
+.byte bytespriteptrforaddress(titlescreenhiscorespr+0*64+ 1*64)
+.byte bytespriteptrforaddress(titlescreenhiscorespr+0*64+ 2*64)
+.byte bytespriteptrforaddress(titlescreenhiscorespr+0*64+ 3*64)
+.byte bytespriteptrforaddress(titlescreenhiscorespr+0*64+ 4*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte $04, $0a
+.repeat 3
+	.byte $07
+.endrepeat
+
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; empty
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+1*64)		; name 123
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+2*64)		; name 456
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)	; ...
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+3*64)		; score 123
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+4*64)		; score 456
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+0*64)		; score 7 (0)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; empty
+.byte $0c,$01, $01,$01,$01
+
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+5*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+6*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+7*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+8*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte $0c,$01, $01,$01,$01
+
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+9*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+10*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+11*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+12*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte $0c,$01, $01,$01,$01
+
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+13*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+14*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+15*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+16*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte $0c,$01, $01,$01,$01
+
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+17*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+18*64)
+.byte bytespriteptrforaddress(titlescreenpointsspr+6*(6*64)+0*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+19*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+20*64)
+.byte bytespriteptrforaddress(titlescreenhiscorelinesspr+0*64)
+.byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
+.byte $0c,$01, $01,$01,$01
+
 
 ; ---------------------------------------------------------------
 

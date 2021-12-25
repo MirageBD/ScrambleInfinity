@@ -103,6 +103,29 @@ plotdigitcompact
 	bne :-
 	rts
 
+plotcharcompact
+	sta zp0
+	stx zp1
+
+	clc
+	lda times8hightable,y
+	adc #>fontchars
+	sta pccptr+2
+
+	ldx times8lowtable,y
+
+	ldy #$00
+pccptr
+:	lda fontchars,x
+	sta (zp0),y
+	inx
+	iny
+	iny
+	iny
+	cpy #18
+	bne :-
+	rts
+
 .segment "PLOT"
 
 plotfuelplotscoreupdatefuel

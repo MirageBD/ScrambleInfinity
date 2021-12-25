@@ -55,7 +55,7 @@
 .define mystery300start					50
 
 .define pointlinespositionsblocksize	10
-.define pointlinesdatablocksize			18
+.define pointlinesdatablocksize			13
 
 ; ------------------------------------------------------------------------------------------------------------------------
 
@@ -74,11 +74,14 @@ loadeddata2					= $3800
 
 screen1						= $4000
 screenui					= $4000
+fontchars					= $7400
 fontdigits					= $bf80
 screen2						= $c000
 sprites1					= $4b00
 titlescreenpointsspr		= $4c00
 titlescreenhowfarspr		= $7800
+titlescreenhiscorelinesspr	= $6a00
+titlescreenhiscorespr		= $7600
 sprites2					= $cb00
 tslogosprorg				= $3000
 tslogospr					= $a000		; consider moving this to $dc00/$de00
@@ -148,6 +151,7 @@ titlescreen1d800			= loadeddata1
 	livesleftscreen			= 5
 	gameover				= 6
 	congratulations			= 7
+	enterhiscore			= 8
 .endenum
 
 .enum explosiontypes

@@ -36,12 +36,17 @@ SEGMENTS
 
 	MUSIC:						load=RAM, start=$1000;
 
-	RECORDEDSESSION:			load=RAM, start=$1f00;
+	ENTERHISCORESCREEN:			load=RAM, start=$1f00;
+	IRQENTERHISCORE:			load=RAM, start=$2000;
+
+	HISCORE:					load=RAM, start=$2100;
+
+	RECORDEDSESSION:			load=RAM, start=$21ff;
 
 	SFX:						load=RAM, start=$2200;
 	TITLESCREENTABLES:			load=RAM, start=$2500;
 
-	CYCLEPERFECT:				load=RAM, start=$2700; # $006c
+	CYCLEPERFECT:				load=RAM, start=$2740; # $006c
 	TABLES2:					load=RAM;
 
 	COMETS:						load=RAM, start=$2800;

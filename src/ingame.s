@@ -124,7 +124,7 @@ wedied
 	bne :+
 
 quickdie
-	lda #gameflow::titlescreen
+	lda #gameflow::enterhiscore
 	sta gameflowstate+1
 	jmp wediedend
 	
