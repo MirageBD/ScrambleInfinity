@@ -115,7 +115,7 @@ i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then ti
 .include "titlescreen.s"
 .include "livesleft.s"
 .include "congratulations.s"
-.include "enterhiscore.s"
+.include "entername.s"
 .include "hiscore.s"
 .include "tables.s"
 .include "helpers.s"

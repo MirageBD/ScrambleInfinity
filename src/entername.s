@@ -1,4 +1,4 @@
-.segment "ENTERHISCORESCREEN"
+.segment "ENTERNAMESCREEN"
 
 enterhiscore
 
@@ -25,8 +25,8 @@ enterhiscore
 	lda #$32+9*8+2
 	sta $d012
 
-	lda #<irqenterhiscore
-	ldx #>irqenterhiscore
+	lda #<irqentername
+	ldx #>irqentername
 	ldy #$00
 	jsr setirqvectors
 
@@ -54,9 +54,9 @@ ehscheckfire
 
 ; -----------------------------------------------------------------------------------------------
 
-.segment "IRQENTERHISCORE"
+.segment "IRQENTERNAME"
 
-irqenterhiscore
+irqentername
 
 	pha
 
@@ -73,8 +73,8 @@ irqenterhiscore
 	lda #$00
 	sta $d020
 
-	lda #<irqenterhiscore
-	ldx #>irqenterhiscore
+	lda #<irqentername
+	ldx #>irqentername
 	ldy #$32+9*8+2
 
 	jmp endirq

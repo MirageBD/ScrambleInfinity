@@ -36,8 +36,8 @@ SEGMENTS
 
 	MUSIC:						load=RAM, start=$1000;
 
-	ENTERHISCORESCREEN:			load=RAM, start=$1f00;
-	IRQENTERHISCORE:			load=RAM, start=$2000;
+	ENTERNAMESCREEN:			load=RAM, start=$1f00;
+	IRQENTERNAME:				load=RAM, start=$2000;
 
 	HISCORE:					load=RAM, start=$2100;
 
