@@ -65,6 +65,13 @@ entername
 	cpx #$15
 	bne :-
 
+	ldx #$00									; colour high score yellow - can be removed if running out of space
+	lda #$07+8
+:	sta $d800+11*40+20,x
+	inx
+	cpx #$0b
+	bne :-
+
 	ldx #$00									; plot pleaseenteryourname
 :	lda pleaseenteryourname,x
 	sta screen3+13*40+9,x
@@ -72,15 +79,17 @@ entername
 	cpx #$16
 	bne :-
 	
-	ldx #$00
-	lda #$01
+	ldx #$00									; draw 6 underscores for name
+	lda #$2b
 :	sta screen3+15*40+17,x
 	inx
 	cpx #$06
 	bne :-
 
-	lda #$2b
-	sta screen3+16*40+17
+	lda #$01									; plot a as first char?
+	sta screen3+15*40+17
+	lda #$03+8									; colour cyan to indicate we're editing... make it pulse?
+	sta $d800+15*40+17
 
 	ldy #$00
 	ldx #$00
@@ -152,7 +161,7 @@ irqentername2
 	lda #$50
 	jsr cycleperfect
 
-	lda d018forscreencharset(screen3,$3800)
+	lda d018forscreencharset(screen3,fontchars)
 	sta $d018
 	lda #$1b
 	sta $d011
@@ -180,6 +189,28 @@ irqentername2
 	sta $d021
 	lda #$0c
 	sta $d022
+
+	lda #$03
+	sta $d015
+	lda #$07
+	sta $d025
+	lda #$00
+	sta $d010
+
+	lda #$66
+	sta $d000
+	lda #$bc
+	sta $d001
+
+	lda #$66
+	sta $d002
+	lda #$bc
+	sta $d003
+
+	lda #(fontchars+$0380)/64
+	sta screen3+$03f8
+	lda #(fontchars+$03c0)/64
+	sta screen3+$03f9
 
 	lda #<irqentername3
 	ldx #>irqentername3
