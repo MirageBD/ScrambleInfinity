@@ -72,9 +72,10 @@ fontui						= $5800
 loadeddata1					= $3000
 loadeddata2					= $3800
 
+screen3						= $3c00
 screen1						= $4000
 screenui					= $4000
-fontchars					= $7400
+fontchars					= $3800
 fontdigits					= $bf80
 screen2						= $c000
 sprites1					= $4b00
@@ -151,7 +152,7 @@ titlescreen1d800			= loadeddata1
 	livesleftscreen			= 5
 	gameover				= 6
 	congratulations			= 7
-	enterhiscore			= 8
+	entername				= 8
 .endenum
 
 .enum explosiontypes

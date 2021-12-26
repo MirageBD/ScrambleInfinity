@@ -242,7 +242,7 @@ tsbkg.b2:  $(BIN_DIR)/metabkg.bin
 	$(MV) $(EXE_DIR)/metabkg.rel.bin.b2 $(EXE_DIR)/tsbkg.b2
 
 tsfont.b2: $(BIN_DIR)/fontfull.bin
-	$(ADDADDR) $(BIN_DIR)/fontfull.bin $(EXE_DIR)/fontfull.rel.bin 29696
+	$(ADDADDR) $(BIN_DIR)/fontfull.bin $(EXE_DIR)/fontfull.rel.bin 14336
 	$(BB) $(EXE_DIR)/fontfull.rel.bin
 	$(MV) $(EXE_DIR)/fontfull.rel.bin.b2 $(EXE_DIR)/tsfont.b2
 

@@ -232,9 +232,9 @@ hiscorenotbeaten
 	
 	; -----------------------------------------
 
-	comparegameflow #gameflow::enterhiscore
+	comparegameflow #gameflow::entername
 	jsr screensafe
-	jsr enterhiscore
+	jsr entername
 	jsr setsafemode
 	nextgameflow #gameflow::titlescreen
 

@@ -4,49 +4,26 @@ titlescreen
 
 	sei
 
-	lda #$37
-	sta $01
+	jsr titlescreeninit1
 
-:	bit $d011
-	bpl :-
-:	bit $d011
-	bmi :-
-	
-	lda #$6b
-	sta $d011
-	
+	ldx #$00
+:	lda #$08									; black
+	sta colormem+(1*$0100),x
+	sta colormem+(2*$0100),x
+	sta colormem+(3*$0100),x
 	lda #$00
-	sta $d015
-
-	jsr clearscreen
-
-	ldx #$00
-	ldy #$00
-	jsr tuneinit
+	sta bitmap1+7*320,x
+	inx
+	bne :-
 
 	ldx #$00
-	stx $d01b									; sprite priority
-	stx $7fff
-	stx $bfff
-
-	lda titlescreen1bmpfile
-	sta file01+0
-	lda titlescreen1bmpfile+1
-	sta file01+1
-	jsr loadpackd
-
-	lda titlescreen10400file
-	sta file01+0
-	lda titlescreen10400file+1
-	sta file01+1
-	jsr loadpackd
-
-	lda titlescreen1d800file
-	sta file01+0
-	lda titlescreen1d800file+1
-	sta file01+1
-	jsr loadpackd
-
+:	lda titlescreen1d800+0*256,x
+	sta colormem+0*256,x
+	lda titlescreen1d800+0*256+24,x
+	sta colormem+0*256+24,x
+	inx
+	bne :-
+	
 	lda titlescreenpointsprfile
 	sta file01+0
 	lda titlescreenpointsprfile+1
@@ -65,37 +42,11 @@ titlescreen
 	sta file01+1
 	jsr loadpackd
 
-	lda titlescreenfont
-	sta file01+0
-	lda titlescreenfont+1
-	sta file01+1
-	jsr loadpackd
-
-	ldx #$00
-:	sta titlescreenhiscorelinesspr+$0000,x
-	sta titlescreenhiscorelinesspr+$0100,x
-	sta titlescreenhiscorelinesspr+$0200,x
-	sta titlescreenhiscorelinesspr+$0300,x
-	sta titlescreenhiscorelinesspr+$0400,x
-	sta titlescreenhiscorelinesspr+$0500,x
-	inx
-	bne :-
-
 	lda titlescreenhiscore
 	sta file01+0
 	lda titlescreenhiscore+1
 	sta file01+1
 	jsr loadpackd
-
-	ldx #$00
-:	lda #$08									; black
-	sta colormem+(1*$0100),x
-	sta colormem+(2*$0100),x
-	sta colormem+(3*$0100),x
-	lda #$00
-	sta bitmap1+7*320,x
-	inx
-	bne :-
 
 	lda #$0f
 	sta colormem+(8*40)+2
@@ -112,14 +63,6 @@ titlescreen
 	sta colormem+(17*40)+32
 	lda #$09
 	sta colormem+(22*40)+6
-
-	ldx #$00
-:	lda titlescreen1d800+0*256,x
-	sta colormem+0*256,x
-	lda titlescreen1d800+0*256+24,x
-	sta colormem+0*256+24,x
-	inx
-	bne :-
 
 	lda #$34
 	sta $01
@@ -182,9 +125,72 @@ waitspacefireloopend
 
 ; -----------------------------------------------------------------------------------------------
 
-irqtitle
+titlescreeninit1
 
-	pha
+	lda #$37
+	sta $01
+
+:	bit $d011
+	bpl :-
+:	bit $d011
+	bmi :-
+	
+	lda #$6b
+	sta $d011
+	
+	lda #$00
+	sta $d015
+
+	jsr clearscreen
+
+	ldx #$00
+	ldy #$00
+	jsr tuneinit
+
+	ldx #$00
+	stx $d01b									; sprite priority
+	stx $7fff
+	stx $bfff
+
+	lda titlescreen1bmpfile
+	sta file01+0
+	lda titlescreen1bmpfile+1
+	sta file01+1
+	jsr loadpackd
+
+	lda titlescreen10400file
+	sta file01+0
+	lda titlescreen10400file+1
+	sta file01+1
+	jsr loadpackd
+
+	lda titlescreen1d800file
+	sta file01+0
+	lda titlescreen1d800file+1
+	sta file01+1
+	jsr loadpackd
+
+	lda titlescreenfont
+	sta file01+0
+	lda titlescreenfont+1
+	sta file01+1
+	jsr loadpackd
+
+	ldx #$00
+:	sta titlescreenhiscorelinesspr+$0000,x
+	sta titlescreenhiscorelinesspr+$0100,x
+	sta titlescreenhiscorelinesspr+$0200,x
+	sta titlescreenhiscorelinesspr+$0300,x
+	sta titlescreenhiscorelinesspr+$0400,x
+	sta titlescreenhiscorelinesspr+$0500,x
+	inx
+	bne :-
+
+	rts
+
+; -----------------------------------------------------------------------------------------------
+
+logotop
 
 	lda bankforaddress(tslogospr)
 	sta $dd00
@@ -269,6 +275,14 @@ irqtitle
 	lda #$00
 	sta $d020
 	sta $d021
+
+	rts
+
+irqtitle
+
+	pha
+
+	jsr logotop
 
 	inc tsanimframedelay
 	lda tsanimframedelay

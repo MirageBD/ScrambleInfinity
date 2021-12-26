@@ -1,29 +1,42 @@
 .segment "ENTERNAMESCREEN"
 
-enterhiscore
+entername
 
 	; check for highscore here
-	rts
+	;rts
 
 	sei
 	
-	lda #$37
-	sta $01
+	jsr titlescreeninit1
 
+	ldx #$00
+:	lda #$09									; white
+	sta colormem+(1*$0100),x
+	sta colormem+(2*$0100),x
+	sta colormem+(3*$0100),x
 	lda #$00
-	sta $d015
-	sta $d418
+	sta bitmap1+7*320,x
+	inx
+	bne :-
 
-	lda #$7f
-	sta $d011
+	ldx #$00
+:	lda titlescreen1d800+0*256,x
+	sta colormem+0*256,x
+	lda titlescreen1d800+0*256+24,x
+	sta colormem+0*256+24,x
+	inx
+	bne :-
 	
-	jsr clearscreen
-	
-	lda #$09
-	sta $d021
+	ldx #$00
+	lda #$01
+:	sta screen3+$0000,x
+	sta screen3+$0100,x
+	sta screen3+$0200,x
+	sta screen3+$0300,x
+	inx
+	bne :-
 
-	lda #$32+9*8+2
-	sta $d012
+
 
 	lda #<irqentername
 	ldx #>irqentername
@@ -31,9 +44,6 @@ enterhiscore
 	jsr setirqvectors
 
 	cli
-
-	lda #$1b
-	sta $d011
 
 waitfireloop
 	jsr waitinput
@@ -60,23 +70,67 @@ irqentername
 
 	pha
 
+	jsr logotop
+
+	lda #<irqentername2
+	ldx #>irqentername2
+	ldy #$68
+	jmp endirq
+
+irqentername2
+	pha
+
+	lda #$50
+	jsr cycleperfect
+
+	lda d018forscreencharset(screen3,$3800)
+	sta $d018
+	lda #$1b
+	sta $d011
+	lda #$0c
+	sta $d022
+	lda #$0c
+	sta $d023
+	lda #$00
+	sta $d021
+	lda #$03
+	sta $dd00
+
+	lda #<irqentername3
+	ldx #>irqentername3
+	ldy #$fa
+	jmp endirq
+
+irqentername3
+	pha
+
+	lda #$12									; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	sta $d011
+
 	lda #$42									; #$4c
 	jsr cycleperfect
 
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	bit $ea
+
+	ldx #$34									; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
+	ldy #$18									; no multicolour or bitmap, otherwise ghostbyte move won't work
+	stx $d011
+	sty $d016
+
 	lda #$02
-	sta $d020
+	sta $dd00
 
-	lda #$e0
-:	cmp $d012
-	bne :-
-
-	lda #$00
-	sta $d020
+	jsr tuneplay
 
 	lda #<irqentername
 	ldx #>irqentername
-	ldy #$32+9*8+2
-
+	ldy #$14
 	jmp endirq
 
 ; -----------------------------------------------------------------------------------------------
