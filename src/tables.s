@@ -805,7 +805,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+4*64)		; score 456
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+0*64)		; score 7 (0)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)		; empty
-.byte $0c,$01, $01,$01,$01
+.byte $08,$07, $0b,$0b,$0b
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+5*64)
@@ -815,7 +815,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+8*64)
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $0c,$01, $01,$01,$01
+.byte $09,$0a, $0b,$0b,$0b
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+9*64)
@@ -825,7 +825,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+12*64)
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $0c,$01, $01,$01,$01
+.byte $09,$08, $0b,$0b,$0b
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+13*64)
@@ -835,7 +835,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+16*64)
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $0c,$01, $01,$01,$01
+.byte $06,$04, $0b,$0b,$0b
 
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+17*64)
@@ -845,7 +845,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+20*64)
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $0c,$01, $01,$01,$01
+.byte $04,$0e, $0b,$0b,$0b
 
 
 ; ---------------------------------------------------------------
