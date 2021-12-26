@@ -119,11 +119,6 @@ usloopend
 
 testhiscorebeaten
 
-	lda hiscore+0
-	cmp score+0
-	bcc sethiscorebeaten
-	bne endcompare
-
 	lda hiscore+1
 	cmp score+1
 	bcc sethiscorebeaten
@@ -146,6 +141,11 @@ testhiscorebeaten
 
 	lda hiscore+5
 	cmp score+5
+	bcc sethiscorebeaten
+	bne endcompare
+
+	lda hiscore+6
+	cmp score+6
 	bcc sethiscorebeaten
 	bne endcompare
 
