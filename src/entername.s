@@ -157,6 +157,8 @@ showentername
 
 	cli
 
+	jmp fixend
+
 waitfireloop
 	jsr waitinput
 
@@ -235,33 +237,70 @@ normalinput
 	inc namecolumn
 
 endinput	
-	jmp waitfireloop
+	jmp fixend
 
 enright
 	lda encolumn
 	cmp #$08
 	beq :+
 	inc encolumn
-:	jmp waitfireloop
+:	jmp fixend
 
 enleft
 	lda encolumn
 	beq :+
 	dec encolumn
-:	jmp waitfireloop
+:	jmp fixend
 
 enup
 	lda enrow
 	beq :+
 	dec enrow
-:	jmp waitfireloop
+:	jmp fixend
 
 endown
 	lda enrow
 	cmp #$03
 	beq :+
 	inc enrow
-:	jmp waitfireloop
+:	jmp fixend
+
+fixend
+	lda #$00
+	sta rightbracketadd+1
+
+	lda enrow
+	cmp #$03
+	bne :+
+	lda encolumn
+	cmp #$08
+	bne :+
+	lda #$07
+	sta encolumn
+
+:	lda enrow
+	cmp #$03
+	bne :+
+	lda encolumn
+	cmp #$07
+	bne :+
+	lda #$10
+	sta rightbracketadd+1
+
+:	lda encolumn
+	asl
+	asl
+	asl
+	asl
+	clc
+	adc #$76
+	sta bracket1posx
+	clc
+rightbracketadd
+	adc #$00
+	sta bracket2posx
+
+	jmp waitfireloop
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -320,15 +359,11 @@ irqentername2
 	lda #$00
 	sta $d010
 
-	lda encolumn						; column * 16
-	asl
-	asl
-	asl
-	asl
-	clc
-	adc #$76
+	lda bracket1posx
 	sta $d000
+	lda bracket2posx
 	sta $d002
+
 	lda enrow
 	asl
 	asl
@@ -413,3 +448,9 @@ params							; saveparams
 	.word $003c
 	.word hiscores
 	.word $7000
+
+bracket1posx
+	.byte $00
+
+bracket2posx
+	.byte $00
