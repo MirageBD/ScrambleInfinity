@@ -3,7 +3,7 @@
 titlescreenplothiscores
 
 	; last zero sprite
-	ldy #$20
+	ldy #$22
 	lda #<(titlescreenhiscorelinesspr+(0*64)+(11+0)*3+0)
 	ldx #>(titlescreenhiscorelinesspr+(0*64)+(11+0)*3+0)
 	jsr plotcharcompact
@@ -277,12 +277,12 @@ times12table
 charasnumber
 
 	sec
-	sbc #$20
+	sbc #$22
 	rts
 
 numberaschar
 	clc
-	adc #$20
+	adc #$22
 	rts
 
 ; ends $a430

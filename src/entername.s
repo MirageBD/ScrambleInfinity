@@ -107,7 +107,7 @@ showentername
 	bne :-
 	
 	ldx #$00									; draw 6 underscores for name
-	lda #$2b
+	lda #$2d
 :	sta screen3+15*40+17,x
 	inx
 	cpx #$06
@@ -136,7 +136,7 @@ showentername
 	cpx #$09
 	bne :-
 
-	lda #$2a									; plot del and end
+	lda #$2c									; plot del and end
 	sta screen3+23*40+24
 	lda #$05
 	sta screen3+23*40+26
@@ -215,7 +215,7 @@ delchar
 	beq endinput
 
 	dec namecolumn
-	lda #$2b
+	lda #$2d
 	ldx namecolumn
 	sta screen3+15*40+17,x
 	jmp endinput
