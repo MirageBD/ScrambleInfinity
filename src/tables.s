@@ -467,6 +467,9 @@ titlescreenfont
 titlescreenhiscore
 .asciiz "t8"
 
+hiscoresfile
+.asciiz "hs"
+
 barsd022
 .byte $07,$0a,$0a,$0a,$08,$08,$02,$02,$02,$02,$02,  $00,  $03,$0e,$04,$0e,$04,$0e,$04,$04,$04,$04,$04,  $00,  $0d,$03,$05,$03,$05,$05,$08,$05,$08,$08,$08
 barsd023

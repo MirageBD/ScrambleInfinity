@@ -69,6 +69,8 @@ maptilecolors				= $bd00
 congratulationsscreen		= $c600
 fontui						= $5800
 
+hiscores					= $5f40
+
 loadeddata1					= $3000
 loadeddata2					= $3800
 

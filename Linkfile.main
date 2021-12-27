@@ -39,9 +39,9 @@ SEGMENTS
 	ENTERNAMESCREEN:			load=RAM, start=$1f00;
 	IRQENTERNAME:				load=RAM;
 
-	RECORDEDSESSION:			load=RAM, start=$21ff;
+	RECORDEDSESSION:			load=RAM, start=$223f;
 
-	SFX:						load=RAM, start=$2200;
+	SFX:						load=RAM, start=$2240;
 	TITLESCREENTABLES:			load=RAM, start=$2500;
 
 	CYCLEPERFECT:				load=RAM, start=$2740; # $006c
@@ -66,7 +66,8 @@ SEGMENTS
 
 	SPRITES1:					load=RAM, start=$4b00; # goes until $5700/$d700 (at the moment) # gets loaded, then copied to cb00, then copied back to 4b00 each time we go ingame
 
-	UIFONT:						load=RAM, start=$5800;
+	UIFONT:						load=RAM, start=$5800; # goes until $5f30
+	# HISCORES:					load=RAM, start=$5f40;
 
 	BITMAP1:					load=OVERLAPPING_RAM, start=$6000, type=BSS;
 
@@ -103,7 +104,7 @@ SEGMENTS
 
 	TSPRESSFIRESPR:				load=RAM, start=$a200;
 
-	HISCORE:					load=RAM, start=$a400;
+	HISCORE:					load=RAM, start=$a380;
 	# FREE $a380-$a500
 
 	FUELANDSCORESPRITES:		load=RAM, start=$a500;
@@ -123,7 +124,7 @@ SEGMENTS
 
 	CONGRATULATIONS:			load=RAM, start=$c600;
 
-	TABLES:						load = RAM, start=$c700;
+	TABLES:						load=RAM, start=$c700;
 
 	#SCREEN2:					load=RAM, start=$c000;
 	SPRITES2:					load=RAM, start=$cd00;

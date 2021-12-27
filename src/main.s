@@ -141,6 +141,10 @@ i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then ti
 
 	jsr initscore
 
+	ldx #<hiscoresfile
+	ldy #>hiscoresfile
+	jsr loadraw
+
 	lda #<irqlimbo								; set limbo irq we don't end up in the loading screen irq which might not be there any more after unpacking
 	ldx #>irqlimbo
 	ldy #$00

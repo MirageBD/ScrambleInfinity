@@ -2,11 +2,29 @@
 
 entername
 
+	sei
+
+	lda #$34
+	sta $01
+
+	jsr inserthighscore
+
+	lda #$37
+	sta $01
+
+	lda hiscoreindex
+	cmp #$05
+	bmi showentername
+
+	cli
+	rts
+
 	; check for highscore here
 	;rts
 
 	sei
 	
+showentername	
 	jsr titlescreeninit1
 
 	ldx #$00
@@ -41,8 +59,8 @@ entername
 	sta $d800+8*40,x
 	sta $d800+9*40,x
 	lda #$2f
-	sta screen3++8*40,x
-	sta screen3++9*40,x
+	sta screen3+8*40,x
+	sta screen3+9*40,x
 	inx
 	cpx #$28
 	bne :-
@@ -109,7 +127,7 @@ entername
 	cpx #$09
 	bne :-
 
-	lda #$2a
+	lda #$2a									; plot del and end
 	sta screen3+23*40+24
 	lda #$05
 	sta screen3+23*40+26
@@ -172,7 +190,14 @@ enfire
 	jmp normalinput
 
 inputdone
-	; save highscore here!
+	ldx #$00								; save highscore name. score has already been saved
+:	lda screen3+15*40+17,x
+ihs4
+	sta hiscores,x
+	inx
+	cpx #$06
+	bne :-
+
 	rts
 
 delchar
@@ -365,4 +390,10 @@ times9table
 	.byte 0*9, 1*9, 2*9, 3*9
 
 namecolumn
+	.byte $00
+
+hiscoreindex
+	.byte $00
+
+hiscoreindextimes12
 	.byte $00
