@@ -39,7 +39,7 @@ showentername
 	stx params+saveparams::loadaddress+0;
 	sty params+saveparams::from+1;
 	sty params+saveparams::loadaddress+1;
-	ldx #$3c									; $3c00
+	ldx #$3c									; $003c
 	ldy #$00
 	stx params+saveparams::length+0;
 	sty params+saveparams::length+1;
