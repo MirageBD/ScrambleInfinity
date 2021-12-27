@@ -86,35 +86,42 @@ entername
 	cpx #$06
 	bne :-
 
-	lda #$01									; plot a as first char?
-	sta screen3+15*40+17
-	lda #$03+8									; colour cyan to indicate we're editing... make it pulse?
-	sta $d800+15*40+17
+;	lda #$01									; plot a as first char?
+;	sta screen3+15*40+17
+;	lda #$03+8									; colour cyan to indicate we're editing... make it pulse?
+;	sta $d800+15*40+17
 
 	ldy #$00
 	ldx #$00
 :	txa
 	clc
 	adc #$01
-	sta screen3+18*40+10,y
-	adc #$0b
-	sta screen3+20*40+10,y
-	adc #$0b
-	sta screen3+22*40+10,y
+	sta screen3+17*40+12,y
+	adc #$09
+	sta screen3+19*40+12,y
+	adc #$09
+	sta screen3+21*40+12,y
+	adc #$09
+	sta screen3+23*40+12,y
 	iny
 	iny
 	inx
-	cpx #$0b
+	cpx #$09
 	bne :-
 
 	lda #$2a
-	sta screen3+22*40+26
+	sta screen3+23*40+24
 	lda #$05
-	sta screen3+22*40+28
+	sta screen3+23*40+26
 	lda #$0e
-	sta screen3+22*40+29
+	sta screen3+23*40+27
 	lda #$04
-	sta screen3+22*40+30
+	sta screen3+23*40+28
+
+	lda #$00
+	sta namecolumn
+	sta enrow
+	sta encolumn
 
 	lda #<irqentername
 	ldx #>irqentername
@@ -136,9 +143,91 @@ waitfireloop
 ehscheckfire
 	txa
 	cmp #joyFire								; yes, it was joy input, check if it was fire
-	bne waitfireloop
+	bne :+
+	jmp enfire
+:	cmp #joyRight
+	bne :+
+	jmp enright
+:	cmp #joyLeft
+	bne :+
+	jmp enleft
+:	cmp #joyUp
+	bne :+
+	jmp enup
+:	cmp #joyDown
+	bne :+
+	jmp endown
 
+:	jmp waitfireloop
+
+enfire
+	lda enrow
+	cmp #$03
+	bne normalinput
+	lda encolumn
+	cmp #$06
+	beq delchar
+	cmp #$07
+	bpl inputdone
+	jmp normalinput
+
+inputdone
+	; save highscore here!
 	rts
+
+delchar
+	lda namecolumn
+	cmp #$00
+	beq endinput
+
+	dec namecolumn
+	lda #$2b
+	ldx namecolumn
+	sta screen3+15*40+17,x
+	jmp endinput
+
+normalinput
+	lda namecolumn
+	cmp #$06
+	beq endinput
+
+	ldx enrow
+	lda times9table,x
+	clc
+	adc encolumn
+	adc #$01
+	ldx namecolumn
+	sta screen3+15*40+17,x
+	inc namecolumn
+
+endinput	
+	jmp waitfireloop
+
+enright
+	lda encolumn
+	cmp #$08
+	beq :+
+	inc encolumn
+:	jmp waitfireloop
+
+enleft
+	lda encolumn
+	beq :+
+	dec encolumn
+:	jmp waitfireloop
+
+enup
+	lda enrow
+	beq :+
+	dec enrow
+:	jmp waitfireloop
+
+endown
+	lda enrow
+	cmp #$03
+	beq :+
+	inc enrow
+:	jmp waitfireloop
 
 ; -----------------------------------------------------------------------------------------------
 
@@ -197,14 +286,23 @@ irqentername2
 	lda #$00
 	sta $d010
 
-	lda #$66
+	lda encolumn						; column * 16
+	asl
+	asl
+	asl
+	asl
+	clc
+	adc #$76
 	sta $d000
-	lda #$bc
-	sta $d001
-
-	lda #$66
 	sta $d002
-	lda #$bc
+	lda enrow
+	asl
+	asl
+	asl
+	asl
+	clc
+	adc #$b4
+	sta $d001
 	sta $d003
 
 	lda #(fontchars+$0380)/64
@@ -256,3 +354,15 @@ yougotahiscore
 
 pleaseenteryourname
 	.byte $10,$0c,$05,$01,$13,$05, $00, $05,$0e,$14,$05,$12, $00, $19,$0f,$15,$12, $00, $0e,$01,$0d,$05
+
+encolumn
+	.byte $00	; 0-a
+
+enrow
+	.byte $00	; 0-2
+
+times9table
+	.byte 0*9, 1*9, 2*9, 3*9
+
+namecolumn
+	.byte $00

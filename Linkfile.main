@@ -37,9 +37,7 @@ SEGMENTS
 	MUSIC:						load=RAM, start=$1000;
 
 	ENTERNAMESCREEN:			load=RAM, start=$1f00;
-	IRQENTERNAME:				load=RAM, start=$2000;
-
-	HISCORE:					load=RAM, start=$2100;
+	IRQENTERNAME:				load=RAM;
 
 	RECORDEDSESSION:			load=RAM, start=$21ff;
 
@@ -105,6 +103,7 @@ SEGMENTS
 
 	TSPRESSFIRESPR:				load=RAM, start=$a200;
 
+	HISCORE:					load=RAM, start=$a400;
 	# FREE $a380-$a500
 
 	FUELANDSCORESPRITES:		load=RAM, start=$a500;
