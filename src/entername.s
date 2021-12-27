@@ -33,20 +33,6 @@ showentername
 	ldy hiscoresfile+1;
 	stx params+saveparams::filename+0;
 	sty params+saveparams::filename+1;
-	ldx #<hiscores								; $5f40
-	ldy #>hiscores
-	stx params+saveparams::from+0;
-	stx params+saveparams::loadaddress+0;
-	sty params+saveparams::from+1;
-	sty params+saveparams::loadaddress+1;
-	ldx #$3c									; $003c
-	ldy #$00
-	stx params+saveparams::length+0;
-	sty params+saveparams::length+1;
-	ldx #<($7000)								; $7000
-	ldy #>($7000)
-	stx params+saveparams::buffer+0;
-	sty params+saveparams::buffer+1;
 
 	jsr titlescreeninit1
 
@@ -421,4 +407,9 @@ hiscoreindex
 hiscoreindextimes12
 	.byte $00
 
-params: .tag saveparams
+params							; saveparams
+	.word 0
+	.word hiscores
+	.word $003c
+	.word hiscores
+	.word $7000
