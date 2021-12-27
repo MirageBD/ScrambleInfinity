@@ -66,16 +66,19 @@ b2.exe:
 	$(MAKE) -C $(UTIL_SRC_DIR)/b2
 	$(CP) $(UTIL_SRC_DIR)/b2/b2.exe $(EXE_DIR)/.
 
-loader-c64.prg: $(LOADER)/loader/build/loader-c64.prg
-	$(CP) $(LOADER)/loader/build/loader-c64.prg $(EXE_DIR)/.
+loader-c64.prg: $(LOADER)/loaderex/loader-c64.prg
+	$(CP) $(LOADER)/loaderex/loader-c64.prg $(EXE_DIR)/.
 	
-install-c64.prg: $(LOADER)/loader/build/install-c64.prg	
-	$(CP) $(LOADER)/loader/build/install-c64.prg $(EXE_DIR)/.
+install-c64.prg: $(LOADER)/loaderex/install-c64.prg
+	$(CP) $(LOADER)/loaderex/install-c64.prg $(EXE_DIR)/.
 
-loadersymbols-c64.inc: $(LOADER)/loader/build/loadersymbols-c64.inc
-	$(CP) $(LOADER)/loader/build/loadersymbols-c64.inc $(EXE_DIR)/.
+loadersymbols-c64.inc: $(LOADER)/loaderex/loadersymbols-c64.inc
+	$(CP) $(LOADER)/loaderex/loadersymbols-c64.inc $(EXE_DIR)/.
 
-main.o: $(SRC_DIR)/main.s Makefile Linkfile.main loader-c64.prg install-c64.prg maptiles.out maptilechars.out loadersymbols-c64.inc
+save-c64.prg: $(LOADER)/loaderex/save-c64.prg
+	$(CP) $(LOADER)/loaderex/save-c64.prg $(EXE_DIR)/.
+
+main.o: $(SRC_DIR)/main.s Makefile Linkfile.main loader-c64.prg install-c64.prg save-c64.prg maptiles.out maptilechars.out loadersymbols-c64.inc
 	$(AS) $(ASFLAGS) -o $(EXE_DIR)/$*.o $(SRC_DIR)/$*.s
 
 main_unpacked.prg: main.o loader-c64.prg install-c64.prg loadersymbols-c64.inc Linkfile.main
@@ -267,7 +270,7 @@ hiscores.addr: $(BIN_DIR)/hiscores.bin
 
 main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
           mapttilesheader.out mapttilesheader.b2 \
-		  tsbmp1.b2 tsbmp10400.b2 tsbmp1d800.b2 tspointspr.b2 tsbkg.b2 tshowfar.b2 tsfont.b2 tshiscores.b2 hiscores.addr\
+		  tsbmp1.b2 tsbmp10400.b2 tsbmp1d800.b2 tspointspr.b2 tsbkg.b2 tshowfar.b2 tsfont.b2 tshiscores.b2 hiscores.addr save-c64.prg \
           ma00.b2 ma01.b2 ma02.b2 ma03.b2 ma04.b2 ma05.b2 ma06.b2 ma07.b2 ma08.b2 ma09.b2 \
           ma0a.b2 ma0b.b2 ma0c.b2 ma0d.b2 ma0e.b2 ma0f.b2 ma10.b2 ma11.b2 ma12.b2 ma13.b2 \
           ma14.b2 ma15.b2 ma16.b2 ma17.b2 ma18.b2 ma19.b2 ma1a.b2 ma1b.b2 ma1c.b2 ma1d.b2 \
@@ -343,6 +346,7 @@ main.d64: boot.prg loadscreen.prg main.prg install-c64.prg \
 	 -f "t7" -w $(EXE_DIR)/tsfont.b2 \
 	 -f "t8" -w $(EXE_DIR)/tshiscores.b2 \
 	 -f "hs" -w $(EXE_DIR)/hiscores.addr \
+	 -f "sv" -w $(EXE_DIR)/save-c64.prg \
 	$(EXE_DIR)/$@
 	cat $(EXE_DIR)/loadscreen.map
 	cat $(EXE_DIR)/main.map

@@ -29,10 +29,14 @@ entername
 
 showentername
 
-	ldx hiscoresfile+0;							; .asciiz "hs"
-	ldy hiscoresfile+1;
-	stx params+saveparams::filename+0;
-	sty params+saveparams::filename+1;
+	ldx #<saver
+	ldy #>saver
+	jsr loadraw
+
+	ldx #<hiscoresfile
+	ldy #>hiscoresfile
+	stx params+saveparams::filename+0
+	sty params+saveparams::filename+1
 
 	jsr titlescreeninit1
 
@@ -208,6 +212,10 @@ ihs4
 	inx
 	cpx #$06
 	bne :-
+
+	;ldx #<params
+	;ldy #>params
+	;jsr $7800								; save file
 
 	rts
 
@@ -443,7 +451,7 @@ hiscoreindextimes12
 	.byte $00
 
 params							; saveparams
-	.word 0
+	.word hiscoresfile
 	.word hiscores
 	.word $003c
 	.word hiscores
