@@ -414,17 +414,7 @@ tspageend_1
 	sta $d020
 	sta $d021
 
-	ldx #$00
-	lda #$fc									; prepare lower border sprites
-:	sta $d001+0*2,x
-	inx
-	inx
-	cpx #$10
-	bne :-
-
-
-	ldx spriteptrforaddress(fuelandscoresprites+0*64)
-	stx screenspecial+$03f8+0
+	jsr titlescreenlowerbordersprites
 
 	ldx spriteptrforaddress(tspressfirespr)
 	stx screenspecial+$03f8+1
@@ -439,6 +429,23 @@ tspageend_1
 	inx
 	stx screenspecial+$03f8+6
 
+	lda #<irqtitle3
+	ldx #>irqtitle3
+	ldy #$fa
+	jmp endirq
+
+titlescreenlowerbordersprites
+
+	ldx #$00
+	lda #$fc									; prepare lower border sprites
+:	sta $d001+0*2,x
+	inx
+	inx
+	cpx #$10
+	bne :-
+
+	ldx spriteptrforaddress(fuelandscoresprites+0*64)
+	stx screenspecial+$03f8+0
 	ldx spriteptrforaddress(fuelandscoresprites+7*64)
 	stx screenspecial+$03f8+7
 
@@ -464,11 +471,9 @@ tspageend_1
 	lda #%10000000
 	sta $d010
 
-	lda #$0c
-	sta $d025
-	lda #$01
-	sta $d026
 	lda #$00
+	sta $d025
+	sta $d026
 	sta $d027+0
 	sta $d027+1
 	sta $d027+2
@@ -477,14 +482,9 @@ tspageend_1
 	sta $d027+5
 	sta $d027+6
 	sta $d027+7
+	rts
 
-	lda #<irqtitle3
-	ldx #>irqtitle3
-	ldy #$fa
-	jmp endirq
-
-irqtitle3
-	pha
+titlescreenlowerbordersprites2
 
 	lda #$12									; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
 	sta $d011
@@ -509,6 +509,11 @@ irqtitle3
 	sta $d018
 	lda bankforaddress(screenspecial)
 	sta $dd00
+
+	lda #$0c
+	sta $d025
+	lda #$01
+	sta $d026
 
 	lda #$08
 :	cmp $d012
@@ -552,6 +557,12 @@ irqtitle3
 	sta $d001+5*2
 	sta $d001+6*2
 	sta $d001+7*2
+	rts
+
+irqtitle3
+	pha
+
+	jsr titlescreenlowerbordersprites2
 
 	inc easetimer
 	lda easetimer

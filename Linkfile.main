@@ -36,7 +36,7 @@ SEGMENTS
 
 	MUSIC:						load=RAM, start=$1000;
 
-	ENTERNAMESCREEN:			load=RAM, start=$1f00;
+	ENTERNAMESCREEN:			load=RAM, start=$1ee0;
 	IRQENTERNAME:				load=RAM;
 
 	RECORDEDSESSION:			load=RAM, start=$223f;

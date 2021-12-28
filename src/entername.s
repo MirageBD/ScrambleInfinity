@@ -389,8 +389,8 @@ irqentername2
 	lda #$0c
 	sta $d022
 
-	lda #$03
-	sta $d015
+	;lda #%11000011
+	;sta $d015
 	lda #$07
 	sta $d025
 	lda #$00
@@ -418,35 +418,31 @@ irqentername2
 
 	lda #<irqentername3
 	ldx #>irqentername3
-	ldy #$fa
+	ldy #$f0
 	jmp endirq
 
 irqentername3
 	pha
 
-	lda #$12									; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
-	sta $d011
+	jsr titlescreenlowerbordersprites
 
-	lda #$42									; #$4c
-	jsr cycleperfect
+	ldx spriteptrforaddress(emptysprite)
+	stx screenspecial+$03f8+1
+	stx screenspecial+$03f8+2
+	stx screenspecial+$03f8+3
+	stx screenspecial+$03f8+4
+	stx screenspecial+$03f8+5
+	stx screenspecial+$03f8+6
 
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	bit $ea
+	lda #<irqentername4
+	ldx #>irqentername4
+	ldy #$fa
+	jmp endirq
 
-	ldx #$34									; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff
-	ldy #$18									; no multicolour or bitmap, otherwise ghostbyte move won't work
-	stx $d011
-	sty $d016
+irqentername4
+	pha
 
-	lda #$02
-	sta $dd00
-
-	jsr tuneplay
+	jsr titlescreenlowerbordersprites2
 
 	lda #<irqentername
 	ldx #>irqentername
