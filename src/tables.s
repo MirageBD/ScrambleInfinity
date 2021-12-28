@@ -798,7 +798,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhiscorespr+0*64+ 4*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $04, $0a
+.byte $09, $0a
 .repeat 3
 	.byte $07
 .endrepeat
