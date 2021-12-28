@@ -851,7 +851,7 @@ pointlinesdata1
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+20*64)
 .byte bytespriteptrforaddress(titlescreenhiscorelinesspr+0*64)
 .byte bytespriteptrforaddress(titlescreenhowfarspr+0*64+0*64)
-.byte $04,$0e, $0b,$0b,$0b
+.byte $06,$0e, $0b,$0b,$0b
 
 
 ; ---------------------------------------------------------------
