@@ -96,12 +96,16 @@ showentername
 	cpx #$15
 	bne :-
 
-	ldx #$00									; colour high score yellow - can be removed if running out of space
-	lda #$07+8
-:	sta $d800+11*40+20,x
+	ldx #$00									; colour high score and and 'end' yellow, 'del' red - can be removed if running out of space
+:	lda #$07+8
+	sta $d800+11*40+20,x
+	sta $d800+23*40+26,x
 	inx
 	cpx #$0b
 	bne :-
+
+	lda #$02+8
+	sta $d800+23*40+24
 
 	ldx #$00									; plot pleaseenteryourname
 :	lda pleaseenteryourname,x
@@ -391,7 +395,7 @@ irqentername2
 
 	;lda #%11000011
 	;sta $d015
-	lda #$07
+	lda #$0f
 	sta $d025
 	lda #$00
 	sta $d010
