@@ -127,15 +127,6 @@ i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then ti
 
 	sei
 
-	lda #$34
-	sta $01
-
-	copymemblocks sprites1, sprites2, $0d00
-	copymemblocks tslogosprorg, tslogospr, $0200
-
-	lda #$37
-	sta $01
-
 	lda #gameflow::titlescreen
 	sta gameflowstate+1
 
@@ -144,6 +135,17 @@ i let $fffe/ffff point to irqHandler and I let $0314/15 point to kernel: then ti
 	ldx #<hiscoresfile
 	ldy #>hiscoresfile
 	jsr loadraw
+
+	lda #$34
+	sta $01
+
+	copymemblocks sprites1, sprites2, $0d00
+	copymemblocks tslogosprorg, tslogospr, $0200
+
+	jsr setboothiscores
+
+	lda #$37
+	sta $01
 
 	lda #<irqlimbo								; set limbo irq we don't end up in the loading screen irq which might not be there any more after unpacking
 	ldx #>irqlimbo
