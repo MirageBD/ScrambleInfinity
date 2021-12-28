@@ -213,9 +213,38 @@ ihs4
 	cpx #$06
 	bne :-
 
-	;ldx #<params
-	;ldy #>params
-	;jsr $7800								; save file
+	sei
+
+	lda #$37
+	sta $01
+
+	lda #$6b
+	sta $d011
+
+	lda #$00
+	sta $d015
+	sta $d020
+	sta $d021
+	sta $d418
+
+	lda #<irqlimbo								; set limbo irq so it doesn't mess with $d011/$d018/$dd00 causing all kinds of glitches
+	ldx #>irqlimbo
+	ldy #$00
+	sta $fffe
+	sta $0314
+	stx $ffff
+	stx $0315
+	sty $d012
+
+	lda $dc0d
+	lda $dd0d
+	dec $d019
+
+	ldx #<params
+	ldy #>params
+	jsr $7800								; save file
+
+	cli
 
 	rts
 
