@@ -498,6 +498,7 @@ titlescreenlowerbordersprites2
 	nop
 	nop
 	nop
+	nop
 	bit $ea
 
 	ldx #$34									; open border : unset RSEL bit (and #%00110111) + turn on ECM to move ghostbyte to $f9ff

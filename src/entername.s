@@ -450,6 +450,7 @@ irqentername3
 irqentername4
 	pha
 
+	nop
 	jsr titlescreenlowerbordersprites2
 
 	lda #<irqentername
