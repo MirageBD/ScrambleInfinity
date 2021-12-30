@@ -72,6 +72,8 @@ titlescreen
 
 	lda #$00
 	sta easetimer
+	;sta starindex
+	;sta startimer
 	jsr setpage1								; start with 'how far can you'
 
 	lda #<irqtitle
@@ -140,17 +142,15 @@ titlescreeninit1
 	
 	lda #$00
 	sta $d015
+	sta $d01b									; sprite priority
+	sta $7fff
+	sta $bfff
 
 	jsr clearscreen
 
 	ldx #$00
 	ldy #$00
 	jsr tuneinit
-
-	ldx #$00
-	stx $d01b									; sprite priority
-	stx $7fff
-	stx $bfff
 
 	lda titlescreen1bmpfile
 	sta file01+0
@@ -564,6 +564,8 @@ irqtitle3
 
 	jsr titlescreenlowerbordersprites2
 
+	jsr twinklestars
+
 	inc easetimer
 	lda easetimer
 	bne :+
@@ -834,5 +836,78 @@ setpage2								; scores
 
 setpageend
 	rts
+
+; -----------------------------------------------------------------------------------------------
+
+.segment "TWINKLESTARS"
+
+twinklestars
+	inc startimer
+	lda startimer
+	cmp #$40
+	bne :+
+
+	ldx #$00
+	jsr plottitlestar
+	ldx #$01
+	jsr plottitlestar
+	ldx #$02
+	jsr plottitlestar
+
+	clc
+	lda starindex
+	adc #$30
+	sta starindex
+
+:	rts
+
+plottitlestar
+
+	clc
+	lda staroffsetlo,x
+	sta ptss1+1
+	sta ptss2+1
+	adc #$30
+	sta ptss3+1
+	sta ptss4+1
+	lda staroffsethi,x
+	sta ptss1+2
+	sta ptss2+2
+	adc #$00
+	sta ptss3+2
+	sta ptss4+2
+
+:	lda #$00
+	sta startimer
+	ldx starindex
+ptss1
+	lda screen1+8*40,x
+	cmp #$19
+	bne :+
+	lda #$01
+ptss2
+	sta screen1+8*40,x
+:
+ptss3
+	lda screen1+8*40+$0030,x
+	cmp #$01
+	bne :+
+	lda #$19
+ptss4
+	sta screen1+8*40+$0030,x
+
+:	rts
+
+starindex
+	.byte $00
+
+startimer
+	.byte $00
+
+staroffsetlo
+	.byte <(screen1+8*40), <(screen1+12*40+15), <(screen1+16*40+30)
+
+staroffsethi
+	.byte >(screen1+8*40), >(screen1+12*40+15), >(screen1+16*40+30)
 
 ; -----------------------------------------------------------------------------------------------

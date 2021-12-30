@@ -1,5 +1,5 @@
-; repository version 184M, built on Mon, 27 Dec 2021 21:26:00 +0100 for project "scramble" using
-; make PLATFORM=c64 save INSTALL=6000 RESIDENT=0400 TRANSIENT=7800 ZP=e8 PROJECT=scramble
+; repository version 186, built on Thu, 30 Dec 2021 15:14:28 +0100 for project "scramble" using
+; make PLATFORM=c64 save INSTALL=6000 RESIDENT=0400 TRANSIENT=7000 ZP=e8 PROJECT=scramble
 
 ; configuration
 config_ALLOW_2_MHZ_ON_C128      = 0
@@ -18,7 +18,7 @@ config_LOAD_VIA_KERNAL_FALLBACK = 0
 config_MEM_DECOMP_API           = 0
 config_MEM_DECOMP_TO_API        = 0
 config_NTSC_COMPATIBILITY       = 0
-config_ONLY_1541_AND_COMPATIBLE = 1
+config_ONLY_1541_AND_COMPATIBLE = 0
 config_UNINSTALL_API            = 0
 
 ; status codes
@@ -33,25 +33,25 @@ status_GENERIC_KERNAL_ERROR     = $fd
 status_DEVICE_NOT_PRESENT       = $fe
 status_FILE_NOT_FOUND           = $ff
 
-; zeropage $e8-$ff
+; zeropage $e8-$100
 loader_zp_first                 = $e8
 loadaddrlo                      = $e8
 loadaddrhi                      = $e9
 endaddrlo                       = $ec
 endaddrhi                       = $ed
 loader_zp_last                  = $f4
-plugin_zp_last                  = $fe
+plugin_zp_last                  = $ff
 
-; install $6000-$6ca5
+; install $6000-$7b9e
 install                         = $6000
 
 ; resident $0400-$0635
 loadraw                         = $0400
 loadcompd                       = $040e
 
-; transient $7800-$7cc4
-save                            = $7800
-swapdrvcod                      = $7a64
-restoreldr                      = $7b3c
-sendbyte                        = $7b63
-receivbyte                      = $7b7f
+; transient $7000-$797d
+save                            = $7000
+swapdrvcod                      = $75c0
+restoreldr                      = $76f7
+sendbyte                        = $772c
+receivbyte                      = $7748

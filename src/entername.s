@@ -244,9 +244,13 @@ ihs4
 	lda $dd0d
 	dec $d019
 
+	lda #$35
+	sta $01
 	ldx #<params
 	ldy #>params
-	jsr $7800								; save file
+	jsr $7000								; save file
+	lda #$37
+	sta $01
 
 	cli
 
@@ -484,7 +488,7 @@ params							; saveparams
 	.word hiscores
 	.word $003c
 	.word hiscores
-	.word $7000
+	.word $e000
 
 bracket1posx
 	.byte $00
